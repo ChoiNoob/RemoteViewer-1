@@ -32,3 +32,33 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+.header{
+    background-color: #d7d7d7;
+}
+
+.footer{
+    background-color: #d7d7d7;
+}
+
+.border_no_right {
+    border-right: 0;
+}
+
+.border_no_left {
+    border-left: 0;
+}
+
+.border_no_top {
+    border-top: 0;
+}
+
+.border_no_bottom {
+    border-bottom: 0;
+}
+
+.gwt_logo {
+    background-image: url('web/img/avanti_logo_64.png');
+    background-position: left top;
+    background-repeat: no-repeat;
+}
