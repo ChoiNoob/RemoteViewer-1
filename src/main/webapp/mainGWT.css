@@ -58,7 +58,18 @@ h1 {
 }
 
 .gwt_logo {
-    background-image: url('web/img/avanti_logo_64.png');
-    background-position: left top;
-    background-repeat: no-repeat;
+    /*background-image: url('web/img/avanti_logo_64.png');*/
+    /*background-position: right bottom;*/
+    /*background-repeat: no-repeat;*/
+    position: absolute;
+    opacity: 50;
+    vertical-align: bottom;
+    right: 25px;
+    bottom: 25px;
+
+}
+
+.gwt_main {
+    padding-right: 15px;
+    padding-bottom: 15px;
 }

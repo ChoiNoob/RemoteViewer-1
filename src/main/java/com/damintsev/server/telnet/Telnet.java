@@ -1,6 +1,5 @@
 package com.damintsev.server.telnet;
 
-import org.apache.commons.net.telnet.TelnetClient;
 import sun.net.TelnetOutputStream;
 
 import java.io.*;
@@ -15,6 +14,7 @@ public class Telnet {
     String host;
     int portNum;
     public static void main(String[] argv) {
+        argv = new String[]{"localhost", "25"};
         new Telnet().talkTo(argv);
     }
     private void talkTo(String av[]) {

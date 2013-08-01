@@ -64,6 +64,11 @@
           <artifactId>gxt</artifactId>
           <version>3.0.1</version>
       </dependency>
+      <dependency>
+          <groupId>com.allen-sauer.gwt.dnd</groupId>
+          <artifactId>gwt-dnd</artifactId>
+          <version>3.1.2</version>
+      </dependency>
   </dependencies>
 
   <build>
