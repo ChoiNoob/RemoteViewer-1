@@ -9,6 +9,7 @@ import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.IconHelper;
 import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.button.ButtonBar;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
 import com.sencha.gxt.widget.core.client.event.BeforeExpandEvent;
@@ -56,39 +57,16 @@ public class UIRootPanel {
 
         body.setCenterWidget(UICenterField.get().getContent());
         ((AbsolutePanel)body.getCenterWidget()).add(logo);
+        final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
+        ((AbsolutePanel)body.getCenterWidget()).add(settings);
 
-
-
-        final ContentPanel panel = new ContentPanel();
         ((AbsolutePanel)body.getCenterWidget()).add(new TextButton("asdas", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                if (panel.isVisible())
-                    panel.collapse();
-                else panel.expand();
+                if (settings.isVisible()) settings.collapse();
+                else settings.expand();
+                AddDeviceWindow.get().show();
             }
         }));
-        panel.addBeforeExpandHandler(new BeforeExpandEvent.BeforeExpandHandler() {
-            public void onBeforeExpand(BeforeExpandEvent event) {
-                panel.show();
-            }
-        });
-        panel.addCollapseHandler(new CollapseEvent.CollapseHandler() {
-            public void onCollapse(CollapseEvent event) {
-                panel.hide();
-            }
-        });
-        panel.setAnimationDuration(1000);
-        panel.setAnimCollapse(true);
-        panel.setHeadingText("Режим редактирования");
-        panel.setCollapsible(true);
-        panel.setPixelSize(160, 500);
-        panel.getElement().getStyle().setTop(10, Style.Unit.PX);
-        panel.getElement().getStyle().setRight(10, Style.Unit.PX);
-        panel.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-        new Draggable(panel);
-        panel.addButton(new TextButton("Save"));
-        panel.addButton(new TextButton("Cancel"));
-        ((AbsolutePanel)body.getCenterWidget()).add(panel);
 
 //        body.setEastWidget(panel, settingsLayout);
         PortalLayoutContainer portal = new PortalLayoutContainer(1);
