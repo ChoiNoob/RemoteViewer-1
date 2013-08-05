@@ -4,6 +4,8 @@ import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -32,7 +34,7 @@ public class UICenterField {
     private List<UIItem> items = new ArrayList<UIItem>();
     private boolean editMode = false;
 
-    public Widget getContent() {
+    private UICenterField() {
         panel = new AbsolutePanel();
         dragController = new PickupDragController(panel, true);
         dragController.setBehaviorConstrainedToBoundaryPanel(false);
@@ -53,7 +55,9 @@ public class UICenterField {
         editButton.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
 
         panel.add(editButton);
+    }
 
+    public Widget getContent() {
         return panel;
     }
 

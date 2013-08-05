@@ -13,9 +13,10 @@ import com.sencha.gxt.core.client.util.IconHelper;
  */
 public class Station extends UIItem {
 
+
     @Override
     public String getName() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return "asdasdd";  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

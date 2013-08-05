@@ -5,6 +5,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.sencha.gxt.core.client.util.IconHelper;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.FramedPanel;
@@ -98,8 +99,12 @@ public class AddDeviceWindow extends Window {
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 Station station = new Station();
-                station.setResource(Utils.getImage("hipath"));
+
+//                station.setadd(new Image(Utils.getImage("hipath")));
+
+
                 UICenterField.get().addItem(station);
+//                Label label = Label.wrap(station.getElement());
                 hide();
             }  //todo
         }));
