@@ -1,5 +1,7 @@
 package com.damintsev.client.uiframe;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.safehtml.shared.UriUtils;
 import com.google.gwt.user.client.ui.Image;
 import com.sencha.gxt.core.client.util.IconHelper;
@@ -64,6 +66,10 @@ public class AddDeviceWindow extends Window {
 //
 //        ].join("");
 //    }-*/;
+
+
+
+//    Driver driver = GWT.create(Driver.class);
 
     private AddDeviceWindow(){
         setModal(true);

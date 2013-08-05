@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='mainGWT'>
-  <inherits name='com.google.gwt.user.User' />
-  <inherits name='com.google.gwt.editor.Editor' />
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name='com.google.gwt.editor.Editor'/>
     <inherits name="com.sencha.gxt.widget.core.Core"/>
     <inherits name="com.sencha.gxt.ui.GXT"/>
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
 
-  <entry-point class='com.damintsev.client.mainGWT' />
+    <entry-point class='com.damintsev.client.mainGWT'/>
 
-  <source path='client' />
-  <source path='shared' />
+    <source path='client'/>
+
+    <!--<source path='dao'/>-->
+    <!--<source path='shared'/>-->
 
 </module>
