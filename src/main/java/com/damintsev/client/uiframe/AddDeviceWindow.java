@@ -1,5 +1,6 @@
 package com.damintsev.client.uiframe;
 
+import com.damintsev.client.Utils;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.safehtml.shared.UriUtils;
@@ -68,10 +69,8 @@ public class AddDeviceWindow extends Window {
 //    }-*/;
 
 
+    private AddDeviceWindow() {
 
-//    Driver driver = GWT.create(Driver.class);
-
-    private AddDeviceWindow(){
         setModal(true);
         setPixelSize(350, 300);
         setHeadingText("Добавить новую телефонную станцию");
@@ -99,7 +98,7 @@ public class AddDeviceWindow extends Window {
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 Station station = new Station();
-                station.setResource(IconHelper.getImageResource(UriUtils.fromString("/web/img/hipath4000.jpg"), 127, 211));
+                station.setResource(Utils.getImage("hipath"));
                 UICenterField.get().addItem(station);
                 hide();
             }  //todo

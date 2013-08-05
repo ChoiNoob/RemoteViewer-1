@@ -73,3 +73,7 @@ h1 {
     padding-right: 15px;
     padding-bottom: 15px;
 }
+
+.dragdrop-dropTarget-engage {
+    background-color: #E0E8FF;
+}

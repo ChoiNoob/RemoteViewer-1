@@ -3,11 +3,12 @@ package com.damintsev.client.uiframe;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.google.gwt.user.client.DOM;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +29,8 @@ public class UICenterField {
 
     private PickupDragController dragController;
     AbsolutePanel panel;
-    private List<UIItem> items;
+    private List<UIItem> items = new ArrayList<UIItem>();
+    private boolean editMode = false;
 
     public Widget getContent() {
         panel = new AbsolutePanel();
@@ -36,13 +38,21 @@ public class UICenterField {
         dragController.setBehaviorConstrainedToBoundaryPanel(false);
         DropController dropController = new AbsolutePositionDropController(panel);
         dragController.registerDropController(dropController);
-//        for (int i = 1; i <= 5; i++) {
-//            // create a label and give it style
-//            Label label = new Label("Label #" + i, false);
-//            label.setPixelSize(150,150);
-//            dragController.makeDraggable(label);
-//            panel.add(label);
-//        }
+        dragController.setBehaviorMultipleSelection(false);
+
+        final TextButton editButton = new TextButton("Редактировать", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                allowDrag();
+                UISettingsPanel.get().expand();
+                editMode = true;
+            }
+        });
+        editButton.setAllowTextSelection(false);
+        editButton.getElement().getStyle().setTop(5, Style.Unit.PX);
+        editButton.getElement().getStyle().setRight(5, Style.Unit.PX);
+        editButton.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
+
+        panel.add(editButton);
 
         return panel;
     }
@@ -64,6 +74,21 @@ public class UICenterField {
     public void disAllowDrag() {
         for(UIItem item : items) {
             dragController.makeNotDraggable(item);
+        }
+    }
+
+    public void saveItemPositions() {
+        disAllowDrag();
+        for(UIItem item : items) {
+            item.savePosition();
+        }
+    }
+
+    public void revertItemPositions() {
+        disAllowDrag();
+        for (UIItem item : items) {
+            UIItem.Position position = item.getPosition();
+            panel.setWidgetPosition(item, position.x, position.y);
         }
     }
 }

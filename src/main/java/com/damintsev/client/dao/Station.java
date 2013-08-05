@@ -1,5 +1,6 @@
 package com.damintsev.client.dao;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
@@ -9,7 +10,7 @@ import com.sencha.gxt.widget.core.client.form.FieldLabel;
  * Date: 04.08.13
  * Time: 14:15
  */
-public class Station {
+public class Station implements Item {
 
     public String host;
     public String port;
@@ -49,16 +50,17 @@ public class Station {
     }
 }
 
-class StationEditor implements Editor<Station> {
-
-    interface Driver extends SimpleBeanEditorDriver<Station, StationEditor> {
-
-    }
-
-    FieldLabel host;
-
-    public StationEditor() {
-        host = new FieldLabel();
-
-    }
-}
+//class StationEditor  implements Editor<Station> {
+//
+//    interface Driver extends SimpleBeanEditorDriver<Station, StationEditor> {
+//    }
+//
+//    FieldLabel host;
+//
+//    Driver driver = GWT.create(Driver.class);
+//
+//    public StationEditor() {
+//        host = new FieldLabel();
+//
+//    }
+//}

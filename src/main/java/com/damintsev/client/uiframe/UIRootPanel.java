@@ -60,13 +60,13 @@ public class UIRootPanel {
         final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
 
-        ((AbsolutePanel)body.getCenterWidget()).add(new TextButton("asdas", new SelectEvent.SelectHandler() {
-            public void onSelect(SelectEvent event) {
-                if (settings.isVisible()) settings.collapse();
-                else settings.expand();
-                AddDeviceWindow.get().show();
-            }
-        }));
+//        ((AbsolutePanel)body.getCenterWidget()).add(new TextButton("asdas", new SelectEvent.SelectHandler() {
+//            public void onSelect(SelectEvent event) {
+//                if (settings.isVisible()) settings.collapse();
+//                else settings.expand();
+//                AddDeviceWindow.get().expand();
+//            }
+//        }));
 
 //        body.setEastWidget(panel, settingsLayout);
         PortalLayoutContainer portal = new PortalLayoutContainer(1);
