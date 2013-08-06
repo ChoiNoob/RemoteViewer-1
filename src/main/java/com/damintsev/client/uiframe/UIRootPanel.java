@@ -64,7 +64,7 @@ public class UIRootPanel {
 //            public void onSelect(SelectEvent event) {
 //                if (settings.isVisible()) settings.collapse();
 //                else settings.expand();
-//                AddDeviceWindow.get().expand();
+//                AddStationWindow.get().expand();
 //            }
 //        }));
 

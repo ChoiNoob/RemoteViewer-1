@@ -3,11 +3,13 @@ package com.damintsev.client.uiframe;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -62,6 +64,7 @@ public class UICenterField {
     }
 
     public void addItem(UIItem item) {
+        item.init();
         dragController.makeDraggable(item);
         panel.add(item, 0, 0);
         panel.setWidgetPosition(item, Window.getClientWidth() / 2, Window.getClientHeight() / 2);
@@ -92,7 +95,51 @@ public class UICenterField {
         disAllowDrag();
         for (UIItem item : items) {
             UIItem.Position position = item.getPosition();
-            panel.setWidgetPosition(item, position.x, position.y);
+            if(position != null)
+                panel.setWidgetPosition(item, position.x, position.y);
+            else
+                item.savePosition();
         }
+        drawConnections();
     }
+
+    private void drawConnections() {
+        HTML canvas = new HTML("<canvas id=\"myCanvas\" width=500></canvas>");
+        panel.getElement().appendChild(canvas.getElement());
+        drawLine();
+    }
+
+    public static native void drawLine()/*-{
+      Window.jQuery(document).ready(function() {
+        x = 50;
+        y = 75;
+        startx = 0;
+        starty = 75;
+
+        function drawIt() {
+            var c = document.getElementById("myCanvas");
+            var ctx = c.getContext("2d");
+
+            ctx.beginPath();
+            ctx.lineWidth = "2";
+            ctx.strokeStyle = "blue"; // Green path
+            ctx.moveTo(startx, starty);
+            ctx.lineTo(x, y);
+
+            ctx.stroke(); // Draw it
+            if (x > 350) {
+                window.clearInterval(timerId);
+            } else if (y <= 25 && x >= 250) {
+                starty = 25;
+                x += 5;
+            } else if (y <= 75 && x >= 250) {
+                x = startx = 250;
+                y -= 5;
+            } else {
+                x += 5;
+            }
+        }
+        timerId = window.setInterval(drawIt, 30);
+      });
+    }-*/;
 }

@@ -1,16 +1,13 @@
 package com.damintsev.client.uiframe;
 
+import com.damintsev.client.Utils;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.UriUtils;
-import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.util.IconHelper;
-import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.button.ButtonBar;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
 import com.sencha.gxt.widget.core.client.event.BeforeExpandEvent;
@@ -62,21 +59,27 @@ public class UISettingsPanel {
         VBoxLayoutContainer buttons = new VBoxLayoutContainer();
         buttons.setVBoxLayoutAlign(VBoxLayoutContainer.VBoxLayoutAlign.CENTER);
 
-        Image img = new Image(IconHelper.getImageResource(UriUtils.fromString("/web/img/hipath4000.jpg"), 100, 100));
-        img.addClickHandler(new ClickHandler() {
-            public void onClick(ClickEvent event) {
-                AddDeviceWindow.get().show();
+        TextButton station = new TextButton("Добавить станцию", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                AddStationWindow.get().show();
             }
         });
-        buttons.add(img);
+        station.setIconAlign(ButtonCell.IconAlign.BOTTOM);
+        station.setIcon(Utils.getImage("hipath3800"));
+        buttons.add(station);
 
-        Image img2 = new Image(IconHelper.getImageResource(UriUtils.fromString("/web/img/hipath4000.jpg"), 100, 100));
-        buttons.add(img2);
+        TextButton device = new TextButton("Добавить устройство",new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                AddSourceWindow.get().show();
+            }
+        });
+        device.setIcon(Utils.getImage("cloud_130"));
+        device.setIconAlign(ButtonCell.IconAlign.BOTTOM);
+        buttons.add(device);
+//        Image img2 = new Image(IconHelper.getImageResource(UriUtils.fromString("/web/img/hipath4000.jpg"), 100, 100));
+//        buttons.add(img2);
 
         panel.add(buttons);
-
-
-//        new Draggable(panel);
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
