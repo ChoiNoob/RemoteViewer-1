@@ -4,12 +4,14 @@ import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -34,6 +36,7 @@ public class UICenterField {
     private PickupDragController dragController;
     AbsolutePanel panel;
     private List<UIItem> items = new ArrayList<UIItem>();
+    private UIItem mainItem;
     private boolean editMode = false;
 
     private UICenterField() {
@@ -49,6 +52,7 @@ public class UICenterField {
                 allowDrag();
                 UISettingsPanel.get().expand();
                 editMode = true;
+                canvasDemo(null,null);
             }
         });
         editButton.setAllowTextSelection(false);
@@ -57,6 +61,11 @@ public class UICenterField {
         editButton.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
 
         panel.add(editButton);
+
+//        HTML canvas = new HTML("<canvas id=\"myCanvas\" width=\"" + Window.getClientWidth() +
+//                "\" height=\"" + Window.getClientHeight() +
+//                "\"></canvas>");
+//        panel.getElement().appendChild(canvas.getElement());
     }
 
     public Widget getContent() {
@@ -65,6 +74,9 @@ public class UICenterField {
 
     public void addItem(UIItem item) {
         item.init();
+        if(item.getType() == ItemType.STATION) {
+            mainItem = item;
+        }
         dragController.makeDraggable(item);
         panel.add(item, 0, 0);
         panel.setWidgetPosition(item, Window.getClientWidth() / 2, Window.getClientHeight() / 2);
@@ -89,6 +101,7 @@ public class UICenterField {
         for(UIItem item : items) {
             item.savePosition();
         }
+        drawConnections(false);
     }
 
     public void revertItemPositions() {
@@ -100,46 +113,50 @@ public class UICenterField {
             else
                 item.savePosition();
         }
-        drawConnections();
+        drawConnections(false);
     }
 
-    private void drawConnections() {
-        HTML canvas = new HTML("<canvas id=\"myCanvas\" width=500></canvas>");
-        panel.getElement().appendChild(canvas.getElement());
-        drawLine();
-    }
-
-    public static native void drawLine()/*-{
-      Window.jQuery(document).ready(function() {
-        x = 50;
-        y = 75;
-        startx = 0;
-        starty = 75;
-
-        function drawIt() {
-            var c = document.getElementById("myCanvas");
-            var ctx = c.getContext("2d");
-
-            ctx.beginPath();
-            ctx.lineWidth = "2";
-            ctx.strokeStyle = "blue"; // Green path
-            ctx.moveTo(startx, starty);
-            ctx.lineTo(x, y);
-
-            ctx.stroke(); // Draw it
-            if (x > 350) {
-                window.clearInterval(timerId);
-            } else if (y <= 25 && x >= 250) {
-                starty = 25;
-                x += 5;
-            } else if (y <= 75 && x >= 250) {
-                x = startx = 250;
-                y -= 5;
-            } else {
-                x += 5;
-            }
+    private void drawConnections(boolean fireEvent) {
+//        if (mainItem == null) {
+//            for (UIItem item : items) {
+//                if (item.getType() == ItemType.STATION) {
+//                    mainItem = item;
+//                    break;
+//                }
+//            }
+//        }
+        for(UIItem item : items) {
+            drawLine(mainItem.getCenterPosition(), item.getCenterPosition(), fireEvent);
         }
-        timerId = window.setInterval(drawIt, 30);
-      });
-    }-*/;
+
+    }
+
+    public void drawLine(UIItem.Position from, UIItem.Position to, boolean fire) {
+//        drawLine(from.x, from.y, to.x, to.y, fire);
+        canvasDemo(from, to);
+    }
+
+    public void  canvasDemo(UIItem.Position from, UIItem.Position to) {
+//        System.out.println("fromX=" + from.x + " fromY=" + from.y + " toX=" + to.x + " toY=" + to.y);
+//        if(from.x == to.x && from.y == to.y)
+//            return;
+        Canvas canvas = Canvas.createIfSupported();
+        canvas.setPixelSize(400,400);
+         canvas.getElement().getStyle().setZIndex(10000);
+        panel.add(canvas);
+        Context2d context = canvas.getContext2d();
+
+        context.beginPath();
+        context.setLineWidth(3);
+        context.moveTo(0, 0);
+        context.lineTo(100, 100);
+//        context.moveTo(100,100);
+        context.lineTo(200, 0);
+//        context.lineTo(25,40);
+//        context.lineTo(25,0);
+//        context.fill();
+        context.stroke();
+//        context.closePath();
+
+    }
 }

@@ -21,7 +21,9 @@ public class UIItem extends Label {
     private String name;
     private Item item;
     private Position position;
+    private Position centerPosition;
     private ImageResource image;
+    private ItemType type;
 
     public UIItem() {
         super();
@@ -37,14 +39,25 @@ public class UIItem extends Label {
 
     public void init() {
         setHorizontalAlignment(ALIGN_CENTER);
-        Element div = DOM.createDiv();
-        div.setInnerText(getName());
-        div.getStyle().setBorderColor("black");
-        div.getStyle().setBackgroundImage("/web/img/tooltip_image.png");
-
-        div.getStyle().setBorderWidth(1, Style.Unit.PX);
-        getElement().appendChild(div);
+//        Element div = DOM.createDiv();
+//        div.setInnerText(getName());
+//        div.getStyle().setBorderColor("black");
+//        div.getStyle().setBackgroundImage("/web/img/tooltip_image.png");
+//
+//        div.getStyle().setBorderWidth(1, Style.Unit.PX);
+//        getElement().appendChild(div);
+        Label label = new Label(getName());
+        if(getName() != null)
+            getElement().appendChild(label.getElement());
+        label.setStyleName("tooltip");
         getElement().appendChild(new Image(image).getElement());
+    }
+
+    public Position getCenterPosition() {
+        int x = getAbsoluteLeft() + image.getWidth() / 2;
+        int y = getAbsoluteTop() + image.getHeight() / 2;
+        position = new Position(x,y);
+        return position;
     }
 
     public Position getPosition() {
@@ -73,6 +86,14 @@ public class UIItem extends Label {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ItemType getType() {
+        return type;
+    }
+
+    public void setType(ItemType type) {
+        this.type = type;
     }
 
     class Position {

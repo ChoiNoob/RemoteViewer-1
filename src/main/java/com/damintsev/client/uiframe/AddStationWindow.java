@@ -56,6 +56,7 @@ public class AddStationWindow extends Window {
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 UIItem stationItem = new UIItem();
+                stationItem.setType(ItemType.STATION);
                 stationItem.setName(name.getValue());
                 stationItem.setImage(Utils.getImage("hipath"));
                 UICenterField.get().addItem(stationItem);

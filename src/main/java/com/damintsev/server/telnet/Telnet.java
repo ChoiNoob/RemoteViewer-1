@@ -14,7 +14,7 @@ public class Telnet {
     String host;
     int portNum;
     public static void main(String[] argv) {
-        argv = new String[]{"localhost", "25"};
+        argv = new String[]{"192.168.110.128", "23"};
         new Telnet().talkTo(argv);
     }
     private void talkTo(String av[]) {

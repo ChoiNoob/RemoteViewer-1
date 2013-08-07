@@ -1,6 +1,10 @@
 package com.damintsev.client;
 
+import com.damintsev.client.uiframe.UIItem;
 import com.damintsev.client.uiframe.UIRootPanel;
+import com.google.gwt.canvas.client.Canvas;
+import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.FillStrokeStyle;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -80,5 +84,33 @@ public class mainGWT implements EntryPoint {
 
     private void onModuleLoad2() {
         RootPanel.get().add(UIRootPanel.get().getContent());
+//        fuck();
     }
-}
+
+
+    private void fuck() {
+//        System.out.println("fromX=" + from.x + " fromY=" + from.y + " toX=" + to.x + " toY=" + to.y);
+//        if(from.x == to.x && from.y == to.y)
+//            return;
+            Canvas canvas = Canvas.createIfSupported();
+            canvas.setPixelSize(400,    400);
+//        canvas.setCoordinateSpaceHeight(0);
+//        canvas.setCoordinateSpaceWidth(10);
+
+            RootPanel.get().getElement().appendChild(canvas.getElement());
+            Context2d context = canvas.getContext2d();
+
+            context.beginPath();
+            context.setLineWidth(1);
+//            context.moveTo(0, 0);
+            context.lineTo(150, 150);
+//            context.moveTo(150,150);
+//            context.lineTo(359, 309);
+//            context.moveTo(359, 309);
+            context.stroke();
+//        context.closePath();
+
+        }
+    }
+
+

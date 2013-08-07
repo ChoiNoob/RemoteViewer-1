@@ -77,3 +77,13 @@ h1 {
 .dragdrop-dropTarget-engage {
     background-color: #E0E8FF;
 }
+
+.tooltip {
+    background: #eee;
+    border: 1px solid #ccc;
+    padding: 3px;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    width: 100px;
+}
