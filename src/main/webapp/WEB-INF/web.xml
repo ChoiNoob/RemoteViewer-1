@@ -8,12 +8,12 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.damintsev.server.GreetingServiceImpl</servlet-class>
+    <servlet-class>com.damintsev.server.services.ServerService</servlet-class>
   </servlet>
 
   <servlet-mapping>
     <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/mainGWT/greet</url-pattern>
+    <url-pattern>/mainGWT/service</url-pattern>
   </servlet-mapping>
 
     <servlet>

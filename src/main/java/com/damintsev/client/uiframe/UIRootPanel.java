@@ -1,10 +1,13 @@
 package com.damintsev.client.uiframe;
 
+import com.damintsev.utils.Dialogs;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.i18n.client.HasDirection;
 import com.google.gwt.layout.client.Layout;
 import com.google.gwt.safehtml.shared.UriUtils;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.core.client.util.IconHelper;
 import com.sencha.gxt.fx.client.Draggable;
@@ -33,6 +36,7 @@ public class UIRootPanel {
     private UIRootPanel(){
 
     }
+    ClientServiceAsync service = GWT.create(ClientService.class);
 
     public Widget getContent() {
         Viewport viewport = new Viewport();
@@ -72,6 +76,20 @@ public class UIRootPanel {
         PortalLayoutContainer portal = new PortalLayoutContainer(1);
 //        portal.add(panel);
 //        body.add(portal);
+
+        service.getMessage(new AsyncCallback<String>() {
+            public void onFailure(Throwable caught) {
+                Dialogs.alert("fail=" + caught.getMessage());
+            }
+
+            public void onSuccess(String result) {
+                Dialogs.alert(result);
+                System.out.println(result);
+                System.out.println(result);
+                System.out.println(result);
+                System.out.println(result);
+            }
+        });
 
         return viewport;
     }
