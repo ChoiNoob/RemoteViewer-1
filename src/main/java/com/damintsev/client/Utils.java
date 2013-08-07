@@ -20,6 +20,8 @@ public class Utils {
             return IconHelper.getImageResource(UriUtils.fromString("/web/img/hipath3800.png"), 75, 84);
          if ("cloud_130".equals(name))
             return IconHelper.getImageResource(UriUtils.fromString("/web/img/cloud_130.png"), 130, 130);
+        if ("hipath3800_32".equals(name))
+            return IconHelper.getImageResource(UriUtils.fromString("/web/img/hipath3800_32.png"), 32, 32);
 
         return null;
     }

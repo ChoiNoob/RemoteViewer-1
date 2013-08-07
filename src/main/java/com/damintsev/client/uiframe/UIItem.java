@@ -39,13 +39,6 @@ public class UIItem extends Label {
 
     public void init() {
         setHorizontalAlignment(ALIGN_CENTER);
-//        Element div = DOM.createDiv();
-//        div.setInnerText(getName());
-//        div.getStyle().setBorderColor("black");
-//        div.getStyle().setBackgroundImage("/web/img/tooltip_image.png");
-//
-//        div.getStyle().setBorderWidth(1, Style.Unit.PX);
-//        getElement().appendChild(div);
         Label label = new Label(getName());
         if(getName() != null)
             getElement().appendChild(label.getElement());
@@ -56,8 +49,8 @@ public class UIItem extends Label {
     public Position getCenterPosition() {
         int x = getAbsoluteLeft() + image.getWidth() / 2;
         int y = getAbsoluteTop() + image.getHeight() / 2;
-        position = new Position(x,y);
-        return position;
+        centerPosition = new Position(x,y);
+        return centerPosition;
     }
 
     public Position getPosition() {
@@ -94,6 +87,14 @@ public class UIItem extends Label {
 
     public void setType(ItemType type) {
         this.type = type;
+    }
+    
+    public int getWigth() {
+        return image.getWidth();
+    }
+
+    public int getHeight() {
+        return image.getHeight();
     }
 
     class Position {

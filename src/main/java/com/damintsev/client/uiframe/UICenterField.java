@@ -3,8 +3,10 @@ package com.damintsev.client.uiframe;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.damintsev.utils.Dialogs;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -13,6 +15,7 @@ import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
@@ -34,14 +37,25 @@ public class UICenterField {
     }
 
     private PickupDragController dragController;
-    AbsolutePanel panel;
+    private AbsolutePanel panel;
     private List<UIItem> items = new ArrayList<UIItem>();
     private UIItem mainItem;
-    private boolean editMode = false;
 
     private UICenterField() {
         panel = new AbsolutePanel();
-        dragController = new PickupDragController(panel, true);
+        dragController = new PickupDragController(panel, true) {
+            @Override
+            public void dragEnd() {
+                drawConnections(false);
+                super.dragEnd();
+            }
+
+            @Override
+            public void dragStart() {
+                clearCanvas();
+                super.dragStart();
+            }
+        };
         dragController.setBehaviorConstrainedToBoundaryPanel(false);
         DropController dropController = new AbsolutePositionDropController(panel);
         dragController.registerDropController(dropController);
@@ -51,8 +65,6 @@ public class UICenterField {
             public void onSelect(SelectEvent event) {
                 allowDrag();
                 UISettingsPanel.get().expand();
-                editMode = true;
-                canvasDemo(null,null);
             }
         });
         editButton.setAllowTextSelection(false);
@@ -61,11 +73,24 @@ public class UICenterField {
         editButton.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
 
         panel.add(editButton);
+        drawCanvas(panel);
+    }
 
-//        HTML canvas = new HTML("<canvas id=\"myCanvas\" width=\"" + Window.getClientWidth() +
-//                "\" height=\"" + Window.getClientHeight() +
-//                "\"></canvas>");
-//        panel.getElement().appendChild(canvas.getElement());
+    private Canvas canvas;
+    private void drawCanvas(AbsolutePanel panel) {
+        final int height = Window.getClientHeight();
+        final int width = Window.getClientWidth();
+
+        canvas = Canvas.createIfSupported();
+        canvas.setWidth(width + "px");
+        canvas.setHeight(height + "px");
+        canvas.setCoordinateSpaceWidth(width);
+        canvas.setCoordinateSpaceHeight(height);
+        panel.add(canvas);
+    }
+
+    public Canvas getCanvas() {
+        return canvas;
     }
 
     public Widget getContent() {
@@ -75,13 +100,18 @@ public class UICenterField {
     public void addItem(UIItem item) {
         item.init();
         if(item.getType() == ItemType.STATION) {
-            mainItem = item;
+            if(mainItem == null)
+                mainItem = item;
+            else
+                Dialogs.alert("В система уже есть головная станция");
         }
         dragController.makeDraggable(item);
         panel.add(item, 0, 0);
-        panel.setWidgetPosition(item, Window.getClientWidth() / 2, Window.getClientHeight() / 2);
-        if(items == null) items = new ArrayList<UIItem>();
+        int centerX = Window.getClientWidth() / 2 - item.getWigth() / 2;
+        int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
+        panel.setWidgetPosition(item, centerX, centerY);
         items.add(item);
+        drawConnections(false);
     }
 
     public void allowDrag(){
@@ -108,55 +138,35 @@ public class UICenterField {
         disAllowDrag();
         for (UIItem item : items) {
             UIItem.Position position = item.getPosition();
-            if(position != null)
-                panel.setWidgetPosition(item, position.x, position.y);
-            else
-                item.savePosition();
+            if(position != null) panel.setWidgetPosition(item, position.x, position.y);
+            else item.savePosition();
         }
         drawConnections(false);
     }
 
     private void drawConnections(boolean fireEvent) {
-//        if (mainItem == null) {
-//            for (UIItem item : items) {
-//                if (item.getType() == ItemType.STATION) {
-//                    mainItem = item;
-//                    break;
-//                }
-//            }
-//        }
+        if(mainItem == null) {
+            Dialogs.alert("В системе нет головной станции");
+        }
+        clearCanvas();
         for(UIItem item : items) {
             drawLine(mainItem.getCenterPosition(), item.getCenterPosition(), fireEvent);
         }
-
     }
 
     public void drawLine(UIItem.Position from, UIItem.Position to, boolean fire) {
-//        drawLine(from.x, from.y, to.x, to.y, fire);
-        canvasDemo(from, to);
-    }
+        if(from.x == to.x && from.y == to.y) return;
 
-    public void  canvasDemo(UIItem.Position from, UIItem.Position to) {
-//        System.out.println("fromX=" + from.x + " fromY=" + from.y + " toX=" + to.x + " toY=" + to.y);
-//        if(from.x == to.x && from.y == to.y)
-//            return;
-        Canvas canvas = Canvas.createIfSupported();
-        canvas.setPixelSize(400,400);
-         canvas.getElement().getStyle().setZIndex(10000);
-        panel.add(canvas);
         Context2d context = canvas.getContext2d();
-
         context.beginPath();
         context.setLineWidth(3);
-        context.moveTo(0, 0);
-        context.lineTo(100, 100);
-//        context.moveTo(100,100);
-        context.lineTo(200, 0);
-//        context.lineTo(25,40);
-//        context.lineTo(25,0);
-//        context.fill();
+        context.moveTo(from.x, from.y);
+        context.lineTo(to.x, to.y);
         context.stroke();
-//        context.closePath();
+    }
 
+    public void clearCanvas() {
+        Context2d context = canvas.getContext2d();
+        context.clearRect(0,0,Window.getClientWidth(),Window.getClientHeight());
     }
 }

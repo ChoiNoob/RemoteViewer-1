@@ -1,6 +1,8 @@
 package com.damintsev.client.uiframe;
 
 import com.damintsev.client.Utils;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -20,7 +22,7 @@ public class AddStationWindow extends Window {
     private static AddStationWindow instance;
 
     public static AddStationWindow get() {
-        if(instance == null) instance = new AddStationWindow();
+        if (instance == null) instance = new AddStationWindow();
         return instance;
     }
 
@@ -34,21 +36,22 @@ public class AddStationWindow extends Window {
         final VerticalLayoutContainer panel = new VerticalLayoutContainer();
         con.add(panel);
 
+        
 
-       final TextField name = new TextField();
-        panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        final TextField name = new TextField();
+        panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         TextField host = new TextField();
         host.setAllowBlank(false);
-        panel.add(new FieldLabel(host, "Адрес сервера"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(host, "Адрес сервера"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         TextField port = new TextField();
         port.setAllowBlank(false);
-        panel.add(new FieldLabel(port, "Порт"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(port, "Порт"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         TextField login = new TextField();
-        panel.add(new FieldLabel(login, "Логин"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
-        panel.add(new FieldLabel(new TextField(), "Пароль"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(login, "Логин"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        panel.add(new FieldLabel(new TextField(), "Пароль"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
         TextArea comment = new TextArea();
         comment.setHeight(70);
         panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
@@ -70,5 +73,15 @@ public class AddStationWindow extends Window {
             }
         }));
         setWidget(con);
+//
+//        Element table = DOM.createTable();
+//        Element tr = DOM.createTR();
+//        Element td1 = DOM.createTD();
+//        Element td2 = DOM.createTD();
+//        tr.appendChild(td1);
+//        tr.appendChild(td2);
+//        td2.appendChild(panel.getElement());
+//        table.appendChild(tr);
+//        getElement().appendChild(table);
     }
 }

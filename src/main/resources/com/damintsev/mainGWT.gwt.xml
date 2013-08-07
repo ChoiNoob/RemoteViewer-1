@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='mainGWT'>
+    <inherits name='com.google.gwt.core.Core'/>
     <inherits name='com.google.gwt.user.User'/>
     <inherits name='com.google.gwt.editor.Editor'/>
     <inherits name="com.sencha.gxt.widget.core.Core"/>
@@ -9,6 +10,7 @@
     <entry-point class='com.damintsev.client.mainGWT'/>
 
     <source path='client'/>
+    <source path='utils'/>
 
     <!--<source path='dao'/>-->
     <!--<source path='shared'/>-->

@@ -1,11 +1,13 @@
 package com.damintsev.client.dao;
 
+import java.io.Serializable;
+
 /**
  * User: Damintsev Andrey
  * Date: 30.07.13
  * Time: 22:55
  */
-public class Device implements Item {
+public class Device implements Item, Serializable {
 
     String name;
     String address;

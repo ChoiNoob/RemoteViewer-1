@@ -1,12 +1,12 @@
 package com.damintsev.server;
 
 import com.damintsev.client.GreetingService;
-import com.damintsev.shared.FieldVerifier;
+import com.damintsev.servlet.FieldVerifier;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * The server side implementation of the RPC service.
- */
+* The server side implementation of the RPC service.
+*/
 @SuppressWarnings("serial")
 public class GreetingServiceImpl extends RemoteServiceServlet implements
     GreetingService {

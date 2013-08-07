@@ -29,7 +29,6 @@ public class UISettingsPanel {
     }
 
     private UISettingsPanel(){
-
     }
 
     private ContentPanel panel;
@@ -49,7 +48,6 @@ public class UISettingsPanel {
         panel.setAnimationDuration(1000);
         panel.setAnimCollapse(true);
         panel.setHeadingText("Режим редактирования");
-        panel.setCollapsible(true);
         panel.setPixelSize(170, 500);
         panel.getElement().getStyle().setTop(5, Style.Unit.PX);
         panel.getElement().getStyle().setRight(5, Style.Unit.PX);
@@ -65,7 +63,7 @@ public class UISettingsPanel {
             }
         });
         station.setIconAlign(ButtonCell.IconAlign.BOTTOM);
-        station.setIcon(Utils.getImage("hipath3800"));
+        station.setIcon(Utils.getImage("hipath3800_32"));
         buttons.add(station);
 
         TextButton device = new TextButton("Добавить устройство",new SelectEvent.SelectHandler() {
