@@ -63,33 +63,6 @@ public class UIRootPanel {
         final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
 
-//        ((AbsolutePanel)body.getCenterWidget()).add(new TextButton("asdas", new SelectEvent.SelectHandler() {
-//            public void onSelect(SelectEvent event) {
-//                if (settings.isVisible()) settings.collapse();
-//                else settings.expand();
-//                AddStationWindow.get().expand();
-//            }
-//        }));
-
-//        body.setEastWidget(panel, settingsLayout);
-        PortalLayoutContainer portal = new PortalLayoutContainer(1);
-//        portal.add(panel);
-//        body.add(portal);
-//
-//        service.getMessage(new AsyncCallback<String>() {
-//            public void onFailure(Throwable caught) {
-//                Dialogs.alert("fail=" + caught.getMessage());
-//            }
-//
-//            public void onSuccess(String result) {
-//                Dialogs.alert(result);
-//                System.out.println(result);
-//                System.out.println(result);
-//                System.out.println(result);
-//                System.out.println(result);
-//            }
-//        });
-
         return viewport;
     }
 }

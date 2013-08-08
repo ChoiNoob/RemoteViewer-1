@@ -10,6 +10,7 @@ public class ISDN extends MyInter {
     private String name;
     private String query;
     private String regExp;
+    private LinkStatus status;
 
     public String getName() {
         return name;
@@ -24,7 +25,7 @@ public class ISDN extends MyInter {
     }
 
     public String getImage() {
-        return "cloud_130";
+        return "cloud";
     }
 
     public String getQuery() {
@@ -49,5 +50,13 @@ public class ISDN extends MyInter {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public LinkStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LinkStatus status) {
+        this.status = status;
     }
 }

@@ -7,6 +7,8 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.util.IconHelper;
+import com.sencha.gxt.core.client.util.Margins;
+import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
@@ -63,19 +65,17 @@ public class UISettingsPanel {
             }
         });
         station.setIconAlign(ButtonCell.IconAlign.BOTTOM);
-        station.setIcon(Utils.getImage("hipath3800_32"));
-        buttons.add(station);
+        station.setIcon(Utils.getImage("hipath"));
+        buttons.add(station, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
         TextButton device = new TextButton("Добавить устройство",new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 AddSourceWindow.get().show();
             }
         });
-        device.setIcon(Utils.getImage("cloud_130"));
+        device.setIcon(Utils.getImage("cloud"));
         device.setIconAlign(ButtonCell.IconAlign.BOTTOM);
         buttons.add(device);
-//        Image img2 = new Image(IconHelper.getImageResource(UriUtils.fromString("/web/img/hipath4000.jpg"), 100, 100));
-//        buttons.add(img2);
 
         panel.add(buttons);
 
