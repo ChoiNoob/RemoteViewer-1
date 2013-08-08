@@ -6,5 +6,5 @@ package com.damintsev.client.dao;
  * Time: 1:45
  */
 public enum DeviceType {
-    ISDN, IP
+    STATION, ISDN, IP
 }

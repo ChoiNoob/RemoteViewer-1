@@ -1,6 +1,6 @@
 package com.damintsev.client.uiframe;
 
-import com.damintsev.client.Utils;
+import com.damintsev.client.dao.ISDN;
 import com.damintsev.client.dao.DeviceType;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -67,12 +67,10 @@ public class AddSourceWindow extends Window {
 
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                UIItem device = new UIItem();
-                device.setName(name.getValue());
-                device.setImage(Utils.getImage("cloud_130"));
-                UICenterField.get().addItem(device);
+                UIItem cloud = new UIItem(new ISDN());
+                UICenterField.get().addItem(cloud);
                 hide();
-            }  //todo
+            }
         }));
 
         con.addButton(new TextButton("Отмена", new SelectEvent.SelectHandler() {

@@ -1,5 +1,6 @@
 package com.damintsev.client.uiframe;
 
+import com.damintsev.client.Utils;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
@@ -34,9 +35,7 @@ public class UIRootPanel {
     }
 
     private UIRootPanel(){
-
     }
-    ClientServiceAsync service = GWT.create(ClientService.class);
 
     public Widget getContent() {
         Viewport viewport = new Viewport();
@@ -55,7 +54,7 @@ public class UIRootPanel {
         footer.setStyleName("footer");
         body.setSouthWidget(footer, new BorderLayoutContainer.BorderLayoutData(20));
 
-        Image logo = new Image(IconHelper.getImageResource(UriUtils.fromString("/web/img/avanti_logo_64.png"), 64, 64)); //todo image resources
+        Image logo = new Image(Utils.getImage("logo"));
         logo.setPixelSize(64, 64);
         logo.setStyleName("gwt_logo");
 
@@ -76,20 +75,20 @@ public class UIRootPanel {
         PortalLayoutContainer portal = new PortalLayoutContainer(1);
 //        portal.add(panel);
 //        body.add(portal);
-
-        service.getMessage(new AsyncCallback<String>() {
-            public void onFailure(Throwable caught) {
-                Dialogs.alert("fail=" + caught.getMessage());
-            }
-
-            public void onSuccess(String result) {
-                Dialogs.alert(result);
-                System.out.println(result);
-                System.out.println(result);
-                System.out.println(result);
-                System.out.println(result);
-            }
-        });
+//
+//        service.getMessage(new AsyncCallback<String>() {
+//            public void onFailure(Throwable caught) {
+//                Dialogs.alert("fail=" + caught.getMessage());
+//            }
+//
+//            public void onSuccess(String result) {
+//                Dialogs.alert(result);
+//                System.out.println(result);
+//                System.out.println(result);
+//                System.out.println(result);
+//                System.out.println(result);
+//            }
+//        });
 
         return viewport;
     }

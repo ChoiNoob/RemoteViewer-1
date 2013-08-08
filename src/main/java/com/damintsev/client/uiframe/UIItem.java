@@ -1,7 +1,9 @@
 package com.damintsev.client.uiframe;
 
 import com.damintsev.client.Utils;
+import com.damintsev.client.dao.DeviceType;
 import com.damintsev.client.dao.Item;
+import com.damintsev.client.dao.MyInter;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.resources.client.ImageResource;
@@ -11,6 +13,8 @@ import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 
+import java.io.Serializable;
+
 /**
  * User: Damintsev Andrey
  * Date: 03.08.13
@@ -18,15 +22,23 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
  */
 public class UIItem extends Label {
 
-    private String name;
     private Item item;
     private Position position;
     private Position centerPosition;
-    private ImageResource image;
-    private ItemType type;
+    private Image image;
 
-    public UIItem() {
+    public UIItem(MyInter data) {
         super();
+        item = new Item();
+        this.item.setData(data);
+        init();
+    }
+
+    public UIItem(Item item) {
+        super();
+        this.item = item;
+        position = new Position(item.getCoordX(), item.getCoordY());
+        init();
     }
 
     public void savePosition() {
@@ -37,13 +49,14 @@ public class UIItem extends Label {
         }
     }
 
-    public void init() {
+    private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
         Label label = new Label(getName());
         if(getName() != null)
             getElement().appendChild(label.getElement());
         label.setStyleName("tooltip");
-        getElement().appendChild(new Image(image).getElement());
+        image = new Image(getImage());
+        getElement().appendChild(image.getElement());
     }
 
     public Position getCenterPosition() {
@@ -57,44 +70,38 @@ public class UIItem extends Label {
         return position;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
-    }
+//    public void setItem(Item item) {
+//        this.item = item;
+//    }
 
     public Item getItem() {
+        item.setCoordX(getPosition().x);
+        item.setCoordY(getPosition().y);
         return item;
     }
 
     public ImageResource getImage() {
-        return image;
-    }
-
-    public void setImage(ImageResource image) {
-        this.image = image;
+        return Utils.getImage(item.getImage());
     }
 
     public String getName() {
-        return name;
+        return item.getName();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public DeviceType getType() {
+        return item.getType();
     }
 
-    public ItemType getType() {
-        return type;
-    }
-
-    public void setType(ItemType type) {
-        this.type = type;
-    }
-    
     public int getWigth() {
         return image.getWidth();
     }
 
     public int getHeight() {
         return image.getHeight();
+    }
+
+    public void setId(int id) {
+        item.setId(id);
     }
 
     class Position {

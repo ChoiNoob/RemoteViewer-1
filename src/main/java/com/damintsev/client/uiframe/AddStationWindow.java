@@ -1,6 +1,7 @@
 package com.damintsev.client.uiframe;
 
 import com.damintsev.client.Utils;
+import com.damintsev.client.dao.Station;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -19,6 +20,7 @@ import com.sencha.gxt.widget.core.client.form.TextField;
  */
 public class AddStationWindow extends Window {
 
+
     private static AddStationWindow instance;
 
     public static AddStationWindow get() {
@@ -36,35 +38,43 @@ public class AddStationWindow extends Window {
         final VerticalLayoutContainer panel = new VerticalLayoutContainer();
         con.add(panel);
 
-        
-
         final TextField name = new TextField();
         panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        TextField host = new TextField();
+        final TextField host = new TextField();
         host.setAllowBlank(false);
         panel.add(new FieldLabel(host, "Адрес сервера"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        TextField port = new TextField();
-        port.setAllowBlank(false);
+        final TextField port = new TextField();
         panel.add(new FieldLabel(port, "Порт"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        TextField login = new TextField();
+        final TextField login = new TextField();
         panel.add(new FieldLabel(login, "Логин"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        panel.add(new FieldLabel(new TextField(), "Пароль"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+
+        final TextField pswd = new TextField();
+        panel.add(new FieldLabel(pswd, "Пароль"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
         TextArea comment = new TextArea();
         comment.setHeight(70);
         panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                UIItem stationItem = new UIItem();
-                stationItem.setType(ItemType.STATION);
-                stationItem.setName(name.getValue());
-                stationItem.setImage(Utils.getImage("hipath"));
-                UICenterField.get().addItem(stationItem);
+                Station station = new Station();
+
+                station.setName(name.getValue());
+
+                if(!host.isValid()) return;
+                station.setHost(host.getValue());
+
+                if(port.getValue() == null)
+                    station.setPort("23");
+
+                station.setLogin(login.getValue());
+                station.setPassword(pswd.getValue());
+
+                UICenterField.get().addItem(new UIItem(station));
                 hide();
-            }  //todo
+            }
         }));
 
         con.addButton(new TextButton("Отмена", new SelectEvent.SelectHandler() {

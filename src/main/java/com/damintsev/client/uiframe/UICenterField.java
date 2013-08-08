@@ -3,19 +3,17 @@ package com.damintsev.client.uiframe;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.damintsev.client.dao.DeviceType;
+import com.damintsev.client.dao.Item;
+import com.damintsev.client.service.Service;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.CssColor;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.box.MessageBox;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
@@ -29,6 +27,7 @@ import java.util.List;
  */
 public class UICenterField {
 
+    private static int id = 0;
     private static UICenterField instance;
 
     public static UICenterField get() {
@@ -38,10 +37,12 @@ public class UICenterField {
 
     private PickupDragController dragController;
     private AbsolutePanel panel;
-    private List<UIItem> items = new ArrayList<UIItem>();
+    private List<UIItem> uiItems;
     private UIItem mainItem;
 
     private UICenterField() {
+        System.out.println("UICenterField construct");
+        uiItems = new ArrayList<UIItem>();
         panel = new AbsolutePanel();
         dragController = new PickupDragController(panel, true) {
             @Override
@@ -74,6 +75,7 @@ public class UICenterField {
 
         panel.add(editButton);
         drawCanvas(panel);
+        loadFromDatabase();
     }
 
     private Canvas canvas;
@@ -89,17 +91,13 @@ public class UICenterField {
         panel.add(canvas);
     }
 
-    public Canvas getCanvas() {
-        return canvas;
-    }
-
     public Widget getContent() {
         return panel;
     }
 
     public void addItem(UIItem item) {
-        item.init();
-        if(item.getType() == ItemType.STATION) {
+        item.setId(getNextId());
+        if(item.getType() == DeviceType.STATION) {
             if(mainItem == null)
                 mainItem = item;
             else
@@ -110,34 +108,76 @@ public class UICenterField {
         int centerX = Window.getClientWidth() / 2 - item.getWigth() / 2;
         int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
         panel.setWidgetPosition(item, centerX, centerY);
-        items.add(item);
+        uiItems.add(item);
         drawConnections(false);
     }
 
-    public void allowDrag(){
-        for(UIItem item : items) {
+    private void allowDrag(){
+        for(UIItem item : uiItems) {
             dragController.makeDraggable(item);
         }
     }
 
-    public void disAllowDrag() {
-        for(UIItem item : items) {
+    private void disAllowDrag() {
+        for(UIItem item : uiItems) {
             dragController.makeNotDraggable(item);
         }
     }
 
     public void saveItemPositions() {
+        if(mainItem == null) Dialogs.alert("В системе нет головной станции");
         disAllowDrag();
-        for(UIItem item : items) {
+        for(UIItem item : uiItems)
             item.savePosition();
-        }
         drawConnections(false);
+        saveToDatabase();
+    }
+    
+    public void saveToDatabase() {
+        List<Item> items = new ArrayList<Item>(uiItems.size());
+        for(UIItem ui : uiItems) {
+            items.add(ui.getItem());
+        }
+        Service.instance.saveItems(items, new AsyncCallback<Boolean>() {
+            public void onFailure(Throwable throwable) {
+                Dialogs.alert(throwable.getMessage());
+            }
+
+            public void onSuccess(Boolean bool) {
+            }
+        });
+    }
+    
+    private void loadFromDatabase() {
+        Service.instance.loadItems(new AsyncCallback<List<Item>>() {
+            public void onFailure(Throwable throwable) {
+                Dialogs.alert(throwable.getMessage());
+            }
+
+            public void onSuccess(List<Item> items) {
+                System.out.println("loaded " + items.size());
+                int tmp = -1;
+                for(Item item : items) {
+                    uiItems.add(new UIItem(item));
+                    if (item.getId() > tmp)
+                        tmp = item.getId();
+                }
+                id = tmp >= 0 ? tmp : 0;
+                rasstavitItems();
+            }
+        });
     }
 
     public void revertItemPositions() {
         disAllowDrag();
-        for (UIItem item : items) {
+        rasstavitItems();
+        drawConnections(false);
+    }
+
+    private void rasstavitItems() {
+        for (UIItem item : uiItems) {
             UIItem.Position position = item.getPosition();
+            panel.add(item,0,0);
             if(position != null) panel.setWidgetPosition(item, position.x, position.y);
             else item.savePosition();
         }
@@ -145,11 +185,9 @@ public class UICenterField {
     }
 
     private void drawConnections(boolean fireEvent) {
-        if(mainItem == null) {
-            Dialogs.alert("В системе нет головной станции");
-        }
+        if(mainItem == null) return;
         clearCanvas();
-        for(UIItem item : items) {
+        for(UIItem item : uiItems) {
             drawLine(mainItem.getCenterPosition(), item.getCenterPosition(), fireEvent);
         }
     }
@@ -168,5 +206,9 @@ public class UICenterField {
     public void clearCanvas() {
         Context2d context = canvas.getContext2d();
         context.clearRect(0,0,Window.getClientWidth(),Window.getClientHeight());
+    }
+
+    private int getNextId() {
+        return id++;
     }
 }

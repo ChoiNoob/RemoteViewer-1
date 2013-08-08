@@ -1,8 +1,13 @@
 package com.damintsev.server.services;
 
-import com.damintsev.client.uiframe.ClientService;
-import com.google.gwt.user.client.rpc.RemoteService;
+import com.damintsev.client.dao.Item;
+import com.damintsev.client.service.ClientService;
+import com.damintsev.server.db.DatabaseProxy;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * User: Damintsev Andrey
@@ -11,8 +16,24 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  */
 public class ServerService extends RemoteServiceServlet implements ClientService {
 
+
     public String getMessage() {
-        System.out.println("calling service!");
-        return "FUCK U!!!!!!";
+        return "!!!!!!";
+    }
+
+    public Boolean saveItems(List<Item> items) {
+        for(Item item : items) {
+            System.out.println("name=" + item.getName());
+            System.out.println("x=" + item.getCoordX());
+            System.out.println("y=" + item.getCoordY());
+        }
+        DatabaseProxy proxy = new DatabaseProxy();
+        proxy.saveItems(items);
+        return true;
+    }
+
+    public List<Item> loadItems() {
+        DatabaseProxy proxy = new DatabaseProxy();
+        return proxy.loadItemPositions();
     }
 }

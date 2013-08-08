@@ -7,12 +7,9 @@
     <inherits name="com.sencha.gxt.ui.GXT"/>
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
 
-    <entry-point class='com.damintsev.client.mainGWT'/>
+    <entry-point class='com.damintsev.client.MainGWT'/>
 
     <source path='client'/>
     <source path='utils'/>
-
-    <!--<source path='dao'/>-->
-    <!--<source path='shared'/>-->
 
 </module>

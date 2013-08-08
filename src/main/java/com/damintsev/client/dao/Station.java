@@ -5,17 +5,26 @@ import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+
 /**
  * User: Damintsev Andrey
  * Date: 04.08.13
  * Time: 14:15
  */
-public class Station implements Item {
+@XmlRootElement
+public class Station extends MyInter {
 
-    public String host;
-    public String port;
-    public String login;
-    public String password;
+    @XmlElement
+    private int id;
+    @XmlElement private String name;
+    @XmlElement  private String host;
+    @XmlElement private String port;
+    @XmlElement private String login;
+    @XmlElement private String password;
+    private  DeviceType deviceType = DeviceType.STATION;
 
     public String getHost() {
         return host;
@@ -48,19 +57,28 @@ public class Station implements Item {
     public void setPort(String port) {
         this.port = port;
     }
-}
 
-//class StationEditor  implements Editor<Station> {
-//
-//    interface Driver extends SimpleBeanEditorDriver<Station, StationEditor> {
-//    }
-//
-//    FieldLabel host;
-//
-//    Driver driver = GWT.create(Driver.class);
-//
-//    public StationEditor() {
-//        host = new FieldLabel();
-//
-//    }
-//}
+    public String getName() {
+        return name;
+    }
+
+    public DeviceType getType() {
+        return deviceType;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getImage() {
+        return "hipath";
+    }
+}
