@@ -1,13 +1,10 @@
-package com.damintsev.client.dao;
+package com.damintsev.client.devices;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.editor.client.Editor;
-import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.damintsev.client.devices.enums.DeviceType;
+import com.damintsev.client.devices.enums.Status;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.io.Serializable;
 
 /**
  * User: Damintsev Andrey
@@ -15,15 +12,27 @@ import java.io.Serializable;
  * Time: 14:15
  */
 @XmlRootElement
-public class Station extends MyInter {
+public class Station extends Device {
 
     @XmlElement
     private int id;
-    @XmlElement private String name;
-    @XmlElement  private String host;
-    @XmlElement private String port;
-    @XmlElement private String login;
-    @XmlElement private String password;
+    @XmlElement
+    private String name;
+    @XmlElement
+    private String host;
+    @XmlElement
+    private String port;
+    @XmlElement
+    private String login;
+    @XmlElement
+    private String password;
+
+    private Status status;
+
+    private String comment;
+
+    private String imageName = "hipath";
+
     private  DeviceType deviceType = DeviceType.STATION;
 
     public String getHost() {
@@ -79,6 +88,23 @@ public class Station extends MyInter {
     }
 
     public String getImage() {
-        return "hipath";
+        return imageName;
+    }
+
+    @Override
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setImage(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

@@ -1,6 +1,7 @@
 package com.damintsev.server.db;
 
-import com.damintsev.client.dao.*;
+import com.damintsev.client.devices.*;
+import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.server.db.xmldao.XMLItem;
 import com.damintsev.server.db.xmldao.XMLItemList;
 import com.damintsev.server.db.xmldao.XMLPosition;
@@ -52,7 +53,7 @@ public class DatabaseProxy {
         return items;
     }
 
-    private MyInter convertXML(XMLItem xmlItem) {
+    private Device convertXML(XMLItem xmlItem) {
         System.out.println("CPTT=" + xmlItem.getType());
         switch (DeviceType.valueOf(xmlItem.getType())) {
             case STATION:
@@ -113,7 +114,7 @@ public class DatabaseProxy {
             pos.setPositionY(item.getCoordY());
             xmlPositionList.add(pos);
 
-            MyInter data = item.getData();
+            Device data = item.getData();
 
             XMLItem item1 = new XMLItem();
             item1.setId(item.getId());

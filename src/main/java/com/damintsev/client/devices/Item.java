@@ -1,4 +1,6 @@
-package com.damintsev.client.dao;
+package com.damintsev.client.devices;
+
+import com.damintsev.client.devices.enums.DeviceType;
 
 import java.io.Serializable;
 
@@ -7,11 +9,19 @@ import java.io.Serializable;
  * Date: 05.08.13
  * Time: 22:33
  */
-public class Item implements Serializable {
+public class Item <T extends Device> implements Serializable {
    
     private int coordX;
     private int coordY;
-    private MyInter data;
+    private T data;
+
+    public Item() {
+
+    }
+
+    public Item(T data) {
+        this.data = data;
+    }
 
     public int getCoordX() {
         return coordX;
@@ -29,11 +39,11 @@ public class Item implements Serializable {
         this.coordY = coordY;
     }
 
-    public MyInter getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(MyInter data) {
+    public void setData(T data) {
         this.data = data;
     }
 

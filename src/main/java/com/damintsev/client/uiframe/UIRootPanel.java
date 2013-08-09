@@ -1,24 +1,11 @@
 package com.damintsev.client.uiframe;
 
-import com.damintsev.client.Utils;
-import com.damintsev.utils.Dialogs;
-import com.google.gwt.core.client.GWT;
+import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.i18n.client.HasDirection;
-import com.google.gwt.layout.client.Layout;
-import com.google.gwt.safehtml.shared.UriUtils;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
-import com.sencha.gxt.core.client.util.IconHelper;
-import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.ContentPanel;
-import com.sencha.gxt.widget.core.client.button.ButtonBar;
-import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
-import com.sencha.gxt.widget.core.client.event.BeforeExpandEvent;
-import com.sencha.gxt.widget.core.client.event.CollapseEvent;
-import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
 /**
  * User: Damintsev Andrey

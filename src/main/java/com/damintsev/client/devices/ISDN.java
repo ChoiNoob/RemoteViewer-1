@@ -1,16 +1,22 @@
-package com.damintsev.client.dao;
+package com.damintsev.client.devices;
+
+import com.damintsev.client.devices.enums.DeviceType;
+import com.damintsev.client.devices.enums.Status;
 
 /**
  * Created by adamintsev
  * Date: 08.08.13 13:45
  */
-public class ISDN extends MyInter {
+public class ISDN extends Device {
 
     private int id;
     private String name;
     private String query;
     private String regExp;
-    private LinkStatus status;
+    private String imageName = "cloud";
+    private Status status;
+    private Station parentStation;
+    private DeviceType type = DeviceType.ISDN;
 
     public String getName() {
         return name;
@@ -21,11 +27,15 @@ public class ISDN extends MyInter {
     }
 
     public DeviceType getType() {
-        return DeviceType.ISDN;
+        return type;
     }
 
     public String getImage() {
-        return "cloud";
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
 
     public String getQuery() {
@@ -52,11 +62,19 @@ public class ISDN extends MyInter {
         this.id = id;
     }
 
-    public LinkStatus getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(LinkStatus status) {
+    public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public Station getParentStation() {
+        return parentStation;
+    }
+
+    public void setParentStation(Station parentStation) {
+        this.parentStation = parentStation;
     }
 }

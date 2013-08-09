@@ -1,42 +1,33 @@
-package com.damintsev.client.uiframe;
+package com.damintsev.client.devices;
 
-import com.damintsev.client.Utils;
-import com.damintsev.client.dao.DeviceType;
-import com.damintsev.client.dao.Item;
-import com.damintsev.client.dao.MyInter;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style;
+import com.damintsev.client.devices.enums.DeviceType;
+import com.damintsev.client.devices.enums.Status;
+import com.damintsev.utils.Position;
+import com.damintsev.utils.Utils;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.*;
-import com.sencha.gxt.fx.client.Draggable;
-import com.sencha.gxt.widget.core.client.ContentPanel;
-
-import java.io.Serializable;
 
 /**
  * User: Damintsev Andrey
  * Date: 03.08.13
  * Time: 2:09
  */
-public class UIItem extends Label {
+public class UIItem<T extends Device> extends Label {
 
-    private Item item;
+    private Item<T> item;
     private Position position;
-    private Position centerPosition;
     private Image image;
 
-    public UIItem(MyInter data) {
+    public UIItem(Item<T> item) {
         super();
-        item = new Item();
-        this.item.setData(data);
+        this.item = item;
+        position = new Position(item.getCoordX(), item.getCoordY());
         init();
     }
 
-    public UIItem(Item item) {
+    public UIItem(T data) {
         super();
-        this.item = item;
+        this.item = new Item<T>(data);
         position = new Position(item.getCoordX(), item.getCoordY());
         init();
     }
@@ -51,30 +42,25 @@ public class UIItem extends Label {
 
     private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
+        image = new Image(getImage());
+        getElement().appendChild(image.getElement());
         Label label = new Label(getName());
         if(getName() != null)
             getElement().appendChild(label.getElement());
         label.setStyleName("tooltip");
-        image = new Image(getImage());
-        getElement().appendChild(image.getElement());
     }
 
     public Position getCenterPosition() {
         int x = getAbsoluteLeft() + image.getWidth() / 2;
         int y = getAbsoluteTop() + image.getHeight() / 2;
-        centerPosition = new Position(x,y);
-        return centerPosition;
+        return new Position(x, y);
     }
 
     public Position getPosition() {
         return position;
     }
 
-//    public void setItem(Item item) {
-//        this.item = item;
-//    }
-
-    public Item getItem() {
+    public Item<T> getItem() {
         item.setCoordX(getPosition().x);
         item.setCoordY(getPosition().y);
         return item;
@@ -92,7 +78,7 @@ public class UIItem extends Label {
         return item.getType();
     }
 
-    public int getWigth() {
+    public int getWidth() {
         return image.getWidth();
     }
 
@@ -103,15 +89,16 @@ public class UIItem extends Label {
     public void setId(int id) {
         item.setId(id);
     }
+    
+    public int getId() {
+        return item.getId();
+    }
 
-    class Position {
+    public Station getParentStation() {
+        return item.getData().getParentStation();
+    }
 
-        Position(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        int x;
-        int y;
+    public Status getStatus() {
+        return item.getData().getStatus();
     }
 }

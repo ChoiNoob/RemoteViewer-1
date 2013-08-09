@@ -1,14 +1,10 @@
 package com.damintsev.client.uiframe;
 
-import com.damintsev.client.Utils;
+import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.safehtml.shared.UriUtils;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.ButtonCell;
-import com.sencha.gxt.core.client.util.IconHelper;
 import com.sencha.gxt.core.client.util.Margins;
-import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.*;
@@ -70,7 +66,7 @@ public class UISettingsPanel {
 
         TextButton device = new TextButton("Добавить устройство",new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                AddSourceWindow.get().show();
+                AddDeviceWindow.get().show();
             }
         });
         device.setIcon(Utils.getImage("cloud"));

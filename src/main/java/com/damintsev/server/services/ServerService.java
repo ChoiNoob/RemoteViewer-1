@@ -1,13 +1,11 @@
 package com.damintsev.server.services;
 
-import com.damintsev.client.dao.Item;
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 /**
  * User: Damintsev Andrey
@@ -15,11 +13,6 @@ import java.util.Properties;
  * Time: 0:22
  */
 public class ServerService extends RemoteServiceServlet implements ClientService {
-
-
-    public String getMessage() {
-        return "!!!!!!";
-    }
 
     public Boolean saveItems(List<Item> items) {
         for(Item item : items) {

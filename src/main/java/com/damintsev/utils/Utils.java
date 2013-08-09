@@ -1,4 +1,4 @@
-package com.damintsev.client;
+package com.damintsev.utils;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.UriUtils;

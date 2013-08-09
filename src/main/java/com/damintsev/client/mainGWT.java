@@ -1,11 +1,6 @@
 package com.damintsev.client;
 
-import com.damintsev.client.service.ClientService;
-import com.damintsev.client.uiframe.UIItem;
 import com.damintsev.client.uiframe.UIRootPanel;
-import com.google.gwt.canvas.client.Canvas;
-import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.canvas.dom.client.FillStrokeStyle;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;

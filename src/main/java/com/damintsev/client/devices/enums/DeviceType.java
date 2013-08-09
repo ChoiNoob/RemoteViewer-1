@@ -1,4 +1,4 @@
-package com.damintsev.client.dao;
+package com.damintsev.client.devices.enums;
 
 /**
  * User: Damintsev Andrey

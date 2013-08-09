@@ -1,6 +1,6 @@
 package com.damintsev.client.service;
 
-import com.damintsev.client.dao.Item;
+import com.damintsev.client.devices.Item;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.List;
  * Date: 08.08.13 15:32
  */
 public interface ClientServiceAsync {
-    void getMessage(AsyncCallback<String> callback);
 
     void saveItems(List<Item> items, AsyncCallback<Boolean> callback);
 

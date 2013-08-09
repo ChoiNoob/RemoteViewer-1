@@ -3,10 +3,15 @@ package com.damintsev.client.uiframe;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.damintsev.client.dao.DeviceType;
-import com.damintsev.client.dao.Item;
+import com.damintsev.client.devices.Device;
+import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.enums.DeviceType;
+import com.damintsev.client.devices.Item;
+import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
 import com.damintsev.utils.Dialogs;
+import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.Style;
@@ -18,7 +23,9 @@ import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: Damintsev Andrey
@@ -37,12 +44,10 @@ public class UICenterField {
 
     private PickupDragController dragController;
     private AbsolutePanel panel;
-    private List<UIItem> uiItems;
-    private UIItem mainItem;
+    private Map<UIItem<Station>, ArrayList<UIItem<? extends Device>>> uiIems;
 
     private UICenterField() {
-        System.out.println("UICenterField construct");
-        uiItems = new ArrayList<UIItem>();
+        uiIems = new HashMap<UIItem<Station>, ArrayList<UIItem<? extends Device>>>();
         panel = new AbsolutePanel();
         dragController = new PickupDragController(panel, true) {
             @Override
@@ -75,7 +80,7 @@ public class UICenterField {
 
         panel.add(editButton);
         drawCanvas(panel);
-        loadFromDatabase();
+//        loadFromDatabase();
     }
 
     private Canvas canvas;
@@ -95,48 +100,64 @@ public class UICenterField {
         return panel;
     }
 
-    public void addItem(UIItem item) {
+    public void addItem(UIItem<? extends Device> item) {
         item.setId(getNextId());
-        if(item.getType() == DeviceType.STATION) {
-            if(mainItem == null)
-                mainItem = item;
-            else
-                Dialogs.alert("В система уже есть головная станция");
+        if(item.getType()==DeviceType.STATION) {
+            if(!uiIems.containsKey(item)) {
+                uiIems.put((UIItem<Station>) item, new ArrayList<UIItem<? extends Device>>());
+            }
+        } else {
+            Station station = item.getParentStation();
+            System.out.println("station=" + station);
+            uiIems.get(getUIItem(station)).add(item);
         }
         dragController.makeDraggable(item);
         panel.add(item, 0, 0);
-        int centerX = Window.getClientWidth() / 2 - item.getWigth() / 2;
+        int centerX = Window.getClientWidth() / 2 - item.getWidth() / 2;
         int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
         panel.setWidgetPosition(item, centerX, centerY);
-        uiItems.add(item);
         drawConnections(false);
     }
 
     private void allowDrag(){
-        for(UIItem item : uiItems) {
-            dragController.makeDraggable(item);
+        for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
+            UIItem<Station> station = entry.getKey();
+            dragController.makeDraggable(station);
+            for(UIItem item : entry.getValue()) {
+                dragController.makeDraggable(item);
+            }
         }
     }
 
     private void disAllowDrag() {
-        for(UIItem item : uiItems) {
-            dragController.makeNotDraggable(item);
+        for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
+            UIItem<Station> station = entry.getKey();
+            dragController.makeNotDraggable(station);
+            for(UIItem item : entry.getValue()) {
+                dragController.makeNotDraggable(item);
+            }
         }
     }
 
     public void saveItemPositions() {
-        if(mainItem == null) Dialogs.alert("В системе нет головной станции");
         disAllowDrag();
-        for(UIItem item : uiItems)
-            item.savePosition();
+        for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
+            entry.getKey().savePosition();
+            for(UIItem item : entry.getValue()) {
+                item.savePosition();
+            }
+        }
         drawConnections(false);
         saveToDatabase();
     }
     
     public void saveToDatabase() {
-        List<Item> items = new ArrayList<Item>(uiItems.size());
-        for(UIItem ui : uiItems) {
-            items.add(ui.getItem());
+        List<Item> items = new ArrayList<Item>();
+        for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
+            items.add(entry.getKey().getItem());
+            for(UIItem item : entry.getValue()) {
+                items.add(item.getItem());
+            }
         }
         Service.instance.saveItems(items, new AsyncCallback<Boolean>() {
             public void onFailure(Throwable throwable) {
@@ -148,51 +169,53 @@ public class UICenterField {
         });
     }
     
-    private void loadFromDatabase() {
-        Service.instance.loadItems(new AsyncCallback<List<Item>>() {
-            public void onFailure(Throwable throwable) {
-                Dialogs.alert(throwable.getMessage());
-            }
-
-            public void onSuccess(List<Item> items) {
-                System.out.println("loaded " + items.size());
-                int tmp = -1;
-                for(Item item : items) {
-                    uiItems.add(new UIItem(item));
-                    if (item.getId() > tmp)
-                        tmp = item.getId();
-                }
-                id = tmp >= 0 ? tmp : 0;
-                rasstavitItems();
-            }
-        });
-    }
+//    private void loadFromDatabase() {
+//        Service.instance.loadItems(new AsyncCallback<List<Item>>() {
+//            public void onFailure(Throwable throwable) {
+//                Dialogs.alert(throwable.getMessage());
+//            }
+//
+//            public void onSuccess(List<Item> items) {
+//                System.out.println("loaded " + items.size());
+//                int tmp = -1;
+//                for(Item item : items) {
+//                    uiItems.add(new UIItem(item));
+//                    if (item.getId() > tmp)
+//                        tmp = item.getId();
+//                }
+//                id = tmp >= 0 ? tmp : 0;
+//                rasstavitItems();
+//            }
+//        });
+//    }
 
     public void revertItemPositions() {
         disAllowDrag();
-        rasstavitItems();
+//        rasstavitItems();
         drawConnections(false);
     }
 
-    private void rasstavitItems() {
-        for (UIItem item : uiItems) {
-            UIItem.Position position = item.getPosition();
-            panel.add(item,0,0);
-            if(position != null) panel.setWidgetPosition(item, position.x, position.y);
-            else item.savePosition();
-        }
-        drawConnections(false);
-    }
+//    private void rasstavitItems() {
+//        for (UIItem item : uiItems) {
+//            Position position = item.getPosition();
+//            panel.add(item,0,0);
+//            if(position != null) panel.setWidgetPosition(item, position.x, position.y);
+//            else item.savePosition();
+//        }
+//        drawConnections(false);
+//    }
 
     private void drawConnections(boolean fireEvent) {
-        if(mainItem == null) return;
         clearCanvas();
-        for(UIItem item : uiItems) {
-            drawLine(mainItem.getCenterPosition(), item.getCenterPosition(), fireEvent);
+        for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
+            UIItem<? extends Device> station = entry.getKey();
+            for(UIItem item : entry.getValue()) {
+                drawLine(station.getCenterPosition(), item.getCenterPosition(), item.getStatus());
+            }
         }
     }
 
-    public void drawLine(UIItem.Position from, UIItem.Position to, boolean fire) {
+    public void drawLine(Position from, Position to, Status status) {
         if(from.x == to.x && from.y == to.y) return;
 
         Context2d context = canvas.getContext2d();
@@ -203,12 +226,28 @@ public class UICenterField {
         context.stroke();
     }
 
-    public void clearCanvas() {
+    private void clearCanvas() {
         Context2d context = canvas.getContext2d();
         context.clearRect(0,0,Window.getClientWidth(),Window.getClientHeight());
     }
 
     private int getNextId() {
         return id++;
+    }
+    
+    public List<Station> getStations() {
+        List<Station> list = new ArrayList<Station>();
+        for(UIItem<Station> item :uiIems.keySet()){
+            list.add(item.getItem().getData());
+        }
+        return list;
+    }
+
+    public UIItem<Station> getUIItem(Station station) {
+        for(UIItem<Station> uiStations : uiIems.keySet()) {
+            if(uiStations.getId() == station.getId())
+                return uiStations;
+        }
+        return null;
     }
 }

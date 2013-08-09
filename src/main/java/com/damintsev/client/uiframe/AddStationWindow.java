@@ -1,9 +1,7 @@
 package com.damintsev.client.uiframe;
 
-import com.damintsev.client.Utils;
-import com.damintsev.client.dao.Station;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
+import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.UIItem;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -72,7 +70,7 @@ public class AddStationWindow extends Window {
                 station.setLogin(login.getValue());
                 station.setPassword(pswd.getValue());
 
-                UICenterField.get().addItem(new UIItem(station));
+                UICenterField.get().addItem(new UIItem<Station>(station));
                 hide();
             }
         }));
