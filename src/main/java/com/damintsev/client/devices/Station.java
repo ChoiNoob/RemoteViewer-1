@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Station extends Device {
 
     @XmlElement
-    private int id;
+    private Long id;
     @XmlElement
     private String name;
     @XmlElement
@@ -79,11 +79,11 @@ public class Station extends Device {
         this.name = name;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

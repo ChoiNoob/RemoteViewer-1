@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class XMLItem {
 
-    private int id;
+    private Long id;
     private String name;
     private String query;
     private String regExp;
@@ -20,12 +20,12 @@ public class XMLItem {
     private String login;
     private String password;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
     @XmlElement
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -86,11 +86,11 @@ public class UIItem<T extends Device> extends Label {
         return image.getHeight();
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         item.setId(id);
     }
     
-    public int getId() {
+    public Long getId() {
         return item.getId();
     }
 

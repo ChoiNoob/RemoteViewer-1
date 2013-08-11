@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class UICenterField {
 
-    private static int id = 0;
+    private static Long id;
     private static UICenterField instance;
 
     public static UICenterField get() {
@@ -231,7 +231,8 @@ public class UICenterField {
         context.clearRect(0,0,Window.getClientWidth(),Window.getClientHeight());
     }
 
-    private int getNextId() {
+    private Long getNextId() {
+        if(id == null) id = 0L; //todo
         return id++;
     }
     
@@ -245,7 +246,7 @@ public class UICenterField {
 
     public UIItem<Station> getUIItem(Station station) {
         for(UIItem<Station> uiStations : uiIems.keySet()) {
-            if(uiStations.getId() == station.getId())
+            if(uiStations.getId().equals(station.getId()))
                 return uiStations;
         }
         return null;

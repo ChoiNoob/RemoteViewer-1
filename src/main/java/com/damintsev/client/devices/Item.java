@@ -59,11 +59,11 @@ public class Item <T extends Device> implements Serializable {
         return data.getImage();
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         data.setId(id);
     }
 
-    public int getId() {
+    public Long getId() {
         return data.getId();
     }
 }

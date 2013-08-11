@@ -66,7 +66,7 @@ public class DatabaseProxy {
                 station.setName(xmlItem.getName());
                 return station;
             case ISDN:
-                ISDN isdn = new ISDN();
+                CommonDevice isdn = new CommonDevice();
                 isdn.setId(xmlItem.getId());
                 isdn.setQuery(xmlItem.getQuery());
                 isdn.setRegExp(xmlItem.getRegExp());
@@ -76,12 +76,12 @@ public class DatabaseProxy {
         return null;
     }
 
-    private XMLItem find(List<XMLItem> xmlItems, int id) {
+    private XMLItem find(List<XMLItem> xmlItems, Long id) {
         int index = Collections.binarySearch(xmlItems, id, new Comparator<Object>() {
             public int compare(Object o1, Object o2) {
                 XMLItem it = (XMLItem) o1;
                 int v;
-                if((v =  new Integer(it.getId()).compareTo( (Integer) o2)) != 0) return v;
+                if((v =  it.getId().compareTo((Long) o2)) != 0) return v;
                 return v;
             }
         });
@@ -122,7 +122,7 @@ public class DatabaseProxy {
 
             switch (data.getType()) {
                 case ISDN:
-                    ISDN isdn = (ISDN) data;
+                    CommonDevice isdn = (CommonDevice) data;
                     item1.setQuery(isdn.getQuery());
                     item1.setRegExp(isdn.getQuery());
                     item1.setType(isdn.getType().name());

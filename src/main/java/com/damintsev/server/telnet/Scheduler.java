@@ -1,6 +1,6 @@
 //package com.damintsev.server.telnet;
 //
-//import com.damintsev.client.dao.ISDN;
+//import com.damintsev.client.dao.CommonDevice;
 //import com.damintsev.client.dao.Device;
 //import com.damintsev.client.dao.Station;
 //
@@ -47,14 +47,14 @@
 //            Station station = entry.getKey();
 //            Telnet telnet = getConnection(station);
 //            for(Device devices : entry.getValue()) {
-//                ISDN isdn  = (ISDN) devices;
+//                CommonDevice isdn  = (CommonDevice) devices;
 //                String result = telnet.executeCommand(isdn.getQuery());
 //                parseResult(isdn, result);
 //            }
 //        }
 //    }
 //
-//    private void parseResult(ISDN isdn, String result) {
+//    private void parseResult(CommonDevice isdn, String result) {
 ////        Pattern pattern = new Pattern();
 ////       result.split()
 //    }

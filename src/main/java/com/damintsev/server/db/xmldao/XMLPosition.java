@@ -8,17 +8,17 @@ import javax.xml.bind.annotation.XmlElement;
  */
 public class XMLPosition {
 
-    private int id;
+    private Long id;
 
     private int positionX;
 
     private int positionY;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
     @XmlElement
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

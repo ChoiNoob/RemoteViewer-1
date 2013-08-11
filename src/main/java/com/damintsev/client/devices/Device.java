@@ -11,8 +11,8 @@ import java.io.Serializable;
  */
 public abstract class Device implements Serializable {
 
-    public abstract void setId(int id);
-    public abstract int getId();
+    public abstract void setId(Long id);
+    public abstract Long getId();
     public abstract String getName();
     public abstract DeviceType getType();
     public abstract String getImage();

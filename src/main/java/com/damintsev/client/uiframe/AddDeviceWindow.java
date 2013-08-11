@@ -1,9 +1,8 @@
 package com.damintsev.client.uiframe;
 
-import com.damintsev.client.devices.ISDN;
+import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.enums.DeviceType;
-import com.damintsev.client.devices.UIItem;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -25,7 +24,7 @@ import com.sencha.gxt.widget.core.client.form.TextField;
  * Date: 06.08.13
  * Time: 1:40
  */
-public class AddDeviceWindow implements Editor<Station>{
+public class AddDeviceWindow implements Editor<CommonDevice>{
 
     private static AddDeviceWindow instance;
 
@@ -33,19 +32,20 @@ public class AddDeviceWindow implements Editor<Station>{
         if(instance == null) instance = new AddDeviceWindow();
         return instance;
     }
-     Station station;
+
+    private CommonDevice device;
     private Driver driver = GWT.create(Driver.class);
     private Window window;
     //editor fields
-    TextField name;
-    TextField host;
-    TextField port;
-    TextField login;
-    TextField password;
-    TextArea comment;
+    private TextField name;
+    private TextField host;
+    private TextField port;
+    private TextField login;
+    private TextField password;
+    private TextArea comment;
 
     private AddDeviceWindow() {
-        station = new Station();
+//        station = new Station();
         window = new Window();
         window.setModal(true);
         window.setPixelSize(350, 350);
@@ -87,7 +87,7 @@ public class AddDeviceWindow implements Editor<Station>{
 
         host = new TextField();
         host.setAllowBlank(false);
-        panel.add(new FieldLabel(host, "Строка зпроса"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(host, "Строка запроса"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         port = new TextField();
         port.setAllowBlank(false);
@@ -104,18 +104,11 @@ public class AddDeviceWindow implements Editor<Station>{
 
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-//                if(!stations.isValid())return;
-//                ISDN isdn = new ISDN();
-//                isdn.setParentStation(stations.getValue());
-//
-//                UIItem<ISDN> cloud = new UIItem<ISDN>(isdn);
-//                UICenterField.get().addItem(cloud);
-//                window.hide();
 
                 driver.flush();
-                Station sss = driver.flush();
-                Dialogs.alert("host=" + sss.getHost());
-                Dialogs.alert("port=" + sss.getPort());
+//                Station sss = driver.flush();
+//                Dialogs.alert("host=" + sss.getHost());
+//                Dialogs.alert("port=" + sss.getPort());
             }
         }));
 
@@ -130,12 +123,16 @@ public class AddDeviceWindow implements Editor<Station>{
         window.setWidget(con);
     }
 
-    public void show() {
+    public void show(CommonDevice station) {
+        if(station.getId() == null) {
+          device = new CommonDevice();
+        }
+        this.device = device;
+        driver.edit(device);
         window.show();
-        driver.edit(station);
     }
 
-    interface Driver extends SimpleBeanEditorDriver<Station, AddDeviceWindow> {
+    interface Driver extends SimpleBeanEditorDriver<CommonDevice, AddDeviceWindow> {
 
     }
 }
