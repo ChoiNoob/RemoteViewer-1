@@ -37,6 +37,8 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
     private Driver driver = GWT.create(Driver.class);
     private Window window;
+    private TextButton delete;
+    private Device device;
     SimpleComboBox<Station> station;
     SimpleComboBox<DeviceType> deviceType;
     TextField name;
@@ -90,6 +92,19 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         comment.setHeight(70);
         panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
+        delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                Dialogs.confirm("Будте удалено утройство", new Runnable() {
+                    public void run() {
+                        UICenterField.get().delete(device);
+                    }
+                });
+               window.hide();
+            }
+        });
+        delete.hide();
+        con.addButton(delete);
+
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                CommonDevice d = driver.flush();
@@ -111,7 +126,9 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
     }
 
     public void show(CommonDevice device) {
-        if(device == null) device = new CommonDevice();
+        if(device == null) {device = new CommonDevice();delete.hide();}
+        else delete.show();
+        this.device = device;
         driver.edit(device);
         window.show();
     }

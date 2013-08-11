@@ -22,10 +22,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Damintsev Andrey
@@ -65,7 +62,8 @@ public class UICenterField {
         dragController.setBehaviorConstrainedToBoundaryPanel(false);
         DropController dropController = new AbsolutePositionDropController(panel);
         dragController.registerDropController(dropController);
-        dragController.setBehaviorMultipleSelection(false);
+        dragController.setBehaviorMultipleSelection(true);
+
 
         final TextButton editButton = new TextButton("Редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
@@ -103,12 +101,9 @@ public class UICenterField {
     public void addItem(UIItem<? extends Device> item) {
         item.setId(getNextId());
         if(item.getType()==DeviceType.STATION) {
-            if(!uiIems.containsKey(item)) {
                 uiIems.put((UIItem<Station>) item, new ArrayList<UIItem<? extends Device>>());
-            }
         } else {
-            Station station = item.getParentStation();
-            System.out.println("station=" + station);
+            Station station = item.getStation();
             uiIems.get(getUIItem(station)).add(item);
         }
         dragController.makeDraggable(item);
@@ -140,6 +135,7 @@ public class UICenterField {
     }
 
     public void saveItemPositions() {
+        dragController.clearSelection();
         disAllowDrag();
         for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
             entry.getKey().savePosition();
@@ -168,6 +164,36 @@ public class UICenterField {
             }
         });
     }
+
+    public Widget getSelected() {
+        Iterator<Widget> it = dragController.getSelectedWidgets().iterator();
+        return it.hasNext() ? it.next() : null;
+    }
+
+    public void delete(Device device) {
+        if(device instanceof Station) {
+            UIItem station = getUIItem((Station) device);
+            ArrayList<UIItem<? extends Device>> devices =uiIems.get(station);
+            for(UIItem<? extends Device> uiDevice : devices)  {
+                deleteDevice(uiDevice);
+            }
+            deleteStation(station);
+        } else {
+
+        }
+    }
+
+    private void deleteDevice(UIItem device){
+        dragController.makeNotDraggable(device);
+        panel.remove(device);
+        uiIems.get(device.getStation()).remove(device);
+    }
+
+    private void deleteStation(UIItem station) {
+        dragController.makeNotDraggable(station);
+        panel.remove(station);
+        uiIems.remove(station);
+    }
     
 //    private void loadFromDatabase() {
 //        Service.instance.loadItems(new AsyncCallback<List<Item>>() {
@@ -190,6 +216,7 @@ public class UICenterField {
 //    }
 
     public void revertItemPositions() {
+        dragController.clearSelection();
         disAllowDrag();
 //        rasstavitItems();
         drawConnections(false);
@@ -237,7 +264,7 @@ public class UICenterField {
     }
     
     public List<Station> getStations() {
-        List<Station> list = new ArrayList<Station>();
+        List<Station> list = new ArrayList<Station>(); //todo change array list
         for(UIItem<Station> item :uiIems.keySet()){
             list.add(item.getItem().getData());
         }

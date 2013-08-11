@@ -94,7 +94,7 @@ public class UIItem<T extends Device> extends Label {
         return item.getId();
     }
 
-    public Station getParentStation() {
+    public Station getStation() {
         return item.getData().getStation();
     }
 

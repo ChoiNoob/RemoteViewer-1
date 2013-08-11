@@ -1,5 +1,9 @@
 package com.damintsev.client.uiframe;
 
+import com.damintsev.client.devices.CommonDevice;
+import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.UIItem;
+import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.Widget;
@@ -73,6 +77,24 @@ public class UISettingsPanel {
         device.setIconAlign(ButtonCell.IconAlign.BOTTOM);
         buttons.add(device);
 
+        TextButton edit = new TextButton("редактировать", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                UIItem selected = (UIItem) UICenterField.get().getSelected();
+                if (selected == null) Dialogs.alert("Выберите устройство");
+                else {
+                    switch (selected.getType()) {
+                        case STATION:
+                            AddStationWindow.get().show((Station) selected.getItem().getData());
+                            break;
+                        case IP:
+                        case ISDN:
+                            AddDeviceWindow.get().show((CommonDevice) selected.getItem().getData());
+                            break;
+                    }
+                }
+            }
+        });
+        buttons.add(edit);
         panel.add(buttons);
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {

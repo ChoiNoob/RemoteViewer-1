@@ -2,6 +2,7 @@ package com.damintsev.client.uiframe;
 
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
+import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -30,6 +31,8 @@ public class AddStationWindow implements Editor<Station> {
 
     private Window window;
     private StationEdit editor = GWT.create(StationEdit.class);
+    private Station station;
+    private TextButton delete;
     TextField name;
     TextField host;
     TextField port;
@@ -67,6 +70,19 @@ public class AddStationWindow implements Editor<Station> {
         comment.setHeight(70);
         panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
+        delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                Dialogs.confirm("Будет удалена станция и все связанные с ней обькты", new Runnable() {
+                    public void run() {
+                        UICenterField.get().delete(station);
+                    }
+                });
+                window.hide();
+            }
+        });
+        delete.hide();
+        con.addButton(delete);
+
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 editor.flush();
@@ -86,7 +102,11 @@ public class AddStationWindow implements Editor<Station> {
     }
 
     public void show(Station station) {
-        if(station == null) station = new Station();
+        if (station == null) {
+            station = new Station();
+            delete.hide();
+        } else delete.show();
+        this.station = station;
         editor.edit(station);
         window.show();
     }
