@@ -120,16 +120,16 @@ public class DatabaseProxy {
             item1.setId(item.getId());
             item1.setName(item.getName());
 
-            switch (data.getType()) {
+            switch (data.getDeviceType()) {
                 case ISDN:
                     CommonDevice isdn = (CommonDevice) data;
                     item1.setQuery(isdn.getQuery());
                     item1.setRegExp(isdn.getQuery());
-                    item1.setType(isdn.getType().name());
+                    item1.setType(isdn.getDeviceType().name());
                     break;
                 case STATION:
                     Station station = (Station) data;
-                    item1.setType(station.getType().name());
+                    item1.setType(station.getDeviceType().name());
                     item1.setHost(station.getHost());
                     item1.setPort(station.getPort());
                     item1.setLogin(station.getLogin());

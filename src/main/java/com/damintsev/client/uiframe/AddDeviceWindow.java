@@ -1,7 +1,9 @@
 package com.damintsev.client.uiframe;
 
 import com.damintsev.client.devices.CommonDevice;
+import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
@@ -33,19 +35,15 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         return instance;
     }
 
-    private CommonDevice device;
     private Driver driver = GWT.create(Driver.class);
     private Window window;
-    //editor fields
-    private TextField name;
-    private TextField host;
-    private TextField port;
-    private TextField login;
-    private TextField password;
-    private TextArea comment;
+    SimpleComboBox<Station> station;
+    SimpleComboBox<DeviceType> deviceType;
+    TextField name;
+    TextField query;
+    TextArea comment;
 
     private AddDeviceWindow() {
-//        station = new Station();
         window = new Window();
         window.setModal(true);
         window.setPixelSize(350, 350);
@@ -56,21 +54,20 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         final VerticalLayoutContainer panel = new VerticalLayoutContainer();
         con.add(panel);
         
-        final SimpleComboBox<Station> stations = new SimpleComboBox<Station>(new LabelProvider<Station>() {
+        station = new SimpleComboBox<Station>(new LabelProvider<Station>() {
             public String getLabel(Station item) {
                 return item.getName()==null?"Адрес: " + item.getHost():item.getName() + " (" + item.getHost() + ")";
             }
         });
-        for(Station station : UICenterField.get().getStations()) {
-            stations.add(station);
+        for(Station st : UICenterField.get().getStations()) {
+            station.add(st);
         }
-        stations.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
-        stations.setEditable(false);
-        stations.setAllowBlank(false);
+        station.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
+        station.setEditable(false);
+        station.setAllowBlank(false);
+        panel.add(new FieldLabel(station, "Станция"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
-        panel.add(new FieldLabel(stations, "Станция"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
-
-        SimpleComboBox<DeviceType> deviceType = new SimpleComboBox<DeviceType>(new LabelProvider<DeviceType>() {
+        deviceType = new SimpleComboBox<DeviceType>(new LabelProvider<DeviceType>() {
             public String getLabel(DeviceType item) {
                 return item.name();
             }
@@ -79,24 +76,15 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         deviceType.add(DeviceType.ISDN);
         deviceType.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
         deviceType.setEditable(false);
-
+        deviceType.setAllowBlank(false);
         panel.add(new FieldLabel(deviceType, "Тип"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         name = new TextField();
-        panel.add(new FieldLabel(name, "�?мя"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
-        host = new TextField();
-        host.setAllowBlank(false);
-        panel.add(new FieldLabel(host, "Строка запроса"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
-
-        port = new TextField();
-        port.setAllowBlank(false);
-        panel.add(new FieldLabel(port, "Порт"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
-
-        login = new TextField();
-        panel.add(new FieldLabel(login, "Логин"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
-        password = new TextField();
-        panel.add(new FieldLabel(password, "Пароль"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        query = new TextField();
+        query.setAllowBlank(false);
+        panel.add(new FieldLabel(query, "Строка запроса"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         comment = new TextArea();
         comment.setHeight(70);
@@ -104,11 +92,12 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-
-                driver.flush();
-//                Station sss = driver.flush();
-//                Dialogs.alert("host=" + sss.getHost());
-//                Dialogs.alert("port=" + sss.getPort());
+               CommonDevice d = driver.flush();
+                System.out.println("d="  + d.getQuery());
+                System.out.println("d=" + driver.hasErrors());
+                if (driver.hasErrors()) return;
+                UICenterField.get().addItem(new UIItem<Device>(driver.flush()));
+                window.hide();
             }
         }));
 
@@ -117,17 +106,12 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                 window.hide();
             }
         }));
-
-        driver.initialize(this);
-
         window.setWidget(con);
+        driver.initialize(this);
     }
 
-    public void show(CommonDevice station) {
-        if(station.getId() == null) {
-          device = new CommonDevice();
-        }
-        this.device = device;
+    public void show(CommonDevice device) {
+        if(device == null) device = new CommonDevice();
         driver.edit(device);
         window.show();
     }

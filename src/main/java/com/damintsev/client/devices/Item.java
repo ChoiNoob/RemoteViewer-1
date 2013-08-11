@@ -52,7 +52,7 @@ public class Item <T extends Device> implements Serializable {
     }
 
     public DeviceType getType() {
-        return data.getType();
+        return data.getDeviceType();
     }
     
     public String getImage() {

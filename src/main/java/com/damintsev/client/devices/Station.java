@@ -71,7 +71,7 @@ public class Station extends Device {
         return name;
     }
 
-    public DeviceType getType() {
+    public DeviceType getDeviceType() {
         return deviceType;
     }
 

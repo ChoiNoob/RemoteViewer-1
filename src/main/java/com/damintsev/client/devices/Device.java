@@ -14,9 +14,9 @@ public abstract class Device implements Serializable {
     public abstract void setId(Long id);
     public abstract Long getId();
     public abstract String getName();
-    public abstract DeviceType getType();
+    public abstract DeviceType getDeviceType();
     public abstract String getImage();
     public abstract Status getStatus();
 
-    public Station getParentStation() {throw new UnsupportedOperationException();}
+    public Station getStation() {throw new UnsupportedOperationException();}
 }

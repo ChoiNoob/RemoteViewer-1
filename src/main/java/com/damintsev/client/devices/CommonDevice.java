@@ -15,8 +15,9 @@ public class CommonDevice extends Device {
     private String regExp;
     private String imageName = "cloud";
     private Status status;
-    private Station parentStation;
-    private DeviceType type = DeviceType.ISDN;
+    private Station station;
+    private DeviceType deviceType;
+    private String comment;
 
     public String getName() {
         return name;
@@ -26,8 +27,12 @@ public class CommonDevice extends Device {
         this.name = name;
     }
 
-    public DeviceType getType() {
-        return type;
+    public DeviceType getDeviceType() {
+        return deviceType;
+    }
+
+    public void setDeviceType(DeviceType deviceType) {
+        this.deviceType = deviceType;
     }
 
     public String getImage() {
@@ -70,11 +75,19 @@ public class CommonDevice extends Device {
         this.status = status;
     }
 
-    public Station getParentStation() {
-        return parentStation;
+    public Station getStation() {
+        return station;
     }
 
-    public void setParentStation(Station parentStation) {
-        this.parentStation = parentStation;
+    public void setStation(Station station) {
+        this.station = station;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 }

@@ -95,7 +95,7 @@ public class UIItem<T extends Device> extends Label {
     }
 
     public Station getParentStation() {
-        return item.getData().getParentStation();
+        return item.getData().getStation();
     }
 
     public Status getStatus() {

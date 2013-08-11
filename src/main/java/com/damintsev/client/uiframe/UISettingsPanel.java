@@ -57,7 +57,7 @@ public class UISettingsPanel {
 
         TextButton station = new TextButton("Добавить станцию", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                AddStationWindow.get().show();
+                AddStationWindow.get().show(null);
             }
         });
         station.setIconAlign(ButtonCell.IconAlign.BOTTOM);
