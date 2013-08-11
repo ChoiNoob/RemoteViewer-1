@@ -96,6 +96,10 @@ public class Station extends Device {
         return status;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public void setImage(String imageName) {
         this.imageName = imageName;
     }

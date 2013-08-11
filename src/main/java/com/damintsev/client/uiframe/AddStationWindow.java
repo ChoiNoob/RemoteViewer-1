@@ -2,6 +2,7 @@ package com.damintsev.client.uiframe;
 
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.devices.enums.Status;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -85,9 +86,10 @@ public class AddStationWindow implements Editor<Station> {
 
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                editor.flush();
+                station = editor.flush();
                 if (editor.hasErrors()) return;
-                UICenterField.get().addItem(new UIItem<Station>(editor.flush()));
+                station.setStatus(Status.INIT);
+                UICenterField.get().addItem(new UIItem<Station>(station));
                 window.hide();
             }
         }));

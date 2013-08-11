@@ -6,5 +6,15 @@ package com.damintsev.client.devices.enums;
  * Time: 0:35
  */
 public enum Status {
-    INIT, WORK, ERROR
+    INIT("yellow"), WORK("green"), ERROR("red");
+
+    private String color;
+
+    private Status(String color) {
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
+    }
 }

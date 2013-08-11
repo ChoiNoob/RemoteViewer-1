@@ -5,6 +5,7 @@ import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
+import com.damintsev.client.devices.enums.Status;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -107,11 +108,10 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-               CommonDevice d = driver.flush();
-                System.out.println("d="  + d.getQuery());
-                System.out.println("d=" + driver.hasErrors());
+                device = driver.flush();
+                device.setStatus(Status.INIT);
                 if (driver.hasErrors()) return;
-                UICenterField.get().addItem(new UIItem<Device>(driver.flush()));
+                UICenterField.get().addItem(new UIItem<Device>(device));
                 window.hide();
             }
         }));

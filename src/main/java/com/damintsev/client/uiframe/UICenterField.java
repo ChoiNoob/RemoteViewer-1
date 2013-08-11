@@ -98,7 +98,7 @@ public class UICenterField {
         return panel;
     }
 
-    public void addItem(UIItem<? extends Device> item) {
+    public void addItem(UIItem<? extends Device> item) {   //todo Добавить двойной клик на элемент
         item.setId(getNextId());
         if(item.getType()==DeviceType.STATION) {
                 uiIems.put((UIItem<Station>) item, new ArrayList<UIItem<? extends Device>>());
@@ -244,10 +244,10 @@ public class UICenterField {
 
     public void drawLine(Position from, Position to, Status status) {
         if(from.x == to.x && from.y == to.y) return;
-
         Context2d context = canvas.getContext2d();
         context.beginPath();
         context.setLineWidth(3);
+        context.setStrokeStyle(status.getColor());
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
         context.stroke();
@@ -255,7 +255,7 @@ public class UICenterField {
 
     private void clearCanvas() {
         Context2d context = canvas.getContext2d();
-        context.clearRect(0,0,Window.getClientWidth(),Window.getClientHeight());
+        context.clearRect(0, 0, Window.getClientWidth(), Window.getClientHeight());
     }
 
     private Long getNextId() {

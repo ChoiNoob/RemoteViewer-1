@@ -17,6 +17,7 @@ public abstract class Device implements Serializable {
     public abstract DeviceType getDeviceType();
     public abstract String getImage();
     public abstract Status getStatus();
+    public abstract void setStatus(Status status);
 
     public Station getStation() {throw new UnsupportedOperationException();}
 }
