@@ -246,7 +246,11 @@ public class UICenterField {
 
     public UIItem<Station> getUIItem(Station station) {
         for(UIItem<Station> uiStations : uiIems.keySet()) {
+<<<<<<< HEAD:src/main/java/com/damintsev/client/uiframe/UICenterField.java
             if(uiStations.getId().equals(station.getId()))
+=======
+            if(uiStations.getId() == station.getId())
+>>>>>>> refs/heads/master:src/src/main/java/com/damintsev/client/uiframe/UICenterField.java
                 return uiStations;
         }
         return null;
