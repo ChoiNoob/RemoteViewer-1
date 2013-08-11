@@ -9,7 +9,7 @@ import com.damintsev.client.devices.enums.Status;
  */
 public class ISDN extends Device {
 
-    private int id;
+    private Long id;
     private String name;
     private String query;
     private String regExp;
@@ -54,11 +54,11 @@ public class ISDN extends Device {
         this.regExp = regExp;
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

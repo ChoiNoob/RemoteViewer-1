@@ -66,11 +66,7 @@ public class UISettingsPanel {
 
         TextButton device = new TextButton("Добавить устройство",new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-<<<<<<< HEAD:src/main/java/com/damintsev/client/uiframe/UISettingsPanel.java
                 AddDeviceWindow.get().show(null);
-=======
-                AddDeviceWindow.get().show();
->>>>>>> refs/heads/master:src/src/main/java/com/damintsev/client/uiframe/UISettingsPanel.java
             }
         });
         device.setIcon(Utils.getImage("cloud"));

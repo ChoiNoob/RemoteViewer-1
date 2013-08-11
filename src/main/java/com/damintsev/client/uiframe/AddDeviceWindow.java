@@ -83,7 +83,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         panel.add(new FieldLabel(deviceType, "Тип"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         name = new TextField();
-        panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(name, "�?мя"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         host = new TextField();
         host.setAllowBlank(false);
