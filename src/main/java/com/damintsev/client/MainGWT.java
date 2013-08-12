@@ -50,28 +50,6 @@ public class MainGWT implements EntryPoint {
 
     private void onModuleLoad2() {
         RootPanel.get().add(UIRootPanel.get().getContent());
-
-        Service.instance.startScheduler(new AsyncCallback<Void>() {
-            public void onFailure(Throwable caught) {
-                Dialogs.alert("startScheduler =" + caught.getMessage());
-            }
-
-            public void onSuccess(Void result) {
-            }
-        });
-
-        Window.addCloseHandler(new CloseHandler<Window>() {
-            public void onClose(CloseEvent<Window> windowCloseEvent) {
-                Service.instance.stopScheduler(new AsyncCallback<Void>() {
-                    public void onFailure(Throwable throwable) {
-                        Dialogs.alert(throwable.getMessage());
-                    }
-
-                    public void onSuccess(Void aVoid) {
-                    }
-                });
-            }
-        });
     }
 }
 

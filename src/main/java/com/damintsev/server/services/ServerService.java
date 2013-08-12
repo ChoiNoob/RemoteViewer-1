@@ -7,6 +7,7 @@ import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.telnet.Scheduler;
 import com.damintsev.client.devices.TestResponse;
+import com.damintsev.server.telnet.SchedulerNew;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         DatabaseProxy proxy = new DatabaseProxy();
         proxy.saveItems(items);
         for(Item item : items) {
-            Scheduler.getInstance().addDevice(item.getData());
+            SchedulerNew.getInstance().addDevice(item.getData());
         }
         return true;
     }
@@ -31,21 +32,21 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         DatabaseProxy proxy = new DatabaseProxy();
         List<Item> items = proxy.loadItemPositions();
         for(Item item : items) {
-            Scheduler.getInstance().addDevice(item.getData());
+            SchedulerNew.getInstance().addDevice(item.getData());
         }
         return items;
     }
 
     public Device getState() {
-        return Scheduler.getInstance().getState();
+        return null;
     }
 
     public void stopScheduler() {
-        Scheduler.getInstance().stop();
+//        Scheduler.getInstance().stop();
     }
 
     public void startScheduler() {
-        Scheduler.getInstance().start();
+//        Scheduler.getInstance().start();
     }
 
     public TestResponse test(Station device) {
@@ -53,6 +54,8 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public Device checkDevice(Device device) {
-        return Scheduler.getInstance().checkDevice(device);
+        System.out.println("Call checkDevice");
+        System.out.println("with id=" + device.getId() + " name=" + device.getName());
+        return SchedulerNew.getInstance().checkDevice(device);
     }
 }

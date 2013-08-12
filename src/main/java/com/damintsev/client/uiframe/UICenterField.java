@@ -111,6 +111,7 @@ public class UICenterField {
         } else {
             System.out.println("addDevice id=" + item.getId());
             Station station = item.getStation();
+            System.out.println("CPT =" + uiIems.get(getUIIStationItem(station)));
             uiIems.get(getUIIStationItem(station)).add(item);
         }
         dragController.makeDraggable(item);
@@ -195,12 +196,13 @@ public class UICenterField {
         } else {
             deleteDevice(getUIIDeviceItem(device));
         }
+        drawConnections(false);
     }
 
     private void deleteDevice(UIItem device){
         dragController.makeNotDraggable(device);
         panel.remove(device);
-        uiIems.get(device.getStation()).remove(device);
+        uiIems.get(getUIIStationItem(device.getStation())).remove(device);
     }
 
     private void deleteStation(UIItem station) {
@@ -210,9 +212,10 @@ public class UICenterField {
     }
     
     private void loadFromDatabase() {
+        System.out.println("load from database!");
         Service.instance.loadItems(new AsyncCallback<List<Item>>() {
             public void onFailure(Throwable throwable) {
-                Dialogs.alert(throwable.getMessage());
+                Dialogs.alert("Error loading from database! " + throwable.getMessage());
             }
 
             public void onSuccess(List<Item> items) {
@@ -220,6 +223,7 @@ public class UICenterField {
                 uiIems.clear();
                 Long id = -1L;
                 for(Item item : items) {
+                    System.out.println("loading from db id=" + item.getId());
                     addItem(new UIItem(item), false);
                   if(id < item.getId()) {
                       id = item.getId();
@@ -229,9 +233,11 @@ public class UICenterField {
                     UICenterField.id = 0L;
                 } else
                     UICenterField.id = id;
-
-                start();
-                schedule();
+                if(items.size() != 0) {
+                    start();
+                    schedule();
+                    disAllowDrag();
+                }
             }
         });
     }
@@ -323,9 +329,12 @@ public class UICenterField {
                         if (result.getDeviceType() == DeviceType.STATION) {
 
                         } else {
-                            ArrayList<UIItem<? extends Device>> items = uiIems.get(result.getStation());
+                            ArrayList<UIItem<? extends Device>> items = uiIems.get(getUIIStationItem(result.getStation()));
                             UIItem item = getUIIDeviceItem(result);
-                            uiIems.get(result.getStation()).remove(item);
+                            if(item== null) return;
+//                            System.out.println("r.gS" + result.getStation());
+//                            System.out.println("uiI.g" + uiIems.get(result.getStation()));
+                            uiIems.get(getUIIStationItem(result.getStation())).remove(item);
                             item.getItem().getData().setStatus(result.getStatus());
                             items.add(item);
                             drawConnections(false);

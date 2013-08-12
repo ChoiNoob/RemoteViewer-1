@@ -34,9 +34,9 @@ public class DatabaseProxy {
             if (file.exists()) {
                 Unmarshaller unmarshaller = createUnmarshaller(XMLPositionList.class);
                 XMLPositionList<XMLPosition> xmlPositionList = (XMLPositionList<XMLPosition>) unmarshaller.unmarshal(file);
-                System.out.println("CPT posIs=" + xmlPositionList.getList().size());
+//                System.out.println("CPT posIs=" + xmlPositionList.getList().size());
                 List<XMLItem> xmlItems = getItems();
-                System.out.println("CPT items=" + xmlItems.size());
+//                System.out.println("CPT items=" + xmlItems.size());
                 for(XMLPosition pos : xmlPositionList.getList()) {
                     Item item = new Item();
                     item.setCoordX(pos.getPositionX());
@@ -55,7 +55,7 @@ public class DatabaseProxy {
     }
 
     private Device convertXML(XMLItem xmlItem, List<XMLItem> itemList) {
-        System.out.println("CPTT=" + xmlItem.getDeviceType());
+//        System.out.println("CPTT=" + xmlItem.getDeviceType());
         switch (DeviceType.valueOf(xmlItem.getDeviceType())) {
             case STATION:
                 Station station = new Station();
