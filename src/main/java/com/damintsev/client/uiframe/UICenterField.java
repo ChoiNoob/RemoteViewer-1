@@ -14,6 +14,7 @@ import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -145,6 +146,12 @@ public class UICenterField {
         }
         drawConnections(false);
         saveToDatabase();
+        Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
+            public boolean execute() {
+                scheduler();
+                return true;
+            }
+        },1000);
     }
     
     public void saveToDatabase() {
@@ -242,6 +249,13 @@ public class UICenterField {
         }
     }
 
+    public void drawLine(Device device) {
+        if(device instanceof Station) {
+
+        } else {
+        }
+    }
+
     public void drawLine(Position from, Position to, Status status) {
         if(from.x == to.x && from.y == to.y) return;
         Context2d context = canvas.getContext2d();
@@ -277,5 +291,25 @@ public class UICenterField {
                 return uiStations;
         }
         return null;
+    }
+
+    public void scheduler() {
+        System.out.println("RUN!");
+        Service.instance.getState(new AsyncCallback<Device>() {
+            public void onFailure(Throwable caught) {
+                Dialogs.alert(caught.getMessage());
+            }
+
+            public void onSuccess(Device result) {
+                if (result != null) {
+                    System.out.println("name=" + result.getName());
+                    System.out.println("status=" + result.getStatus());
+                } else {
+                    System.out.println("null");
+                }
+
+
+            }
+        });
     }
 }

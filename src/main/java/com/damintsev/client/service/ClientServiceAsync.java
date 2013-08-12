@@ -1,5 +1,6 @@
 package com.damintsev.client.service;
 
+import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -14,4 +15,6 @@ public interface ClientServiceAsync {
     void saveItems(List<Item> items, AsyncCallback<Boolean> callback);
 
     void loadItems(AsyncCallback<List<Item>> callback);
+
+    void getState(AsyncCallback<Device> callback);
 }

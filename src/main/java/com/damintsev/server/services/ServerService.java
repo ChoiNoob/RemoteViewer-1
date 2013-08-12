@@ -1,8 +1,10 @@
 package com.damintsev.server.services;
 
+import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
+import com.damintsev.server.telnet.Scheduler;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.List;
@@ -14,19 +16,25 @@ import java.util.List;
  */
 public class ServerService extends RemoteServiceServlet implements ClientService {
 
+    public ServerService(){
+        System.out.println("AKSKASFSKJFLKS");
+    }
+
     public Boolean saveItems(List<Item> items) {
-        for(Item item : items) {
-            System.out.println("name=" + item.getName());
-            System.out.println("x=" + item.getCoordX());
-            System.out.println("y=" + item.getCoordY());
-        }
         DatabaseProxy proxy = new DatabaseProxy();
         proxy.saveItems(items);
+        for(Item item : items) {
+            Scheduler.getInstance().addDevice(item.getData());
+        }
         return true;
     }
 
     public List<Item> loadItems() {
         DatabaseProxy proxy = new DatabaseProxy();
         return proxy.loadItemPositions();
+    }
+
+    public Device getState() {
+        return Scheduler.getInstance().getState();
     }
 }
