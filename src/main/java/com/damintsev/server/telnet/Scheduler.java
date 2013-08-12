@@ -6,8 +6,10 @@ import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.devices.TestResponse;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
+import java.util.Timer;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -45,7 +47,7 @@ public class Scheduler {
             try {
                 initConnection(station);
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
             if(!stationDevices.containsKey(station)) {
                 System.out.println("station put");
@@ -77,6 +79,7 @@ public class Scheduler {
     }
 
     public void scheduler() throws IOException {
+        System.out.println("server schedule");
         for(Map.Entry<Station, List<Device>> entry : stationDevices.entrySet()) {
             Station station = entry.getKey();
             TelnetClient telnet = getConnection(station);
@@ -187,5 +190,33 @@ public class Scheduler {
             }
         }
         return response;
+    }
+
+    public Device checkDevice(Device device) {
+        System.out.println("Check device id=" + device.getId());
+        if(device instanceof  Station) {
+
+        } else {
+            CommonDevice dev = (CommonDevice) device;
+            if(stationDevices.containsKey(dev.getStation())) {
+                Device devs = find(stationDevices.get(dev.getStation()), dev);
+                if(devs == null) {
+                    addDevice(device);
+                }
+            } else {
+                addDevice(dev.getStation());
+                addDevice(dev);
+            }
+        }
+        return null;
+    }
+
+    Device find(List<Device> devices, Device device) {
+        for(Device dev : devices) {
+            if(dev.getId().equals(device.getId())){
+                return dev;
+            }
+        }
+        return null;
     }
 }

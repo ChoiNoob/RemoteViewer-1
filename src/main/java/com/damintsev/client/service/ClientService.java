@@ -29,5 +29,7 @@ public interface ClientService extends RemoteService {
     public void startScheduler();
 
     public TestResponse test(Station device);
+
+    public Device checkDevice(Device device);
 }
 

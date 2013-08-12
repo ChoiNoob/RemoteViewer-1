@@ -14,6 +14,7 @@ import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -99,14 +100,16 @@ public class UICenterField {
     }
 
     public void addItem(UIItem<? extends Device> item) {
-        addItem(item, false);
+        addItem(item, true);
     }
 
     public void addItem(UIItem<? extends Device> item, boolean newI) {   //todo Добавить двойной клик на элемент
         item.setId(getNextId());
         if(item.getType()==DeviceType.STATION) {
+            System.out.println("addStation id=" + item.getId());
                 uiIems.put((UIItem<Station>) item, new ArrayList<UIItem<? extends Device>>());
         } else {
+            System.out.println("addDevice id=" + item.getId());
             Station station = item.getStation();
             uiIems.get(getUIIStationItem(station)).add(item);
         }
@@ -116,7 +119,6 @@ public class UICenterField {
             int centerX = Window.getClientWidth() / 2 - item.getWidth() / 2;
             int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
             panel.setWidgetPosition(item, centerX, centerY);
-
         } else {
             Position pos = item.getPosition();
             panel.setWidgetPosition(item, pos.x, pos.y);
@@ -155,12 +157,8 @@ public class UICenterField {
         }
         drawConnections(false);
         saveToDatabase();
-//        Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
-//            public boolean execute() {
-//                scheduler();
-//                return true;
-//            }
-//        },1000);
+        start();
+        schedule();
     }
     
     public void saveToDatabase() {
@@ -222,12 +220,18 @@ public class UICenterField {
                 uiIems.clear();
                 Long id = -1L;
                 for(Item item : items) {
-                    addItem(new UIItem(item));
+                    addItem(new UIItem(item), false);
                   if(id < item.getId()) {
                       id = item.getId();
                   }
                 }
-                UICenterField.id = id;
+                if (id == -1L) {
+                    UICenterField.id = 0L;
+                } else
+                    UICenterField.id = id;
+
+                start();
+                schedule();
             }
         });
     }
@@ -294,21 +298,63 @@ public class UICenterField {
         return null;
     }
 
-    public void scheduler() {
-        System.out.println("RUN!");
-        Service.instance.getState(new AsyncCallback<Device>() {
-            public void onFailure(Throwable caught) {
-                Dialogs.alert(caught.getMessage());
+    public void schedule() {
+        Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
+            public boolean execute() {
+                scheduler();
+                return start;
             }
+        },1000);
+    }
 
-            public void onSuccess(Device result) {
-                if (result != null) {
-                    System.out.println("name=" + result.getName());
-                    System.out.println("status=" + result.getStatus());
-                } else {
-                    System.out.println("null");
+    private void scheduler() {
+        System.out.println("RUN!");
+        if(iterator == null)
+            iterator = createIterator();
+        if(iterator.hasNext()) {
+            Service.instance.checkDevice(iterator.next().getData(), new AsyncCallback<Device>() {
+                public void onFailure(Throwable caught) {
+                    stop();
+                    Dialogs.alert("Check device false! " + caught.getMessage());   //todo!!!!
                 }
+
+                public void onSuccess(Device result) {
+                    if (result != null) {
+                        if (result.getDeviceType() == DeviceType.STATION) {
+
+                        } else {
+                            ArrayList<UIItem<? extends Device>> items = uiIems.get(result.getStation());
+                            UIItem item = getUIIDeviceItem(result);
+                            uiIems.get(result.getStation()).remove(item);
+                            item.getItem().getData().setStatus(result.getStatus());
+                            items.add(item);
+                            drawConnections(false);
+                        }
+                    }
+                }
+            });
+        } else {
+           iterator = createIterator();
+        }
+    }
+    private Iterator<Item> iterator;
+
+    private Iterator<Item> createIterator() {
+        List<Item> items = new ArrayList<Item>();
+        for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
+            items.add(entry.getKey().getItem());
+            for(UIItem item : entry.getValue()) {
+                items.add(item.getItem());
             }
-        });
+        }
+        return items.iterator();
+    }
+
+   private boolean start;
+    public void start() {
+                     this.start = true;
+    }
+    public void stop() {
+        this.start = false;
     }
 }

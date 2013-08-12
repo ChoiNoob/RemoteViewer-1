@@ -51,4 +51,8 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     public TestResponse test(Station device) {
         return Scheduler.getInstance().test(device); //todo
     }
+
+    public Device checkDevice(Device device) {
+        return Scheduler.getInstance().checkDevice(device);
+    }
 }

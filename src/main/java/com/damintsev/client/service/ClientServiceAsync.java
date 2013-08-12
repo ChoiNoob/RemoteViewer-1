@@ -25,4 +25,6 @@ public interface ClientServiceAsync {
     void test(Station device, AsyncCallback<TestResponse> callback);
 
     void startScheduler(AsyncCallback<Void> async);
+
+    void checkDevice(Device device, AsyncCallback<Device> callback);
 }
