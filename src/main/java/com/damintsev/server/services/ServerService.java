@@ -3,7 +3,7 @@ package com.damintsev.server.services;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.Station;
-import com.damintsev.client.service.ClientService;
+import com.damintsev.client.service.MyClientService;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.telnet.Scheduler;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -15,7 +15,7 @@ import java.util.List;
  * Date: 08.08.13
  * Time: 0:22
  */
-public class ServerService extends RemoteServiceServlet implements ClientService {
+public class ServerService extends RemoteServiceServlet implements MyClientService {
 
     public ServerService(){
         System.out.println("AKSKASFSKJFLKS");
@@ -44,6 +44,6 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public String test(Station device) {
-        return Scheduler.getInstance().test(device);
+        return "" + Scheduler.getInstance().test(device); //todo
     }
 }

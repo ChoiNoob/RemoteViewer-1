@@ -7,9 +7,6 @@ package com.damintsev.server;
  */
 public abstract class Callback {
 
-    public abstract void onWrite();
-
-    public abstract void onRead();
-
+    public abstract void call();
 
 }

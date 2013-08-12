@@ -24,7 +24,7 @@ public class Scheduler {
         return instance;
     }
 
-    private Map<Station, Telnet> telnetStation;
+    private Map<Station, TelnetClient> telnetStation;
     private Map<Station, List<Device>> stationDevices;
     private boolean firstTime = true;
     private BlockingQueue<Device> queue;
@@ -37,7 +37,7 @@ public class Scheduler {
     }
 
     public void addDevice(Device device) {
-        if (telnetStation == null) telnetStation = new HashMap<Station, Telnet>();
+        if (telnetStation == null) telnetStation = new HashMap<Station, TelnetClient>();
         if(device instanceof Station) {
             Station station = (Station) device;
             initConnection(station);
@@ -51,14 +51,10 @@ public class Scheduler {
                 stationDevices.get(device.getStation()).add(device);
             }
         }
-        if (firstTime) {
-            ;
-            firstTime = false;
-        }
     }
 
     private void initConnection(Station station) {
-        Telnet telnet = new Telnet();
+        TelnetClient telnet = new TelnetClient();
         telnet.setHost(station.getHost());
         telnet.setPort(station.getPort());
         telnet.setLogin(station.getLogin());
@@ -68,7 +64,7 @@ public class Scheduler {
         }
     }
 
-    private Telnet getConnection(Station station) {
+    private TelnetClient getConnection(Station station) {
         if(!telnetStation.containsKey(station))
             initConnection(station);
         return telnetStation.get(station);
@@ -77,11 +73,10 @@ public class Scheduler {
     public void scheduler() {
         for(Map.Entry<Station, List<Device>> entry : stationDevices.entrySet()) {
             Station station = entry.getKey();
-            Telnet telnet = getConnection(station);
+            TelnetClient telnet = getConnection(station);
             for(Device devices : entry.getValue()) {
                 CommonDevice device  = (CommonDevice) devices;
-                String result = telnet.executeCommand(device.getQuery());
-//                String result = "asdasd";
+                String result = telnet.execute(device.getQuery());
                 parseResult(device, result);
                 queue.add(device);
                 try {
@@ -93,15 +88,48 @@ public class Scheduler {
         }
     }
     
-    private String sendTestCommand(Station station) {
-        Telnet connection = telnetStation.get(station);
-        return connection.executeCommand("dir");
+    private boolean sendTestCommand(Station station) {
+        TelnetClient connection = telnetStation.get(station);
+        return connection.testConnection();
     }
 
+    public static void main(String[] args) {
+        Scheduler scheduler = new Scheduler();
+        scheduler.parseResult(new CommonDevice(),"");
+    }
     private void parseResult(CommonDevice isdn, String result) {
 //        Pattern pattern = new Pattern();
 //       result.split()
-        isdn.setStatus(Status.WORK);
+        result = "DIS-SDSU:SPEC,,PEN,PER2,1,1,5,0;\n" +
+                "H500:  AMO SDSU  STARTED\n" +
+                "\n" +
+                "  LTG1 (PERIPHERY)\n" +
+                "------\n" +
+                "  MOUNTING LOCATION    MODULE NAME     BDL BD(#=ACT)  STATUS\n" +
+                "  -------------------  LTG    1 --------------------- READY\n" +
+                "  -AP370013-----SG  1  LTU    1 --------------------- READY\n" +
+                "  P102.AP3 1.AP3 1.005 DIU-N2          A   Q2196-X    READY\n" +
+                "             CCT  LINE         STNO  SI BUS TYPE\n" +
+                "             000  1550                  PP NW         asf\n" +
+                "\n" +
+                "AMO-SDSU -111       STATUS DISPLAY IN SWITCHING UNIT\n" +
+                "DISPLAY COMPLETED;\n" +
+                "\n" ;
+
+        int index = result.indexOf("PP NW");
+        System.out.println("index = " + index + " length=" + result.length());
+        result = result.substring(index, result.length());
+        System.out.println(result);
+        if(result.contains("READY")) {
+            isdn.setStatus(Status.WORK);
+            System.out.println("WORK");
+        } else if(result.contains("NEC")) {
+            isdn.setStatus(Status.WARNING);
+            System.out.println("WARNING");
+        } else {
+            isdn.setStatus(Status.ERROR);
+            System.out.println("ERROR");
+        }
         isdn.setComment(result);
     }
 
@@ -125,8 +153,8 @@ public class Scheduler {
         timer.cancel();
     }
 
-    public String test(Device device) {
-        String result = "null";
+    public boolean test(Device device) {
+        boolean result = false;
         if(device instanceof Station) {
             Station station = (Station) device;
             initConnection(station);
