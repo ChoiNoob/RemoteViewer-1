@@ -1,11 +1,17 @@
 package com.damintsev.client;
 
+import com.damintsev.client.service.Service;
 import com.damintsev.client.uiframe.UIRootPanel;
+import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -44,6 +50,28 @@ public class MainGWT implements EntryPoint {
 
     private void onModuleLoad2() {
         RootPanel.get().add(UIRootPanel.get().getContent());
+
+        Service.instance.startScheduler(new AsyncCallback<Void>() {
+            public void onFailure(Throwable caught) {
+                Dialogs.alert("startScheduler =" + caught.getMessage());
+            }
+
+            public void onSuccess(Void result) {
+            }
+        });
+
+        Window.addCloseHandler(new CloseHandler<Window>() {
+            public void onClose(CloseEvent<Window> windowCloseEvent) {
+                Service.instance.stopScheduler(new AsyncCallback<Void>() {
+                    public void onFailure(Throwable throwable) {
+                        Dialogs.alert(throwable.getMessage());
+                    }
+
+                    public void onSuccess(Void aVoid) {
+                    }
+                });
+            }
+        });
     }
 }
 

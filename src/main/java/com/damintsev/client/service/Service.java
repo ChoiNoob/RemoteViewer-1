@@ -7,5 +7,5 @@ import com.google.gwt.core.client.GWT;
  * Date: 08.08.13 15:30
  */
 public class Service {
-    public static MyClientServiceAsync instance = GWT.create(MyClientService.class);
+    public static ClientServiceAsync instance = GWT.create(ClientService.class);
 }

@@ -3,6 +3,7 @@ package com.damintsev.client.service;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.TestResponse;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.List;
@@ -21,5 +22,7 @@ public interface ClientServiceAsync {
 
     void stopScheduler(AsyncCallback<Void> callback);
 
-    void test(Station device, AsyncCallback<String> async);
+    void test(Station device, AsyncCallback<TestResponse> callback);
+
+    void startScheduler(AsyncCallback<Void> async);
 }

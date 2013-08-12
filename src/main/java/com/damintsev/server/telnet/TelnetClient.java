@@ -7,6 +7,7 @@ package com.damintsev.server.telnet;
 
 import java.io.*;
 
+import com.damintsev.client.devices.TestResponse;
 import org.apache.commons.net.telnet.TelnetNotificationHandler;
 import org.apache.commons.net.telnet.EchoOptionHandler;
 import org.apache.commons.net.telnet.TerminalTypeOptionHandler;
@@ -42,7 +43,7 @@ public class TelnetClient implements Runnable, TelnetNotificationHandler {
     private String password;
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         TelnetClient example = new TelnetClient();
         example.setLogin("sasha");
         example.setPassword("1");
@@ -55,7 +56,7 @@ public class TelnetClient implements Runnable, TelnetNotificationHandler {
      * Main for the TelnetClient.
      * *
      */
-    public boolean connect() {
+    public boolean connect() throws IOException {
 
         tc = new org.apache.commons.net.telnet.TelnetClient();
         TerminalTypeOptionHandler ttopt = new TerminalTypeOptionHandler("VT100", false, false, true, false);
@@ -88,7 +89,7 @@ public class TelnetClient implements Runnable, TelnetNotificationHandler {
             testConnection();
         } catch (IOException e) {
             System.err.println("Exception while connecting:" + e.getMessage());
-            return false;
+            throw e;
         } catch (InterruptedException e) {
             e.printStackTrace();
             return false;
@@ -162,7 +163,7 @@ public class TelnetClient implements Runnable, TelnetNotificationHandler {
         }
     }
 
-    public boolean testConnection() {
+    public TestResponse testConnection() {
         clearReaded();
         try {
             System.out.println("Sending AYT command!");
@@ -175,7 +176,10 @@ public class TelnetClient implements Runnable, TelnetNotificationHandler {
         }
         String result = getReaded();
         System.out.println("Test server. Send AYT. result=" + result.contains("yes"));
-        return result.contains("yes");
+        TestResponse response = new TestResponse();
+        response.setResultText(result);
+        response.setResult(result.contains("yes"));
+        return response;
     }
 
     /**

@@ -4,11 +4,12 @@ import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.devices.TestResponse;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
-import java.util.regex.Pattern;
 
 /**
 * User: Damintsev Andrey
@@ -26,21 +27,26 @@ public class Scheduler {
 
     private Map<Station, TelnetClient> telnetStation;
     private Map<Station, List<Device>> stationDevices;
-    private boolean firstTime = true;
     private BlockingQueue<Device> queue;
     private Timer timer;
+    private boolean running = false;
 
     public Scheduler() {
         queue = new ArrayBlockingQueue<Device>(100);
         stationDevices = new HashMap<Station, List<Device>>();
+        telnetStation = new HashMap<Station, TelnetClient>();
         timer = new Timer();
+        System.out.println("new timer");
     }
 
     public void addDevice(Device device) {
-        if (telnetStation == null) telnetStation = new HashMap<Station, TelnetClient>();
         if(device instanceof Station) {
             Station station = (Station) device;
-            initConnection(station);
+            try {
+                initConnection(station);
+            } catch (IOException e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
             if(!stationDevices.containsKey(station)) {
                 System.out.println("station put");
                 stationDevices.put(station, new ArrayList<Device>());
@@ -53,7 +59,7 @@ public class Scheduler {
         }
     }
 
-    private void initConnection(Station station) {
+    private void initConnection(Station station) throws IOException {
         TelnetClient telnet = new TelnetClient();
         telnet.setHost(station.getHost());
         telnet.setPort(station.getPort());
@@ -64,13 +70,13 @@ public class Scheduler {
         }
     }
 
-    private TelnetClient getConnection(Station station) {
+    private TelnetClient getConnection(Station station) throws IOException {
         if(!telnetStation.containsKey(station))
             initConnection(station);
         return telnetStation.get(station);
     }
 
-    public void scheduler() {
+    public void scheduler() throws IOException {
         for(Map.Entry<Station, List<Device>> entry : stationDevices.entrySet()) {
             Station station = entry.getKey();
             TelnetClient telnet = getConnection(station);
@@ -88,7 +94,7 @@ public class Scheduler {
         }
     }
     
-    private boolean sendTestCommand(Station station) {
+    private TestResponse sendTestCommand(Station station) {
         TelnetClient connection = telnetStation.get(station);
         return connection.testConnection();
     }
@@ -141,25 +147,45 @@ public class Scheduler {
     }
 
     public void start() {
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                scheduler();
-            }
-        }, 1000, 1000);
+        if (!running) {
+            System.out.println("starting");
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    try {
+                        scheduler();
+                    } catch (IOException e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                    }
+                }
+            }, 1000, 1000);
+            running = true;
+        }
     }
 
     public void stop() {
         timer.cancel();
+        running = false;
     }
 
-    public boolean test(Device device) {
-        boolean result = false;
+    public TestResponse test(Device device) {
+        TestResponse response = null;
         if(device instanceof Station) {
             Station station = (Station) device;
-            initConnection(station);
-            result = sendTestCommand(station);
+            try {
+                initConnection(station);
+                response = sendTestCommand(station);
+                if(response == null) { response = new TestResponse();
+                    response.setResult(false);
+                    response.setResultText("error bl9");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                response = new TestResponse();
+                response.setResult(false);
+                response.setResultText("error bl9");
+            }
         }
-        return result;
+        return response;
     }
 }

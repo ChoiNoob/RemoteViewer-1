@@ -3,9 +3,10 @@ package com.damintsev.server.services;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.Station;
-import com.damintsev.client.service.MyClientService;
+import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.telnet.Scheduler;
+import com.damintsev.client.devices.TestResponse;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.util.List;
@@ -15,11 +16,7 @@ import java.util.List;
  * Date: 08.08.13
  * Time: 0:22
  */
-public class ServerService extends RemoteServiceServlet implements MyClientService {
-
-    public ServerService(){
-        System.out.println("AKSKASFSKJFLKS");
-    }
+public class ServerService extends RemoteServiceServlet implements ClientService {
 
     public Boolean saveItems(List<Item> items) {
         DatabaseProxy proxy = new DatabaseProxy();
@@ -32,7 +29,11 @@ public class ServerService extends RemoteServiceServlet implements MyClientServi
 
     public List<Item> loadItems() {
         DatabaseProxy proxy = new DatabaseProxy();
-        return proxy.loadItemPositions();
+        List<Item> items = proxy.loadItemPositions();
+        for(Item item : items) {
+            Scheduler.getInstance().addDevice(item.getData());
+        }
+        return items;
     }
 
     public Device getState() {
@@ -43,7 +44,11 @@ public class ServerService extends RemoteServiceServlet implements MyClientServi
         Scheduler.getInstance().stop();
     }
 
-    public String test(Station device) {
-        return "" + Scheduler.getInstance().test(device); //todo
+    public void startScheduler() {
+        Scheduler.getInstance().start();
+    }
+
+    public TestResponse test(Station device) {
+        return Scheduler.getInstance().test(device); //todo
     }
 }

@@ -11,16 +11,11 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Date: 04.08.13
  * Time: 14:15
  */
-@XmlRootElement
 public class Station extends Device {
 
-    @XmlElement
     private Long id;
-    @XmlElement
     private String name;
-    @XmlElement
     private String host;
-    @XmlElement
     private String port;
     @XmlElement
     private String login;

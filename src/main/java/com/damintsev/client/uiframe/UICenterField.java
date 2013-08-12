@@ -220,13 +220,14 @@ public class UICenterField {
             public void onSuccess(List<Item> items) {
                 System.out.println("loaded " + items.size());
                 uiIems.clear();
+                Long id = -1L;
                 for(Item item : items) {
                     addItem(new UIItem(item));
-//                    if (item.getId() > tmp)
-//                        tmp = item.getId();
+                  if(id < item.getId()) {
+                      id = item.getId();
+                  }
                 }
-//                id = tmp >= 0 ? tmp : 0;
-//                rasstavitItems();
+                UICenterField.id = id;
             }
         });
     }
@@ -234,19 +235,8 @@ public class UICenterField {
     public void revertItemPositions() {
         dragController.clearSelection();
         disAllowDrag();
-//        rasstavitItems();
         drawConnections(false);
     }
-
-//    private void rasstavitItems() {
-//        for (UIItem item : uiItems) {
-//            Position position = item.getPosition();
-//            panel.add(item,0,0);
-//            if(position != null) panel.setWidgetPosition(item, position.x, position.y);
-//            else item.savePosition();
-//        }
-//        drawConnections(false);
-//    }
 
     private void drawConnections(boolean fireEvent) {
         clearCanvas();
@@ -255,13 +245,6 @@ public class UICenterField {
             for(UIItem item : entry.getValue()) {
                 drawLine(station.getCenterPosition(), item.getCenterPosition(), item.getStatus());
             }
-        }
-    }
-
-    public void drawLine(Device device) {
-        if(device instanceof Station) {
-
-        } else {
         }
     }
 
@@ -282,7 +265,7 @@ public class UICenterField {
     }
 
     private Long getNextId() {
-        if(id == null) id = 0L; //todo
+        if(id == null) id = 0L;
         return id++;
     }
     
@@ -325,8 +308,6 @@ public class UICenterField {
                 } else {
                     System.out.println("null");
                 }
-
-
             }
         });
     }

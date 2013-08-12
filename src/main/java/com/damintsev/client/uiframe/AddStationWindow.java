@@ -78,15 +78,7 @@ public class AddStationWindow implements Editor<Station> {
                 station = editor.flush();
                 if (editor.hasErrors()) return;
                 station.setStatus(Status.INIT);
-                Service.instance.test(station, new AsyncCallback<String>() {
-                    public void onFailure(Throwable throwable) {
-                        System.out.println(throwable.getMessage());
-                    }
-
-                    public void onSuccess(String s) {
-                        System.out.println("result=" + s);
-                    }
-                });
+                TelnetWindow.getInstance().show(station);
             }
         }));
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {

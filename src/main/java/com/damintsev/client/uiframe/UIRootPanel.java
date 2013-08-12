@@ -56,19 +56,6 @@ public class UIRootPanel {
         final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
 
-        System.out.println("CREATE!!");
-        Window.addCloseHandler(new CloseHandler<Window>() {
-            public void onClose(CloseEvent<Window> windowCloseEvent) {
-                Service.instance.stopScheduler(new AsyncCallback<Void>() {
-                    public void onFailure(Throwable throwable) {
-                    }
-
-                    public void onSuccess(Void aVoid) {
-                    }
-                });
-            }
-        });
-
         return viewport;
     }
 }
