@@ -1,11 +1,17 @@
 package com.damintsev.client.uiframe;
 
+import com.damintsev.client.service.Service;
 import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.i18n.client.HasDirection;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.*;
+import com.sun.corba.se.spi.activation.Server;
 
 /**
  * User: Damintsev Andrey
@@ -49,6 +55,19 @@ public class UIRootPanel {
         ((AbsolutePanel)body.getCenterWidget()).add(logo);
         final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
+
+        System.out.println("CREATE!!");
+        Window.addCloseHandler(new CloseHandler<Window>() {
+            public void onClose(CloseEvent<Window> windowCloseEvent) {
+                Service.instance.stopScheduler(new AsyncCallback<Void>() {
+                    public void onFailure(Throwable throwable) {
+                    }
+
+                    public void onSuccess(Void aVoid) {
+                    }
+                });
+            }
+        });
 
         return viewport;
     }

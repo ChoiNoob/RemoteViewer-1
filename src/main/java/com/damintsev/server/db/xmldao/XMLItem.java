@@ -1,5 +1,7 @@
 package com.damintsev.server.db.xmldao;
 
+import com.damintsev.client.devices.enums.DeviceType;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,11 +16,13 @@ public class XMLItem {
     private String name;
     private String query;
     private String regExp;
-    private String type;
     private String host;
     private String port;
     private String login;
     private String password;
+    private String comment;
+    private String deviceType;
+    private Long stationId;
 
     public Long getId() {
         return id;
@@ -53,13 +57,6 @@ public class XMLItem {
         this.regExp = regExp;
     }
 
-    public String getType() {
-        return type;
-    }
-    @XmlElement
-    public void setType(String type) {
-        this.type = type;
-    }
     @XmlElement
     public void setHost(String host) {
         this.host = host;
@@ -91,5 +88,30 @@ public class XMLItem {
 
     public String getPassword() {
         return password;
+    }
+    
+    @XmlElement
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+    @XmlElement
+    public void setDeviceType(String deviceType) {
+        this.deviceType = deviceType;
+    }
+
+    public String getDeviceType() {
+        return deviceType;
+    }
+
+    public void setStationId(Long id) {
+        this.stationId = id;
+    }
+
+    public Long getStationId() {
+        return stationId;
     }
 }

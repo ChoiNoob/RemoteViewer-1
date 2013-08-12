@@ -14,7 +14,6 @@ import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -79,7 +78,7 @@ public class UICenterField {
 
         panel.add(editButton);
         drawCanvas(panel);
-//        loadFromDatabase();
+        loadFromDatabase();
     }
 
     private Canvas canvas;
@@ -99,19 +98,29 @@ public class UICenterField {
         return panel;
     }
 
-    public void addItem(UIItem<? extends Device> item) {   //todo Добавить двойной клик на элемент
+    public void addItem(UIItem<? extends Device> item) {
+        addItem(item, false);
+    }
+
+    public void addItem(UIItem<? extends Device> item, boolean newI) {   //todo Добавить двойной клик на элемент
         item.setId(getNextId());
         if(item.getType()==DeviceType.STATION) {
                 uiIems.put((UIItem<Station>) item, new ArrayList<UIItem<? extends Device>>());
         } else {
             Station station = item.getStation();
-            uiIems.get(getUIItem(station)).add(item);
+            uiIems.get(getUIIStationItem(station)).add(item);
         }
         dragController.makeDraggable(item);
         panel.add(item, 0, 0);
-        int centerX = Window.getClientWidth() / 2 - item.getWidth() / 2;
-        int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
-        panel.setWidgetPosition(item, centerX, centerY);
+        if (newI) {
+            int centerX = Window.getClientWidth() / 2 - item.getWidth() / 2;
+            int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
+            panel.setWidgetPosition(item, centerX, centerY);
+
+        } else {
+            Position pos = item.getPosition();
+            panel.setWidgetPosition(item, pos.x, pos.y);
+        }
         drawConnections(false);
     }
 
@@ -146,12 +155,12 @@ public class UICenterField {
         }
         drawConnections(false);
         saveToDatabase();
-        Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
-            public boolean execute() {
-                scheduler();
-                return true;
-            }
-        },1000);
+//        Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
+//            public boolean execute() {
+//                scheduler();
+//                return true;
+//            }
+//        },1000);
     }
     
     public void saveToDatabase() {
@@ -179,14 +188,14 @@ public class UICenterField {
 
     public void delete(Device device) {
         if(device instanceof Station) {
-            UIItem station = getUIItem((Station) device);
-            ArrayList<UIItem<? extends Device>> devices =uiIems.get(station);
+            UIItem station = getUIIStationItem((Station) device);
+            ArrayList<UIItem<? extends Device>> devices = uiIems.get(station);
             for(UIItem<? extends Device> uiDevice : devices)  {
                 deleteDevice(uiDevice);
             }
             deleteStation(station);
         } else {
-
+            deleteDevice(getUIIDeviceItem(device));
         }
     }
 
@@ -202,25 +211,25 @@ public class UICenterField {
         uiIems.remove(station);
     }
     
-//    private void loadFromDatabase() {
-//        Service.instance.loadItems(new AsyncCallback<List<Item>>() {
-//            public void onFailure(Throwable throwable) {
-//                Dialogs.alert(throwable.getMessage());
-//            }
-//
-//            public void onSuccess(List<Item> items) {
-//                System.out.println("loaded " + items.size());
-//                int tmp = -1;
-//                for(Item item : items) {
-//                    uiItems.add(new UIItem(item));
+    private void loadFromDatabase() {
+        Service.instance.loadItems(new AsyncCallback<List<Item>>() {
+            public void onFailure(Throwable throwable) {
+                Dialogs.alert(throwable.getMessage());
+            }
+
+            public void onSuccess(List<Item> items) {
+                System.out.println("loaded " + items.size());
+                uiIems.clear();
+                for(Item item : items) {
+                    addItem(new UIItem(item));
 //                    if (item.getId() > tmp)
 //                        tmp = item.getId();
-//                }
+                }
 //                id = tmp >= 0 ? tmp : 0;
 //                rasstavitItems();
-//            }
-//        });
-//    }
+            }
+        });
+    }
 
     public void revertItemPositions() {
         dragController.clearSelection();
@@ -285,10 +294,19 @@ public class UICenterField {
         return list;
     }
 
-    public UIItem<Station> getUIItem(Station station) {
+    public UIItem<Station> getUIIStationItem(Station station) {
         for(UIItem<Station> uiStations : uiIems.keySet()) {
             if(uiStations.getId().equals(station.getId()))
                 return uiStations;
+        }
+        return null;
+    }
+    public UIItem getUIIDeviceItem(Device station) {
+        for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
+            for(UIItem item : entry.getValue()) {
+                if(item.getId().equals(station.getId()))
+                    return item;
+            }
         }
         return null;
     }

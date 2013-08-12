@@ -98,9 +98,9 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                 Dialogs.confirm("Будте удалено утройство", new Runnable() {
                     public void run() {
                         UICenterField.get().delete(device);
+                        window.hide();
                     }
                 });
-               window.hide();
             }
         });
         delete.hide();

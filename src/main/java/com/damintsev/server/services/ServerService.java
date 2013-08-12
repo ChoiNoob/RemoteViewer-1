@@ -2,6 +2,7 @@ package com.damintsev.server.services;
 
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
+import com.damintsev.client.devices.Station;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.telnet.Scheduler;
@@ -36,5 +37,13 @@ public class ServerService extends RemoteServiceServlet implements ClientService
 
     public Device getState() {
         return Scheduler.getInstance().getState();
+    }
+
+    public void stopScheduler() {
+        Scheduler.getInstance().stop();
+    }
+
+    public String test(Station device) {
+        return Scheduler.getInstance().test(device);
     }
 }

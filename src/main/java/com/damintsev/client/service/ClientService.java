@@ -2,6 +2,7 @@ package com.damintsev.client.service;
 
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
+import com.damintsev.client.devices.Station;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -21,5 +22,9 @@ public interface ClientService extends RemoteService {
     public List<Item> loadItems();
 
     public Device getState();
+
+    public void stopScheduler();
+    
+    public String test(Station device);
 }
 

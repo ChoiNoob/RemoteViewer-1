@@ -3,10 +3,12 @@ package com.damintsev.client.uiframe;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.service.Service;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -71,14 +73,30 @@ public class AddStationWindow implements Editor<Station> {
         comment.setHeight(70);
         panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
+        con.addButton(new TextButton("Тест", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                station = editor.flush();
+                if (editor.hasErrors()) return;
+                station.setStatus(Status.INIT);
+                Service.instance.test(station, new AsyncCallback<String>() {
+                    public void onFailure(Throwable throwable) {
+                        System.out.println(throwable.getMessage());
+                    }
+
+                    public void onSuccess(String s) {
+                        System.out.println("result=" + s);
+                    }
+                });
+            }
+        }));
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалена станция и все связанные с ней обькты", new Runnable() {
                     public void run() {
                         UICenterField.get().delete(station);
+                        window.hide();
                     }
                 });
-                window.hide();
             }
         });
         delete.hide();

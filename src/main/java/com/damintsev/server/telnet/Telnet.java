@@ -12,10 +12,9 @@ import org.apache.commons.net.telnet.TelnetClient;
 * Time:  1:11
 */
 
-public class Telnet {
+public class Telnet extends Thread {
 
     private TelnetClient telnet;
-    //    private BufferedInputStream input;
     private InputStream input;
     private PrintStream output;      //  output  stream
     private final int waitTime = 1000;  //wait  time  response  from  reader,  in  ms
@@ -41,35 +40,29 @@ public class Telnet {
                 output.close();
             }
 
-            //  Connect  to  the  specified  server
-            telnet.setConnectTimeout(5000);//  Timeout  5s
+//            telnet.setConnectTimeout(5000);
             telnet.connect(host, Integer.parseInt(port));
 
-            //  Get  input  and  output  stream  references       
             input = (telnet.getInputStream());
             output = new PrintStream(telnet.getOutputStream());
 
-            Thread.sleep(waitTime);  //  wait  for  responding  from  reader
-            //  Log  the  user  on
+            Thread.sleep(waitTime);
             if (readUntil("login:  ") == null) {
             }
             Thread.sleep(waitTime);
             write(login);
-            Thread.sleep(waitTime);  //  wait  for  responding  from  reader
+            Thread.sleep(waitTime);
             if (readUntil("Password:  ") == null)
                 write(password);
-            Thread.sleep(waitTime);  //  wait  for  responding  from  reader
-            //  Advance  to  a  prompt
-            //  readUntil(prompt  +  "  ");
-            return true;  //  connect  OK
+            Thread.sleep(waitTime);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;  //  connect  fail
+            return false;
         }
     }
 
     private String readUntil(String pattern) {
-        System.out.println("read until");
         try {
             char lastChar = 0;
             if (pattern != null) lastChar = pattern.charAt(pattern.length() - 1);
@@ -100,6 +93,27 @@ public class Telnet {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String read() {
+        StringBuilder sb = new StringBuilder();
+        try {
+        
+            
+            byte[] buff = new byte[1024];
+            int ret_read = 0;
+            do {
+                ret_read = input.read(buff);
+                if (ret_read > 0) {
+                    System.out.print(new String(buff, 0, ret_read));
+                    sb.append(new String(buff, 0, ret_read));
+                }
+            }
+            while (ret_read >= 0);
+        } catch (Exception e) {
+            System.err.println("Exception while reading socket:" + e.getMessage());
+        }
+        return sb.toString();
     }
 
     private void write(String value) {
@@ -159,15 +173,17 @@ public class Telnet {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return readUntil(null);
+        return read();
     }
 
     public static void main(String[] args) {
         Telnet telnet1 = new Telnet();
-        telnet1.setHost("192.168.110.128");
+//        telnet1.setHost("192.168.110.128");
+//        telnet1.setPort("23");
+//        telnet1.setLogin("sasha");
+//        telnet1.setPassword("1");
+        telnet1.setHost("127.0.0.1");
         telnet1.setPort("23");
-        telnet1.setLogin("sasha");
-        telnet1.setPassword("1");
         telnet1.connect();
         System.out.println(telnet1.executeCommand("ls -l"));
     }

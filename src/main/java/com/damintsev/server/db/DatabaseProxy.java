@@ -2,6 +2,7 @@ package com.damintsev.server.db;
 
 import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
+import com.damintsev.client.devices.enums.Status;
 import com.damintsev.server.db.xmldao.XMLItem;
 import com.damintsev.server.db.xmldao.XMLItemList;
 import com.damintsev.server.db.xmldao.XMLPosition;
@@ -31,7 +32,7 @@ public class DatabaseProxy {
         try {
             File file = new File(positionFile);
             if (file.exists()) {
-                Unmarshaller unmarshaller = creaetUnmarshaller(XMLPositionList.class);
+                Unmarshaller unmarshaller = createUnmarshaller(XMLPositionList.class);
                 XMLPositionList<XMLPosition> xmlPositionList = (XMLPositionList<XMLPosition>) unmarshaller.unmarshal(file);
                 System.out.println("CPT posIs=" + xmlPositionList.getList().size());
                 List<XMLItem> xmlItems = getItems();
@@ -43,7 +44,7 @@ public class DatabaseProxy {
 //                    item.setId(pos.getId());
 
                     XMLItem xmlItem = find(xmlItems, pos.getId());
-                    item.setData(convertXML(xmlItem));
+                    item.setData(convertXML(xmlItem, xmlItems));
                     items.add(item);
                 }
             }
@@ -53,9 +54,9 @@ public class DatabaseProxy {
         return items;
     }
 
-    private Device convertXML(XMLItem xmlItem) {
-        System.out.println("CPTT=" + xmlItem.getType());
-        switch (DeviceType.valueOf(xmlItem.getType())) {
+    private Device convertXML(XMLItem xmlItem, List<XMLItem> itemList) {
+        System.out.println("CPTT=" + xmlItem.getDeviceType());
+        switch (DeviceType.valueOf(xmlItem.getDeviceType())) {
             case STATION:
                 Station station = new Station();
                 station.setHost(xmlItem.getHost());
@@ -64,6 +65,8 @@ public class DatabaseProxy {
                 station.setPassword(xmlItem.getPassword());
                 station.setId(xmlItem.getId());
                 station.setName(xmlItem.getName());
+                station.setComment(xmlItem.getComment());
+                station.setStatus(Status.INIT);
                 return station;
             case ISDN:
                 CommonDevice isdn = new CommonDevice();
@@ -71,7 +74,29 @@ public class DatabaseProxy {
                 isdn.setQuery(xmlItem.getQuery());
                 isdn.setRegExp(xmlItem.getRegExp());
                 isdn.setName(xmlItem.getName());
+                isdn.setComment(xmlItem.getComment());
+                isdn.setDeviceType(DeviceType.valueOf(xmlItem.getDeviceType()));
+                isdn.setStation(findStation(xmlItem.getStationId(), itemList));
+                isdn.setStatus(Status.INIT);
                 return isdn;
+        }
+        return null;
+    }
+
+    private Station findStation(Long stationId, List<XMLItem> itemList) {
+        for(XMLItem xmlItem :itemList) {
+            if(xmlItem.getId().equals(stationId)){
+                Station station = new Station();
+                station.setHost(xmlItem.getHost());
+                station.setPort(xmlItem.getPort());
+                station.setLogin(xmlItem.getLogin());
+                station.setPassword(xmlItem.getPassword());
+                station.setId(xmlItem.getId());
+                station.setName(xmlItem.getName());
+                station.setComment(xmlItem.getComment());
+
+                return station;
+            }
         }
         return null;
     }
@@ -93,7 +118,7 @@ public class DatabaseProxy {
         try {
             File file = new File(itemsFile);
             if(file.exists()) {
-                Unmarshaller unmarshaller = creaetUnmarshaller(XMLItemList.class);
+                Unmarshaller unmarshaller = createUnmarshaller(XMLItemList.class);
                 XMLItemList<XMLItem> xmlItemList = (XMLItemList<XMLItem>) unmarshaller.unmarshal(file);
                 return xmlItemList.getItems();
             }
@@ -125,16 +150,20 @@ public class DatabaseProxy {
                     CommonDevice isdn = (CommonDevice) data;
                     item1.setQuery(isdn.getQuery());
                     item1.setRegExp(isdn.getQuery());
-                    item1.setType(isdn.getDeviceType().name());
+                    item1.setDeviceType(isdn.getDeviceType().name());
+                    item1.setName(isdn.getName());
+                    item1.setComment(isdn.getComment());
+                    item1.setDeviceType(isdn.getDeviceType().name());
+                    item1.setStationId(isdn.getStation().getId());
                     break;
                 case STATION:
                     Station station = (Station) data;
-                    item1.setType(station.getDeviceType().name());
+                    item1.setDeviceType(station.getDeviceType().name());
                     item1.setHost(station.getHost());
                     item1.setPort(station.getPort());
                     item1.setLogin(station.getLogin());
                     item1.setPassword(station.getPassword());
-                    station.getPassword();
+                    item1.setDeviceType(station.getDeviceType().name());
                     break;
             }
             xmlItems.add(item1);
@@ -180,11 +209,10 @@ public class DatabaseProxy {
         return null;
     }
 
-    private Unmarshaller creaetUnmarshaller(Class clazz) {
+    private Unmarshaller createUnmarshaller(Class clazz) {
         try {
             JAXBContext context = JAXBContext.newInstance(clazz);
-            Unmarshaller marshaller = context.createUnmarshaller();
-            return marshaller;
+            return context.createUnmarshaller();
         } catch (JAXBException e) {
             e.printStackTrace();
         }

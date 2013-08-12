@@ -52,21 +52,9 @@ public class Scheduler {
             }
         }
         if (firstTime) {
-//            new Thread(new Runnable() {
-//                public void run() {
-                    timer.scheduleAtFixedRate(new TimerTask() {
-                        @Override
-                        public void run() {
-                            scheduler();
-                        }
-                    }, 1000, 1000);
-//                }
-//            }).start();
-
-
+            ;
             firstTime = false;
         }
-
     }
 
     private void initConnection(Station station) {
@@ -75,9 +63,9 @@ public class Scheduler {
         telnet.setPort(station.getPort());
         telnet.setLogin(station.getLogin());
         telnet.setPassword(station.getPassword());
-//        if(telnet.connect()) {
-//            telnetStation.put(station, telnet);
-//        }
+        if(telnet.connect()) {
+            telnetStation.put(station, telnet);
+        }
     }
 
     private Telnet getConnection(Station station) {
@@ -87,30 +75,34 @@ public class Scheduler {
     }
 
     public void scheduler() {
-        System.out.println("shdule");
         for(Map.Entry<Station, List<Device>> entry : stationDevices.entrySet()) {
             Station station = entry.getKey();
-//            Telnet telnet = getConnection(station);
+            Telnet telnet = getConnection(station);
             for(Device devices : entry.getValue()) {
                 CommonDevice device  = (CommonDevice) devices;
-//                String result = telnet.executeCommand(device.getQuery());
-                String result = "asdasd";
+                String result = telnet.executeCommand(device.getQuery());
+//                String result = "asdasd";
                 parseResult(device, result);
                 queue.add(device);
-                System.out.println("quque add");
-//                try {
-////                    Thread.sleep(2000);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
+    }
+    
+    private String sendTestCommand(Station station) {
+        Telnet connection = telnetStation.get(station);
+        return connection.executeCommand("dir");
     }
 
     private void parseResult(CommonDevice isdn, String result) {
 //        Pattern pattern = new Pattern();
 //       result.split()
         isdn.setStatus(Status.WORK);
+        isdn.setComment(result);
     }
 
     public Device getState() {
@@ -118,5 +110,28 @@ public class Scheduler {
         Device device = queue.poll();
         System.out.println("device=" + device.toString());
         return device;
+    }
+
+    public void start() {
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                scheduler();
+            }
+        }, 1000, 1000);
+    }
+
+    public void stop() {
+        timer.cancel();
+    }
+
+    public String test(Device device) {
+        String result = "null";
+        if(device instanceof Station) {
+            Station station = (Station) device;
+            initConnection(station);
+            result = sendTestCommand(station);
+        }
+        return result;
     }
 }

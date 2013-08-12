@@ -6,7 +6,7 @@ package com.damintsev.client.devices.enums;
  * Time: 0:35
  */
 public enum Status {
-    INIT("yellow"), WORK("green"), ERROR("red");
+    INIT("gray"), WORK("green"), ERROR("red"), WARNING("yellow");
 
     private String color;
 
