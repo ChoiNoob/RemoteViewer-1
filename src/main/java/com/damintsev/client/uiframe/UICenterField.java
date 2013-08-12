@@ -70,6 +70,7 @@ public class UICenterField {
             public void onSelect(SelectEvent event) {
                 allowDrag();
                 UISettingsPanel.get().expand();
+                stop();
             }
         });
         editButton.setAllowTextSelection(false);
@@ -314,7 +315,6 @@ public class UICenterField {
     }
 
     private void scheduler() {
-        System.out.println("RUN!");
         if(iterator == null)
             iterator = createIterator();
         if(iterator.hasNext()) {
@@ -359,10 +359,12 @@ public class UICenterField {
         return items.iterator();
     }
 
-   private boolean start;
+    private boolean start;
+
     public void start() {
-                     this.start = true;
+        this.start = true;
     }
+
     public void stop() {
         this.start = false;
     }

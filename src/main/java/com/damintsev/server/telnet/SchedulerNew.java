@@ -38,8 +38,8 @@ public class SchedulerNew {
             Station station = (Station) device;
             try {
                 initConnection(station);
-            } catch (IOException e) {
-                e.printStackTrace();  //todo runtime exeption
+            } catch (IOException e) {   e.printStackTrace();
+                throw new RuntimeException(e);  //todo runtime exeption
             }
         } else {
 //            if (s)
@@ -52,9 +52,9 @@ public class SchedulerNew {
         telnet.setPort(station.getPort());
         telnet.setLogin(station.getLogin());
         telnet.setPassword(station.getPassword());
-//        if (telnet.connect()) {
-//            telnetStation.put(station, telnet);
-//        }
+        if (telnet.connect()) {
+            telnetStation.put(station, telnet);
+        }
     }
 
     public Device checkDevice(Device device) {
@@ -62,9 +62,9 @@ public class SchedulerNew {
 
         } else {
             CommonDevice dev = (CommonDevice) device;
-//            TelnetClient telnet = getConnection(dev.getStation());
-//            String result = telnet.execute(dev.getQuery());
-            parseResult(dev, "");
+            TelnetClient telnet = getConnection(dev.getStation());
+            String result = telnet.execute(dev.getQuery());
+            parseResult(dev, result);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -80,7 +80,7 @@ public class SchedulerNew {
             try {
                 initConnection(station);
             } catch (IOException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                e.printStackTrace();
             }
         }
         return telnetStation.get(station);
