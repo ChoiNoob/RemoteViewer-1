@@ -59,6 +59,7 @@ public class DatabaseProxy {
     }
 
     private Device convertXML(XMLItem xmlItem, List<XMLItem> itemList) {
+        System.out.println("CPTT=" + xmlItem.getId());
         System.out.println("CPTT=" + xmlItem.getDeviceType());
         switch (DeviceType.valueOf(xmlItem.getDeviceType())) {
             case STATION:
@@ -107,16 +108,20 @@ public class DatabaseProxy {
     }
 
     private XMLItem find(List<XMLItem> xmlItems, Long id) {
-        int index = Collections.binarySearch(xmlItems, id, new Comparator<Object>() {
-            public int compare(Object o1, Object o2) {
-                XMLItem it = (XMLItem) o1;
-                int v;
-                if((v =  it.getId().compareTo((Long) o2)) != 0) return v;
-                return v;
-            }
-        });
-        return index >= 0 ? xmlItems.get(index):null;
-
+//        int index = Collections.binarySearch(xmlItems, id, new Comparator<Object>() {
+//            public int compare(Object o1, Object o2) {
+//                XMLItem it = (XMLItem) o1;
+//                int v;
+//                if((v =  it.getId().compareTo((Long) o2)) != 0) return v;
+//                return v;
+//            }
+//        });
+//        return index >= 0 ? xmlItems.get(index):null;
+        for(XMLItem xml : xmlItems) {
+            if(xml.getId().equals(id))
+                return xml;
+        }
+        return null;
     }
 
     private List<XMLItem> getItems() {

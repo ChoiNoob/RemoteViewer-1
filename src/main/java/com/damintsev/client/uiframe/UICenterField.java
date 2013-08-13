@@ -326,7 +326,7 @@ public class UICenterField {
                 scheduler();
                 return start;
             }
-        }, 1000);
+        }, 5000);
     }
 
     private void scheduler() {

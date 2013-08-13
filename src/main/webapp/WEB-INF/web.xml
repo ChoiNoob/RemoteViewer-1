@@ -24,6 +24,26 @@
         <!--<servlet-name>imageUpload</servlet-name>-->
         <!--<url-pattern>/download</url-pattern>-->
     <!--</servlet-mapping>-->
+    <!--<context-param>-->
+        <!--<param-name>log4jConfigLocation</param-name>-->
+        <!--<param-value>/WEB-INF/log4j.properties</param-value>-->
+    <!--</context-param>-->
+    <!--<listener>-->
+        <!--<listener-class>org.apache.logging.log4j.core.web.Log4jServletContextListener</listener-class>-->
+    <!--</listener>-->
+
+    <!--<filter>-->
+        <!--<filter-name>log4jServletFilter</filter-name>-->
+        <!--<filter-class>org.apache.logging.log4j.core.web.Log4jServletFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+        <!--<filter-name>log4jServletFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
+        <!--&lt;!&ndash;<dispatcher>REQUEST</dispatcher>&ndash;&gt;-->
+        <!--&lt;!&ndash;<dispatcher>FORWARD</dispatcher>&ndash;&gt;-->
+        <!--&lt;!&ndash;<dispatcher>INCLUDE</dispatcher>&ndash;&gt;-->
+        <!--&lt;!&ndash;<dispatcher>ERROR</dispatcher>&ndash;&gt;-->
+    <!--</filter-mapping>-->
 
     <servlet>
         <servlet-name>remoteLogging</servlet-name>
@@ -38,7 +58,4 @@
   <welcome-file-list>
     <welcome-file>mainGWT.html</welcome-file>
   </welcome-file-list>
-
-
-
 </web-app>

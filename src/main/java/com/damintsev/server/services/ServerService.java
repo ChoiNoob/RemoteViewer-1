@@ -6,6 +6,7 @@ import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.telnet.Scheduler;
 import com.damintsev.server.telnet.SchedulerNew;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -16,22 +17,19 @@ import java.util.List;
  */
 public class ServerService extends RemoteServiceServlet implements ClientService {
 
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ServerService.class);
+
     public Boolean saveItems(List<Item> items) {
+        logger.debug("Call saveItems()");
         DatabaseProxy proxy = new DatabaseProxy();
         proxy.saveItems(items);
-//        for(Item item : items) {
-//            SchedulerNew.getInstance().addDevice(item.getData());
-//        }
         return true;
     }
 
     public List<Item> loadItems() {
+        logger.debug("Call loadItems()");
         DatabaseProxy proxy = new DatabaseProxy();
-        List<Item> items = proxy.loadItemPositions();
-//        for(Item item : items) {
-//            SchedulerNew.getInstance().addDevice(item.getData());
-//        }
-        return items;
+        return proxy.loadItemPositions();
     }
 
     public Device getState() {
@@ -51,7 +49,7 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public Device checkDevice(Device device) {
-        System.out.println("Call checkDevice");
+        logger.debug("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
         System.out.println("with id=" + device.getId() + " name=" + device.getName());
         Device result = null;
         try {
