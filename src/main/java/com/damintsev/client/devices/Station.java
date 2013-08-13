@@ -17,17 +17,11 @@ public class Station extends Device {
     private String name;
     private String host;
     private String port;
-    @XmlElement
     private String login;
-    @XmlElement
     private String password;
-
     private Status status;
-
     private String comment;
-
     private String imageName = "hipath";
-
     private  DeviceType deviceType = DeviceType.STATION;
 
     public String getHost() {

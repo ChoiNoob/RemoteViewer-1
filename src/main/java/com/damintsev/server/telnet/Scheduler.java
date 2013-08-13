@@ -44,11 +44,7 @@ public class Scheduler {
     public void addDevice(Device device) {
         if(device instanceof Station) {
             Station station = (Station) device;
-            try {
-                initConnection(station);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            initConnection(station);
             if(!stationDevices.containsKey(station)) {
                 System.out.println("station put");
                 stationDevices.put(station, new ArrayList<Device>());
@@ -61,7 +57,7 @@ public class Scheduler {
         }
     }
 
-    private void initConnection(Station station) throws IOException {
+    private void initConnection(Station station)  {
         TelnetClient telnet = new TelnetClient();
         telnet.setHost(station.getHost());
         telnet.setPort(station.getPort());
@@ -72,13 +68,13 @@ public class Scheduler {
         }
     }
 
-    private TelnetClient getConnection(Station station) throws IOException {
+    private TelnetClient getConnection(Station station)  {
         if(!telnetStation.containsKey(station))
             initConnection(station);
         return telnetStation.get(station);
     }
 
-    public void scheduler() throws IOException {
+    public void scheduler()  {
         System.out.println("server schedule");
         for(Map.Entry<Station, List<Device>> entry : stationDevices.entrySet()) {
             Station station = entry.getKey();
@@ -155,11 +151,7 @@ public class Scheduler {
             timer.scheduleAtFixedRate(new TimerTask() {
                 @Override
                 public void run() {
-                    try {
                         scheduler();
-                    } catch (IOException e) {
-                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                    }
                 }
             }, 1000, 1000);
             running = true;
@@ -175,16 +167,9 @@ public class Scheduler {
         TestResponse response = null;
         if(device instanceof Station) {
             Station station = (Station) device;
-            try {
-                initConnection(station);
-                response = sendTestCommand(station);
-                if(response == null) { response = new TestResponse();
-                    response.setResult(false);
-                    response.setResultText("error bl9");
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-                response = new TestResponse();
+            initConnection(station);
+            response = sendTestCommand(station);
+            if(response == null) { response = new TestResponse();
                 response.setResult(false);
                 response.setResultText("error bl9");
             }

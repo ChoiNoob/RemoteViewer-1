@@ -99,7 +99,7 @@ public class AddStationWindow implements Editor<Station> {
                 station = editor.flush();
                 if (editor.hasErrors()) return;
                 station.setStatus(Status.INIT);
-                UICenterField.get().addItem(new UIItem<Station>(station));
+                UICenterField.get().addItem(new UIItem(station));
                 window.hide();
             }
         }));

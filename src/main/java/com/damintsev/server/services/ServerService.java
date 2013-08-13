@@ -1,12 +1,9 @@
 package com.damintsev.server.services;
 
-import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.*;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.telnet.Scheduler;
-import com.damintsev.client.devices.TestResponse;
 import com.damintsev.server.telnet.SchedulerNew;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 

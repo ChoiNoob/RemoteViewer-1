@@ -74,7 +74,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
         deviceType = new SimpleComboBox<DeviceType>(new LabelProvider<DeviceType>() {
             public String getLabel(DeviceType item) {
-                return item.name();
+                return item.getName();
             }
         });
         deviceType.add(DeviceType.IP);
@@ -113,7 +113,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                 device = driver.flush();
                 device.setStatus(Status.INIT);
                 if (driver.hasErrors()) return;
-                UICenterField.get().addItem(new UIItem<Device>(device));
+                UICenterField.get().addItem(new UIItem(device));
                 window.hide();
             }
         }));

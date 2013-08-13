@@ -7,28 +7,37 @@ import com.damintsev.utils.Utils;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.*;
 
+import java.io.Serializable;
+
 /**
  * User: Damintsev Andrey
  * Date: 03.08.13
  * Time: 2:09
  */
-public class UIItem<T extends Device> extends Label {
+public class UIItem extends Label {
 
-    private Item<T> item;
     private Position position;
     private Image image;
+//    private int coordX;
+//    private int coordY;
+    private Device data;
+    private Label label;
 
-    public UIItem(Item<T> item) {
-        super();
-        this.item = item;
-        position = new Position(item.getCoordX(), item.getCoordY());
-        init();
+    public UIItem(){
+
     }
 
-    public UIItem(T data) {
+    public UIItem(Device data) {
         super();
-        this.item = new Item<T>(data);
-        position = new Position(item.getCoordX(), item.getCoordY());
+        this.data = data;
+        init();
+//        position = new Position(image.getAbsoluteLeft(), item.getCoordY());
+    }
+
+    public UIItem(Device data, Position position) {
+        super();
+        this.data = data;
+        this.position = position;
         init();
     }
 
@@ -39,14 +48,14 @@ public class UIItem<T extends Device> extends Label {
             position.y = getAbsoluteTop();
         }
     }
-    Label label;
+
     private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
         image = new Image(getImage());
         getElement().appendChild(image.getElement());
 
         label = new Label(getName());
-        if(getName() != null || item.getData() instanceof Station)
+        if(getName() != null || data instanceof Station)
             getElement().appendChild(label.getElement());
         label.setStyleName("tooltip");
     }
@@ -58,25 +67,26 @@ public class UIItem<T extends Device> extends Label {
     }
 
     public Position getPosition() {
+        if(position == null) savePosition();
         return position;
     }
 
-    public Item<T> getItem() {
-        item.setCoordX(getPosition().x);
-        item.setCoordY(getPosition().y);
-        return item;
-    }
+//    public Item<T> getItem() {
+//        item.setCoordX(getPosition().x);
+//        item.setCoordY(getPosition().y);
+//        return item;
+//    }
 
     public ImageResource getImage() {
-        return Utils.getImage(item.getImage());
+        return Utils.getImage(data.getImage());
     }
 
     public String getName() {
-        return item.getName();
+        return data.getName();
     }
 
-    public DeviceType getType() {
-        return item.getType();
+    public DeviceType getDeviceType() {
+        return data.getDeviceType();
     }
 
     public int getWidth() {
@@ -88,22 +98,30 @@ public class UIItem<T extends Device> extends Label {
     }
 
     public void setId(Long id) {
-        item.setId(id);
+        data.setId(id);
     }
     
     public Long getId() {
-        return item.getId();
+        return data.getId();
     }
 
     public Station getStation() {
-        return item.getData().getStation();
+        return data.getStation();
     }
 
     public Status getStatus() {
-        return item.getData().getStatus();
+        return data.getStatus();
     }
 
     public void setLabelColor() {
-        label.getElement().getStyle().setBackgroundColor(item.getData().getStatus().getColor());
+        label.getElement().getStyle().setBackgroundColor(data.getStatus().getColor());
+    }
+
+    public Device getData() {
+        return data;
+    }
+
+    public void setData(Device data) {
+        this.data = data;
     }
 }

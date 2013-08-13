@@ -1,6 +1,7 @@
 package com.damintsev.client.devices;
 
 import com.damintsev.client.devices.enums.DeviceType;
+import com.damintsev.utils.Position;
 
 import java.io.Serializable;
 
@@ -19,8 +20,10 @@ public class Item <T extends Device> implements Serializable {
 
     }
 
-    public Item(T data) {
+    public Item(T data, Position pos) {
         this.data = data;
+        coordX = pos.x;
+        coordY = pos.y;
     }
 
     public int getCoordX() {

@@ -3,11 +3,8 @@ package com.damintsev.client.uiframe;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
 import com.damintsev.utils.Dialogs;
@@ -42,10 +39,13 @@ public class UICenterField {
 
     private PickupDragController dragController;
     private AbsolutePanel panel;
-    private Map<UIItem<Station>, ArrayList<UIItem<? extends Device>>> uiIems;
+//    private Map<UIItem<Station>, ArrayList<UIItem<? extends Device>>> uiIems;
+    private Map<Long, UIItem> uiStations;
+    private Map<Long, UIItem> uiDevices;
 
     private UICenterField() {
-        uiIems = new HashMap<UIItem<Station>, ArrayList<UIItem<? extends Device>>>();
+        uiStations = new HashMap<Long, UIItem>();
+        uiDevices = new HashMap<Long, UIItem>();
         panel = new AbsolutePanel();
         dragController = new PickupDragController(panel, true) {
             @Override
@@ -101,34 +101,18 @@ public class UICenterField {
         return panel;
     }
 
-    public void addItem(UIItem<? extends Device> item) {
-        addItem(item, true);
-    }
+    public void addItem(UIItem item) {
+        boolean newI;
+        if (item.getId() == null) {
+            item.setId(getNextId());
+            newI = true;
+        } else newI = false;
+        insertUpdateItem(item);
 
-    public void addItem(UIItem<? extends Device> item, boolean newI) {   //todo Добавить двойной клик на элемент
-        if (item.getId() == null) {   item.setId(getNextId());
-
-        }
-
-        if (item.getType() == DeviceType.STATION) {
-            if(!uiIems.containsKey(item)) {
-                System.out.println("addStation id=" + item.getId());
-                uiIems.put((UIItem<Station>) item, new ArrayList<UIItem<? extends Device>>());
-            }
-            else {
-                System.out.println("update station id=" + item.getId());
-                ArrayList<UIItem<? extends Device>> existingItems = uiIems.get(item);
-                deleteStation(item);
-                uiIems.put((UIItem<Station>) item, existingItems);
-            }
-        } else {
-            System.out.println("addDevice id=" + item.getId());
-            Station station = item.getStation();
-            System.out.println("CPT =" + uiIems.get(getUIIStationItem(station)));
-            uiIems.get(getUIIStationItem(station)).add(item);
-        }
         dragController.makeDraggable(item);
-        panel.add(item, 0, 0);
+        System.out.println("Asdas=" + panel.getWidgetIndex(item));
+        if(panel.getWidgetIndex(item) == -1)
+            panel.add(item, 0, 0);
         if (newI) {
             int centerX = Window.getClientWidth() / 2 - item.getWidth() / 2;
             int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
@@ -140,34 +124,49 @@ public class UICenterField {
         drawConnections(false);
     }
 
+    private UIItem insertUpdateItem(UIItem item) {
+        if (item.getDeviceType() == DeviceType.STATION) {
+            System.out.println("CPT=" + uiStations.containsKey(item.getId()));
+            if (uiStations.containsKey(item.getId())) {
+                uiStations.get(item.getId()).setData(item.getData());
+//                uiStations.get(item.getId());
+            } else uiStations.put(item.getId(), item);
+        } else {
+            if (uiDevices.containsKey(item.getId())) {
+                uiDevices.get(item.getId()).setData(item.getData());
+//                uiDevices.get(item.getId());
+            } else
+                uiDevices.put(item.getId(), item);
+        }
+        return item;
+    }
+
     private void allowDrag() {
-        for (Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
-            UIItem<Station> station = entry.getKey();
+        for(UIItem station : uiStations.values()) {
             dragController.makeDraggable(station);
-            for (UIItem item : entry.getValue()) {
-                dragController.makeDraggable(item);
-            }
+        }
+        for(UIItem device : uiDevices.values()) {
+            dragController.makeDraggable(device);
         }
     }
 
     private void disAllowDrag() {
-        for (Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
-            UIItem<Station> station = entry.getKey();
+        for(UIItem station : uiStations.values()) {
             dragController.makeNotDraggable(station);
-            for (UIItem item : entry.getValue()) {
-                dragController.makeNotDraggable(item);
-            }
+        }
+        for(UIItem device : uiDevices.values()) {
+            dragController.makeNotDraggable(device);
         }
     }
 
     public void saveItemPositions() {
         dragController.clearSelection();
         disAllowDrag();
-        for (Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
-            entry.getKey().savePosition();
-            for (UIItem item : entry.getValue()) {
-                item.savePosition();
-            }
+        for(UIItem station : uiStations.values()) {
+            station.savePosition();
+        }
+        for(UIItem device : uiDevices.values()) {
+            device.savePosition();
         }
         drawConnections(false);
         saveToDatabase();
@@ -177,15 +176,15 @@ public class UICenterField {
 
     public void saveToDatabase() {
         List<Item> items = new ArrayList<Item>();
-        for (Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
-            items.add(entry.getKey().getItem());
-            for (UIItem item : entry.getValue()) {
-                items.add(item.getItem());
-            }
+        for(UIItem station : uiStations.values()) {
+            items.add(new Item<Device>(station.getData(),station.getPosition()));
+        }
+        for(UIItem device : uiDevices.values()) {
+            items.add(new Item<Device>(device.getData(),device.getPosition()));
         }
         Service.instance.saveItems(items, new AsyncCallback<Boolean>() {
             public void onFailure(Throwable throwable) {
-                Dialogs.alert(throwable.getMessage());
+                Dialogs.alert("Error saving properties! " + throwable.getMessage());
             }
 
             public void onSuccess(Boolean bool) {
@@ -199,29 +198,40 @@ public class UICenterField {
     }
 
     public void delete(Device device) {
-        if (device instanceof Station) {
-            UIItem station = getUIIStationItem((Station) device);
-            ArrayList<UIItem<? extends Device>> devices = uiIems.get(station);
-            for (UIItem<? extends Device> uiDevice : devices) {
-                deleteDevice(uiDevice);
-            }
-            deleteStation(station);
+        delete(device, true);
+    }
+
+    public void delete(Device device, boolean deleteChilds) {
+        if(device instanceof Station) {
+            dragController.makeNotDraggable(uiStations.get(device.getId()));
+            panel.remove(uiStations.get(device.getId()));
+            uiStations.remove(device.getId());
+            if(deleteChilds)
+                for (UIItem dev : findDevicesForStation(device.getId())) {
+                    delete(dev.getData());
+                }
         } else {
-            deleteDevice(getUIIDeviceItem(device));
+            dragController.makeNotDraggable(uiDevices.get(device.getId()));
+            panel.remove(uiDevices.get(device.getId()));
+            uiDevices.remove(device.getId());
         }
-        drawConnections(false);
     }
 
-    private void deleteDevice(UIItem device) {
-        dragController.makeNotDraggable(device);
-        panel.remove(device);
-        uiIems.get(getUIIStationItem(device.getStation())).remove(device);
+    List<UIItem> findDevicesForStation(UIItem station){
+        return findDevicesForStation(station.getId());
     }
 
-    private void deleteStation(UIItem station) {
-        dragController.makeNotDraggable(station);
-        panel.remove(station);
-        uiIems.remove(station);
+    List<UIItem> findDevicesForStation(Station station) {
+        return findDevicesForStation(station.getId());
+    }
+
+    List<UIItem> findDevicesForStation(Long deviceId) {
+        List<UIItem> devices = new ArrayList<UIItem>();
+        for(UIItem item : uiDevices.values()) {
+            if(item.getStation().getId().equals(deviceId))
+                devices.add(item);
+        }
+        return devices;
     }
 
     private void loadFromDatabase() {
@@ -233,11 +243,13 @@ public class UICenterField {
 
             public void onSuccess(List<Item> items) {
                 System.out.println("loaded " + items.size());
-                uiIems.clear();
+                uiDevices.clear();
+                uiStations.clear();
                 Long id = -1L;
                 for (Item item : items) {
                     System.out.println("loading from db id=" + item.getId());
-                    addItem(new UIItem(item), false);
+                    Position pos = new Position(item.getCoordX(), item.getCoordY());
+                    addItem(new UIItem(item.getData(), pos));
                     if (id < item.getId()) {
                         id = item.getId();
                     }
@@ -251,6 +263,7 @@ public class UICenterField {
                     schedule();
                     disAllowDrag();
                 }
+                drawConnections(false);
             }
         });
     }
@@ -263,11 +276,9 @@ public class UICenterField {
 
     private void drawConnections(boolean fireEvent) {
         clearCanvas();
-        for (Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
-            UIItem<? extends Device> station = entry.getKey();
-            station.setLabelColor();
-            for (UIItem item : entry.getValue()) {
-                drawLine(station.getCenterPosition(), item.getCenterPosition(), item.getStatus());
+        for(UIItem station : uiStations.values()) {
+            for(UIItem device : findDevicesForStation(station)) {
+                drawLine(station.getCenterPosition(), device.getCenterPosition(), device.getStatus());
             }
         }
     }
@@ -294,29 +305,11 @@ public class UICenterField {
     }
 
     public List<Station> getStations() {
-        List<Station> list = new ArrayList<Station>(); //todo change array list
-        for (UIItem<Station> item : uiIems.keySet()) {
-            list.add(item.getItem().getData());
+        List<Station> stations = new ArrayList<Station>();
+        for (UIItem st : uiStations.values()) {
+            stations.add((Station) st.getData());
         }
-        return list;
-    }
-
-    public UIItem<Station> getUIIStationItem(Station station) {
-        for (UIItem<Station> uiStations : uiIems.keySet()) {
-            if (uiStations.getId().equals(station.getId()))
-                return uiStations;
-        }
-        return null;
-    }
-
-    public UIItem getUIIDeviceItem(Device station) {
-        for (Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
-            for (UIItem item : entry.getValue()) {
-                if (item.getId().equals(station.getId()))
-                    return item;
-            }
-        }
-        return null;
+        return stations;
     }
 
     public void schedule() {
@@ -332,34 +325,18 @@ public class UICenterField {
         if (iterator == null)
             iterator = createIterator();
         if (iterator.hasNext()) {
-            final Device device = iterator.next().getData();
+            final Device device = iterator.next();
             Service.instance.checkDevice(device, new AsyncCallback<Device>() {
                 public void onFailure(Throwable caught) {
 //                    stop();
 //                    Dialogs.alert("Check device false! " + caught.getMessage());   //todo!!!!
                     device.setStatus(Status.ERROR);
-                    if (device instanceof Station) {
-
-                    } else {
                         onSuccess(device);
-                    }
                 }
 
                 public void onSuccess(Device result) {
                     if (result != null) {
-                        if (result.getDeviceType() == DeviceType.STATION) {
-
-                        } else {
-                            ArrayList<UIItem<? extends Device>> items = uiIems.get(getUIIStationItem(result.getStation()));
-                            UIItem item = getUIIDeviceItem(result);
-                            if (item == null) return;
-//                            System.out.println("r.gS" + result.getStation());
-//                            System.out.println("uiI.g" + uiIems.get(result.getStation()));
-                            uiIems.get(getUIIStationItem(result.getStation())).remove(item);
-                            item.getItem().getData().setStatus(result.getStatus());
-                            items.add(item);
-                            drawConnections(false);
-                        }
+                       updateUIItem(result);
                     }
                 }
             });
@@ -368,15 +345,25 @@ public class UICenterField {
         }
     }
 
-    private Iterator<Item> iterator;
+    private void updateUIItem(Device device) {
+        if(device instanceof Station) {
+           UIItem station = uiStations.get(device.getId());
+            uiStations.put(device.getId(), station);
+        } else {
+            UIItem dev = uiDevices.get(device.getId());
+            uiDevices.put(device.getId(), dev);
+        }
+    }
 
-    private Iterator<Item> createIterator() {
-        List<Item> items = new ArrayList<Item>();
-        for (Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
-            items.add(entry.getKey().getItem());
-            for (UIItem item : entry.getValue()) {
-                items.add(item.getItem());
-            }
+    private Iterator<Device> iterator;
+
+    private Iterator<Device> createIterator() {
+        List<Device> items = new ArrayList<Device>();
+        for(UIItem station : uiStations.values()) {
+            items.add(station.getData());
+        }
+        for(UIItem device : uiDevices.values()) {
+            items.add(device.getData());
         }
         return items.iterator();
     }

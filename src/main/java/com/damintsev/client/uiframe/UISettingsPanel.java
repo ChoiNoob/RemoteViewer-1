@@ -82,13 +82,13 @@ public class UISettingsPanel {
                 UIItem selected = (UIItem) UICenterField.get().getSelected();
                 if (selected == null) Dialogs.alert("Выберите устройство");
                 else {
-                    switch (selected.getType()) {
+                    switch (selected.getDeviceType()) {
                         case STATION:
-                            AddStationWindow.get().show((Station) selected.getItem().getData());
+                            AddStationWindow.get().show((Station) selected.getData());
                             break;
                         case IP:
                         case ISDN:
-                            AddDeviceWindow.get().show((CommonDevice) selected.getItem().getData());
+                            AddDeviceWindow.get().show((CommonDevice) selected.getData());
                             break;
                     }
                 }

@@ -43,7 +43,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
     private String password;
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         TelnetClient example = new TelnetClient();
         example.setLogin("sasha");
         example.setPassword("1");
@@ -56,7 +56,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
      * Main for the TelnetClient.
      * *
      */
-    public boolean connect() throws IOException {
+    public boolean connect() {
 
         tc = new org.apache.commons.net.telnet.TelnetClient();
         TerminalTypeOptionHandler ttopt = new TerminalTypeOptionHandler("VT100", false, false, true, false);
@@ -89,7 +89,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
             testConnection();
         } catch (IOException e) {
             System.err.println("Exception while connecting:" + e.getMessage());
-            throw e;
+            throw new RuntimeException(e);
         } catch (InterruptedException e) {
             e.printStackTrace();
             return false;

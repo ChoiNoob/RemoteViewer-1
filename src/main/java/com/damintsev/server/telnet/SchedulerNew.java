@@ -49,18 +49,23 @@ public class SchedulerNew {
 //        }
 //    }
 
-    private boolean initConnection(Station station) throws IOException {
+    private boolean initConnection(Station station) {
         TelnetClient telnet = new TelnetClient();
         telnet.setHost(station.getHost());
         telnet.setPort(station.getPort());
         telnet.setLogin(station.getLogin());
         telnet.setPassword(station.getPassword());
-        if (telnet.connect()) {
-            telnet.start();
-            System.out.println("telnetStation.put");
-            telnetStation.put(station, telnet);
-            return true;
-        }
+//        try {
+            if (telnet.connect()) {
+                telnet.start();
+                System.out.println("telnetStation.put");
+                telnetStation.put(station, telnet);
+                return true;
+            }
+//        } catch (IOException e) {
+//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+//            throw new RuntimeException(e);
+//        }
         return false;
     }
 
@@ -90,14 +95,15 @@ public class SchedulerNew {
 
     private TelnetClient getConnection(Station station) {
         if (!telnetStation.containsKey(station)) {
-            try {
+//            try {
                 System.out.println("getConnection. init connection!");
                 initConnection(station);
-            } catch (IOException e) {
-                System.out.println("fail");
-                e.printStackTrace();
-                System.out.println("e:" + e.getMessage());
-            }
+//            } catch (IOException e) {
+//                System.out.println("fail");
+//                e.printStackTrace();
+//                System.out.println("e:" + e.getMessage());
+//                throw new RuntimeException(e);
+//            }
         }
         System.out.println("CPT=" + telnetStation.get(station));
         return telnetStation.get(station);
