@@ -49,14 +49,13 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public Device checkDevice(Device device) {
-        logger.debug("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
-        System.out.println("with id=" + device.getId() + " name=" + device.getName());
+        logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
         Device result = null;
         try {
             result = SchedulerNew.getInstance().checkDevice(device);
             return result;
         }catch (Exception e) {
-            System.out.println("FUCK U!! " + e.getMessage());
+            logger.error("Error while processing checkDevice: ", e);
             throw new RuntimeException(e);
         }
     }

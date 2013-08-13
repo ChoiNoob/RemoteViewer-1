@@ -7,6 +7,7 @@ package com.damintsev.server.telnet;
 
 import com.damintsev.client.devices.TestResponse;
 import org.apache.commons.net.telnet.*;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,6 +33,8 @@ import java.io.OutputStream;
  *         *
  */
 public class TelnetClient extends Thread implements TelnetNotificationHandler {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(TelnetClient.class);
     private org.apache.commons.net.telnet.TelnetClient tc = null;
     private OutputStream outstr;
     private ByteArrayOutputStream stream;
@@ -66,11 +69,12 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
             tc.addOptionHandler(echoopt);
             tc.addOptionHandler(gaopt);
         } catch (InvalidTelnetOptionException e) {
-            System.err.println("Error registering option handlers: " + e.getMessage());
+            logger.error("Error registering option handlers: " + e.getMessage());
         } catch (IOException e) {
             e.printStackTrace();
         }
         try {
+            logger.debug("Trying to connect to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password);
             tc.connect(host, Integer.parseInt(port));
             tc.registerNotifHandler(new TelnetClient());
             tc.setKeepAlive(false);
@@ -84,15 +88,15 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
             Thread.sleep(3000);
             write(login);
             write(password);
-//            System.out.println(write("ls -l"));
-
-            testConnection();
-        } catch (IOException e) {
-            System.err.println("Exception while connecting:" + e.getMessage());
+           if(testConnection().isResult()) {
+               logger.debug("connection sucsessful!");
+           }
+        } catch (Exception e) {
+            logger.error("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
             throw new RuntimeException(e);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            return false;
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//            return false;
         }
         return true;
     }
@@ -100,18 +104,18 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
     private String write(String command) {
         clearReaded();
         command += "\n\r";
-        System.out.println("Sending command to remote server: " + command);
+        logger.debug("Sending command to remote server: " + command);
         try {
             outstr.write(command.getBytes());
             outstr.flush();
             Thread.sleep(2000);
         } catch (IOException e) {
-            e.printStackTrace();
+           logger.debug(e.getMessage(), e);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.debug(e.getMessage(), e);
         }
         String result = getReaded();
-        System.out.println("Readed from server: " + result);
+        logger.debug("Readed from server: " + result);
         return result;
     }
 
@@ -126,7 +130,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
      * *
      */
     public void run() {
-        System.out.println("Start reader!!!!");
+//        System.out.println("Start reader!!!!");
         try {
             byte[] buff = new byte[1024];
             int ret_read = 0;
@@ -139,9 +143,8 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
             }
             while (ret_read >= 0);
         } catch (IOException e) {
-            System.err.println("Exception while reading socket:" + e.getMessage());
+           logger.error("Exception while reading socket:" + e.getMessage(), e);
         }
-        System.out.println("exit  бля");
     }
 
     private void clearReaded() {
@@ -166,7 +169,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
     public TestResponse testConnection() {
         clearReaded();
         try {
-            System.out.println("Sending AYT command!");
+            logger.debug("Sending AYT command!");
             tc.sendAYT(3000);
             Thread.sleep(5000);
         } catch (IOException e) {
@@ -175,7 +178,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
             e.printStackTrace();
         }
         String result = getReaded();
-        System.out.println("Test server. Send AYT. result=" + result.contains("yes"));
+        logger.debug("Test server. Send AYT. result=" + result.contains("yes"));
         TestResponse response = new TestResponse();
         response.setResultText(result);
         response.setResult(result.contains("yes"));

@@ -5,6 +5,7 @@ import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.TestResponse;
 import com.damintsev.client.devices.enums.Status;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,8 @@ import java.util.Map;
  * Time: 1:49
  */
 public class SchedulerNew {
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SchedulerNew.class);
 
     private static SchedulerNew instance;
 
@@ -64,29 +67,34 @@ public class SchedulerNew {
 
     public Device checkDevice(Device device) {
         if (device instanceof Station) {
-            TelnetClient telnet = getConnection((Station) device);
-            TestResponse response = telnet.testConnection();
-            if(response.isResult())    {
-                device.setStatus(Status.WORK);
-            }
-            else {
+            try {
+                TelnetClient telnet = getConnection((Station) device);
+                TestResponse response = telnet.testConnection();
+                if (response.isResult()) {
+                    device.setStatus(Status.WORK);
+                } else {
+                    device.setStatus(Status.ERROR);
+                }
+            } catch (Exception e) {
+                logger.error("ErrorStation=" + e.getLocalizedMessage());
                 device.setStatus(Status.ERROR);
+                ((Station) device).setComment(e.getLocalizedMessage());
             }
             return device;
         } else {
             CommonDevice dev = (CommonDevice) device;
-            try{
-            TelnetClient telnet = getConnection(dev.getStation());
-            if (telnet != null) {
-                String result = telnet.execute(dev.getQuery());
-                parseResult(dev, result);
-            } else {
+            try {
+                TelnetClient telnet = getConnection(dev.getStation());
+                if (telnet != null) {
+                    String result = telnet.execute(dev.getQuery());
+                    parseResult(dev, result);
+                } else {
+                    dev.setStatus(Status.ERROR);
+                }
+            } catch (Exception e) {
+                logger.error("ErrorDevice=" + e.getLocalizedMessage());
                 dev.setStatus(Status.ERROR);
-            }
-            }catch (Exception e) {
-                System.out.println(e.getLocalizedMessage());
-                e.printStackTrace();
-                dev.setStatus(Status.ERROR);
+                dev.setComment(e.getLocalizedMessage());
             }
             return dev;
         }
@@ -94,19 +102,18 @@ public class SchedulerNew {
 
     private synchronized TelnetClient getConnection(Station station) {
         if (!telnetStation.containsKey(station.getId())) {
-            System.out.println("getConnection. init connection!");
+            logger.info("connection for Station id=" + station.getId() + " not found. Initializing new one");
             initConnection(station);
         }
-        System.out.println("CPT=" + telnetStation.get(station.getId()));
         return telnetStation.get(station.getId());
     }
 
     private void parseResult(CommonDevice isdn, String result) {
         int index = result.indexOf("PP NW");
         if (index > 0) {
-            System.out.println("index = " + index + " length=" + result.length());
+//            System.out.println("index = " + index + " length=" + result.length());
             result = result.substring(index, result.length());
-            System.out.println(result);
+//            System.out.println(result);
         }
         if (result.contains("READY")) {
             isdn.setStatus(Status.WORK);
