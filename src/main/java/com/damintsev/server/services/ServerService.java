@@ -22,18 +22,18 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     public Boolean saveItems(List<Item> items) {
         DatabaseProxy proxy = new DatabaseProxy();
         proxy.saveItems(items);
-        for(Item item : items) {
-            SchedulerNew.getInstance().addDevice(item.getData());
-        }
+//        for(Item item : items) {
+//            SchedulerNew.getInstance().addDevice(item.getData());
+//        }
         return true;
     }
 
     public List<Item> loadItems() {
         DatabaseProxy proxy = new DatabaseProxy();
         List<Item> items = proxy.loadItemPositions();
-        for(Item item : items) {
-            SchedulerNew.getInstance().addDevice(item.getData());
-        }
+//        for(Item item : items) {
+//            SchedulerNew.getInstance().addDevice(item.getData());
+//        }
         return items;
     }
 
@@ -56,6 +56,13 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     public Device checkDevice(Device device) {
         System.out.println("Call checkDevice");
         System.out.println("with id=" + device.getId() + " name=" + device.getName());
-        return SchedulerNew.getInstance().checkDevice(device);
+        Device result = null;
+        try {
+            result = SchedulerNew.getInstance().checkDevice(device);
+            return result;
+        }catch (Exception e) {
+            System.out.println("FUCK U!! " + e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 }

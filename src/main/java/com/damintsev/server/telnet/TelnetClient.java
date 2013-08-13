@@ -32,7 +32,7 @@ import org.apache.commons.net.telnet.InvalidTelnetOptionException;
  * @author Bruno D'Avanzo
  *         *
  */
-public class TelnetClient implements Runnable, TelnetNotificationHandler {
+public class TelnetClient extends Thread implements TelnetNotificationHandler {
     private org.apache.commons.net.telnet.TelnetClient tc = null;
     private OutputStream outstr;
     private ByteArrayOutputStream stream;

@@ -33,21 +33,21 @@ public class SchedulerNew {
         stationDevices = new HashMap<Station, List<Device>>();
     }
 
-    public void addDevice(Device device) {
-        System.out.println("addDevice id=" + device.getId());
-        if (device instanceof Station) {
-            Station station = (Station) device;
-            try {
-                initConnection(station);
-            } catch (IOException e) {
-                System.out.println("addDevice exception " + e.getMessage());
-                e.printStackTrace();
-                throw new RuntimeException(e);  //todo runtime exeption
-            }
-        } else {
-//            if (s)
-        }
-    }
+//    public void addDevice(Device device) {
+//        System.out.println("addDevice id=" + device.getId());
+//        if (device instanceof Station) {
+//            Station station = (Station) device;
+//            try {
+//                initConnection(station);
+//            } catch (IOException e) {
+//                System.out.println("addDevice exception " + e.getMessage());
+//                e.printStackTrace();
+//                throw new RuntimeException(e);  //todo runtime exeption
+//            }
+//        } else {
+////            if (s)
+//        }
+//    }
 
     private boolean initConnection(Station station) throws IOException {
         TelnetClient telnet = new TelnetClient();
@@ -56,6 +56,7 @@ public class SchedulerNew {
         telnet.setLogin(station.getLogin());
         telnet.setPassword(station.getPassword());
         if (telnet.connect()) {
+            telnet.start();
             System.out.println("telnetStation.put");
             telnetStation.put(station, telnet);
             return true;
@@ -67,10 +68,12 @@ public class SchedulerNew {
         if (device instanceof Station) {
             TelnetClient telnet = getConnection((Station) device);
             TestResponse response = telnet.testConnection();
-            if(response.isResult())
+            if(response.isResult())    {
                 device.setStatus(Status.WORK);
-            else
+            }
+            else{
                 device.setStatus(Status.ERROR);
+            }
         } else {
             CommonDevice dev = (CommonDevice) device;
             TelnetClient telnet = getConnection(dev.getStation());
@@ -139,9 +142,20 @@ public class SchedulerNew {
     public static void main(String[] args) {
         SchedulerNew newS = new SchedulerNew();
         Station station = new Station();
-        station.setHost("asdasd");
+        station.setHost("192.168.110.128");
         station.setPort("23");
-        newS.addDevice(station);
+        station.setLogin("sasha");
+        station.setPassword("1");
+        newS.checkDevice(station);
+        System.out.println("CPT1");
+        newS.checkDevice(station);
+        System.out.println("CPT2");
+        newS.checkDevice(station);
+        System.out.println("CPT3");
+        newS.checkDevice(station);
+        System.out.println("CPT4");
+        newS.checkDevice(station);
+        newS.checkDevice(station);
     }
 }
 
