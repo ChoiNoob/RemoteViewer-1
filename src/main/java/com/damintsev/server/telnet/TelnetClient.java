@@ -47,7 +47,7 @@ public class TelnetClient implements Runnable, TelnetNotificationHandler {
         TelnetClient example = new TelnetClient();
         example.setLogin("sasha");
         example.setPassword("1");
-        example.setHost("192.168.110.128");
+        example.setHost("192.168.110.129");
         example.setPort("23");
         example.connect();
     }
@@ -82,8 +82,8 @@ public class TelnetClient implements Runnable, TelnetNotificationHandler {
             Thread reader = new Thread(this);
             reader.start();
             Thread.sleep(3000);
-            System.out.println(write(login));
-            System.out.println(write(password));
+            write(login);
+            write(password);
 //            System.out.println(write("ls -l"));
 
             testConnection();

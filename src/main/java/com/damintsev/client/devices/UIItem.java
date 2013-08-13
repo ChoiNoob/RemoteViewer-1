@@ -39,13 +39,14 @@ public class UIItem<T extends Device> extends Label {
             position.y = getAbsoluteTop();
         }
     }
-
+    Label label;
     private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
         image = new Image(getImage());
         getElement().appendChild(image.getElement());
-        Label label = new Label(getName());
-        if(getName() != null)
+
+        label = new Label(getName());
+        if(getName() != null || item.getData() instanceof Station)
             getElement().appendChild(label.getElement());
         label.setStyleName("tooltip");
     }
@@ -100,5 +101,9 @@ public class UIItem<T extends Device> extends Label {
 
     public Status getStatus() {
         return item.getData().getStatus();
+    }
+
+    public void setLabelColor() {
+        label.getElement().getStyle().setBackgroundColor(item.getData().getStatus().getColor());
     }
 }

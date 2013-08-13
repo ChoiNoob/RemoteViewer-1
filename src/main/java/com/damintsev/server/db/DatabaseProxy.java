@@ -55,7 +55,7 @@ public class DatabaseProxy {
     }
 
     private Device convertXML(XMLItem xmlItem, List<XMLItem> itemList) {
-//        System.out.println("CPTT=" + xmlItem.getDeviceType());
+        System.out.println("CPTT=" + xmlItem.getDeviceType());
         switch (DeviceType.valueOf(xmlItem.getDeviceType())) {
             case STATION:
                 Station station = new Station();
@@ -150,7 +150,6 @@ public class DatabaseProxy {
                     CommonDevice isdn = (CommonDevice) data;
                     item1.setQuery(isdn.getQuery());
                     item1.setRegExp(isdn.getQuery());
-                    item1.setDeviceType(isdn.getDeviceType().name());
                     item1.setName(isdn.getName());
                     item1.setComment(isdn.getComment());
                     item1.setDeviceType(isdn.getDeviceType().name());
@@ -163,7 +162,6 @@ public class DatabaseProxy {
                     item1.setPort(station.getPort());
                     item1.setLogin(station.getLogin());
                     item1.setPassword(station.getPassword());
-                    item1.setDeviceType(station.getDeviceType().name());
                     break;
             }
             xmlItems.add(item1);

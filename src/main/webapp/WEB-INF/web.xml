@@ -16,14 +16,14 @@
     <url-pattern>/mainGWT/service</url-pattern>
   </servlet-mapping>
 
-    <servlet>
-        <servlet-name>imageUpload</servlet-name>
-        <servlet-class>com.damintsev.servlet.ImageUpload</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>imageUpload</servlet-name>
-        <url-pattern>/download</url-pattern>
-    </servlet-mapping>
+    <!--<servlet>-->
+        <!--<servlet-name>imageUpload</servlet-name>-->
+        <!--<servlet-class>com.damintsev.servlet.ImageUpload</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>imageUpload</servlet-name>-->
+        <!--<url-pattern>/download</url-pattern>-->
+    <!--</servlet-mapping>-->
 
   <!-- Default page to serve -->
   <welcome-file-list>

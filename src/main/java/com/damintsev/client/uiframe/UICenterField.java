@@ -105,7 +105,7 @@ public class UICenterField {
     }
 
     public void addItem(UIItem<? extends Device> item, boolean newI) {   //todo Добавить двойной клик на элемент
-        item.setId(getNextId());
+        if(item.getId()==null)item.setId(getNextId());
         if(item.getType()==DeviceType.STATION) {
             System.out.println("addStation id=" + item.getId());
                 uiIems.put((UIItem<Station>) item, new ArrayList<UIItem<? extends Device>>());
@@ -253,6 +253,7 @@ public class UICenterField {
         clearCanvas();
         for(Map.Entry<UIItem<Station>, ArrayList<UIItem<? extends Device>>> entry : uiIems.entrySet()) {
             UIItem<? extends Device> station = entry.getKey();
+            station.setLabelColor();
             for(UIItem item : entry.getValue()) {
                 drawLine(station.getCenterPosition(), item.getCenterPosition(), item.getStatus());
             }

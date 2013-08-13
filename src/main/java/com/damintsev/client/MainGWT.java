@@ -1,6 +1,7 @@
 package com.damintsev.client;
 
 import com.damintsev.client.service.Service;
+import com.damintsev.client.uiframe.UICenterField;
 import com.damintsev.client.uiframe.UIRootPanel;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.EntryPoint;
@@ -50,6 +51,11 @@ public class MainGWT implements EntryPoint {
 
     private void onModuleLoad2() {
         RootPanel.get().add(UIRootPanel.get().getContent());
+        Window.addCloseHandler(new CloseHandler<Window>() {
+            public void onClose(CloseEvent<Window> event) {
+                UICenterField.get().stop();
+            }
+        });
     }
 }
 

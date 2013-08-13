@@ -16,6 +16,7 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.ExpandEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
@@ -65,6 +66,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         for(Station st : UICenterField.get().getStations()) {
             station.add(st);
         }
+
         station.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
         station.setEditable(false);
         station.setAllowBlank(false);
@@ -130,6 +132,10 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         else delete.show();
         this.device = device;
         driver.edit(device);
+        station.getStore().clear();
+        for(Station st : UICenterField.get().getStations()) {
+            station.add(st);
+        }
         window.show();
     }
 
