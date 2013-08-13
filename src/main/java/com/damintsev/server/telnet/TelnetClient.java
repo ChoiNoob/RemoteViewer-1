@@ -5,14 +5,13 @@ package com.damintsev.server.telnet;
  * Date: 12.08.13 15:29
  */
 
-import java.io.*;
-
 import com.damintsev.client.devices.TestResponse;
-import org.apache.commons.net.telnet.TelnetNotificationHandler;
-import org.apache.commons.net.telnet.EchoOptionHandler;
-import org.apache.commons.net.telnet.TerminalTypeOptionHandler;
-import org.apache.commons.net.telnet.SuppressGAOptionHandler;
-import org.apache.commons.net.telnet.InvalidTelnetOptionException;
+import org.apache.commons.net.telnet.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 
 /**
@@ -74,7 +73,8 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
         try {
             tc.connect(host, Integer.parseInt(port));
             tc.registerNotifHandler(new TelnetClient());
-            tc.setKeepAlive(true);
+            tc.setKeepAlive(false);
+            tc.setSoTimeout(60000);//1 minute
 
             instr = tc.getInputStream();
             outstr = tc.getOutputStream();

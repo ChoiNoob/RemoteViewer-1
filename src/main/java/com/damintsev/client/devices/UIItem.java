@@ -5,9 +5,8 @@ import com.damintsev.client.devices.enums.Status;
 import com.damintsev.utils.Position;
 import com.damintsev.utils.Utils;
 import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.*;
-
-import java.io.Serializable;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 
 /**
  * User: Damintsev Andrey
@@ -18,8 +17,6 @@ public class UIItem extends Label {
 
     private Position position;
     private Image image;
-//    private int coordX;
-//    private int coordY;
     private Device data;
     private Label label;
 
@@ -31,7 +28,6 @@ public class UIItem extends Label {
         super();
         this.data = data;
         init();
-//        position = new Position(image.getAbsoluteLeft(), item.getCoordY());
     }
 
     public UIItem(Device data, Position position) {

@@ -16,7 +16,6 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
-import com.sencha.gxt.widget.core.client.event.ExpandEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
@@ -113,6 +112,8 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                 device = driver.flush();
                 device.setStatus(Status.INIT);
                 if (driver.hasErrors()) return;
+                System.out.println("stat=" + device.getStation().getHost());
+                System.out.println("type=" + device.getStation().getDeviceType());
                 UICenterField.get().addItem(new UIItem(device));
                 window.hide();
             }

@@ -6,9 +6,7 @@ import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.TestResponse;
 import com.damintsev.client.devices.enums.Status;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,12 +23,12 @@ public class SchedulerNew {
         return instance;
     }
 
-    private Map<Station, TelnetClient> telnetStation;
-    private Map<Station, List<Device>> stationDevices;
+    private Map<Long, TelnetClient> telnetStation;
+    private Map<Long, Station> stationDevices;
 
     private SchedulerNew() {
-        telnetStation = new HashMap<Station, TelnetClient>();
-        stationDevices = new HashMap<Station, List<Device>>();
+        telnetStation = new HashMap<Long, TelnetClient>();
+        stationDevices = new HashMap<Long, Station>();
     }
 
 //    public void addDevice(Device device) {
@@ -59,7 +57,7 @@ public class SchedulerNew {
             if (telnet.connect()) {
                 telnet.start();
                 System.out.println("telnetStation.put");
-                telnetStation.put(station, telnet);
+                telnetStation.put(station.getId(), telnet);
                 return true;
             }
 //        } catch (IOException e) {
@@ -76,11 +74,13 @@ public class SchedulerNew {
             if(response.isResult())    {
                 device.setStatus(Status.WORK);
             }
-            else{
+            else {
                 device.setStatus(Status.ERROR);
             }
+            return device;
         } else {
             CommonDevice dev = (CommonDevice) device;
+            try{
             TelnetClient telnet = getConnection(dev.getStation());
             if (telnet != null) {
                 String result = telnet.execute(dev.getQuery());
@@ -88,50 +88,31 @@ public class SchedulerNew {
             } else {
                 dev.setStatus(Status.ERROR);
             }
+            }catch (Exception e) {
+                System.out.println(e.getLocalizedMessage());
+                e.printStackTrace();
+                dev.setStatus(Status.ERROR);
+            }
             return dev;
         }
-        return null;
     }
 
     private TelnetClient getConnection(Station station) {
-        if (!telnetStation.containsKey(station)) {
-//            try {
-                System.out.println("getConnection. init connection!");
-                initConnection(station);
-//            } catch (IOException e) {
-//                System.out.println("fail");
-//                e.printStackTrace();
-//                System.out.println("e:" + e.getMessage());
-//                throw new RuntimeException(e);
-//            }
+        if (!telnetStation.containsKey(station.getId())) {
+            System.out.println("getConnection. init connection!");
+            initConnection(station);
         }
-        System.out.println("CPT=" + telnetStation.get(station));
-        return telnetStation.get(station);
+        System.out.println("CPT=" + telnetStation.get(station.getId()));
+        return telnetStation.get(station.getId());
     }
 
     private void parseResult(CommonDevice isdn, String result) {
-//        Pattern pattern = new Pattern();
-//       result.split()
-//        result = "DIS-SDSU:SPEC,,PEN,PER2,1,1,5,0;\n" +
-//                "H500:  AMO SDSU  STARTED\n" +
-//                "\n" +
-//                "  LTG1 (PERIPHERY)\n" +
-//                "------\n" +
-//                "  MOUNTING LOCATION    MODULE NAME     BDL BD(#=ACT)  STATUS\n" +
-//                "  -------------------  LTG    1 --------------------- READY\n" +
-//                "  -AP370013-----SG  1  LTU    1 --------------------- READY\n" +
-//                "  P102.AP3 1.AP3 1.005 DIU-N2          A   Q2196-X    READY\n" +
-//                "             CCT  LINE         STNO  SI BUS TYPE\n" +
-//                "             000  1550                  PP NW         READY\n" +
-//                "\n" +
-//                "AMO-SDSU -111       STATUS DISPLAY IN SWITCHING UNIT\n" +
-//                "DISPLAY COMPLETED;\n" +
-//                "\n";
-
         int index = result.indexOf("PP NW");
-        System.out.println("index = " + index + " length=" + result.length());
-        result = result.substring(index, result.length());
-        System.out.println(result);
+        if (index > 0) {
+            System.out.println("index = " + index + " length=" + result.length());
+            result = result.substring(index, result.length());
+            System.out.println(result);
+        }
         if (result.contains("READY")) {
             isdn.setStatus(Status.WORK);
             System.out.println("WORK");

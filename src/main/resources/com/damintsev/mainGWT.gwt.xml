@@ -2,13 +2,28 @@
 <module rename-to='mainGWT'>
     <inherits name='com.google.gwt.core.Core'/>
     <inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
     <inherits name='com.google.gwt.editor.Editor'/>
     <inherits name="com.sencha.gxt.widget.core.Core"/>
     <inherits name="com.sencha.gxt.ui.GXT"/>
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
 
-    <entry-point class='com.damintsev.client.MainGWT'/>
+    <!--<extend-property name="locale" values="ru_RU"/>-->
+    <set-property name="gwt.logging.simpleRemoteHandler" value="ENABLED" />
 
+    <set-property name="compiler.stackMode"
+                  value="emulated" />
+    <set-configuration-property name="compiler.emulatedStack.recordLineNumbers"
+                                value="true"/>
+    <set-configuration-property name="compiler.emulatedStack.recordFileNames"
+                                value="true"/>
+
+
+    <entry-point class='com.damintsev.client.MainGWT'/>
+<!--osdijfsl;dfjlsfj;liasjf;liasfasf-->
+    <!--<extend-property name="user.agent" values="gecko1_8" />-->
+    <collapse-all-properties />
+                                    <!--asdasdasdasdasdasd-->
     <source path='client'/>
     <source path='utils'/>
 

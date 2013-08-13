@@ -3,7 +3,10 @@ package com.damintsev.client.uiframe;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.damintsev.client.devices.*;
+import com.damintsev.client.devices.Device;
+import com.damintsev.client.devices.Item;
+import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
@@ -39,7 +42,6 @@ public class UICenterField {
 
     private PickupDragController dragController;
     private AbsolutePanel panel;
-//    private Map<UIItem<Station>, ArrayList<UIItem<? extends Device>>> uiIems;
     private Map<Long, UIItem> uiStations;
     private Map<Long, UIItem> uiDevices;
 
@@ -64,7 +66,6 @@ public class UICenterField {
         DropController dropController = new AbsolutePositionDropController(panel);
         dragController.registerDropController(dropController);
         dragController.setBehaviorMultipleSelection(true);
-
 
         final TextButton editButton = new TextButton("Редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
@@ -102,16 +103,20 @@ public class UICenterField {
     }
 
     public void addItem(UIItem item) {
+        addItem(item, false);
+    }
+
+    public void addItem(UIItem item, boolean fromDB) {
         boolean newI;
         if (item.getId() == null) {
             item.setId(getNextId());
             newI = true;
         } else newI = false;
-        insertUpdateItem(item);
+      item = insertUpdateItem(item);
 
         dragController.makeDraggable(item);
         System.out.println("Asdas=" + panel.getWidgetIndex(item));
-        if(panel.getWidgetIndex(item) == -1)
+        if(panel.getWidgetIndex(item) == -1 || fromDB)
             panel.add(item, 0, 0);
         if (newI) {
             int centerX = Window.getClientWidth() / 2 - item.getWidth() / 2;
@@ -128,13 +133,13 @@ public class UICenterField {
         if (item.getDeviceType() == DeviceType.STATION) {
             System.out.println("CPT=" + uiStations.containsKey(item.getId()));
             if (uiStations.containsKey(item.getId())) {
-                uiStations.get(item.getId()).setData(item.getData());
-//                uiStations.get(item.getId());
+                item = uiStations.get(item.getId());
+                item.setData(item.getData());
             } else uiStations.put(item.getId(), item);
         } else {
             if (uiDevices.containsKey(item.getId())) {
-                uiDevices.get(item.getId()).setData(item.getData());
-//                uiDevices.get(item.getId());
+                item = uiDevices.get(item.getId());
+                item.setData(item.getData());
             } else
                 uiDevices.put(item.getId(), item);
         }
@@ -215,6 +220,7 @@ public class UICenterField {
             panel.remove(uiDevices.get(device.getId()));
             uiDevices.remove(device.getId());
         }
+        drawConnections(false);
     }
 
     List<UIItem> findDevicesForStation(UIItem station){
@@ -249,7 +255,7 @@ public class UICenterField {
                 for (Item item : items) {
                     System.out.println("loading from db id=" + item.getId());
                     Position pos = new Position(item.getCoordX(), item.getCoordY());
-                    addItem(new UIItem(item.getData(), pos));
+                    addItem(new UIItem(item.getData(), pos), true);
                     if (id < item.getId()) {
                         id = item.getId();
                     }
@@ -277,6 +283,7 @@ public class UICenterField {
     private void drawConnections(boolean fireEvent) {
         clearCanvas();
         for(UIItem station : uiStations.values()) {
+            station.setLabelColor();
             for(UIItem device : findDevicesForStation(station)) {
                 drawLine(station.getCenterPosition(), device.getCenterPosition(), device.getStatus());
             }
@@ -288,6 +295,7 @@ public class UICenterField {
         Context2d context = canvas.getContext2d();
         context.beginPath();
         context.setLineWidth(3);
+        System.out.println("draw s= " + status + " color=" + status.getColor());
         context.setStrokeStyle(status.getColor());
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
@@ -301,7 +309,7 @@ public class UICenterField {
 
     private Long getNextId() {
         if (id == null) id = 0L;
-        return id++;
+        return ++id;
     }
 
     public List<Station> getStations() {
@@ -336,7 +344,8 @@ public class UICenterField {
 
                 public void onSuccess(Device result) {
                     if (result != null) {
-                       updateUIItem(result);
+                        System.out.println("result not null=" + result.getStatus());
+                        updateUIItem(result);
                     }
                 }
             });
@@ -347,12 +356,17 @@ public class UICenterField {
 
     private void updateUIItem(Device device) {
         if(device instanceof Station) {
+            System.out.println("update ST");
            UIItem station = uiStations.get(device.getId());
+            station.setData(device);
             uiStations.put(device.getId(), station);
         } else {
+            System.out.println("uodate DEV=" + device.getStatus());
             UIItem dev = uiDevices.get(device.getId());
+            dev.setData(device);
             uiDevices.put(device.getId(), dev);
         }
+        drawConnections(false);
     }
 
     private Iterator<Device> iterator;
@@ -375,6 +389,7 @@ public class UICenterField {
     }
 
     public void stop() {
+        System.out.println("stop");
         this.start = false;
     }
 }

@@ -1,6 +1,9 @@
 package com.damintsev.server.db;
 
-import com.damintsev.client.devices.*;
+import com.damintsev.client.devices.CommonDevice;
+import com.damintsev.client.devices.Device;
+import com.damintsev.client.devices.Item;
+import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.server.db.xmldao.XMLItem;
@@ -23,7 +26,8 @@ import java.util.List;
  * Date: 08.08.13 16:28
  */
 public class DatabaseProxy {
-    private final static String tomcatHome = System.getProperty("catalina.base");
+//    private final static String tomcatHome = System.getProperty("catalina.base");
+    private final static String tomcatHome = "W:\\tmp";//System.getProperty("catalina.base");
     private final static String positionFile = tomcatHome + File.separatorChar + "filePosition.xml";
     private final static String itemsFile = tomcatHome + File.separatorChar  + "fileItems.xml";
 
@@ -69,6 +73,7 @@ public class DatabaseProxy {
                 station.setStatus(Status.INIT);
                 return station;
             case ISDN:
+            case IP:
                 CommonDevice isdn = new CommonDevice();
                 isdn.setId(xmlItem.getId());
                 isdn.setQuery(xmlItem.getQuery());
@@ -147,6 +152,7 @@ public class DatabaseProxy {
 
             switch (data.getDeviceType()) {
                 case ISDN:
+                case IP:
                     CommonDevice isdn = (CommonDevice) data;
                     item1.setQuery(isdn.getQuery());
                     item1.setRegExp(isdn.getQuery());
