@@ -168,7 +168,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
         try {
             System.out.println("Sending AYT command!");
             tc.sendAYT(3000);
-            Thread.sleep(9000);
+            Thread.sleep(5000);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

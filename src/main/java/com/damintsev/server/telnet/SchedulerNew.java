@@ -53,17 +53,12 @@ public class SchedulerNew {
         telnet.setPort(station.getPort());
         telnet.setLogin(station.getLogin());
         telnet.setPassword(station.getPassword());
-//        try {
-            if (telnet.connect()) {
-                telnet.start();
-                System.out.println("telnetStation.put");
-                telnetStation.put(station.getId(), telnet);
-                return true;
-            }
-//        } catch (IOException e) {
-//            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-//            throw new RuntimeException(e);
-//        }
+        if (telnet.connect()) {
+            telnet.start();
+            System.out.println("telnetStation.put");
+            telnetStation.put(station.getId(), telnet);
+            return true;
+        }
         return false;
     }
 
@@ -97,7 +92,7 @@ public class SchedulerNew {
         }
     }
 
-    private TelnetClient getConnection(Station station) {
+    private synchronized TelnetClient getConnection(Station station) {
         if (!telnetStation.containsKey(station.getId())) {
             System.out.println("getConnection. init connection!");
             initConnection(station);
@@ -143,6 +138,21 @@ public class SchedulerNew {
         System.out.println("CPT4");
         newS.checkDevice(station);
         newS.checkDevice(station);
+    }
+
+    public TestResponse test(Station device) {
+        TestResponse response = new TestResponse();
+        try{
+            System.out.println("TEST CPT:");
+//            response.setResult());
+           TelnetClient client = getConnection(device);
+            response = client.testConnection();
+
+        }catch (Exception e) {
+            System.out.println("FIFUFUFU" + e);
+            response.setResultText("Exception " + e.getMessage());
+        }
+        return response;
     }
 }
 

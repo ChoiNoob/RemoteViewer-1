@@ -49,7 +49,8 @@ public class TelnetWindow extends Window {
             }
 
             public void onSuccess(TestResponse result) {
-                text.setText(result.getResultText());
+                text.setText(String.valueOf(result.isResult()) + "\n" + result.getResultText());
+
             }
         });
     }
