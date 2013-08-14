@@ -102,18 +102,23 @@ public class SchedulerNew {
 
     private synchronized TelnetClient getConnection(Station station) {
         if (!telnetStation.containsKey(station.getId())) {
-            logger.info("connection for Station id=" + station.getId() + " not found. Initializing new one");
+            logger.info("connection for Station id=" + station.getId() + " name=" + station.getHost() + " not found. Initializing new one");
             initConnection(station);
+        } else {
+            logger.info("Connection for Station id=" + station.getId() + " name=" + station.getHost() + " found");
         }
         return telnetStation.get(station.getId());
     }
 
     private void parseResult(CommonDevice isdn, String result) {
+        logger.info("Parse server responce for device id=" + isdn.getId() + " name=" + isdn.getName());
+        logger.info(result);
         int index = result.indexOf("PP NW");
         if (index > 0) {
 //            System.out.println("index = " + index + " length=" + result.length());
             result = result.substring(index, result.length());
-//            System.out.println(result);
+            logger.info("After substring: " + result);
+//  System.out.println(result);
         }
         if (result.contains("READY")) {
             isdn.setStatus(Status.WORK);

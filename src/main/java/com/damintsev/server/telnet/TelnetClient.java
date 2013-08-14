@@ -104,7 +104,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
     private String write(String command) {
         clearReaded();
         command += "\n\r";
-        logger.debug("Sending command to remote server: " + command);
+        logger.info("***Sending command to remote server: " + command);
         try {
             outstr.write(command.getBytes());
             outstr.flush();
@@ -115,7 +115,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
             logger.debug(e.getMessage(), e);
         }
         String result = getReaded();
-        logger.debug("Readed from server: " + result);
+        logger.info("***Readed from server: " + result);
         return result;
     }
 
@@ -168,20 +168,21 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
 
     public TestResponse testConnection() {
         clearReaded();
+        boolean boolRes = false;
         try {
-            logger.debug("Sending AYT command!");
-            tc.sendAYT(3000);
-            Thread.sleep(5000);
+            logger.info("Sending AYT command!");
+            boolRes = tc.sendAYT(3000);
+            Thread.sleep(1000);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         String result = getReaded();
-        logger.debug("Test server. Send AYT. result=" + result.contains("yes"));
+        logger.info("Test server. Send AYT. result=" + result.contains("yes") + " boolean result=" + boolRes);
         TestResponse response = new TestResponse();
         response.setResultText(result);
-        response.setResult(result.contains("yes"));
+        response.setResult(result.contains("yes") && boolRes);
         return response;
     }
 

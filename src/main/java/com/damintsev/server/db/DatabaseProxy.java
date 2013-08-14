@@ -10,6 +10,8 @@ import com.damintsev.server.db.xmldao.XMLItem;
 import com.damintsev.server.db.xmldao.XMLItemList;
 import com.damintsev.server.db.xmldao.XMLPosition;
 import com.damintsev.server.db.xmldao.XMLPositionList;
+import com.damintsev.server.services.ServerService;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -17,8 +19,6 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -27,9 +27,23 @@ import java.util.List;
  */
 public class DatabaseProxy {
 //    private final static String tomcatHome = System.getProperty("catalina.base");
-    private final static String tomcatHome = "W:\\tmp";//System.getProperty("catalina.base");
-    private final static String positionFile = tomcatHome + File.separatorChar + "filePosition.xml";
-    private final static String itemsFile = tomcatHome + File.separatorChar  + "fileItems.xml";
+    private static String tomcatHome;// = File.separatorChar + "home" + File.separatorChar + "das";//System.getProperty("catalina.base");
+    private String positionFile;
+    private String itemsFile;
+
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ServerService.class);
+
+    public DatabaseProxy() {
+        String osName = System.getProperty("os.name");
+        if (osName.startsWith("Win"))
+            tomcatHome = "W:\\tmp\\";
+        else
+            tomcatHome = File.separatorChar + "home" + File.separatorChar + "das" + File.separatorChar;
+
+        itemsFile = tomcatHome + File.separatorChar + "fileItems.xml";
+        positionFile = tomcatHome + File.separatorChar + "filePosition.xml";
+    }
 
     public List<Item> loadItemPositions() {
         List<Item> items = new ArrayList<Item>();

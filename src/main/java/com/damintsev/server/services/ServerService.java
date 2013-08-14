@@ -1,9 +1,11 @@
 package com.damintsev.server.services;
 
-import com.damintsev.client.devices.*;
+import com.damintsev.client.devices.Device;
+import com.damintsev.client.devices.Item;
+import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.TestResponse;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
-import com.damintsev.server.telnet.Scheduler;
 import com.damintsev.server.telnet.SchedulerNew;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.slf4j.LoggerFactory;
@@ -20,14 +22,14 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ServerService.class);
 
     public Boolean saveItems(List<Item> items) {
-        logger.debug("Call saveItems()");
+        logger.info("Call saveItems()");
         DatabaseProxy proxy = new DatabaseProxy();
         proxy.saveItems(items);
         return true;
     }
 
     public List<Item> loadItems() {
-        logger.debug("Call loadItems()");
+        logger.info("Call loadItems()");
         DatabaseProxy proxy = new DatabaseProxy();
         return proxy.loadItemPositions();
     }
