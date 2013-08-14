@@ -11,7 +11,8 @@ import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.*;
+import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.BeforeExpandEvent;
 import com.sencha.gxt.widget.core.client.event.CollapseEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
@@ -95,6 +96,12 @@ public class UISettingsPanel {
             }
         });
         buttons.add(edit);
+
+        buttons.add(new TextButton("Настройки FTP", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                UIFTPSettings.getInstance().show();
+            }
+        }));
         panel.add(buttons);
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {

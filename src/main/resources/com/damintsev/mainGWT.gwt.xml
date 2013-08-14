@@ -8,7 +8,7 @@
     <inherits name="com.sencha.gxt.ui.GXT"/>
     <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
 
-    <!--<extend-property name="locale" values="ru_RU"/>-->
+    <extend-property name="locale" values="ru_RU"/>
     <set-property name="gwt.logging.simpleRemoteHandler" value="ENABLED" />
 <!---->
     <!--<set-property name="compiler.stackMode"-->

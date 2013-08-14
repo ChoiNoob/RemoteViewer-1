@@ -1,9 +1,7 @@
 package com.damintsev.client.service;
 
-import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
-import com.damintsev.client.devices.TestResponse;
+import com.damintsev.client.devices.*;
+import com.damintsev.utils.ListLoadResultImpl;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.List;
@@ -20,11 +18,13 @@ public interface ClientServiceAsync {
 
     void getState(AsyncCallback<Device> callback);
 
-    void stopScheduler(AsyncCallback<Void> callback);
-
     void test(Station device, AsyncCallback<TestResponse> callback);
 
-    void startScheduler(AsyncCallback<Void> async);
-
     void checkDevice(Device device, AsyncCallback<Device> callback);
+
+    void getBillingInfo(AsyncCallback<ListLoadResultImpl<BillingInfo>> async);
+
+    void saveFTPSettings(FTPSettings settings, AsyncCallback<Void> async);
+
+    void loadFTPSettings(AsyncCallback<FTPSettings> async);
 }

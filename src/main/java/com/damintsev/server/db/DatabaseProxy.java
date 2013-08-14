@@ -1,9 +1,6 @@
 package com.damintsev.server.db;
 
-import com.damintsev.client.devices.CommonDevice;
-import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.server.db.xmldao.XMLItem;
@@ -18,6 +15,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +28,7 @@ public class DatabaseProxy {
     private static String tomcatHome;// = File.separatorChar + "home" + File.separatorChar + "das";//System.getProperty("catalina.base");
     private String positionFile;
     private String itemsFile;
+    private String ftpSettings;
 
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ServerService.class);
@@ -43,6 +42,7 @@ public class DatabaseProxy {
 
         itemsFile = tomcatHome + File.separatorChar + "fileItems.xml";
         positionFile = tomcatHome + File.separatorChar + "filePosition.xml";
+        ftpSettings = tomcatHome + File.separatorChar + "ftpSettings.xml";
     }
 
     public List<Item> loadItemPositions() {
@@ -190,7 +190,6 @@ public class DatabaseProxy {
                     break;
             }
             xmlItems.add(item1);
-
         }
         try{
             File file = new File(positionFile);
@@ -243,4 +242,30 @@ public class DatabaseProxy {
     }
 
 
+    public void saveFTP(FTPSettings settings) {
+        File file = new File(ftpSettings);
+        try {
+            if (!file.exists())
+                file.createNewFile();
+            Marshaller marshaller = createMarshaller(FTPSettings.class);
+            marshaller.marshal(settings, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public FTPSettings loadFTP() {
+        File file = new File(ftpSettings);
+        if (file.exists()) {
+            try {
+                Unmarshaller unmarshaller = createUnmarshaller(FTPSettings.class);
+                return (FTPSettings) unmarshaller.unmarshal(file);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

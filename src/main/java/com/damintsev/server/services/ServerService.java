@@ -1,12 +1,11 @@
 package com.damintsev.server.services;
 
-import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
-import com.damintsev.client.devices.TestResponse;
+import com.damintsev.client.devices.*;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
+import com.damintsev.server.ftp.FTPService;
 import com.damintsev.server.telnet.SchedulerNew;
+import com.damintsev.utils.ListLoadResultImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.slf4j.LoggerFactory;
 
@@ -38,14 +37,6 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         return null;
     }
 
-    public void stopScheduler() {
-//        Scheduler.getInstance().stop();
-    }
-
-    public void startScheduler() {
-//        Scheduler.getInstance().start();
-    }
-
     public TestResponse test(Station device) {
         return SchedulerNew.getInstance().test(device); //todo
     }
@@ -60,5 +51,21 @@ public class ServerService extends RemoteServiceServlet implements ClientService
             logger.error("Error while processing checkDevice: ", e);
             throw new RuntimeException(e);
         }
+    }
+
+    public ListLoadResultImpl<BillingInfo> getBillingInfo() {
+        ListLoadResultImpl<BillingInfo> list = new ListLoadResultImpl<BillingInfo>();
+        list.setData(FTPService.getInstance().getBills());
+        return list;
+    }
+
+    public void saveFTPSettings(FTPSettings settings) {
+        DatabaseProxy proxy = new DatabaseProxy();
+        proxy.saveFTP(settings);
+    }
+
+    public FTPSettings loadFTPSettings() {
+        DatabaseProxy proxy = new DatabaseProxy();
+        return proxy.loadFTP();
     }
 }
