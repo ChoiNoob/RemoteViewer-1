@@ -8,6 +8,7 @@ import com.damintsev.server.db.xmldao.XMLItemList;
 import com.damintsev.server.db.xmldao.XMLPosition;
 import com.damintsev.server.db.xmldao.XMLPositionList;
 import com.damintsev.server.services.ServerService;
+import org.hibernate.Session;
 import org.slf4j.LoggerFactory;
 
 import javax.xml.bind.JAXBContext;
@@ -66,6 +67,20 @@ public class DatabaseProxy {
                     items.add(item);
                 }
             }
+
+            Session session = Hibernate.getSessionFactory().openSession();
+            session.beginTransaction();
+            TrunkName name = new TrunkName();
+            name.setId(1L);
+            name.setName("Asdasdasd");
+            session.save(name);
+
+            session.getTransaction().commit();
+            Hibernate.shutdown();
+
+//            session.createQuery("SELECT t FROM Tr t");
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
