@@ -39,19 +39,6 @@ public class TelnetWindow extends Window {
     public void show(Device device) {
         this.device = device;
         super.show();
-        runTest();
-    }
-
-    private void runTest() {
-        Service.instance.test((Station) device, new AsyncCallback<TestResponse>() {
-            public void onFailure(Throwable caught) {
-                Dialogs.alert("run test error!" + caught.toString());
-            }
-
-            public void onSuccess(TestResponse result) {
-                text.setText(String.valueOf(result.isResult()) + "\n" + result.getResultText());
-
-            }
-        });
+//        runTest();
     }
 }

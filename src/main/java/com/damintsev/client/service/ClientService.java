@@ -22,9 +22,11 @@ public interface ClientService extends RemoteService {
 
     public Device getState();
 
-    public TestResponse test(Station device);
-
     public Device checkDevice(Device device);
+
+    public void start();
+
+    public void stop();
 
     public ListLoadResultImpl<BillingInfo> getBillingInfo();
 

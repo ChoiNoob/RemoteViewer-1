@@ -89,6 +89,11 @@ public class Station extends Device {
         this.status = status;
     }
 
+    @Override
+    public Station getStation() {
+        return this;
+    }
+
     public void setImage(String imageName) {
         this.imageName = imageName;
     }

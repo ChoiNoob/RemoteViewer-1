@@ -5,8 +5,10 @@ package com.damintsev.server.telnet;
  * Date: 12.08.13 15:29
  */
 
+import com.damintsev.client.devices.Response;
 import com.damintsev.client.devices.TestResponse;
 import org.apache.commons.net.telnet.*;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
@@ -34,7 +36,7 @@ import java.io.OutputStream;
  */
 public class TelnetClient extends Thread implements TelnetNotificationHandler {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(TelnetClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(TelnetClient.class);
     private org.apache.commons.net.telnet.TelnetClient tc = null;
     private OutputStream outstr;
     private ByteArrayOutputStream stream;
@@ -43,7 +45,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
     private String port;
     private String login;
     private String password;
-
+    private Response response;
 
     public static void main(String[] args) {
         TelnetClient example = new TelnetClient();
@@ -58,8 +60,8 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
      * Main for the TelnetClient.
      * *
      */
-    public boolean connect() {
-
+    public Response connect() {
+        response = new Response();
         tc = new org.apache.commons.net.telnet.TelnetClient();
         TerminalTypeOptionHandler ttopt = new TerminalTypeOptionHandler("VT100", false, false, true, false);
         EchoOptionHandler echoopt = new EchoOptionHandler(true, false, true, false);
@@ -88,20 +90,21 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
             Thread.sleep(3000);
             write(login);
             write(password);
-           if(testConnection().isResult()) {
+           if(sendAYT().isResult()) {
                logger.debug("connection sucsessful!");
+               response.setResult(true);
+               response.setResultText("Success");
            }
         } catch (Exception e) {
             logger.error("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
-            throw new RuntimeException(e);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//            return false;
+            response.setResultText("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
+            response.setResult(false);
+//            throw new RuntimeException(e);
         }
-        return true;
+        return response;
     }
 
-    private String write(String command) {
+    private Response write(String command) {
         clearReaded();
         command += "\n\r";
         logger.info("***Sending command to remote server: " + command);
@@ -116,10 +119,10 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
         }
         String result = getReaded();
         logger.info("***Readed from server: " + result);
-        return result;
+        return new Response(result);
     }
 
-    public String execute(String command) {
+    public Response execute(String command) {
         return write(command);
     }
 
@@ -166,7 +169,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
         }
     }
 
-    public TestResponse testConnection() {
+    public Response sendAYT() {
         clearReaded();
         boolean boolRes = false;
         try {
@@ -180,7 +183,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
         }
         String result = getReaded();
         logger.info("Test server. Send AYT. result=" + result.contains("yes") + " boolean result=" + boolRes);
-        TestResponse response = new TestResponse();
+        Response response = new Response();
         response.setResultText(result);
         response.setResult(result.contains("yes") && boolRes);
         return response;
@@ -243,5 +246,9 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public Response getResponse() {
+        return response;
     }
 }

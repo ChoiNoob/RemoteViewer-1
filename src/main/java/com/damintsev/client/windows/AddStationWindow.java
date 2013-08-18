@@ -1,14 +1,14 @@
-package com.damintsev.client.uiframe;
+package com.damintsev.client.windows;
 
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.Status;
-import com.damintsev.client.service.Service;
+import com.damintsev.client.uiframe.TelnetWindow;
+import com.damintsev.client.uiframe.UICenterField;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;

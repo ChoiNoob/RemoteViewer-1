@@ -4,9 +4,10 @@ import com.damintsev.client.devices.*;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.ftp.FTPService;
-import com.damintsev.server.telnet.SchedulerNew;
+import com.damintsev.server.telnet.TelnetScheduler;
 import com.damintsev.utils.ListLoadResultImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class ServerService extends RemoteServiceServlet implements ClientService {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ServerService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServerService.class);
 
     public Boolean saveItems(List<Item> items) {
         logger.info("Call saveItems()");
@@ -37,20 +38,29 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         return null;
     }
 
-    public TestResponse test(Station device) {
-        return SchedulerNew.getInstance().test(device); //todo
-    }
+//    public TestResponse test(Station device) {
+//        return TelnetScheduler.getInstance().test(device); //todo
+//    }
 
     public Device checkDevice(Device device) {
         logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
-        Device result = null;
-        try {
-            result = SchedulerNew.getInstance().checkDevice(device);
-            return result;
-        }catch (Exception e) {
-            logger.error("Error while processing checkDevice: ", e);
-            throw new RuntimeException(e);
-        }
+//        Device result = null;
+//        try {
+//            result = TelnetScheduler.getInstance().checkDevice(device);
+//            return result;
+//        }catch (Exception e) {
+//            logger.error("Error while processing checkDevice: ", e);
+//            throw new RuntimeException(e);
+//        }
+        return TelnetScheduler.getInstance().getDeviceState(device);
+    }
+
+    public void start() {
+        TelnetScheduler.getInstance().start();
+    }
+
+    public void stop() {
+        TelnetScheduler.getInstance().stop();
     }
 
     public ListLoadResultImpl<BillingInfo> getBillingInfo() {

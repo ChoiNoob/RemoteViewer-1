@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 public abstract class Device implements Serializable {
 
+    private Response response;
+
     public abstract void setId(Long id);
     public abstract Long getId();
     public abstract String getName();
@@ -19,5 +21,13 @@ public abstract class Device implements Serializable {
     public abstract Status getStatus();
     public abstract void setStatus(Status status);
 
-    public Station getStation() {throw new UnsupportedOperationException();}
+    public abstract Station getStation();
+
+    public Response getResponse() {
+        return response;
+    }
+
+    public void setResponse(Response response) {
+        this.response = response;
+    }
 }

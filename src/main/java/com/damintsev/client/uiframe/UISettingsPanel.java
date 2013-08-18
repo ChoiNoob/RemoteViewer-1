@@ -3,6 +3,8 @@ package com.damintsev.client.uiframe;
 import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.windows.AddDeviceWindow;
+import com.damintsev.client.windows.AddStationWindow;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;

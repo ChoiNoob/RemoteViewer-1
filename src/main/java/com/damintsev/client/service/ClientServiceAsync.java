@@ -18,7 +18,6 @@ public interface ClientServiceAsync {
 
     void getState(AsyncCallback<Device> callback);
 
-    void test(Station device, AsyncCallback<TestResponse> callback);
 
     void checkDevice(Device device, AsyncCallback<Device> callback);
 
@@ -27,4 +26,8 @@ public interface ClientServiceAsync {
     void saveFTPSettings(FTPSettings settings, AsyncCallback<Void> async);
 
     void loadFTPSettings(AsyncCallback<FTPSettings> async);
+
+    void stop(AsyncCallback<Void> async);
+
+    void start(AsyncCallback<Void> async);
 }

@@ -1,4 +1,4 @@
-package com.damintsev.client.uiframe;
+package com.damintsev.client.windows;
 
 import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Device;
@@ -6,6 +6,7 @@ import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.uiframe.UICenterField;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
