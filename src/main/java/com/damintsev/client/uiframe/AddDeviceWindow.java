@@ -44,6 +44,8 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
     SimpleComboBox<DeviceType> deviceType;
     TextField name;
     TextField query;
+    @Ignore
+    TextField busyQuery;
     TextArea comment;
 
     private AddDeviceWindow() {
@@ -89,6 +91,10 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         query = new TextField();
         query.setAllowBlank(false);
         panel.add(new FieldLabel(query, "Строка запроса"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        busyQuery = new TextField();
+
+        busyQuery.setAllowBlank(false);
+        panel.add(new FieldLabel(busyQuery, "Проверка сосотояния"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         comment = new TextArea();
         comment.setHeight(70);

@@ -53,6 +53,11 @@ public class UIRootPanel {
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
         ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
 
+        BusiChannelPanel panel = new BusiChannelPanel();
+
+
+//        ((AbsolutePanel)body.getCenterWidget()).add(panel.getPanel());
+
         return viewport;
     }
 }
