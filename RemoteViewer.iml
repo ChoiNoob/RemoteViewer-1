@@ -9,11 +9,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/target/generated-sources/gwt" />
-          <root url="file://$MODULE_DIR$/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
       </configuration>
     </facet>
     <facet type="gwt" name="GWT">
@@ -41,9 +36,9 @@
       <excludeFolder url="file://$MODULE_DIR$/${project.b&#10;    uild.directory}/RemoteViewer-1.0-SNAPSHOT/WEB-INF/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target/.generated" />
       <excludeFolder url="file://$MODULE_DIR$/target/RemoteViewer-1.0-SNAPSHOT" />
+      <excludeFolder url="file://$MODULE_DIR$/target/RemoteViewer_war" />
+      <excludeFolder url="file://$MODULE_DIR$/target/RemoteViewer_war_exploded" />
       <excludeFolder url="file://$MODULE_DIR$/target/gwt-unitCache" />
-      <excludeFolder url="file://$MODULE_DIR$/target/maven-archiver" />
-      <excludeFolder url="file://$MODULE_DIR$/target/surefire" />
       <excludeFolder url="file://$MODULE_DIR$/target/test-classes" />
     </content>
     <orderEntry type="inheritedJdk" />
@@ -53,9 +48,12 @@
     <orderEntry type="library" scope="TEST" name="Maven: javax.validation:validation-api:1.0.0.GA" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: javax.validation:validation-api:sources:1.0.0.GA" level="project" />
     <orderEntry type="library" name="Maven: org.json:json:20090211" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.7" level="project" />
     <orderEntry type="library" name="Maven: com.sencha.gxt:gxt:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.allen-sauer.gwt.dnd:gwt-dnd:3.1.2" level="project" />
+    <orderEntry type="library" name="Maven: commons-net:commons-net:3.3" level="project" />
+    <orderEntry type="library" name="Maven: com.sencha.gxt:gxt-chart:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.6.1" level="project" />
   </component>
 </module>
 
