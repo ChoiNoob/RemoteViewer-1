@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * User: Damintsev Andrey
@@ -25,12 +27,12 @@ public class TelnetScheduler {
         return instance;
     }
 
-    private Map<Long, TelnetClient> telnetStation;
+    private Map<Long, TelnetWorker> telnetStation;
     private ConcurrentHashMap<Long, Device> devices;
     private Timer timer;
 
     private TelnetScheduler() {
-        telnetStation = new HashMap<Long, TelnetClient>();
+        telnetStation = new HashMap<Long, TelnetWorker>();
         devices = new ConcurrentHashMap<Long, Device>();
     }
 
@@ -54,47 +56,49 @@ public class TelnetScheduler {
     }
 
     private boolean initConnection(Station station) {
-        TelnetClient telnet = new TelnetClient();
+        TelnetWorker telnet = new TelnetWorker();
         telnet.setHost(station.getHost());
         telnet.setPort(station.getPort());
         telnet.setLogin(station.getLogin());
         telnet.setPassword(station.getPassword());
-        Response resp = telnet.connect();
-//        if ((resp = telnet.connect()).isResult()) {
-        telnet.start();
-        telnetStation.put(station.getId(), telnet);
+        Response resp;// = telnet.connect();
+        if ((resp = telnet.connect()).isResult()) {
+            telnet.start();
+            telnetStation.put(station.getId(), telnet);
+            return resp.isResult();
+        }
         return resp.isResult();
-//        }
-//        return resp.isResult();
     }
 
     public void checkDevice(Device device) {
         logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
-        TelnetClient telnet = getConnection( device.getStation());
-        if (!telnet.getResponse().isResult()) {
-            Response response = telnet.getResponse();
-            device.setResponse(response);
+        TelnetWorker telnet = getConnection( device.getStation());
+        if (telnet == null ) {
+//            Response response = telnet.getResponse();
+//            device.setResponse(response);
+            device.setStatus(Status.ERROR);
             return;
         }
         if (device instanceof Station) {
-            checkStation(telnet, (Station) device);
+            checkStation(telnet,(Station) device);
         } else if (device.getDeviceType() == DeviceType.IP) {
-            checkIP(telnet, device);
+            checkIP(telnet,device);
         } else if (device.getDeviceType() == DeviceType.ISDN) {
-            checkISDN(telnet, device);
+            checkISDN(telnet,device);
         }
     }
 
-    private void checkISDN(TelnetClient telnet, Device device) {
-        Response resp = telnet.execute(((CommonDevice) device).getQuery());
-        parsePingResult(resp, device);
-
-    }
-
-    private void checkIP(TelnetClient telnet, Device device) {
-        //Check alive
+    private void checkISDN(TelnetWorker telnet, Device device) {
         Response resp = telnet.execute(((CommonDevice) device).getQuery());
         parseAliveResult(resp, device);
+        device.setResponse(resp);
+        devices.put(device.getId(), device);
+    }
+
+    private void checkIP(TelnetWorker telnet, Device device) {
+        //Check alive
+        Response resp = telnet.execute(((CommonDevice) device).getQuery());
+        parsePingResult(resp, device);
         device.setResponse(resp);
         devices.put(device.getId(), device);
     }
@@ -102,7 +106,18 @@ public class TelnetScheduler {
     private void parsePingResult(Response resp, Device device) {
         logger.info("Parse server response for device id=" + device.getId() + " name=" + device.getName());
         String result = resp.getResultText();
-
+        Pattern pattern = Pattern.compile("[0-9]{2,3} bytes from ");
+        Matcher matcher = pattern.matcher(result);
+        if(matcher.find()){
+//        if(result.matches("[0-9]{2,3} bytes from  ")){
+            logger.info("Pattern found. WORK");
+            device.setStatus(Status.WORK);
+            resp.setStatus(Status.WORK);
+        } else {
+            logger.info("Pattern not found. ERROR");
+            device.setStatus(Status.ERROR);
+            resp.setStatus(Status.ERROR);
+        }
 
     }
 
@@ -131,9 +146,20 @@ public class TelnetScheduler {
 //        device.setComment(result);
     }
 
-    private void checkStation(TelnetClient telnet, Station station) {
-        Response resp = telnet.sendAYT();
+    private void checkStation(TelnetWorker telnet, Station station) {
+        Response resp = null;
+        try {
+            resp = telnet.sendAYT();
+        } catch (Exception e) {
+            logger.error("Caught exception while sending ASK command " + e.getLocalizedMessage());
+            resp = new Response();
+            resp.setStatus(Status.ERROR);
+            resp.setResultText(e.getMessage());
+            telnet.disconnect();
+            telnetStation.remove(station.getId());
+        }
         station.setResponse(resp);
+        station.setStatus(resp.getStatus());
         devices.put(station.getId(), station);
     }
 
@@ -164,7 +190,7 @@ public class TelnetScheduler {
         iterator = devices.values().iterator();
     }
 
-    private synchronized TelnetClient getConnection(Station station) {
+    private synchronized TelnetWorker getConnection(Station station) {
         if (!telnetStation.containsKey(station.getId())) {
             logger.info("connection for Station id=" + station.getId() + " name=" + station.getHost() + " not found. Initializing new one");
             initConnection(station);
@@ -219,7 +245,7 @@ public class TelnetScheduler {
 //        try{
 //            System.out.println("TEST CPT:");
 ////            response.setResult());
-//           TelnetClient client = getConnection(device);
+//           TelnetWorker client = getConnection(device);
 //            response = client.sendAYT();
 //
 //        }catch (Exception e) {

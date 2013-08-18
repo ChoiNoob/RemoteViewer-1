@@ -336,10 +336,10 @@ public class UICenterField {
             final Device device = iterator.next();
             Service.instance.checkDevice(device, new AsyncCallback<Device>() {
                 public void onFailure(Throwable caught) {
-//                    stop();
-//                    Dialogs.alert("Check device false! " + caught.getMessage());   //todo!!!!
-                    device.setStatus(Status.ERROR);
-                        onSuccess(device);
+                    stop();
+                    Dialogs.alert("Check device false! " + caught.getMessage());   //todo!!!!
+//                    device.setStatus(Status.ERROR);
+//                        onSuccess(device);
                 }
 
                 public void onSuccess(Device result) {

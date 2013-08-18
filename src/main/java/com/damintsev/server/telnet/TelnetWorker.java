@@ -6,7 +6,7 @@ package com.damintsev.server.telnet;
  */
 
 import com.damintsev.client.devices.Response;
-import com.damintsev.client.devices.TestResponse;
+import com.damintsev.client.devices.enums.Status;
 import org.apache.commons.net.telnet.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +18,9 @@ import java.io.OutputStream;
 
 
 /**
- * This is a simple example of use of TelnetClient.
+ * This is a simple example of use of TelnetWorker.
  * An external option handler (SimpleTelnetOptionHandler) is used.
- * Initial configuration requested by TelnetClient will be:
+ * Initial configuration requested by TelnetWorker will be:
  * WILL ECHO, WILL SUPPRESS-GA, DO SUPPRESS-GA.
  * VT100 terminal type will be subnegotiated.
  * <p/>
@@ -34,9 +34,9 @@ import java.io.OutputStream;
  * @author Bruno D'Avanzo
  *         *
  */
-public class TelnetClient extends Thread implements TelnetNotificationHandler {
+public class TelnetWorker extends Thread implements TelnetNotificationHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(TelnetClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(TelnetWorker.class);
     private org.apache.commons.net.telnet.TelnetClient tc = null;
     private OutputStream outstr;
     private ByteArrayOutputStream stream;
@@ -48,7 +48,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
     private Response response;
 
     public static void main(String[] args) {
-        TelnetClient example = new TelnetClient();
+        TelnetWorker example = new TelnetWorker();
         example.setLogin("sasha");
         example.setPassword("1");
         example.setHost("192.168.110.129");
@@ -56,8 +56,12 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
         example.connect();
     }
 
+    public TelnetWorker() {
+
+    }
+
     /**
-     * Main for the TelnetClient.
+     * Main for the TelnetWorker.
      * *
      */
     public Response connect() {
@@ -78,7 +82,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
         try {
             logger.debug("Trying to connect to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password);
             tc.connect(host, Integer.parseInt(port));
-            tc.registerNotifHandler(new TelnetClient());
+            tc.registerNotifHandler(new TelnetWorker());
             tc.setKeepAlive(false);
             tc.setSoTimeout(60000);//1 minute
 
@@ -128,7 +132,7 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
 
     /**
      * Reader thread.
-     * Reads lines from the TelnetClient and echoes them
+     * Reads lines from the TelnetWorker and echoes them
      * on the screen.
      * *
      */
@@ -176,21 +180,24 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
             logger.info("Sending AYT command!");
             boolRes = tc.sendAYT(3000);
             Thread.sleep(1000);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         String result = getReaded();
         logger.info("Test server. Send AYT. result=" + result.contains("yes") + " boolean result=" + boolRes);
         Response response = new Response();
         response.setResultText(result);
         response.setResult(result.contains("yes") && boolRes);
+        if(result.contains("yes") && boolRes)
+            response.setStatus(Status.WORK);
+        else
+            response.setStatus(Status.ERROR);
         return response;
     }
 
     /**
-     * Callback method called when TelnetClient receives an option
+     * Callback method called when TelnetWorker receives an option
      * negotiation command.
      * <p/>
      *
@@ -248,7 +255,9 @@ public class TelnetClient extends Thread implements TelnetNotificationHandler {
         this.login = login;
     }
 
-    public Response getResponse() {
-        return response;
-    }
+//    public Response getResponse() {
+//        return response;
+//    }
+
+
 }
