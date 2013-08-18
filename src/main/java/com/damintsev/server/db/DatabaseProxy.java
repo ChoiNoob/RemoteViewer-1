@@ -69,21 +69,21 @@ public class DatabaseProxy {
                 }
             }
 
-            Session session = Hibernate.getSessionFactory().openSession();
-            session.beginTransaction();
-            TrunkName name = new TrunkName();
-            name.setId(3L);
-            name.setName("Asdasdasd");
-            session.save(name);
-
-
-            session.getTransaction().commit();
-            Hibernate.shutdown();
-
-            session = Hibernate.getSessionFactory().openSession();
-            Query query = session.createQuery("SELECT t from TrunkName t ");
-            List<TrunkName> names = query.list();
-            System.out.println("CPTTTTTT =" + names.size());
+//            Session session = Hibernate.getSessionFactory().openSession();
+//            session.beginTransaction();
+//            TrunkName name = new TrunkName();
+//            name.setId(3L);
+//            name.setName("Asdasdasd");
+//            session.save(name);
+//
+//
+//            session.getTransaction().commit();
+//            Hibernate.shutdown();
+//
+//            session = Hibernate.getSessionFactory().openSession();
+//            Query query = session.createQuery("SELECT t from TrunkName t ");
+//            List<TrunkName> names = query.list();
+//            System.out.println("CPTTTTTT =" + names.size());
 //            session.createQuery("SELECT t FROM Tr t");
 
 
@@ -113,7 +113,7 @@ public class DatabaseProxy {
                 CommonDevice isdn = new CommonDevice();
                 isdn.setId(xmlItem.getId());
                 isdn.setQuery(xmlItem.getQuery());
-                isdn.setRegExp(xmlItem.getRegExp());
+                isdn.setQueryBusy(xmlItem.getRegExp());
                 isdn.setName(xmlItem.getName());
                 isdn.setComment(xmlItem.getComment());
                 isdn.setDeviceType(DeviceType.valueOf(xmlItem.getDeviceType()));

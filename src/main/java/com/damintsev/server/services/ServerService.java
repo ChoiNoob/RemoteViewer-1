@@ -1,7 +1,9 @@
 package com.damintsev.server.services;
 
 import com.damintsev.client.devices.*;
+import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.ClientService;
+import com.damintsev.server.db.CleanManager;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.ftp.FTPService;
 import com.damintsev.server.telnet.TelnetScheduler;
@@ -10,7 +12,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * User: Damintsev Andrey
@@ -20,6 +22,24 @@ import java.util.List;
 public class ServerService extends RemoteServiceServlet implements ClientService {
 
     private static final Logger logger = LoggerFactory.getLogger(ServerService.class);
+
+    public ServerService() {
+        Timer timer = new Timer();
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        timer.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        CleanManager.getInstance().cleanBusyInfo();
+                    }
+                },
+                cal.getTime(),
+                1000 * 60 * 60 * 24 * 7
+        );
+    }
 
     public Boolean saveItems(List<Item> items) {
         logger.info("Call saveItems()");
@@ -63,6 +83,10 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         TelnetScheduler.getInstance().stop();
     }
 
+    public void deleteItem(Device device) {
+        TelnetScheduler.getInstance().deleteItem(device);
+    }
+
     public ListLoadResultImpl<BillingInfo> getBillingInfo() {
         ListLoadResultImpl<BillingInfo> list = new ListLoadResultImpl<BillingInfo>();
         list.setData(FTPService.getInstance().getBills());
@@ -77,5 +101,9 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     public FTPSettings loadFTPSettings() {
         DatabaseProxy proxy = new DatabaseProxy();
         return proxy.loadFTP();
+    }
+
+    public List<BusyInfo> loadBusyInfo(Device device) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

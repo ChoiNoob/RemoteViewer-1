@@ -2,8 +2,13 @@ package com.damintsev.client.devices;
 
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.uiframe.BusyChannelWindow;
 import com.damintsev.utils.Position;
 import com.damintsev.utils.Utils;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.DoubleClickEvent;
+import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -48,6 +53,13 @@ public class UIItem extends Label {
     private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
         image = new Image(getImage());
+        super.addDoubleClickHandler(new DoubleClickHandler() {
+            public void onDoubleClick(DoubleClickEvent event) {
+                if(getDeviceType() == DeviceType.STATION) return;
+                BusyChannelWindow panel = new BusyChannelWindow();
+                panel.show(data);
+            }
+        });
         getElement().appendChild(image.getElement());
 
         label = new Label(getName());

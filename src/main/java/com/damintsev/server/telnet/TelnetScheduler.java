@@ -3,6 +3,9 @@ package com.damintsev.server.telnet;
 import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.devices.graph.BusyInfo;
+import com.damintsev.server.db.Hibernate;
+import com.damintsev.server.db.HibernateProxy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +53,9 @@ public class TelnetScheduler {
 
     private void addDevice(Device device) {
         devices.put(device.getId(), device);
-        if (device instanceof Station) {
-            initConnection((Station) device);
-        }
+//        if (device instanceof Station) {
+//            initConnection((Station) device);
+//        }
     }
 
     private boolean initConnection(Station station) {
@@ -70,7 +73,7 @@ public class TelnetScheduler {
         return resp.isResult();
     }
 
-    public void checkDevice(Device device) {
+    public synchronized void checkDevice(Device device) {
         logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
         TelnetWorker telnet = getConnection( device.getStation());
         if (telnet == null ) {
@@ -93,6 +96,32 @@ public class TelnetScheduler {
         parseAliveResult(resp, device);
         device.setResponse(resp);
         devices.put(device.getId(), device);
+        if(((CommonDevice) device).getQueryBusy() != null) {
+            resp = telnet.execute(((CommonDevice) device).getQueryBusy());
+            parseBusyResponse(resp, device);
+        }
+    }
+
+    private void parseBusyResponse(Response resp, Device device) {
+        String result = resp.getResultText();
+        logger.info("After ask busy result is: " + result);
+        int index = result.indexOf("OTHER");
+        BusyInfo info;
+        String busy = null;
+        if(index > 0) {
+            result = result.substring(index);
+            String []table = result.split(" ");
+            if(table.length >= 3) {
+                busy = table[3];
+                info = new BusyInfo();
+                info.setBusy(Long.parseLong(busy));
+                info.setDate(new Date());
+                info.setDeviceId(device.getId());
+                info.setMax(Long.parseLong(table[2]));
+                HibernateProxy.saveBusyInfo(info);
+                ((CommonDevice)device).setBusyInfo(info);
+            }
+        }
     }
 
     private void checkIP(TelnetWorker telnet, Device device) {
@@ -101,6 +130,10 @@ public class TelnetScheduler {
         parsePingResult(resp, device);
         device.setResponse(resp);
         devices.put(device.getId(), device);
+        if(((CommonDevice) device).getQueryBusy() != null) {
+            resp = telnet.execute(((CommonDevice) device).getQueryBusy());
+            parseBusyResponse(resp, device);
+        }
     }
 
     private void parsePingResult(Response resp, Device device) {
@@ -176,7 +209,7 @@ public class TelnetScheduler {
                 else
                     createIterator();
             }
-        }, 3000, 3000);
+        }, 5000, 5000);
     }
 
     public void stop() {
@@ -198,6 +231,22 @@ public class TelnetScheduler {
             logger.info("Connection for Station id=" + station.getId() + " name=" + station.getHost() + " found");
         }
         return telnetStation.get(station.getId());
+    }
+
+    public void deleteItem(Device device) {
+        stop();
+        if (device instanceof Station) {
+            TelnetWorker telnet = telnetStation.remove(device.getId());
+            telnet.disconnect();
+            for(Device dev : devices.values()) {
+                if(dev.getStation().getId().equals(device.getId())) {
+                    devices.remove(dev.getId());
+                }
+            }
+        } else {
+            devices.remove(device.getId());
+        }
+        start();
     }
 
 //    private void parseResult(CommonDevice isdn, String result) {

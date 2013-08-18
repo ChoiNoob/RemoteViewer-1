@@ -2,6 +2,7 @@ package com.damintsev.client.devices;
 
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.devices.graph.BusyInfo;
 
 /**
  * Created by adamintsev
@@ -12,12 +13,13 @@ public class CommonDevice extends Device {
     private Long id;
     private String name;
     private String query;
-    private String regExp;
+    private String queryBusy;
     private String imageName = "cloud";
     private Status status;
     private Station station;
     private DeviceType deviceType;
     private String comment;
+    private BusyInfo busyInfo;
 
     public String getName() {
         return name;
@@ -51,12 +53,12 @@ public class CommonDevice extends Device {
         this.query = query;
     }
 
-    public String getRegExp() {
-        return regExp;
+    public String getQueryBusy() {
+        return queryBusy;
     }
 
-    public void setRegExp(String regExp) {
-        this.regExp = regExp;
+    public void setQueryBusy(String queryBusy) {
+        this.queryBusy = queryBusy;
     }
 
     public Long getId() {
@@ -89,5 +91,13 @@ public class CommonDevice extends Device {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public BusyInfo getBusyInfo() {
+        return busyInfo;
+    }
+
+    public void setBusyInfo(BusyInfo busyInfo) {
+        this.busyInfo = busyInfo;
     }
 }
