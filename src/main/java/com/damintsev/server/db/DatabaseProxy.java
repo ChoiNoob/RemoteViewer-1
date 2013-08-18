@@ -8,6 +8,7 @@ import com.damintsev.server.db.xmldao.XMLItemList;
 import com.damintsev.server.db.xmldao.XMLPosition;
 import com.damintsev.server.db.xmldao.XMLPositionList;
 import com.damintsev.server.services.ServerService;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.slf4j.LoggerFactory;
 
@@ -71,13 +72,18 @@ public class DatabaseProxy {
             Session session = Hibernate.getSessionFactory().openSession();
             session.beginTransaction();
             TrunkName name = new TrunkName();
-            name.setId(1L);
+            name.setId(3L);
             name.setName("Asdasdasd");
             session.save(name);
+
 
             session.getTransaction().commit();
             Hibernate.shutdown();
 
+            session = Hibernate.getSessionFactory().openSession();
+            Query query = session.createQuery("SELECT t from TrunkName t ");
+            List<TrunkName> names = query.list();
+            System.out.println("CPTTTTTT =" + names.size());
 //            session.createQuery("SELECT t FROM Tr t");
 
 
