@@ -5,6 +5,7 @@ import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.windows.AddDeviceWindow;
 import com.damintsev.client.windows.AddStationWindow;
+import com.damintsev.client.windows.UIFTPSettings;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
@@ -99,11 +100,11 @@ public class UISettingsPanel {
         });
         buttons.add(edit);
 
-        buttons.add(new TextButton("Настройки FTP", new SelectEvent.SelectHandler() {
-            public void onSelect(SelectEvent event) {
-                UIFTPSettings.getInstance().show();
-            }
-        }));
+//        buttons.add(new TextButton("Настройки FTP", new SelectEvent.SelectHandler() {
+//            public void onSelect(SelectEvent event) {
+////                UIFTPSettings.getInstance().show();
+//            }
+//        }));
         panel.add(buttons);
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {

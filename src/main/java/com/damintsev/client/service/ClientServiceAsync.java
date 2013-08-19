@@ -25,7 +25,7 @@ public interface ClientServiceAsync {
 
     void saveFTPSettings(FTPSettings settings, AsyncCallback<Void> async);
 
-    void loadFTPSettings(AsyncCallback<FTPSettings> async);
+    void loadFTPSettings(Station station, AsyncCallback<FTPSettings> async);
 
     void stop(AsyncCallback<Void> async);
 
@@ -34,4 +34,6 @@ public interface ClientServiceAsync {
     void deleteItem(Device device, AsyncCallback<Void> async);
 
     void loadBusyInfo(Device device, AsyncCallback<List<BusyInfo>> async);
+
+    void deleteDevice(Device device, AsyncCallback<Void> async);
 }

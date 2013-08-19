@@ -1,5 +1,6 @@
 package com.damintsev.client.devices;
 
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
@@ -10,13 +11,37 @@ import java.io.Serializable;
  * Time: 23:35
  */
 @XmlRootElement
+@Entity
+@org.hibernate.annotations.Entity
 public class FTPSettings implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "settings_id")
+    private Long id;
+
+    @JoinColumn(name = "station_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Station station;
+    @Column
     private String host;
+    @Column
     private String port;
+    @Column
     private String login;
+    @Column
     private String password;
+    @Column
     private String dir;
+
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
+    }
 
     public String getDir() {
         return dir;
@@ -61,5 +86,13 @@ public class FTPSettings implements Serializable {
     @XmlElement
     public void setPort(String port) {
         this.port = port;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

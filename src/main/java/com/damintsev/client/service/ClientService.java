@@ -35,7 +35,9 @@ public interface ClientService extends RemoteService {
 
     public void saveFTPSettings(FTPSettings settings);
 
-    public FTPSettings loadFTPSettings();
+    public FTPSettings loadFTPSettings(Station station);
+
+    public void deleteDevice(Device device);
 
     public List<BusyInfo> loadBusyInfo(Device device);
 }

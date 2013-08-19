@@ -16,6 +16,8 @@
         <property name="hbm2ddl.auto">update</property>
         <mapping class="com.damintsev.client.devices.TrunkName"/>
         <mapping class="com.damintsev.client.devices.graph.BusyInfo"/>
+        <mapping class="com.damintsev.client.devices.FTPSettings"/>
+        <mapping class="com.damintsev.client.devices.Station"/>
     </session-factory>
 
 

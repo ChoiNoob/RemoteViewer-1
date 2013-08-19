@@ -98,9 +98,14 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         proxy.saveFTP(settings);
     }
 
-    public FTPSettings loadFTPSettings() {
+    public FTPSettings loadFTPSettings(Station station) {
         DatabaseProxy proxy = new DatabaseProxy();
-        return proxy.loadFTP();
+        return proxy.loadFTP(station);
+    }
+
+    public void deleteDevice(Device device) {
+        DatabaseProxy proxy = new DatabaseProxy();
+        proxy.delete(device);
     }
 
     public List<BusyInfo> loadBusyInfo(Device device) {

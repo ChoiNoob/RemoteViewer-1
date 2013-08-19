@@ -3,12 +3,14 @@ package com.damintsev.client.windows;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.service.Service;
 import com.damintsev.client.uiframe.TelnetWindow;
 import com.damintsev.client.uiframe.UICenterField;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
@@ -46,7 +48,7 @@ public class AddStationWindow implements Editor<Station> {
     private AddStationWindow() {
         window = new Window();
         window.setModal(true);
-        window.setPixelSize(350, 300);
+        window.setPixelSize(400, 350);
         window.setHeadingText("Добавить новую телефонную станцию");
         ContentPanel con = new ContentPanel();
         con.setHeaderVisible(false);
@@ -73,12 +75,13 @@ public class AddStationWindow implements Editor<Station> {
         comment.setHeight(70);
         panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        con.addButton(new TextButton("Тест", new SelectEvent.SelectHandler() {
+        con.addButton(new TextButton("Сбор данных о звонках", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 station = editor.flush();
                 if (editor.hasErrors()) return;
                 station.setStatus(Status.INIT);
-                TelnetWindow.getInstance().show(station);
+//                TelnetWindow.getInstance().show(station);
+                  UIFTPSettings.getInstance().show(station);
             }
         }));
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
@@ -86,6 +89,15 @@ public class AddStationWindow implements Editor<Station> {
                 Dialogs.confirm("Будет удалена станция и все связанные с ней обькты", new Runnable() {
                     public void run() {
                         UICenterField.get().delete(station);
+                        Service.instance.deleteDevice(station, new AsyncCallback<Void>() {
+                            public void onFailure(Throwable caught) {
+                                //To change body of implemented methods use File | Settings | File Templates.
+                            }
+
+                            public void onSuccess(Void result) {
+                                //To change body of implemented methods use File | Settings | File Templates.
+                            }
+                        });
                         window.hide();
                     }
                 });

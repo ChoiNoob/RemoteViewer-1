@@ -51,9 +51,11 @@ public class UIRootPanel {
         ((AbsolutePanel)body.getCenterWidget()).add(logo);
         final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
+
+
         ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
 
-//        ((AbsolutePanel)body.getCenterWidget()).add(panel.show());
+//        ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
 
         return viewport;
     }

@@ -265,28 +265,69 @@ public class DatabaseProxy {
 
     public void saveFTP(FTPSettings settings) {
         File file = new File(ftpSettings);
+//        try {
+//            if (!file.exists())
+//                file.createNewFile();
+//            Marshaller marshaller = createMarshaller(FTPSettings.class);
+//            marshaller.marshal(settings, file);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JAXBException e) {
+//            e.printStackTrace();
+//        }
+        Session session = Hibernate.getSessionFactory().openSession();
+        session.beginTransaction();
+        session.save(settings.getStation());
+        if(settings.getId() != null)
+            session.update(settings);
+        else session.save(settings);
+        session.getTransaction().commit();
+        session.close();
+    }
+
+    public FTPSettings loadFTP(Station station) {
+//        File file = new File(ftpSettings);
+//        if (file.exists()) {
+//            try {
+//                Unmarshaller unmarshaller = createUnmarshaller(FTPSettings.class);
+//                return (FTPSettings) unmarshaller.unmarshal(file);
+//            } catch (JAXBException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return null;
+        Session session = null;
+        Query query;
         try {
-            if (!file.exists())
-                file.createNewFile();
-            Marshaller marshaller = createMarshaller(FTPSettings.class);
-            marshaller.marshal(settings, file);
-        } catch (IOException e) {
+            session = Hibernate.getSessionFactory().openSession();
+            query = session.createQuery("SELECT f FROM FTPSettings f " +
+                    "WHERE f.station = :station ");
+            query.setParameter("station", station);
+            return (FTPSettings) query.uniqueResult();
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (JAXBException e) {
-            e.printStackTrace();
+            return null;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
-    public FTPSettings loadFTP() {
-        File file = new File(ftpSettings);
-        if (file.exists()) {
-            try {
-                Unmarshaller unmarshaller = createUnmarshaller(FTPSettings.class);
-                return (FTPSettings) unmarshaller.unmarshal(file);
-            } catch (JAXBException e) {
-                e.printStackTrace();
+    public void delete(Device device) {
+        Session session = Hibernate.getSessionFactory().openSession();
+        session.beginTransaction();
+        if(device instanceof Station) {
+            session.delete((Station)device);
+            Query query = session.createQuery("select ftp from FTPSettings ftp where ftp.station = :station");
+            query.setParameter("station", device);
+            List<FTPSettings> ftpSettings = query.list();
+            for(FTPSettings settings : ftpSettings) {
+                session.delete(settings);
             }
+
         }
-        return null;
+        session.getTransaction().commit();
+        session.close();
     }
 }

@@ -3,6 +3,7 @@ package com.damintsev.client.devices;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -11,18 +12,31 @@ import javax.xml.bind.annotation.XmlRootElement;
  * Date: 04.08.13
  * Time: 14:15
  */
+@Entity
+@org.hibernate.annotations.Entity
 public class Station extends Device {
-
+    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "station_id")
     private Long id;
+    @Column
     private String name;
+    @Column
     private String host;
+    @Column
     private String port;
+    @Column
     private String login;
+    @Column
     private String password;
+    @Column
     private Status status;
+    @Column
     private String comment;
+    @Transient
     private String imageName = "hipath";
-    private  DeviceType deviceType = DeviceType.STATION;
+    @Column
+    private DeviceType deviceType = DeviceType.STATION;
 
     public String getHost() {
         return host;

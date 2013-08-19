@@ -1,4 +1,4 @@
-package com.damintsev.client.uiframe;
+package com.damintsev.client.windows;
 
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.graph.BusyInfo;

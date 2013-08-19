@@ -9,9 +9,9 @@ import java.io.Serializable;
 public class BillingInfo implements Serializable {
 
     private Long id;
-    private String streamName;
-    private String value2;
-    private String value;
+    private String number;
+    private String numberFrom;
+    private Long quantity;
 
     public Long getId() {
         return id;
@@ -21,27 +21,27 @@ public class BillingInfo implements Serializable {
         this.id = id;
     }
 
-    public String getStreamName() {
-        return streamName;
+    public String getNumber() {
+        return number;
     }
 
-    public void setStreamName(String streamName) {
-        this.streamName = streamName;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public String getValue2() {
-        return value2;
+    public Long getQuantity() {
+        return quantity;
     }
 
-    public String getValue() {
-        return value;
+    public void setQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 
-    public void setValue2(String value2) {
-        this.value2 = value2;
+    public String getNumberFrom() {
+        return numberFrom;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setNumberFrom(String numberFrom) {
+        this.numberFrom = numberFrom;
     }
 }
