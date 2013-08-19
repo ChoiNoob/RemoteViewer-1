@@ -51,19 +51,19 @@ public class UIItem extends Label {
     private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
         image = new Image(getImage());
-        super.addDoubleClickHandler(new DoubleClickHandler() {
-            public void onDoubleClick(DoubleClickEvent event) {
-                if(getDeviceType() == DeviceType.STATION) return;
-                BusyChannelWindow panel = new BusyChannelWindow();
-                panel.show(data);
-            }
-        });
         getElement().appendChild(image.getElement());
 
         label = new Label(getName());
         if(getName() != null || data instanceof Station)
             getElement().appendChild(label.getElement());
         label.setStyleName("tooltip");
+        super.addDoubleClickHandler(new DoubleClickHandler() {
+            public void onDoubleClick(DoubleClickEvent event) {
+                if(getDeviceType() == DeviceType.STATION) return;
+                BusyChannelWindow panel = new BusyChannelWindow();
+                panel.show(UIItem.this);
+            }
+        });
     }
 
     public Position getCenterPosition() {

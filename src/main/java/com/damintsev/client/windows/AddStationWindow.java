@@ -10,12 +10,15 @@ import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.form.CheckBox;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 import com.sencha.gxt.widget.core.client.form.TextField;
@@ -44,6 +47,8 @@ public class AddStationWindow implements Editor<Station> {
     TextField login;
     TextField password;
     TextArea comment;
+    @Path(value = "allowStatistics")
+    CheckBox checkBox;
 
     private AddStationWindow() {
         window = new Window();
@@ -74,6 +79,9 @@ public class AddStationWindow implements Editor<Station> {
         comment = new TextArea();
         comment.setHeight(70);
         panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+
+        checkBox = new CheckBox();
+        panel.add(new FieldLabel(checkBox, "Разрешить сбор статистики"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         con.addButton(new TextButton("Сбор данных о звонках", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {

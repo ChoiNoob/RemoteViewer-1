@@ -23,7 +23,12 @@ public class FTPSettings implements Serializable {
     @JoinColumn(name = "station_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Station station;
+
+    @Transient
+    private Long stationId;
+    
     @Column
+    @XmlElement
     private String host;
     @Column
     private String port;
@@ -94,5 +99,13 @@ public class FTPSettings implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getStationId() {
+        return stationId;
+    }
+     @XmlElement
+    public void setStationId(Long stationId) {
+        this.stationId = stationId;
     }
 }

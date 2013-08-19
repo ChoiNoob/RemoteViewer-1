@@ -5,10 +5,13 @@ import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.CleanManager;
 import com.damintsev.server.db.DatabaseProxy;
+import com.damintsev.server.db.Hibernate;
 import com.damintsev.server.ftp.FTPService;
 import com.damintsev.server.telnet.TelnetScheduler;
 import com.damintsev.utils.ListLoadResultImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.hibernate.Query;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,6 +48,7 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         logger.info("Call saveItems()");
         DatabaseProxy proxy = new DatabaseProxy();
         proxy.saveItems(items);
+        TelnetScheduler.getInstance().clear();
         return true;
     }
 
@@ -108,7 +112,18 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         proxy.delete(device);
     }
 
-    public List<BusyInfo> loadBusyInfo(Device device) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public BusyInfo loadBusyInfo(Device device) {
+        Session session = Hibernate.getSessionFactory().openSession();
+        Query query = session.createQuery("SELECT FIRS(b) FROM BusyInfo b " +
+                " WHERE b.deviceId = :device " +
+                "order by b.date desc ");
+        query.setParameter("device", device.getId());
+        return (BusyInfo) query.uniqueResult();
+
+
+    }
+
+    public void testFTP() {
+        System.out.println("CPT=" + FTPService.getInstance().getBills());
     }
 }

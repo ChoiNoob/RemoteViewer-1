@@ -100,11 +100,11 @@ public class UISettingsPanel {
         });
         buttons.add(edit);
 
-//        buttons.add(new TextButton("Настройки FTP", new SelectEvent.SelectHandler() {
-//            public void onSelect(SelectEvent event) {
-////                UIFTPSettings.getInstance().show();
-//            }
-//        }));
+        buttons.add(new TextButton("Настройки FTP", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+//                UIFTPSettings.getInstance().show();
+            }
+        }));
         panel.add(buttons);
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {
@@ -122,6 +122,13 @@ public class UISettingsPanel {
         });
 
         panel.addButton(cancel);
+
+        panel.addButton(new TextButton("asd", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        }));
+
         panel.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
 
         return panel;

@@ -33,7 +33,9 @@ public interface ClientServiceAsync {
 
     void deleteItem(Device device, AsyncCallback<Void> async);
 
-    void loadBusyInfo(Device device, AsyncCallback<List<BusyInfo>> async);
+    void loadBusyInfo(Device device, AsyncCallback<BusyInfo> async);
 
     void deleteDevice(Device device, AsyncCallback<Void> async);
+
+    void testFTP(AsyncCallback<Void> async);
 }

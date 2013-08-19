@@ -51,7 +51,6 @@ public class FTPService {
             worker.connect();
         String bills = worker.getFile(settings.getDir());
 
-
       return parse(bills);
     }
 

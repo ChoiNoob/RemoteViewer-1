@@ -201,7 +201,7 @@ public class UIBillingPanel {
 //        grid.setLoader(loader);
 ////        start();
 //        panel.add(grid);
-//        panel.collapse();
+        panel.collapse();
     }
 
     public ContentPanel getContent() {

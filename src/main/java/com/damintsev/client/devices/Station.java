@@ -37,6 +37,8 @@ public class Station extends Device {
     private String imageName = "hipath";
     @Column
     private DeviceType deviceType = DeviceType.STATION;
+    @Column
+    private Boolean allowStatistics;
 
     public String getHost() {
         return host;
@@ -118,5 +120,21 @@ public class Station extends Device {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    public Boolean getAllowStatistics() {
+        return allowStatistics;
+    }
+
+    public void setAllowStatistics(Boolean allowStatistics) {
+        this.allowStatistics = allowStatistics;
     }
 }

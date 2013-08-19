@@ -3,10 +3,8 @@ package com.damintsev.server.db;
 import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
-import com.damintsev.server.db.xmldao.XMLItem;
-import com.damintsev.server.db.xmldao.XMLItemList;
-import com.damintsev.server.db.xmldao.XMLPosition;
-import com.damintsev.server.db.xmldao.XMLPositionList;
+import com.damintsev.server.db.xmldao.*;
+import com.damintsev.server.ftp.FTPService;
 import com.damintsev.server.services.ServerService;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -177,6 +175,7 @@ public class DatabaseProxy {
     public void saveItems(List<Item> items) {
         List<XMLItem>  xmlItems = new ArrayList<XMLItem>();
         List<XMLPosition> xmlPositionList = new ArrayList<XMLPosition>();
+        List<FTPSettings> xmlFtpSettingsList = new ArrayList<FTPSettings>();
         for(Item item : items) {
             XMLPosition pos = new XMLPosition();
             pos.setId(item.getId());
@@ -208,6 +207,16 @@ public class DatabaseProxy {
                     item1.setPort(station.getPort());
                     item1.setLogin(station.getLogin());
                     item1.setPassword(station.getPassword());
+                    if(station.getAllowStatistics() != null) {
+                        FTPSettings settings = new FTPSettings();
+                        settings.setId(station.getId());
+                        settings.setHost(station.getHost());
+                        settings.setLogin(station.getLogin());
+                        settings.setPassword(station.getPassword());
+                        settings.setStationId(station.getId());
+                        xmlFtpSettingsList.add(settings);
+                        FTPService.getInstance().setSettings(settings);
+                    }
                     break;
             }
             xmlItems.add(item1);
@@ -234,6 +243,16 @@ public class DatabaseProxy {
             marshaller = createMarshaller(XMLItemList.class);
             marshaller.marshal(itemList, file);
             marshaller.marshal(itemList, System.out);
+
+            //save FTP
+//            file = new File(ftpSettings);
+//            if(!file.exists())
+//                file.createNewFile();
+//            XMLFTPSettings<FTPSettings> xmlftpSettings = new XMLFTPSettings<FTPSettings>();
+//            xmlftpSettings.setList(xmlFtpSettingsList);
+//            marshaller = createMarshaller(XMLFTPSettings.class);
+//            marshaller.marshal(xmlftpSettings, file);
+//            marshaller.marshal(xmlftpSettings, System.out);
 
         }   catch (Exception e) {
             e.printStackTrace();
@@ -265,53 +284,54 @@ public class DatabaseProxy {
 
     public void saveFTP(FTPSettings settings) {
         File file = new File(ftpSettings);
-//        try {
-//            if (!file.exists())
-//                file.createNewFile();
-//            Marshaller marshaller = createMarshaller(FTPSettings.class);
-//            marshaller.marshal(settings, file);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (JAXBException e) {
-//            e.printStackTrace();
+        try {
+            if (!file.exists())
+                file.createNewFile();
+            Marshaller marshaller = createMarshaller(FTPSettings.class);
+            marshaller.marshal(settings, file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+//        Session session = Hibernate.getSessionFactory().openSession();
+//        session.beginTransaction();
+//        session.save(settings.getStation());
+//        if(settings.getId() != null) {
+//               session.saveOrUpdate(settings);
 //        }
-        Session session = Hibernate.getSessionFactory().openSession();
-        session.beginTransaction();
-        session.save(settings.getStation());
-        if(settings.getId() != null)
-            session.update(settings);
-        else session.save(settings);
-        session.getTransaction().commit();
-        session.close();
+//        else session.save(settings);
+//        session.getTransaction().commit();
+//        session.close();
     }
 
     public FTPSettings loadFTP(Station station) {
-//        File file = new File(ftpSettings);
-//        if (file.exists()) {
-//            try {
-//                Unmarshaller unmarshaller = createUnmarshaller(FTPSettings.class);
-//                return (FTPSettings) unmarshaller.unmarshal(file);
-//            } catch (JAXBException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return null;
-        Session session = null;
-        Query query;
-        try {
-            session = Hibernate.getSessionFactory().openSession();
-            query = session.createQuery("SELECT f FROM FTPSettings f " +
-                    "WHERE f.station = :station ");
-            query.setParameter("station", station);
-            return (FTPSettings) query.uniqueResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (session != null) {
-                session.close();
+        File file = new File(ftpSettings);
+        if (file.exists()) {
+            try {
+                Unmarshaller unmarshaller = createUnmarshaller(FTPSettings.class);
+                return (FTPSettings) unmarshaller.unmarshal(file);
+            } catch (JAXBException e) {
+                e.printStackTrace();
             }
         }
+        return null;
+//        Session session = null;
+//        Query query;
+//        try {
+//            session = Hibernate.getSessionFactory().openSession();
+//            query = session.createQuery("SELECT f FROM FTPSettings f " +
+//                    "WHERE f.station = :station ");
+//            query.setParameter("station", station);
+//            return (FTPSettings) query.uniqueResult();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
     }
 
     public void delete(Device device) {

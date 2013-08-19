@@ -49,9 +49,9 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
 
     public static void main(String[] args) {
         TelnetWorker example = new TelnetWorker();
-        example.setLogin("sasha");
-        example.setPassword("1");
-        example.setHost("192.168.110.129");
+        example.setLogin("root");
+        example.setPassword("hicom");
+        example.setHost("192.0.2.3");
         example.setPort("23");
         example.connect();
     }
@@ -92,30 +92,32 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             Thread reader = new Thread(this);
             reader.start();
             Thread.sleep(3000);
+            write("");
             write(login);
             write(password);
-           if(sendAYT().isResult()) {
+//            write("dis-sdsu:all,,pen,per3,1,1,13,0;");
+//           if(sendAYT().isResult()) {
                logger.debug("connection sucsessful!");
                response.setResult(true);
                response.setResultText("Success");
-           }
+//           }
         } catch (Exception e) {
             logger.error("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
             response.setResultText("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
             response.setResult(false);
-//            throw new RuntimeException(e);
+            throw new RuntimeException(e);
         }
         return response;
     }
 
     private Response write(String command) {
         clearReaded();
-        command += "\n\r";
+        command += "\r\n";
         logger.info("***Sending command to remote server: " + command);
         try {
             outstr.write(command.getBytes());
             outstr.flush();
-            Thread.sleep(2000);
+            Thread.sleep(5000);
         } catch (IOException e) {
            logger.debug(e.getMessage(), e);
         } catch (InterruptedException e) {
@@ -167,6 +169,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             outstr.close();
             instr.close();
             stream.close();
+            super.interrupt();
             tc.disconnect();
         } catch (IOException e) {
             e.printStackTrace();

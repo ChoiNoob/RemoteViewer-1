@@ -90,11 +90,10 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
         query = new TextField();
         query.setAllowBlank(false);
-        panel.add(new FieldLabel(query, "Строка запроса"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
-        queryBusy = new TextField();
+        panel.add(new FieldLabel(query, "Запрос состояния канала"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
-        queryBusy.setAllowBlank(false);
-        panel.add(new FieldLabel(queryBusy, "Проверка сосотояния"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        queryBusy = new TextField();
+        panel.add(new FieldLabel(queryBusy, "Проверака занятых каналов"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         comment = new TextArea();
         comment.setHeight(70);

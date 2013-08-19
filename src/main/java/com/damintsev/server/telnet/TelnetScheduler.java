@@ -64,7 +64,7 @@ public class TelnetScheduler {
         telnet.setPort(station.getPort());
         telnet.setLogin(station.getLogin());
         telnet.setPassword(station.getPassword());
-        Response resp;// = telnet.connect();
+        Response resp;
         if ((resp = telnet.connect()).isResult()) {
             telnet.start();
             telnetStation.put(station.getId(), telnet);
@@ -75,19 +75,27 @@ public class TelnetScheduler {
 
     public synchronized void checkDevice(Device device) {
         logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
-        TelnetWorker telnet = getConnection( device.getStation());
-        if (telnet == null ) {
+        try {
+            TelnetWorker telnet = getConnection(device.getStation());
+            if (telnet == null) {
 //            Response response = telnet.getResponse();
 //            device.setResponse(response);
+                device.setStatus(Status.ERROR);
+                return;
+            }
+            if (device instanceof Station) {
+                checkStation(telnet, (Station) device);
+            } else if (device.getDeviceType() == DeviceType.IP) {
+                checkIP(telnet, device);
+            } else if (device.getDeviceType() == DeviceType.ISDN) {
+                checkISDN(telnet, device);
+            }
+        } catch (Exception e) {
+            logger.info("Exception wile checking device =" + e.getMessage());
+            TelnetWorker telnet = telnetStation.get(device.getId());
+            telnetStation.remove(device.getId());
+            if(telnet!=null)telnet.disconnect();
             device.setStatus(Status.ERROR);
-            return;
-        }
-        if (device instanceof Station) {
-            checkStation(telnet,(Station) device);
-        } else if (device.getDeviceType() == DeviceType.IP) {
-            checkIP(telnet,device);
-        } else if (device.getDeviceType() == DeviceType.ISDN) {
-            checkISDN(telnet,device);
         }
     }
 
@@ -108,10 +116,15 @@ public class TelnetScheduler {
         int index = result.indexOf("OTHER");
         BusyInfo info;
         String busy = null;
-        if(index > 0) {
-            result = result.substring(index);
-            String []table = result.split(" ");
-            if(table.length >= 3) {
+        if (index > 0) {
+            result = result.substring(index + 5);
+            logger.info("After substring result is =" + result);
+            result = result.replace("   ", " ");
+            result = result.replace("  ", " ");
+            String[] table = result.trim().split(" ");
+            logger.info("After replace =" + result);
+            if (table.length >= 3) {
+                logger.info("table[0]=" + table[0] + "table[1]=" + table[1] + "table[2]=" + table[2] + "table[3]=" + table[3]);
                 busy = table[3];
                 info = new BusyInfo();
                 info.setBusy(Long.parseLong(busy));
@@ -119,7 +132,7 @@ public class TelnetScheduler {
                 info.setDeviceId(device.getId());
                 info.setMax(Long.parseLong(table[2]));
                 HibernateProxy.saveBusyInfo(info);
-                ((CommonDevice)device).setBusyInfo(info);
+                ((CommonDevice) device).setBusyInfo(info);
             }
         }
     }
@@ -151,7 +164,6 @@ public class TelnetScheduler {
             device.setStatus(Status.ERROR);
             resp.setStatus(Status.ERROR);
         }
-
     }
 
     private void parseAliveResult(Response resp, Device device) {
@@ -181,19 +193,27 @@ public class TelnetScheduler {
 
     private void checkStation(TelnetWorker telnet, Station station) {
         Response resp = null;
-        try {
-            resp = telnet.sendAYT();
-        } catch (Exception e) {
-            logger.error("Caught exception while sending ASK command " + e.getLocalizedMessage());
-            resp = new Response();
-            resp.setStatus(Status.ERROR);
-            resp.setResultText(e.getMessage());
-            telnet.disconnect();
-            telnetStation.remove(station.getId());
-        }
+//        try {
+            resp = new Response("sucsess");
+            resp.setStatus(Status.WORK);
+//            resp = telnet.sendAYT();
+//            telnet.execute()
+//        } catch (Exception e) {
+//            logger.error("Caught exception while sending ASK command " + e.getLocalizedMessage());
+//            resp = new Response();
+//            resp.setStatus(Status.ERROR);
+//            resp.setResultText(e.getMessage());
+//            telnet.disconnect();
+//            telnetStation.remove(station.getId());
+//        }
         station.setResponse(resp);
         station.setStatus(resp.getStatus());
         devices.put(station.getId(), station);
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void start() {
@@ -209,7 +229,7 @@ public class TelnetScheduler {
                 else
                     createIterator();
             }
-        }, 5000, 5000);
+        }, 20000, 10000);
     }
 
     public void stop() {
@@ -309,6 +329,10 @@ public class TelnetScheduler {
         resp.setResultText("System initializing...");
         resp.setStatus(Status.INIT);
         return resp;
+    }
+
+    public void clear() {
+        devices.clear();
     }
 }
 
