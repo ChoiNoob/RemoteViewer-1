@@ -1,6 +1,7 @@
 package com.damintsev.client.service;
 
 import com.damintsev.client.devices.*;
+import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.utils.ListLoadResultImpl;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -42,5 +43,9 @@ public interface ClientService extends RemoteService {
     public BusyInfo loadBusyInfo(Device device);
 
     public void testFTP();
+
+    public Device saveDevice(Device device);
+
+    public Device loadDevice(Long debiceId, DeviceType deviceType);
 }
 

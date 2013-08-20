@@ -6,6 +6,7 @@ import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.server.db.Hibernate;
 import com.damintsev.server.db.HibernateProxy;
+import com.damintsev.server.db.xmldao.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -131,8 +132,8 @@ public class TelnetScheduler {
                 info.setDate(new Date());
                 info.setDeviceId(device.getId());
                 info.setMax(Long.parseLong(table[2]));
-                HibernateProxy.saveBusyInfo(info);
-                ((CommonDevice) device).setBusyInfo(info);
+                DatabaseConnector.getInstance().saveBusyInfo(device.getId(), info);
+                        ((CommonDevice) device).setBusyInfo(info);
             }
         }
     }
@@ -333,6 +334,10 @@ public class TelnetScheduler {
 
     public void clear() {
         devices.clear();
+        for(TelnetWorker telnet : telnetStation.values()) {
+            telnet.disconnect();
+        }
+        telnetStation.clear();
     }
 }
 

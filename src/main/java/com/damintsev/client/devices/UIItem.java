@@ -59,7 +59,7 @@ public class UIItem extends Label {
         label.setStyleName("tooltip");
         super.addDoubleClickHandler(new DoubleClickHandler() {
             public void onDoubleClick(DoubleClickEvent event) {
-                if(getDeviceType() == DeviceType.STATION) return;
+                if (getDeviceType() == DeviceType.STATION) return;
                 BusyChannelWindow panel = new BusyChannelWindow();
                 panel.show(UIItem.this);
             }
@@ -73,7 +73,7 @@ public class UIItem extends Label {
     }
 
     public Position getPosition() {
-        if(position == null) savePosition();
+//        if(position == null) savePosition();
         return position;
     }
 
@@ -129,5 +129,10 @@ public class UIItem extends Label {
 
     public void setData(Device data) {
         this.data = data;
+    }
+
+    public void redraw() {
+        System.out.println("redraw");
+        label.setText(getName());
     }
 }

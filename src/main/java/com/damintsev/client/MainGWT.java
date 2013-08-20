@@ -53,11 +53,9 @@ public class MainGWT implements EntryPoint {
         RootPanel.get().add(UIRootPanel.get().getContent());
         Service.instance.start(new AsyncCallback<Void>() {
             public void onFailure(Throwable caught) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             public void onSuccess(Void result) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
         Window.addCloseHandler(new CloseHandler<Window>() {

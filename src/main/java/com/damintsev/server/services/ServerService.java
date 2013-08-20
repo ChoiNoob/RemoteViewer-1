@@ -1,11 +1,13 @@
 package com.damintsev.server.services;
 
 import com.damintsev.client.devices.*;
+import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.CleanManager;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.db.Hibernate;
+import com.damintsev.server.db.xmldao.DatabaseConnector;
 import com.damintsev.server.ftp.FTPService;
 import com.damintsev.server.telnet.TelnetScheduler;
 import com.damintsev.utils.ListLoadResultImpl;
@@ -46,16 +48,15 @@ public class ServerService extends RemoteServiceServlet implements ClientService
 
     public Boolean saveItems(List<Item> items) {
         logger.info("Call saveItems()");
-        DatabaseProxy proxy = new DatabaseProxy();
-        proxy.saveItems(items);
-        TelnetScheduler.getInstance().clear();
+        DatabaseConnector.getInstance().saveUIPosition(items);
         return true;
     }
 
     public List<Item> loadItems() {
-        logger.info("Call loadItems()");
-        DatabaseProxy proxy = new DatabaseProxy();
-        return proxy.loadItemPositions();
+//        logger.info("Call loadItems()");
+//        DatabaseProxy proxy = new DatabaseProxy();
+//        return proxy.loadItemPositions();
+        return DatabaseConnector.getInstance().loadItems();
     }
 
     public Device getState() {
@@ -68,14 +69,6 @@ public class ServerService extends RemoteServiceServlet implements ClientService
 
     public Device checkDevice(Device device) {
         logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
-//        Device result = null;
-//        try {
-//            result = TelnetScheduler.getInstance().checkDevice(device);
-//            return result;
-//        }catch (Exception e) {
-//            logger.error("Error while processing checkDevice: ", e);
-//            throw new RuntimeException(e);
-//        }
         return TelnetScheduler.getInstance().getDeviceState(device);
     }
 
@@ -108,22 +101,25 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public void deleteDevice(Device device) {
-        DatabaseProxy proxy = new DatabaseProxy();
-        proxy.delete(device);
+        DatabaseConnector.getInstance().deleteDevice(device);
+        TelnetScheduler.getInstance().clear();
     }
 
     public BusyInfo loadBusyInfo(Device device) {
-        Session session = Hibernate.getSessionFactory().openSession();
-        Query query = session.createQuery("SELECT FIRS(b) FROM BusyInfo b " +
-                " WHERE b.deviceId = :device " +
-                "order by b.date desc ");
-        query.setParameter("device", device.getId());
-        return (BusyInfo) query.uniqueResult();
-
-
+        return DatabaseConnector.getInstance().getBusyInfo(device);
     }
 
     public void testFTP() {
         System.out.println("CPT=" + FTPService.getInstance().getBills());
+    }
+
+    public Device saveDevice(Device device) {
+        logger.info("calling saveDevice()");
+        TelnetScheduler.getInstance().clear();
+        return DatabaseConnector.getInstance().saveDevice(device);
+    }
+
+    public Device loadDevice(Long deviceId, DeviceType deviceType) {
+        return DatabaseConnector.getInstance().loadDevice(deviceId, deviceType);
     }
 }

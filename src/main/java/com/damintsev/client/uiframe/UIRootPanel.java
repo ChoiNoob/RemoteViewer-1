@@ -34,21 +34,11 @@ public class UIRootPanel {
         viewport.add(body);
 
         FlowLayoutContainer footer = new FlowLayoutContainer();
-//        Label text = new Label("Avanti-Telecommunications 2013");
-//        text.getElement().getStyle().setFontSize(15, Style.Unit.PX);
-//        text.getElement().getStyle().setColor("gray");
-//        text.setHorizontalAlignment(HasHorizontalAlignment.HorizontalAlignmentConstant.endOf(HasDirection.Direction.DEFAULT));
-//        footer.add(text);
         footer.setHeight(20);
         footer.setStyleName("footer");
         body.setSouthWidget(footer, new BorderLayoutContainer.BorderLayoutData(20));
 
-//        Image logo = new Image(Utils.getImage("logo"));
-//        logo.setPixelSize(64, 64);
-//        logo.setStyleName("gwt_logo");
-
         body.setCenterWidget(UICenterField.get().getContent());
-//        ((AbsolutePanel)body.getCenterWidget()).add(logo);
         final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
 

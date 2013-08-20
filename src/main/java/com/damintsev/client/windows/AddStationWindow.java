@@ -1,7 +1,9 @@
 package com.damintsev.client.windows;
 
+import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
 import com.damintsev.client.uiframe.TelnetWindow;
@@ -41,6 +43,7 @@ public class AddStationWindow implements Editor<Station> {
     private StationEdit editor = GWT.create(StationEdit.class);
     private Station station;
     private TextButton delete;
+    private Runnable listener;
     TextField name;
     TextField host;
     TextField port;
@@ -89,6 +92,7 @@ public class AddStationWindow implements Editor<Station> {
                 if (editor.hasErrors()) return;
                 station.setStatus(Status.INIT);
 //                TelnetWindow.getInstance().show(station);
+
                   UIFTPSettings.getInstance().show(station);
             }
         }));
@@ -119,8 +123,21 @@ public class AddStationWindow implements Editor<Station> {
                 station = editor.flush();
                 if (editor.hasErrors()) return;
                 station.setStatus(Status.INIT);
-                UICenterField.get().addItem(new UIItem(station));
-                window.hide();
+                final boolean newInstance = station.getId()==null;
+                window.mask();
+                Service.instance.saveDevice(station, new AsyncCallback<Device>() {
+                    public void onFailure(Throwable caught) {
+                        Dialogs.alert("Error saving statin to db " + caught.getMessage());
+                    }
+
+                    public void onSuccess(Device result) {
+                        window.unmask();
+                        window.hide();
+                        if(newInstance)UICenterField.get().addItem(new UIItem(station));
+                        if(listener != null)
+                            listener.run();
+                    }
+                });
             }
         }));
 
@@ -133,13 +150,27 @@ public class AddStationWindow implements Editor<Station> {
         window.setWidget(con);
     }
 
-    public void show(Station station) {
-        if (station == null) {
+    public void show(Long stationId, Runnable listener) {
+        this.listener = listener;
+        if (stationId == null) {
             station = new Station();
             delete.hide();
-        } else delete.show();
-        this.station = station;
-        editor.edit(station);
+            editor.edit(station);
+        } else {
+            window.mask();
+            Service.instance.loadDevice(stationId, DeviceType.STATION, new AsyncCallback<Device>() {
+                public void onFailure(Throwable caught) {
+                    Dialogs.alert("Error while loading Station =" + caught.getMessage());
+                }
+
+                public void onSuccess(Device result) {
+                    window.unmask();
+                    AddStationWindow.this.station = (Station) result;
+                    editor.edit(station);
+                }
+            });
+            delete.show();
+        }
         window.show();
     }
 

@@ -65,7 +65,7 @@ public class UISettingsPanel {
 
         TextButton station = new TextButton("Добавить станцию", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                AddStationWindow.get().show(null);
+                AddStationWindow.get().show(null, null);
             }
         });
         station.setIconAlign(ButtonCell.IconAlign.BOTTOM);
@@ -83,16 +83,20 @@ public class UISettingsPanel {
 
         TextButton edit = new TextButton("редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                UIItem selected = (UIItem) UICenterField.get().getSelected();
+                final UIItem selected = (UIItem) UICenterField.get().getSelected();
                 if (selected == null) Dialogs.alert("Выберите устройство");
                 else {
                     switch (selected.getDeviceType()) {
                         case STATION:
-                            AddStationWindow.get().show((Station) selected.getData());
+                            AddStationWindow.get().show(selected.getId(), new Runnable() {
+                                public void run() {
+                                    selected.redraw();
+                                }
+                            });
                             break;
                         case IP:
                         case ISDN:
-                            AddDeviceWindow.get().show((CommonDevice) selected.getData());
+                            AddDeviceWindow.get().show(selected.getId());
                             break;
                     }
                 }
@@ -111,6 +115,7 @@ public class UISettingsPanel {
             public void onSelect(SelectEvent event) {
                 UICenterField.get().saveItemPositions();
                 collapse();
+                reload();
             }
         });
         panel.addButton(save);
@@ -122,12 +127,6 @@ public class UISettingsPanel {
         });
 
         panel.addButton(cancel);
-
-        panel.addButton(new TextButton("asd", new SelectEvent.SelectHandler() {
-            public void onSelect(SelectEvent event) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-        }));
 
         panel.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
 
@@ -145,4 +144,8 @@ public class UISettingsPanel {
     public boolean isExpanded() {
         return panel.isExpanded();
     }
+
+    public static native void reload()/*-{
+        $wnd.location = $wnd.location.pathname;
+    }-*/;
 }

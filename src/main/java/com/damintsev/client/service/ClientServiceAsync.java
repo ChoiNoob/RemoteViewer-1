@@ -1,6 +1,7 @@
 package com.damintsev.client.service;
 
 import com.damintsev.client.devices.*;
+import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.utils.ListLoadResultImpl;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -38,4 +39,8 @@ public interface ClientServiceAsync {
     void deleteDevice(Device device, AsyncCallback<Void> async);
 
     void testFTP(AsyncCallback<Void> async);
+
+    void saveDevice(Device device, AsyncCallback<Device> async);
+
+    void loadDevice(Long debiceId, DeviceType deviceType, AsyncCallback<Device> async);
 }

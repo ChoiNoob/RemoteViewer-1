@@ -6,11 +6,13 @@ import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.service.Service;
 import com.damintsev.client.uiframe.UICenterField;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -101,9 +103,17 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                Dialogs.confirm("Будте удалено утройство", new Runnable() {
+                Dialogs.confirm("Будее удалено утройство", new Runnable() {
                     public void run() {
-                        UICenterField.get().delete(device);
+                        Service.instance.deleteDevice(device, new AsyncCallback<Void>() {
+                            public void onFailure(Throwable caught) {
+                                //To change body of implemented methods use File | Settings | File Templates.
+                            }
+
+                            public void onSuccess(Void result) {
+                                UICenterField.get().delete(device);
+                            }
+                        });
                         window.hide();
                     }
                 });
@@ -117,8 +127,19 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                 device = driver.flush();
                 device.setStatus(Status.INIT);
                 if (driver.hasErrors()) return;
-                System.out.println("stat=" + device.getStation().getHost());
-                System.out.println("type=" + device.getStation().getDeviceType());
+                final boolean newEntity = device.getId() == null;
+                window.mask();
+                Service.instance.saveDevice(device, new AsyncCallback<Device>() {
+                    public void onFailure(Throwable caught) {
+                       Dialogs.alert("Cannot save device =" +caught.getMessage());
+                    }
+
+                    public void onSuccess(Device result) {
+                        window.unmask();
+                        window.hide();
+                        if(newEntity) UICenterField.get().addItem(new UIItem(result));
+                    }
+                });
                 UICenterField.get().addItem(new UIItem(device));
                 window.hide();
             }
@@ -133,16 +154,32 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         driver.initialize(this);
     }
 
-    public void show(CommonDevice device) {
-        if(device == null) {device = new CommonDevice();delete.hide();}
-        else delete.show();
-        this.device = device;
-        driver.edit(device);
+    public void show(Long id) {
+        window.show();
+        if (id == null) {
+            device = new CommonDevice();
+            delete.hide();
+            driver.edit((CommonDevice) device);
+        } else {
+            delete.show();
+            window.mask();
+            Service.instance.loadDevice(id, DeviceType.ISDN, new AsyncCallback<Device>() {
+                public void onFailure(Throwable caught) {
+                    Dialogs.alert("Error loading device =" + caught.getMessage());
+                }
+
+                public void onSuccess(Device result) {
+                    device = result;
+                    window.unmask();
+                    driver.edit((CommonDevice) device);
+                }
+            });
+        }
+
         station.getStore().clear();
         for(Station st : UICenterField.get().getStations()) {
             station.add(st);
         }
-        window.show();
     }
 
     interface Driver extends SimpleBeanEditorDriver<CommonDevice, AddDeviceWindow> {

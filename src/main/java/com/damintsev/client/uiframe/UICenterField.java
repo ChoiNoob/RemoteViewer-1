@@ -32,7 +32,6 @@ import java.util.*;
  */
 public class UICenterField {
 
-    private static Long id;
     private static UICenterField instance;
 
     public static UICenterField get() {
@@ -107,18 +106,18 @@ public class UICenterField {
     }
 
     public void addItem(UIItem item, boolean fromDB) {
-        boolean newI;
-        if (item.getId() == null) {
-            item.setId(getNextId());
-            newI = true;
-        } else newI = false;
-      item = insertUpdateItem(item);
+//        boolean newI;
+//        if (item.getId() == null) {
+//            item.setId(getNextId());
+//            newI = true;
+//        } else newI = false;
+       insertUpdateItem(item);
 
         dragController.makeDraggable(item);
         System.out.println("Asdas=" + panel.getWidgetIndex(item));
         if(panel.getWidgetIndex(item) == -1 || fromDB)
             panel.add(item, 0, 0);
-        if (newI) {
+        if (item.getPosition() == null) {
             int centerX = Window.getClientWidth() / 2 - item.getWidth() / 2;
             int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
             panel.setWidgetPosition(item, centerX, centerY);
@@ -132,15 +131,16 @@ public class UICenterField {
     private UIItem insertUpdateItem(UIItem item) {
         if (item.getDeviceType() == DeviceType.STATION) {
             System.out.println("CPT=" + uiStations.containsKey(item.getId()));
-            if (uiStations.containsKey(item.getId())) {
-                item = uiStations.get(item.getId());
-                item.setData(item.getData());
-            } else uiStations.put(item.getId(), item);
+//            if (uiStations.containsKey(item.getId())) {
+//                item = uiStations.get(item.getId());
+//                item.setData(item.getData());
+//            } else
+                uiStations.put(item.getId(), item);
         } else {
-            if (uiDevices.containsKey(item.getId())) {
-                item = uiDevices.get(item.getId());
-                item.setData(item.getData());
-            } else
+//            if (uiDevices.containsKey(item.getId())) {
+//                item = uiDevices.get(item.getId());
+//                item.setData(item.getData());
+//            } else
                 uiDevices.put(item.getId(), item);
         }
         return item;
@@ -251,19 +251,11 @@ public class UICenterField {
                 System.out.println("loaded " + items.size());
                 uiDevices.clear();
                 uiStations.clear();
-                Long id = -1L;
                 for (Item item : items) {
-                    System.out.println("loading from db id=" + item.getId());
+                    System.out.println("loading from db id=" + item.getId() + " x=" + item.getCoordX() + " y=" + item.getCoordY());
                     Position pos = new Position(item.getCoordX(), item.getCoordY());
                     addItem(new UIItem(item.getData(), pos), true);
-                    if (id < item.getId()) {
-                        id = item.getId();
-                    }
                 }
-                if (id == -1L) {
-                    UICenterField.id = 0L;
-                } else
-                    UICenterField.id = id;
                 if (items.size() != 0) {
                     start();
                     schedule();
@@ -305,11 +297,6 @@ public class UICenterField {
     private void clearCanvas() {
         Context2d context = canvas.getContext2d();
         context.clearRect(0, 0, Window.getClientWidth(), Window.getClientHeight());
-    }
-
-    private Long getNextId() {
-        if (id == null) id = 0L;
-        return ++id;
     }
 
     public List<Station> getStations() {
