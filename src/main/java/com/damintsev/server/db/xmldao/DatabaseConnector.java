@@ -303,7 +303,7 @@ public class DatabaseConnector {
                 device = findStation(connection, deviceId);
                 return device;
             } else
-                statement = connection.prepareStatement("SELECT * FROM  DEVICE WHERE id = ?");
+                statement = connection.prepareStatement("SELECT * FROM  device WHERE id = ?");
             statement.setLong(1, deviceId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -373,7 +373,7 @@ public class DatabaseConnector {
         ResultSet resultSet = null;
         try {
             connection = Mysql.getConnection();
-                statement = connection.prepareStatement("SELECT * FROM  busyinfo WHERE id = ? order by date desc ");
+                statement = connection.prepareStatement("SELECT * FROM  busyinfo WHERE device_id = ? order by date desc ");
             statement.setMaxRows(1);
             statement.setLong(1, device.getId());
             resultSet = statement.executeQuery();
@@ -382,7 +382,7 @@ public class DatabaseConnector {
                 info.setId(resultSet.getLong("id"));
                 info.setBusy(resultSet.getLong("busy"));
                 info.setMax(resultSet.getLong("max"));
-                info.setDate(resultSet.getDate("date"));
+                info.setDate(resultSet.getTimestamp("date"));
                 info.setDeviceId(device.getId());
                 return info;
             }
@@ -426,7 +426,6 @@ public class DatabaseConnector {
                 statement = connection.prepareStatement("SELECT id FROM device WHERE station_id = ? ");
                 resultSet = statement.executeQuery();
                 List<Long> devices = new ArrayList<Long>();
-
                 while (resultSet.next()) {
                     devices.add(resultSet.getLong("id"));
                 }
@@ -436,6 +435,10 @@ public class DatabaseConnector {
 
                 statement = connection.prepareStatement("DELETE FROM device_pos WHERE id in (?)");
                 statement.setArray(1, connection.createArrayOf("Long", devices.toArray()));
+                statement.executeUpdate();
+
+                statement = connection.prepareStatement("DELETE FROM ftpsettings WHERE station_id = ?");
+                statement.setLong(1, device.getId());
                 statement.executeUpdate();
 
             } else {
@@ -467,7 +470,7 @@ public class DatabaseConnector {
     public FTPSettings saveFTPSettings(FTPSettings settings) {
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try{
             connection = Mysql.getConnection();
 
@@ -649,7 +652,7 @@ public class DatabaseConnector {
             calendar.set(Calendar.HOUR, 0);
             calendar.set(Calendar.MINUTE, 0);
 
-            statement.setDate(1, new java.sql.Date(calendar.getTimeInMillis()));
+            statement.setTimestamp(1, new Timestamp(calendar.getTimeInMillis()));
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 BillingInfo info = new BillingInfo();
@@ -718,5 +721,52 @@ public class DatabaseConnector {
             }
             return null;
         }
+    }
+
+    public List<BusyInfo> getBusyInfoStatistics(Device device) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<BusyInfo> busyInfoList = new ArrayList<BusyInfo>();
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM  busyinfo " +
+                    "WHERE id = ? " +
+                    " AND date > ? " +
+                    "order by date desc ");
+            statement.setLong(1, device.getId());
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.HOUR, -2);
+            statement.setTimestamp(2, new Timestamp(calendar.getTimeInMillis()));
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                BusyInfo info = new BusyInfo();
+                info.setId(resultSet.getLong("id"));
+                info.setBusy(resultSet.getLong("busy"));
+                info.setMax(resultSet.getLong("max"));
+                info.setDate(resultSet.getDate("date"));
+                info.setDeviceId(device.getId());
+                busyInfoList.add(info);
+            }
+            return busyInfoList;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

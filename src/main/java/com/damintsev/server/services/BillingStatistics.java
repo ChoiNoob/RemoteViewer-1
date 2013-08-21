@@ -38,6 +38,7 @@ public class BillingStatistics {
             BillingInfo info = new BillingInfo();
             info.setNumberShort(i>3?"12345":"666");
 
+            info.setQuantity((long)i*i);
             billingInfoList.add(info);
         }
         addBilling(billingInfoList);
@@ -81,5 +82,15 @@ public class BillingStatistics {
     private void clearCahche() {
         top.clear();
         loadFromDB();
+
+        List<BillingInfo> billingInfoList = new ArrayList<BillingInfo>();
+        for(int i = 0 ; i < 10; i++) {
+            BillingInfo info = new BillingInfo();
+            info.setNumberShort(i>3?"12345":"666");
+
+            info.setQuantity((long)i*i);
+            billingInfoList.add(info);
+        }
+        addBilling(billingInfoList);
     }
 }

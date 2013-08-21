@@ -30,7 +30,7 @@
     <entry-point class='com.damintsev.client.MainGWT'/>
 <!--osdijfsl;dfjlsfj;liasjf;liasfasf-->
     <!--<extend-property name="user.agent" values="gecko1_8" />-->
-    <collapse-all-properties />
+    <!--<collapse-all-properties />-->
                                     <!--asdasdasdasdasdasd-->
     <source path='client'/>
     <source path='utils'/>

@@ -45,4 +45,6 @@ public interface ClientServiceAsync {
     void loadDevice(Long debiceId, DeviceType deviceType, AsyncCallback<Device> async);
 
     void getStatistisc(AsyncCallback<List<BillingStats>> async);
+
+    void loadBusyInfoStatistics(Device device, AsyncCallback<List<BusyInfo>> async);
 }

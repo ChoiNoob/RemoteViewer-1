@@ -42,6 +42,8 @@ public interface ClientService extends RemoteService {
 
     public BusyInfo loadBusyInfo(Device device);
 
+    public List<BusyInfo> loadBusyInfoStatistics(Device device);
+
     public void testFTP();
 
     public Device saveDevice(Device device);

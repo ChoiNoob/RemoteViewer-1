@@ -125,4 +125,8 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     public List<BillingStats> getStatistisc() {
         return BillingStatistics.getInstance().getStatistics();
     }
+
+    public List<BusyInfo> loadBusyInfoStatistics(Device device) {
+        return DatabaseConnector.getInstance().getBusyInfoStatistics(device);
+    }
 }

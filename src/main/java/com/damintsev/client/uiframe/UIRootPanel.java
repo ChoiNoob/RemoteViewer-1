@@ -1,5 +1,6 @@
 package com.damintsev.client.uiframe;
 
+import com.damintsev.client.windows.BusyChannelPanel;
 import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.i18n.client.HasDirection;
@@ -46,7 +47,6 @@ public class UIRootPanel {
         ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
 
 //        ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
-
         return viewport;
     }
 }

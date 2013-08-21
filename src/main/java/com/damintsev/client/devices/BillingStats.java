@@ -1,5 +1,6 @@
 package com.damintsev.client.devices;
 
+
 import java.io.Serializable;
 
 /**
@@ -12,6 +13,10 @@ public class BillingStats implements Serializable {
     private String name;
     private Long quantity;
 
+    public BillingStats(){
+
+    }
+
     public Long getQuantity() {
         return quantity;
     }
@@ -19,7 +24,7 @@ public class BillingStats implements Serializable {
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
-    
+
     public Long increaseQuantity() {
         return ++quantity;
     }
@@ -39,4 +44,5 @@ public class BillingStats implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
 }

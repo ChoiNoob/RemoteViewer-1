@@ -9,22 +9,23 @@ import java.util.Date;
  * Date: 18.08.13
  * Time: 22:18
  */
-@Entity
-@org.hibernate.annotations.Entity
 public class BusyInfo implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
-    @Column
     private Long deviceId;
-    @Column
     private Date date;
-    @Column
     private Long busy;
-    @Column
     private Long max;
+
+    public BusyInfo() {
+
+    }
+
+    public BusyInfo(Date date, Long busy, Long max) {
+        this.date = date;
+        this.busy = busy;
+        this.max = max;
+    }
 
     public Long getBusy() {
         return busy;

@@ -6,9 +6,10 @@ import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.Service;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.ListLoadResultImpl;
-import com.damintsev.utils.ValueProvider;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.editor.client.Editor;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.chart.client.chart.Chart;
@@ -22,9 +23,11 @@ import com.sencha.gxt.chart.client.draw.RGB;
 import com.sencha.gxt.chart.client.draw.path.PathSprite;
 import com.sencha.gxt.chart.client.draw.sprite.Sprite;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite;
+import com.sencha.gxt.core.client.ValueProvider;
 import com.sencha.gxt.data.client.loader.RpcProxy;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
+import com.sencha.gxt.data.shared.PropertyAccess;
 import com.sencha.gxt.data.shared.loader.ListLoadConfig;
 import com.sencha.gxt.data.shared.loader.ListLoader;
 import com.sencha.gxt.data.shared.loader.LoadResultListStoreBinding;
@@ -52,6 +55,19 @@ public class UIBillingPanel {
         return instance;
     }
 
+    public interface BillingStatsProperties extends PropertyAccess<BillingStats> {
+//        @Editor.Path("number")
+//        ModelKeyProvider<BillingStats> numberKey();
+
+        ValueProvider<BillingStats, String> name();
+
+        ValueProvider<BillingStats, String> number();
+
+        ValueProvider<BillingStats, Long> quantity();
+    }
+
+    private static final BillingStatsProperties properties = GWT.create(BillingStatsProperties.class);
+
     private Chart<BillingStats> chart;
     private ContentPanel panel;
     private boolean runAnother = false;
@@ -75,7 +91,7 @@ public class UIBillingPanel {
                 stop();
             }
         });
-        new Draggable(panel); //todo really need ?!
+        new Draggable(panel, panel.getHeader());//.setUseProxy(true); //todo really need ?!
 
         ListStore<BillingStats> store = new ListStore<BillingStats>(new ModelKeyProvider<BillingStats>() {
             public String getKey(BillingStats item) {
@@ -89,37 +105,13 @@ public class UIBillingPanel {
         NumericAxis<BillingStats> axis = new NumericAxis<BillingStats>();
         axis.setPosition(Chart.Position.LEFT);
 //
-        PathSprite odd = new PathSprite();
-        odd.setOpacity(1);
-        odd.setFill(new Color("#ddd"));
-        odd.setStroke(new Color("#bbb"));
-        odd.setStrokeWidth(0.5);
-        axis.setGridOddConfig(odd);
-
-//        final LineSeries<BillingInfo> series3 = new LineSeries<BillingInfo>();
-//        series3.setYAxisPosition(Chart.Position.LEFT);
-//        series3.setYField(new ValueProvider<BillingInfo, Number>() {
-//            @Override
-//            public Number getValue(BillingInfo object) {
-//                return object.getQuantity();
-//            }
-//        });
-//        series3.setStroke(new RGB(32, 68, 186));
-//        series3.setShowMarkers(true);
-//        series3.setSmooth(true);
-//        series3.setFill(new RGB(32, 68, 186));
-//        Sprite marker = Primitives.diamond(0, 0, 6);
-//        marker.setFill(new RGB(32, 68, 186));
-//        series3.setMarkerConfig(marker);
-//        series3.setHighlighting(true);
-//        chart.addSeries(series3);
-//        chart.setShadowChart(true);
-        axis.addField(new ValueProvider<BillingStats, Number>() {
-            @Override
-            public Number getValue(BillingStats object) {
-                return object.getQuantity();
-            }
-        });
+//        PathSprite odd = new PathSprite();
+//        odd.setOpacity(1);
+//        odd.setFill(new Color("#ddd"));
+//        odd.setStroke(new Color("#bbb"));
+//        odd.setStrokeWidth(0.5);
+//        axis.setGridOddConfig(odd);
+        axis.addField(properties.quantity());
         TextSprite sprite = new TextSprite("Количество звонков");
         axis.setTitleConfig(sprite);
         axis.setMinimum(0);
@@ -129,26 +121,34 @@ public class UIBillingPanel {
         CategoryAxis<BillingStats, String> categoryAxis = new CategoryAxis<BillingStats, String>();
         categoryAxis.setPosition(Chart.Position.BOTTOM);
         categoryAxis.setField(new ValueProvider<BillingStats, String>() {
-            @Override
             public String getValue(BillingStats object) {
-                return object.getName() == null ? object.getNumber() : object.getName();
+                return object.getName()==null?object.getNumber():object.getName();
+            }
+
+            public void setValue(BillingStats object, String value) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            public String getPath() {
+                return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
         });
 
         final BarSeries<BillingStats> column = new BarSeries<BillingStats>();
         column.setYAxisPosition(Chart.Position.LEFT);
-        column.addYField(new ValueProvider<BillingStats, Number>() {
-            @Override
-            public Number getValue(BillingStats object) {
-                return object.getQuantity();
-            }
-        });
-        column.addColor(new RGB(148,174,10));
+//        column.addYField(new ValueProvider<BillingStats, Number>() {
+//            @Override
+//            public Number getValue(BillingStats object) {
+//                return object.getQuantity();
+//            }
+//        });
+        column.addYField(properties.quantity());
+        column.addColor(new RGB(148, 174, 10));
         column.setColumn(true);
+//        column.setGutter(10);
         chart.addSeries(column);
 
         chart.addAxis(categoryAxis);
-
         panel.add(chart);
 
 
@@ -159,6 +159,7 @@ public class UIBillingPanel {
             info.setQuantity((long)2 * i - i);
             chart.getStore().add(info);
         }
+
         panel.collapse();
     }
 
@@ -170,6 +171,7 @@ public class UIBillingPanel {
         Service.instance.getStatistisc(new AsyncCallback<List<BillingStats>>() {
             public void onFailure(Throwable caught) {
                 Dialogs.alert("Error while getting statistics =" + caught.getMessage());
+                runAnother=false;
             }
 
             public void onSuccess(List<BillingStats> result) {
@@ -177,6 +179,14 @@ public class UIBillingPanel {
                 if (result != null) {
                     chart.getStore().clear();
                     chart.getStore().addAll(result);
+                    if(result.size() < 10) {
+                        for(int i = 0; i < 10 - result.size();i++) {
+                            BillingStats stats = new BillingStats();
+                            stats.setNumber("");
+                            stats.setQuantity(0L);
+                            chart.getStore().add(stats);
+                        }
+                    }
                     chart.redrawChart();
                 }
             }
@@ -193,7 +203,7 @@ public class UIBillingPanel {
     }
 
     public void start() {
-        System.out.println("start");
+        System.out.println("start Billing statistics");
         runAnother = true;
         schedule();
     }
