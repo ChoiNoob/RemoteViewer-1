@@ -100,14 +100,14 @@ public class AddStationWindow implements Editor<Station> {
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалена станция и все связанные с ней обькты", new Runnable() {
                     public void run() {
-                        UICenterField.get().delete(station);
+//
                         Service.instance.deleteDevice(station, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
                                 //To change body of implemented methods use File | Settings | File Templates.
                             }
 
                             public void onSuccess(Void result) {
-                                //To change body of implemented methods use File | Settings | File Templates.
+                                UICenterField.get().delete(station);
                             }
                         });
                         window.hide();
@@ -127,7 +127,7 @@ public class AddStationWindow implements Editor<Station> {
                 window.mask();
                 Service.instance.saveDevice(station, new AsyncCallback<Device>() {
                     public void onFailure(Throwable caught) {
-                        Dialogs.alert("Error saving statin to db " + caught.getMessage());
+                        Dialogs.alert("Error saving station to db " + caught.getMessage());
                     }
 
                     public void onSuccess(Device result) {

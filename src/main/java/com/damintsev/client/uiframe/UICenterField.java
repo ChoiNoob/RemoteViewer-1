@@ -106,11 +106,6 @@ public class UICenterField {
     }
 
     public void addItem(UIItem item, boolean fromDB) {
-//        boolean newI;
-//        if (item.getId() == null) {
-//            item.setId(getNextId());
-//            newI = true;
-//        } else newI = false;
        insertUpdateItem(item);
 
         dragController.makeDraggable(item);
@@ -202,26 +197,26 @@ public class UICenterField {
         return it.hasNext() ? it.next() : null;
     }
 
-    public void delete(Device device) {
-        delete(device, true);
-    }
-
-    public void delete(Device device, boolean deleteChilds) {
-        if(device instanceof Station) {
-            dragController.makeNotDraggable(uiStations.get(device.getId()));
-            panel.remove(uiStations.get(device.getId()));
-            uiStations.remove(device.getId());
-            if(deleteChilds)
-                for (UIItem dev : findDevicesForStation(device.getId())) {
-                    delete(dev.getData());
-                }
-        } else {
-            dragController.makeNotDraggable(uiDevices.get(device.getId()));
-            panel.remove(uiDevices.get(device.getId()));
-            uiDevices.remove(device.getId());
-        }
-        drawConnections(false);
-    }
+//    public void delete(Device device) {
+//        delete(device, true);
+//    }
+//
+//    public void delete(Device device, boolean deleteChilds) {
+//        if(device instanceof Station) {
+//            dragController.makeNotDraggable(uiStations.get(device.getId()));
+//            panel.remove(uiStations.get(device.getId()));
+//            uiStations.remove(device.getId());
+//            if(deleteChilds)
+//                for (UIItem dev : findDevicesForStation(device.getId())) {
+//                    delete(dev.getData());
+//                }
+//        } else {
+//            dragController.makeNotDraggable(uiDevices.get(device.getId()));
+//            panel.remove(uiDevices.get(device.getId()));
+//            uiDevices.remove(device.getId());
+//        }
+//        drawConnections(false);
+//    }
 
     List<UIItem> findDevicesForStation(UIItem station){
         return findDevicesForStation(station.getId());
@@ -313,7 +308,7 @@ public class UICenterField {
                 scheduler();
                 return start;
             }
-        }, 3000);
+        }, 5000);
     }
 
     private void scheduler() {
@@ -324,9 +319,7 @@ public class UICenterField {
             Service.instance.checkDevice(device, new AsyncCallback<Device>() {
                 public void onFailure(Throwable caught) {
                     stop();
-                    Dialogs.alert("Check device false! " + caught.getMessage());   //todo!!!!
-//                    device.setStatus(Status.ERROR);
-//                        onSuccess(device);
+                    Dialogs.alert("Check device false! " + caught.getMessage());
                 }
 
                 public void onSuccess(Device result) {
@@ -344,11 +337,11 @@ public class UICenterField {
     private void updateUIItem(Device device) {
         if(device instanceof Station) {
             System.out.println("update ST");
-           UIItem station = uiStations.get(device.getId());
+            UIItem station = uiStations.get(device.getId());
             station.setData(device);
             uiStations.put(device.getId(), station);
         } else {
-            System.out.println("uodate DEV=" + device.getStatus());
+            System.out.println("update DEV=" + device.getStatus());
             UIItem dev = uiDevices.get(device.getId());
             dev.setData(device);
             uiDevices.put(device.getId(), dev);
@@ -378,5 +371,21 @@ public class UICenterField {
     public void stop() {
         System.out.println("stop");
         this.start = false;
+    }
+
+    public void delete(Device device) {
+        if(device instanceof Station) {
+            UIItem station = uiStations.get(device.getId());
+            dragController.makeNotDraggable(station);
+            panel.remove(station);
+            for (UIItem dev : findDevicesForStation(device.getId())) {
+                delete(dev.getData());
+            }
+        }else {
+            UIItem dev = uiDevices.get(device.getId());
+            dragController.makeNotDraggable(dev);
+            panel.remove(dev);
+        }
+        drawConnections(false);
     }
 }

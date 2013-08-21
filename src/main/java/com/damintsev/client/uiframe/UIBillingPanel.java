@@ -1,8 +1,10 @@
 package com.damintsev.client.uiframe;
 
 import com.damintsev.client.devices.BillingInfo;
+import com.damintsev.client.devices.BillingStats;
 import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.Service;
+import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.ListLoadResultImpl;
 import com.damintsev.utils.ValueProvider;
 import com.google.gwt.core.client.Scheduler;
@@ -50,7 +52,7 @@ public class UIBillingPanel {
         return instance;
     }
 
-    private Chart<BillingInfo> chart;
+    private Chart<BillingStats> chart;
     private ContentPanel panel;
     private boolean runAnother = false;
 
@@ -75,16 +77,16 @@ public class UIBillingPanel {
         });
         new Draggable(panel); //todo really need ?!
 
-        ListStore<BillingInfo> store = new ListStore<BillingInfo>(new ModelKeyProvider<BillingInfo>() {
-            public String getKey(BillingInfo item) {
-                return item.getId().toString();
+        ListStore<BillingStats> store = new ListStore<BillingStats>(new ModelKeyProvider<BillingStats>() {
+            public String getKey(BillingStats item) {
+                return item.getNumber();
             }
         });
 
-        chart = new Chart<BillingInfo>();
+        chart = new Chart<BillingStats>();
         chart.setStore(store);
 
-        NumericAxis<BillingInfo> axis = new NumericAxis<BillingInfo>();
+        NumericAxis<BillingStats> axis = new NumericAxis<BillingStats>();
         axis.setPosition(Chart.Position.LEFT);
 //
         PathSprite odd = new PathSprite();
@@ -112,36 +114,32 @@ public class UIBillingPanel {
 //        series3.setHighlighting(true);
 //        chart.addSeries(series3);
 //        chart.setShadowChart(true);
-        axis.addField(new ValueProvider<BillingInfo, Number>() {
+        axis.addField(new ValueProvider<BillingStats, Number>() {
             @Override
-            public Number getValue(BillingInfo object) {
+            public Number getValue(BillingStats object) {
                 return object.getQuantity();
             }
         });
         TextSprite sprite = new TextSprite("Количество звонков");
         axis.setTitleConfig(sprite);
-//        axis.setWidth(50);
-//        axis.setMaximum(100);
         axis.setMinimum(0);
         axis.setDisplayGrid(true);
         chart.addAxis(axis);
 
-        CategoryAxis<BillingInfo, String> categoryAxis = new CategoryAxis<BillingInfo, String>();
+        CategoryAxis<BillingStats, String> categoryAxis = new CategoryAxis<BillingStats, String>();
         categoryAxis.setPosition(Chart.Position.BOTTOM);
-        categoryAxis.setField(new ValueProvider<BillingInfo, String>() {
+        categoryAxis.setField(new ValueProvider<BillingStats, String>() {
             @Override
-            public String getValue(BillingInfo object) {
-                if (object.getNumberFrom() == null) {
-                    return object.getNumber();
-                } else return object.getNumberFrom();
+            public String getValue(BillingStats object) {
+                return object.getName() == null ? object.getNumber() : object.getName();
             }
         });
 
-        final BarSeries<BillingInfo> column = new BarSeries<BillingInfo>();
+        final BarSeries<BillingStats> column = new BarSeries<BillingStats>();
         column.setYAxisPosition(Chart.Position.LEFT);
-        column.addYField(new ValueProvider<BillingInfo, Number>() {
+        column.addYField(new ValueProvider<BillingStats, Number>() {
             @Override
-            public Number getValue(BillingInfo object) {
+            public Number getValue(BillingStats object) {
                 return object.getQuantity();
             }
         });
@@ -155,52 +153,12 @@ public class UIBillingPanel {
 
 
         for(int i = 0; i < 10; i++) {
-            BillingInfo info = new BillingInfo();
-            info.setId((long)i);
+            BillingStats info = new BillingStats();
+//            info.setId((long)i);
             info.setNumber("81296770");
             info.setQuantity((long)2 * i - i);
             chart.getStore().add(info);
         }
-
-//        List<ColumnConfig<BillingInfo, ?>> columns = new ArrayList<ColumnConfig<BillingInfo, ?>>();
-//        columns.add(new ColumnConfig<BillingInfo, String>(new ValueProvider<BillingInfo, String>() {
-//            @Override
-//            public String getValue(BillingInfo object) {
-//                return object.getStreamName();
-//            }
-//        },100, "Поток"));
-//        columns.add(new ColumnConfig<BillingInfo, String>(new ValueProvider<BillingInfo, String>() {
-//            @Override
-//            public String getValue(BillingInfo object) {
-//                return object.getValue();
-//            }
-//        },75, "Значение"));
-//        columns.add(new ColumnConfig<BillingInfo, String>(new ValueProvider<BillingInfo, String>() {
-//            @Override
-//            public String getValue(BillingInfo object) {
-//                return object.getValue2();
-//            }
-//        },75, "Значение 2"));
-//
-//        grid = new Grid<BillingInfo>(new ListStore<BillingInfo>(new ModelKeyProvider<BillingInfo>() {
-//            public String getKey(BillingInfo item) {
-//                return item.getId().toString();
-//            }
-//        }), new ColumnModel<BillingInfo>(columns));
-//
-//
-//        RpcProxy<ListLoadConfig, ListLoadResultImpl<BillingInfo>> proxy = new RpcProxy<ListLoadConfig, ListLoadResultImpl<BillingInfo>>() {
-//            @Override
-//            public void load(ListLoadConfig loadConfig, AsyncCallback<ListLoadResultImpl<BillingInfo>> callback) {
-//                System.out.println("loadaaaaa");
-//                Service.instance.getBillingInfo(callback);
-//            }
-//        };
-//        ListLoader<ListLoadConfig, ListLoadResultImpl<BillingInfo>> loader = new ListLoader<ListLoadConfig, ListLoadResultImpl<BillingInfo>>(proxy);
-//        loader.addLoadHandler(new LoadResultListStoreBinding<ListLoadConfig,BillingInfo,ListLoadResultImpl<BillingInfo>>(grid.getStore()));
-//        grid.setLoader(loader);
-////        start();
-//        panel.add(grid);
         panel.collapse();
     }
 
@@ -209,7 +167,20 @@ public class UIBillingPanel {
     }
 
     private void scheduler() {
-//        grid.getLoader().load();
+        Service.instance.getStatistisc(new AsyncCallback<List<BillingStats>>() {
+            public void onFailure(Throwable caught) {
+                Dialogs.alert("Error while getting statistics =" + caught.getMessage());
+            }
+
+            public void onSuccess(List<BillingStats> result) {
+                System.out.println("res=" + result);
+                if (result != null) {
+                    chart.getStore().clear();
+                    chart.getStore().addAll(result);
+                    chart.redrawChart();
+                }
+            }
+        });
     }
 
     public void schedule() {

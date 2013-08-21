@@ -1,6 +1,7 @@
 package com.damintsev.client.devices;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by adamintsev
@@ -9,9 +10,13 @@ import java.io.Serializable;
 public class BillingInfo implements Serializable {
 
     private Long id;
+    private Date date;
     private String number;
+    private String numberShort;
     private String numberFrom;
     private Long quantity;
+    private String callDuration;
+    private Long trunkNumber;
 
     public Long getId() {
         return id;
@@ -43,5 +48,37 @@ public class BillingInfo implements Serializable {
 
     public void setNumberFrom(String numberFrom) {
         this.numberFrom = numberFrom;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getNumberShort() {
+        return numberShort;
+    }
+
+    public void setNumberShort(String numberShort) {
+        this.numberShort = numberShort;
+    }
+
+    public String getCallDuration() {
+        return callDuration;
+    }
+
+    public void setCallDuration(String callDuration) {
+        this.callDuration = callDuration;
+    }
+
+    public void setTrunkNumber(Long trunkNumber) {
+        this.trunkNumber = trunkNumber;
+    }
+
+    public Long getTrunkNumber() {
+        return trunkNumber;
     }
 }

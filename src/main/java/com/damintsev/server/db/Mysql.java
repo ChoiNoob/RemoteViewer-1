@@ -15,7 +15,7 @@ public class Mysql {
         Connection connect = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection("jdbc:mysql://localhost/viewer?"
+            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/viewer?"
                     + "user=root&password=chiken");
         } catch (Exception e) {
             e.printStackTrace();

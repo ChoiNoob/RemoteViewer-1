@@ -8,7 +8,6 @@ import com.damintsev.server.db.CleanManager;
 import com.damintsev.server.db.DatabaseProxy;
 import com.damintsev.server.db.Hibernate;
 import com.damintsev.server.db.xmldao.DatabaseConnector;
-import com.damintsev.server.ftp.FTPService;
 import com.damintsev.server.telnet.TelnetScheduler;
 import com.damintsev.utils.ListLoadResultImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -53,9 +52,6 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public List<Item> loadItems() {
-//        logger.info("Call loadItems()");
-//        DatabaseProxy proxy = new DatabaseProxy();
-//        return proxy.loadItemPositions();
         return DatabaseConnector.getInstance().loadItems();
     }
 
@@ -86,23 +82,25 @@ public class ServerService extends RemoteServiceServlet implements ClientService
 
     public ListLoadResultImpl<BillingInfo> getBillingInfo() {
         ListLoadResultImpl<BillingInfo> list = new ListLoadResultImpl<BillingInfo>();
-        list.setData(FTPService.getInstance().getBills());
+//        list.setData(FTPService.getInstance().getBills());
         return list;
     }
 
-    public void saveFTPSettings(FTPSettings settings) {
-        DatabaseProxy proxy = new DatabaseProxy();
-        proxy.saveFTP(settings);
+    public FTPSettings saveFTPSettings(FTPSettings settings) {
+//        DatabaseProxy proxy = new DatabaseProxy();
+//        proxy.saveFTP(settings);
+       return DatabaseConnector.getInstance().saveFTPSettings(settings);
     }
 
     public FTPSettings loadFTPSettings(Station station) {
-        DatabaseProxy proxy = new DatabaseProxy();
-        return proxy.loadFTP(station);
+//        DatabaseProxy proxy = new DatabaseProxy();
+//        return proxy.loadFTP(station);
+        return DatabaseConnector.getInstance().loadFTPSettings(station);
     }
 
     public void deleteDevice(Device device) {
         DatabaseConnector.getInstance().deleteDevice(device);
-        TelnetScheduler.getInstance().clear();
+        TelnetScheduler.getInstance().deleteDevice(device);
     }
 
     public BusyInfo loadBusyInfo(Device device) {
@@ -110,16 +108,21 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public void testFTP() {
-        System.out.println("CPT=" + FTPService.getInstance().getBills());
+//        System.out.println("CPT=" + FTPService.getInstance().getBills());
     }
 
     public Device saveDevice(Device device) {
         logger.info("calling saveDevice()");
-        TelnetScheduler.getInstance().clear();
-        return DatabaseConnector.getInstance().saveDevice(device);
+        Device dev = DatabaseConnector.getInstance().saveDevice(device);
+        TelnetScheduler.getInstance().updateDevice(dev);
+        return dev;
     }
 
     public Device loadDevice(Long deviceId, DeviceType deviceType) {
         return DatabaseConnector.getInstance().loadDevice(deviceId, deviceType);
+    }
+
+    public List<BillingStats> getStatistisc() {
+        return BillingStatistics.getInstance().getStatistics();
     }
 }

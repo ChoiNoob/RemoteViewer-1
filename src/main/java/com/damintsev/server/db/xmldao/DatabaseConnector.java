@@ -349,7 +349,7 @@ public class DatabaseConnector {
             statement.setLong(1, id);
             statement.setLong(2, info.getBusy());
             statement.setLong(3, info.getMax());
-            statement.setDate(4, new Date(new java.util.Date().getTime()));
+            statement.setTimestamp(4, new Timestamp(new java.util.Date().getTime()));
             statement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -461,6 +461,262 @@ public class DatabaseConnector {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public FTPSettings saveFTPSettings(FTPSettings settings) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try{
+            connection = Mysql.getConnection();
+
+            if(settings.getId() == null) {
+                statement = connection.prepareStatement("INSERT INTO ftpsettings(dir,host,login,password,port,station_id)" +
+                        "VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, settings.getDir());
+                statement.setString(2, settings.getHost());
+                statement.setString(3, settings.getLogin());
+                statement.setString(4, settings.getPassword());
+                statement.setString(5, settings.getPort());
+                statement.setLong(6, settings.getStation().getId());
+                statement.executeUpdate();
+                resultSet = statement.getGeneratedKeys();
+                if(resultSet.next()) {
+                    settings.setId(resultSet.getLong(1));
+                }
+                return settings;
+            } else {
+                statement = connection.prepareStatement("UPDATE ftpsettings SET dir=?,host=?,login=?,password=?,port=?,station_id=?" +
+                        " WHERE settings_id = ?");
+                statement.setString(1, settings.getDir());
+                statement.setString(2, settings.getHost());
+                statement.setString(3, settings.getLogin());
+                statement.setString(4, settings.getPassword());
+                statement.setString(5, settings.getPort());
+                statement.setLong(6, settings.getStation().getId());
+                statement.setLong(7, settings.getId());
+                statement.executeUpdate();
+                return settings;
+            }
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public FTPSettings loadFTPSettings(Station station) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        FTPSettings settings = null;
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM ftpsettings WHERE station_id = ?");
+            statement.setLong(1, station.getId());
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                settings = new FTPSettings();
+                settings.setId(resultSet.getLong("settings_id"));
+                settings.setDir(resultSet.getString("dir"));
+                settings.setHost(resultSet.getString("host"));
+                settings.setLogin(resultSet.getString("login"));
+                settings.setPassword(resultSet.getString("password"));
+                settings.setPort(resultSet.getString("port"));
+                settings.setStationId(resultSet.getLong("station_id"));
+                settings.setStation(findStation(connection, resultSet.getLong("station_id")));
+            }
+            return settings;
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public List<FTPSettings> listFTPSettings() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<FTPSettings> settingses = new ArrayList<FTPSettings>();
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM ftpsettings");
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+               FTPSettings settings = new FTPSettings();
+                settings.setId(resultSet.getLong("settings_id"));
+                settings.setDir(resultSet.getString("dir"));
+                settings.setHost(resultSet.getString("host"));
+                settings.setLogin(resultSet.getString("login"));
+                settings.setPassword(resultSet.getString("password"));
+                settings.setPort(resultSet.getString("port"));
+                settings.setStationId(resultSet.getLong("station_id"));
+                settings.setStation(findStation(connection, resultSet.getLong("station_id")));
+                settingses.add(settings);
+            }
+            return settingses;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null; 
+    }
+
+    public BillingInfo saveBillingInfo(BillingInfo info) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("INSERT INTO billinginfo (date,source,destination,duration,trunk_id,shortDesination) " +
+                    "VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            statement.executeUpdate();
+            statement.setDate(1, new java.sql.Date(info.getDate().getTime()));
+            statement.setString(2, info.getNumberFrom());
+            statement.setString(3,info.getNumber());
+            statement.setString(4, info.getCallDuration());
+            statement.setLong(5, info.getTrunkNumber());
+            statement.setString(6, info.getNumberShort());
+            resultSet = statement.getGeneratedKeys();
+            if (resultSet.next()) {
+                info.setId(resultSet.getLong(1));
+            }
+            return info;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
+    public List<BillingInfo> loadBillingInfo() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        List<BillingInfo> billingInfoList = new ArrayList<BillingInfo>();
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM billinginfo WHERE date >= ?");
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR, 0);
+            calendar.set(Calendar.MINUTE, 0);
+
+            statement.setDate(1, new java.sql.Date(calendar.getTimeInMillis()));
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                BillingInfo info = new BillingInfo();
+                info.setId(resultSet.getLong("id"));
+                info.setDate(resultSet.getDate("date"));
+                info.setCallDuration(resultSet.getString("callduration"));
+                info.setNumberFrom(resultSet.getString("source"));
+                info.setNumber(resultSet.getString("destination"));
+                info.setNumberShort(resultSet.getString("shortDestination"));
+                info.setTrunkNumber(resultSet.getLong("trunk_id"));
+                billingInfoList.add(info);
+            }
+            return billingInfoList;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+    
+    private HashMap<String, String> dictionary = new HashMap<String, String>();
+    public String getDestinationName(String prefix) {
+        if(dictionary.containsKey(prefix))
+            return dictionary.get(prefix);
+        else {
+            Connection connection = null;
+            PreparedStatement statement = null;
+            ResultSet resultSet;
+            try {
+                connection = Mysql.getConnection();
+                statement = connection.prepareStatement("SELECT name FROM dictionary WHERE prefix LIKE ?");
+
+                statement.setString(1, prefix);
+                resultSet = statement.executeQuery();
+                String name = null;
+                if(resultSet.next()) {
+                    name = resultSet.getString("name");
+                    dictionary.put(prefix, name);
+                }
+                return name;
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (statement != null) {
+                        statement.close();
+                    }
+                    if (connection != null) {
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
         }
     }
 }

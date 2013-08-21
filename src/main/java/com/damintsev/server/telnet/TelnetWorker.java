@@ -118,10 +118,9 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             outstr.write(command.getBytes());
             outstr.flush();
             Thread.sleep(5000);
-        } catch (IOException e) {
-           logger.debug(e.getMessage(), e);
-        } catch (InterruptedException e) {
-            logger.debug(e.getMessage(), e);
+        } catch (Exception e) {
+           logger.debug("Exception when reading command" + e.getMessage(), e);
+            throw new RuntimeException(e);
         }
         String result = getReaded();
         logger.info("***Readed from server: " + result);
@@ -152,7 +151,8 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             }
             while (ret_read >= 0);
         } catch (IOException e) {
-           logger.error("Exception while reading socket:" + e.getMessage(), e);
+            logger.error("Exception while reading socket:" + e.getMessage(), e);
+            throw new RuntimeException(e);
         }
     }
 

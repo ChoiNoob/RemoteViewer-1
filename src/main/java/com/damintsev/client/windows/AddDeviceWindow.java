@@ -103,7 +103,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                Dialogs.confirm("Будее удалено утройство", new Runnable() {
+                Dialogs.confirm("Будет удалено утройство", new Runnable() {
                     public void run() {
                         Service.instance.deleteDevice(device, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
@@ -138,10 +138,9 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                         window.unmask();
                         window.hide();
                         if(newEntity) UICenterField.get().addItem(new UIItem(result));
+                        window.hide();
                     }
                 });
-                UICenterField.get().addItem(new UIItem(device));
-                window.hide();
             }
         }));
 

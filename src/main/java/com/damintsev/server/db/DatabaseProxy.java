@@ -4,7 +4,6 @@ import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.server.db.xmldao.*;
-import com.damintsev.server.ftp.FTPService;
 import com.damintsev.server.services.ServerService;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -215,7 +214,7 @@ public class DatabaseProxy {
                         settings.setPassword(station.getPassword());
                         settings.setStationId(station.getId());
                         xmlFtpSettingsList.add(settings);
-                        FTPService.getInstance().setSettings(settings);
+//                        FTPService.getInstance().setSettings(settings);
                     }
                     break;
             }

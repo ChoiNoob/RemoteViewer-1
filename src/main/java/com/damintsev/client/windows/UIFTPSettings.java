@@ -87,15 +87,19 @@ public class UIFTPSettings implements Editor<FTPSettings> {
             public void onSelect(SelectEvent event) {
                 editor.flush();
                 if(editor.hasErrors())return;
-                Service.instance.saveFTPSettings(editor.flush(), new AsyncCallback<Void>() {
+                Service.instance.saveFTPSettings(editor.flush(), new AsyncCallback<FTPSettings>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert(caught.getMessage());
                     }
 
-                    public void onSuccess(Void result) {
+                    public void onSuccess(FTPSettings result) {
+                        Dialogs.message("Сохранение прошло успешно ИД = " +result.getId(), new Runnable() {
+                            public void run() {
+                                window.hide();
+                            }
+                        });
                     }
                 });
-                window.hide();
             }
         }));
         window.addButton(new TextButton("Отмена", new SelectEvent.SelectHandler() {
@@ -107,6 +111,7 @@ public class UIFTPSettings implements Editor<FTPSettings> {
     }
 
     public void show(final Station station) {
+        window.show();
         window.mask();
         simpleComboBox.add(station);
         simpleComboBox.setValue(station);
@@ -124,10 +129,8 @@ public class UIFTPSettings implements Editor<FTPSettings> {
                 editor.edit(result);
             }
         });
-        window.show();
     }
 
     interface Editor extends SimpleBeanEditorDriver<FTPSettings, UIFTPSettings> {
-
     }
 }

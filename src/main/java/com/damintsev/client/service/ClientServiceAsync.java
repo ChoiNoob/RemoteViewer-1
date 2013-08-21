@@ -24,7 +24,7 @@ public interface ClientServiceAsync {
 
     void getBillingInfo(AsyncCallback<ListLoadResultImpl<BillingInfo>> async);
 
-    void saveFTPSettings(FTPSettings settings, AsyncCallback<Void> async);
+    void saveFTPSettings(FTPSettings settings, AsyncCallback<FTPSettings> async);
 
     void loadFTPSettings(Station station, AsyncCallback<FTPSettings> async);
 
@@ -43,4 +43,6 @@ public interface ClientServiceAsync {
     void saveDevice(Device device, AsyncCallback<Device> async);
 
     void loadDevice(Long debiceId, DeviceType deviceType, AsyncCallback<Device> async);
+
+    void getStatistisc(AsyncCallback<List<BillingStats>> async);
 }

@@ -34,7 +34,7 @@ public interface ClientService extends RemoteService {
 
     public ListLoadResultImpl<BillingInfo> getBillingInfo();
 
-    public void saveFTPSettings(FTPSettings settings);
+    public FTPSettings saveFTPSettings(FTPSettings settings);
 
     public FTPSettings loadFTPSettings(Station station);
 
@@ -47,5 +47,7 @@ public interface ClientService extends RemoteService {
     public Device saveDevice(Device device);
 
     public Device loadDevice(Long debiceId, DeviceType deviceType);
+    
+    public List<BillingStats> getStatistisc();
 }
 

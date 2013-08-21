@@ -194,19 +194,20 @@ public class TelnetScheduler {
 
     private void checkStation(TelnetWorker telnet, Station station) {
         Response resp = null;
-//        try {
-            resp = new Response("sucsess");
-            resp.setStatus(Status.WORK);
-//            resp = telnet.sendAYT();
+        try {
+//            resp = new Response("sucsess");
+//            resp.setStatus(Status.WORK);
+            resp = telnet.execute("dis-date;");
+            parseStationResponse(resp, station);
 //            telnet.execute()
-//        } catch (Exception e) {
-//            logger.error("Caught exception while sending ASK command " + e.getLocalizedMessage());
-//            resp = new Response();
-//            resp.setStatus(Status.ERROR);
-//            resp.setResultText(e.getMessage());
-//            telnet.disconnect();
-//            telnetStation.remove(station.getId());
-//        }
+        } catch (Exception e) {
+            logger.error("Caught exception while sending ASK command " + e.getLocalizedMessage());
+            resp = new Response();
+            resp.setStatus(Status.ERROR);
+            resp.setResultText(e.getMessage());
+            telnet.disconnect();
+            telnetStation.remove(station.getId());
+        }
         station.setResponse(resp);
         station.setStatus(resp.getStatus());
         devices.put(station.getId(), station);
@@ -214,6 +215,19 @@ public class TelnetScheduler {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void parseStationResponse(Response resp, Station station) {
+        if (resp.getResultText().contains("STARTED") && resp.getResultText().contains("AMO DATE")) {
+            logger.info("After Station parse result is WORK");
+            station.setStatus(Status.WORK);
+            resp.setStatus(Status.WORK);
+        }
+        else {
+            logger.info("After Station parse result is ERROR");
+            station.setStatus(Status.ERROR);
+            resp.setStatus(Status.ERROR);
         }
     }
 
@@ -338,6 +352,36 @@ public class TelnetScheduler {
             telnet.disconnect();
         }
         telnetStation.clear();
+    }
+
+    public void updateDevice(Device device) {
+        if(device instanceof Station) {
+            TelnetWorker telnet = telnetStation.get(device.getId());
+            if(telnet!=null){
+                telnet.disconnect();
+            }
+            telnetStation.remove(device.getId());
+            devices.put(device.getId(), device);
+        } else {
+            devices.put(device.getId(), device);
+        }
+    }
+
+    public void deleteDevice(Device device) {
+        if(device instanceof Station) {
+            TelnetWorker telnet = telnetStation.get(device.getId());
+            if(telnet!=null){
+                telnet.disconnect();
+            }
+            telnetStation.remove(device.getId());
+            for(Device dev : devices.values()) {
+                if(dev.getStation().getId().equals(dev.getId())) {
+                    devices.remove(dev.getId());
+                }
+            }
+        } else {
+            devices.remove(device.getId());
+        }
     }
 }
 
