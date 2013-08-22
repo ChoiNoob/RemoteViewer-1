@@ -3,8 +3,10 @@ package com.damintsev.client.service;
 import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.graph.BusyInfo;
-import com.damintsev.utils.ListLoadResultImpl;
+import com.google.gwt.core.client.Callback;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.sencha.gxt.data.shared.loader.ListLoadResult;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 
 import java.util.List;
 
@@ -21,8 +23,6 @@ public interface ClientServiceAsync {
     void getState(AsyncCallback<Device> callback);
 
     void checkDevice(Device device, AsyncCallback<Device> callback);
-
-    void getBillingInfo(AsyncCallback<ListLoadResultImpl<BillingInfo>> async);
 
     void saveFTPSettings(FTPSettings settings, AsyncCallback<FTPSettings> async);
 
@@ -47,4 +47,6 @@ public interface ClientServiceAsync {
     void getStatistisc(AsyncCallback<List<BillingStats>> async);
 
     void loadBusyInfoStatistics(Device device, AsyncCallback<List<BusyInfo>> async);
+
+    void getStationList(AsyncCallback<PagingLoadResult<Station>> async);
 }

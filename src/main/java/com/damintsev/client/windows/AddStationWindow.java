@@ -133,7 +133,7 @@ public class AddStationWindow implements Editor<Station> {
                     public void onSuccess(Device result) {
                         window.unmask();
                         window.hide();
-                        if(newInstance)UICenterField.get().addItem(new UIItem(station));
+                        if(newInstance)UICenterField.get().addItem(new UIItem(result));
                         if(listener != null)
                             listener.run();
                     }

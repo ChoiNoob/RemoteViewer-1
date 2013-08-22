@@ -112,7 +112,7 @@ public class DatabaseConnector {
 
                 statement.executeUpdate();
                 resultSet = statement.getGeneratedKeys();
-                while (resultSet.next()) {
+                if (resultSet.next()) {
                     station.setId(resultSet.getLong(1));
                 }
                 resultSet.close();
@@ -424,18 +424,41 @@ public class DatabaseConnector {
                 statement.executeUpdate();
 
                 statement = connection.prepareStatement("SELECT id FROM device WHERE station_id = ? ");
+                statement.setLong(1, device.getId());
                 resultSet = statement.executeQuery();
                 List<Long> devices = new ArrayList<Long>();
                 while (resultSet.next()) {
                     devices.add(resultSet.getLong("id"));
                 }
-                statement = connection.prepareStatement("DELETE FROM device WHERE id in (?)");
-                statement.setArray(1, connection.createArrayOf("Long", devices.toArray()));
-                statement.executeUpdate();
 
-                statement = connection.prepareStatement("DELETE FROM device_pos WHERE id in (?)");
-                statement.setArray(1, connection.createArrayOf("Long", devices.toArray()));
-                statement.executeUpdate();
+                if (devices.size() > 0) {
+                    String SQL = "DELETE FROM device WHERE id in (";
+                    for(int i = 0; i < devices.size(); i++) {
+                        if (i > 0) SQL +=",";
+                        SQL += "?";
+                    }
+                    SQL += ")";
+                    statement = connection.prepareStatement(SQL);
+                    for(int i = 0; i < devices.size(); i++) {
+                        statement.setLong(i + 1, devices.get(i));
+                    }
+                    statement.executeUpdate();
+
+                    SQL = "DELETE FROM device_pos WHERE id in (";
+                    for(int i = 0; i < devices.size(); i++) {
+                        if (i > 0) SQL +=",";
+                        SQL += "?";
+                    }
+                    SQL += ")";
+                    statement = connection.prepareStatement(SQL);
+                    for(int i = 0; i < devices.size(); i++) {
+                        statement.setLong(i + 1, devices.get(i));
+                    }
+                    statement.executeUpdate();
+//                    statement = connection.prepareStatement("DELETE FROM device_pos WHERE id in (?)");
+//                    statement.setArray(1, connection.createArrayOf("Long", devices.toArray()));
+//                    statement.executeUpdate();
+                }
 
                 statement = connection.prepareStatement("DELETE FROM ftpsettings WHERE station_id = ?");
                 statement.setLong(1, device.getId());
@@ -451,6 +474,11 @@ public class DatabaseConnector {
             }
 
         } catch (Exception e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
             logger.error(e.getMessage(), e);
             e.printStackTrace();
         } finally {
@@ -762,6 +790,46 @@ public class DatabaseConnector {
                 }
                 if (connection != null) {
                     connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public List<Station> getStationList() {
+        List<Station> stations = new ArrayList<Station>();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Connection connection;
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM station");
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                Station    station = new Station();
+                station.setId(resultSet.getLong("station_id"));
+                station.setComment(resultSet.getString("comment"));
+                station.setStatus(Status.INIT);
+                station.setHost(resultSet.getString("host"));
+                station.setPort(resultSet.getString("port"));
+                station.setLogin(resultSet.getString("login"));
+                station.setPassword(resultSet.getString("password"));
+                station.setName(resultSet.getString("name"));
+                stations.add(station);
+            }
+            return stations;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -5,14 +5,13 @@ import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.ClientService;
 import com.damintsev.server.db.CleanManager;
-import com.damintsev.server.db.DatabaseProxy;
-import com.damintsev.server.db.Hibernate;
 import com.damintsev.server.db.xmldao.DatabaseConnector;
 import com.damintsev.server.telnet.TelnetScheduler;
-import com.damintsev.utils.ListLoadResultImpl;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import org.hibernate.Query;
-import org.hibernate.Session;
+import com.sencha.gxt.data.shared.loader.ListLoadResult;
+import com.sencha.gxt.data.shared.loader.ListLoadResultBean;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
+import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,10 +58,6 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         return null;
     }
 
-//    public TestResponse test(Station device) {
-//        return TelnetScheduler.getInstance().test(device); //todo
-//    }
-
     public Device checkDevice(Device device) {
         logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
         return TelnetScheduler.getInstance().getDeviceState(device);
@@ -78,12 +73,6 @@ public class ServerService extends RemoteServiceServlet implements ClientService
 
     public void deleteItem(Device device) {
         TelnetScheduler.getInstance().deleteItem(device);
-    }
-
-    public ListLoadResultImpl<BillingInfo> getBillingInfo() {
-        ListLoadResultImpl<BillingInfo> list = new ListLoadResultImpl<BillingInfo>();
-//        list.setData(FTPService.getInstance().getBills());
-        return list;
     }
 
     public FTPSettings saveFTPSettings(FTPSettings settings) {
@@ -124,6 +113,17 @@ public class ServerService extends RemoteServiceServlet implements ClientService
 
     public List<BillingStats> getStatistisc() {
         return BillingStatistics.getInstance().getStatistics();
+    }
+
+//    public ListLoadResult<Station> getStationList() {
+//        return new ListLoadResultBean<Station>(DatabaseConnector.getInstance().getStationList());
+//
+//    }
+
+
+    public PagingLoadResult<Station> getStationList() throws Exception {
+        List<Station> stations = DatabaseConnector.getInstance().getStationList();
+        return new PagingLoadResultBean<Station>(stations, 0, stations.size());
     }
 
     public List<BusyInfo> loadBusyInfoStatistics(Device device) {

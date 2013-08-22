@@ -376,16 +376,17 @@ public class UICenterField {
     public void delete(Device device) {
         if(device instanceof Station) {
             UIItem station = uiStations.get(device.getId());
-            dragController.makeNotDraggable(station);
+//            dragController.makeNotDraggable(station);
             panel.remove(station);
             for (UIItem dev : findDevicesForStation(device.getId())) {
                 delete(dev.getData());
             }
         }else {
             UIItem dev = uiDevices.get(device.getId());
-            dragController.makeNotDraggable(dev);
+//            dragController.makeNotDraggable(dev);
             panel.remove(dev);
         }
         drawConnections(false);
+        createIterator();
     }
 }
