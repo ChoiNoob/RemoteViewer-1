@@ -32,7 +32,7 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.add(Calendar.DAY_OF_MONTH, 1);
-        timer.schedule(
+        timer.scheduleAtFixedRate(
                 new TimerTask() {
                     @Override
                     public void run() {
@@ -54,25 +54,12 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         return DatabaseConnector.getInstance().loadItems();
     }
 
-    public Device getState() {
-        return null;
-    }
-
-    public Device checkDevice(Device device) {
-        logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
-        return TelnetScheduler.getInstance().getDeviceState(device);
-    }
-
     public void start() {
         TelnetScheduler.getInstance().start();
     }
 
     public void stop() {
         TelnetScheduler.getInstance().stop();
-    }
-
-    public void deleteItem(Device device) {
-        TelnetScheduler.getInstance().deleteItem(device);
     }
 
     public FTPSettings saveFTPSettings(FTPSettings settings) {
@@ -87,24 +74,20 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         return DatabaseConnector.getInstance().loadFTPSettings(station);
     }
 
-    public void deleteDevice(Device device) {
-        DatabaseConnector.getInstance().deleteDevice(device);
-        TelnetScheduler.getInstance().deleteDevice(device);
-    }
-
-    public BusyInfo loadBusyInfo(Device device) {
-        return DatabaseConnector.getInstance().getBusyInfo(device);
-    }
-
-    public void testFTP() {
-//        System.out.println("CPT=" + FTPService.getInstance().getBills());
-    }
-
     public Device saveDevice(Device device) {
         logger.info("calling saveDevice()");
         Device dev = DatabaseConnector.getInstance().saveDevice(device);
         TelnetScheduler.getInstance().updateDevice(dev);
         return dev;
+    }
+
+    public void deleteDevice(Device device) {
+        TelnetScheduler.getInstance().deleteDevice(device);
+        DatabaseConnector.getInstance().deleteDevice(device);
+    }
+
+    public BusyInfo loadBusyInfo(Device device) {
+        return DatabaseConnector.getInstance().getBusyInfo(device);
     }
 
     public Device loadDevice(Long deviceId, DeviceType deviceType) {
@@ -115,12 +98,6 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         return BillingStatistics.getInstance().getStatistics();
     }
 
-//    public ListLoadResult<Station> getStationList() {
-//        return new ListLoadResultBean<Station>(DatabaseConnector.getInstance().getStationList());
-//
-//    }
-
-
     public PagingLoadResult<Station> getStationList() throws Exception {
         List<Station> stations = DatabaseConnector.getInstance().getStationList();
         return new PagingLoadResultBean<Station>(stations, 0, stations.size());
@@ -128,5 +105,13 @@ public class ServerService extends RemoteServiceServlet implements ClientService
 
     public List<BusyInfo> loadBusyInfoStatistics(Device device) {
         return DatabaseConnector.getInstance().getBusyInfoStatistics(device);
+    }
+
+    public List<Device> getItemsState() {
+        return TelnetScheduler.getInstance().getDeviceState();
+    }
+
+    public void hardReset() {
+        TelnetScheduler.getInstance().hardReset();
     }
 }

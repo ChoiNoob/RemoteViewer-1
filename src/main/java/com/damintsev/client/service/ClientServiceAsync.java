@@ -8,7 +8,9 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.data.shared.loader.ListLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by adamintsev
@@ -20,9 +22,6 @@ public interface ClientServiceAsync {
 
     void loadItems(AsyncCallback<List<Item>> callback);
 
-    void getState(AsyncCallback<Device> callback);
-
-    void checkDevice(Device device, AsyncCallback<Device> callback);
 
     void saveFTPSettings(FTPSettings settings, AsyncCallback<FTPSettings> async);
 
@@ -32,13 +31,9 @@ public interface ClientServiceAsync {
 
     void start(AsyncCallback<Void> async);
 
-    void deleteItem(Device device, AsyncCallback<Void> async);
-
     void loadBusyInfo(Device device, AsyncCallback<BusyInfo> async);
 
     void deleteDevice(Device device, AsyncCallback<Void> async);
-
-    void testFTP(AsyncCallback<Void> async);
 
     void saveDevice(Device device, AsyncCallback<Device> async);
 
@@ -49,4 +44,8 @@ public interface ClientServiceAsync {
     void loadBusyInfoStatistics(Device device, AsyncCallback<List<BusyInfo>> async);
 
     void getStationList(AsyncCallback<PagingLoadResult<Station>> async);
+
+    void getItemsState(AsyncCallback<List<Device>> async);
+
+    void hardReset(AsyncCallback<Void> async);
 }

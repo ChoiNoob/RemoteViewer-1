@@ -9,7 +9,9 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.sencha.gxt.data.shared.loader.ListLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -24,15 +26,9 @@ public interface ClientService extends RemoteService {
 
     public List<Item> loadItems();
 
-    public Device getState();
-
-    public Device checkDevice(Device device);
-
     public void start();
 
     public void stop();
-
-    public void deleteItem(Device device);
 
     public FTPSettings saveFTPSettings(FTPSettings settings);
 
@@ -44,8 +40,6 @@ public interface ClientService extends RemoteService {
 
     public List<BusyInfo> loadBusyInfoStatistics(Device device);
 
-    public void testFTP();
-
     public Device saveDevice(Device device);
 
     public Device loadDevice(Long debiceId, DeviceType deviceType);
@@ -53,5 +47,9 @@ public interface ClientService extends RemoteService {
     public List<BillingStats> getStatistisc();
 
     public PagingLoadResult<Station> getStationList() throws Exception;
+
+    public List<Device> getItemsState();
+
+    public void hardReset();
 }
 

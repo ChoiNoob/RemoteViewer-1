@@ -45,14 +45,16 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
     private String port;
     private String login;
     private String password;
-    private Response response;
+    private boolean keepAlive = false;
+    private Long timeout;
+    private boolean allowTimeout = true;
 
     public static void main(String[] args) {
         TelnetWorker example = new TelnetWorker();
         example.setLogin("root");
         example.setPassword("hicom");
         example.setHost("192.0.2.3");
-        example.setPort("23");
+        example.setPort("1202");
         example.connect();
     }
 
@@ -65,7 +67,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
      * *
      */
     public Response connect() {
-        response = new Response();
+        Response response = new Response();
         tc = new org.apache.commons.net.telnet.TelnetClient();
         TerminalTypeOptionHandler ttopt = new TerminalTypeOptionHandler("VT100", false, false, true, false);
         EchoOptionHandler echoopt = new EchoOptionHandler(true, false, true, false);
@@ -83,8 +85,10 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             logger.debug("Trying to connect to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password);
             tc.connect(host, Integer.parseInt(port));
             tc.registerNotifHandler(new TelnetWorker());
-            tc.setKeepAlive(false);
-            tc.setSoTimeout(60000);//1 minute
+            tc.setKeepAlive(keepAlive);
+            if(allowTimeout)
+                if(timeout == null) tc.setSoTimeout(60000);//1 minute
+                else tc.setSoTimeout(timeout.intValue());
 
             instr = tc.getInputStream();
             outstr = tc.getOutputStream();
@@ -145,7 +149,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             do {
                 ret_read = instr.read(buff);
                 if (ret_read > 0) {
-//                    System.out.print("\t\t\t" + new String(buff, 0, ret_read));
+                    System.out.print("\t\t\t" + new String(buff, 0, ret_read));
                     stream.write(buff, 0, ret_read);
                 }
             }
@@ -258,9 +262,27 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
         this.login = login;
     }
 
-//    public Response getResponse() {
-//        return response;
-//    }
+    public boolean isKeepAlive() {
+        return keepAlive;
+    }
 
+    public void setKeepAlive(boolean keepAlive) {
+        this.keepAlive = keepAlive;
+    }
 
+    public Long getTimeout() {
+        return timeout;
+    }
+
+    public void setTimeout(Long timeout) {
+        this.timeout = timeout;
+    }
+
+    public boolean isAllowTimeout() {
+        return allowTimeout;
+    }
+
+    public void setAllowTimeout(boolean allowTimeout) {
+        this.allowTimeout = allowTimeout;
+    }
 }

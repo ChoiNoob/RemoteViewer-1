@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class TelnetScheduler {
 
     private static final Logger logger = LoggerFactory.getLogger(TelnetScheduler.class);
-
+    private static final Long HOUR = 1000 * 60 * 60L;
     private static TelnetScheduler instance;
 
     public static TelnetScheduler getInstance() {
@@ -34,30 +34,36 @@ public class TelnetScheduler {
     private Map<Long, TelnetWorker> telnetStation;
     private ConcurrentHashMap<Long, Device> devices;
     private Timer timer;
+    private Timer databaseLoader;
 
     private TelnetScheduler() {
+        logger.info("Initializing TelnetSheduler");
         telnetStation = new HashMap<Long, TelnetWorker>();
         devices = new ConcurrentHashMap<Long, Device>();
+        loadFromDB();
+        logger.info("Telnet Scheduler sucsessfylly constructed");
+        start();
     }
 
-    public Device getDeviceState(Device device) {
-        Device response;
-        if (!devices.containsKey(device.getId())) {
-            addDevice(device);
-            response = device;
-            response.setResponse(TelnetScheduler.createInitResponse());
-        } else {
-            response = devices.get(device.getId());
-        }
-        return response;
-    }
-
-    private void addDevice(Device device) {
-        devices.put(device.getId(), device);
-//        if (device instanceof Station) {
-//            initConnection((Station) device);
+//    @Deprecated
+//    public Device getDeviceState(Device device) {
+//        Device response;
+//        if (!devices.containsKey(device.getId())) {
+//            addDevice(device);
+//            response = device;
+//            response.setResponse(TelnetScheduler.createInitResponse());
+//        } else {
+//            response = devices.get(device.getId());
 //        }
-    }
+//        return response;
+//    }
+//
+//    private void addDevice(Device device) {
+//        devices.put(device.getId(), device);
+////        if (device instanceof Station) {
+////            initConnection((Station) device);
+////        }
+//    }
 
     private boolean initConnection(Station station) {
         TelnetWorker telnet = new TelnetWorker();
@@ -79,8 +85,6 @@ public class TelnetScheduler {
         try {
             TelnetWorker telnet = getConnection(device.getStation());
             if (telnet == null) {
-//            Response response = telnet.getResponse();
-//            device.setResponse(response);
                 device.setStatus(Status.ERROR);
                 return;
             }
@@ -237,7 +241,7 @@ public class TelnetScheduler {
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if(iterator == null)
+                if (iterator == null)
                     createIterator();
                 if (iterator.hasNext())
                     checkDevice(iterator.next());
@@ -245,11 +249,20 @@ public class TelnetScheduler {
                     createIterator();
             }
         }, 20000, 10000);
+
+        databaseLoader = new Timer();
+        databaseLoader.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                loadFromDB();
+            }
+        }, HOUR, HOUR);
     }
 
     public void stop() {
         logger.info("Stop timer");
         timer.cancel();
+        databaseLoader.cancel();
     }
 
     private Iterator<Device> iterator;
@@ -268,93 +281,8 @@ public class TelnetScheduler {
         return telnetStation.get(station.getId());
     }
 
-    public void deleteItem(Device device) {
-        stop();
-        if (device instanceof Station) {
-            TelnetWorker telnet = telnetStation.remove(device.getId());
-            telnet.disconnect();
-            for(Device dev : devices.values()) {
-                if(dev.getStation().getId().equals(device.getId())) {
-                    devices.remove(dev.getId());
-                }
-            }
-        } else {
-            devices.remove(device.getId());
-        }
-        start();
-    }
-
-//    private void parseResult(CommonDevice isdn, String result) {
-//        logger.info("Parse server responce for device id=" + isdn.getId() + " name=" + isdn.getName());
-//        logger.info(result);
-//        int index = result.indexOf("PP NW");
-//        if (index > 0) {
-//            result = result.substring(index, result.length());
-//            logger.info("After substring: " + result);
-//        }
-//        if (result.contains("READY")) {
-//            isdn.setStatus(Status.WORK);
-//            System.out.println("WORK");
-//        } else if (result.contains("NEC")) {
-//            isdn.setStatus(Status.WARNING);
-//            System.out.println("WARNING");
-//        } else {
-//            isdn.setStatus(Status.ERROR);
-//            System.out.println("ERROR");
-//        }
-//        isdn.setComment(result);
-//    }
-//
-//    public static void main(String[] args) {
-//        TelnetScheduler newS = new TelnetScheduler();
-//        Station station = new Station();
-//        station.setHost("192.168.110.128");
-//        station.setPort("23");
-//        station.setLogin("sasha");
-//        station.setPassword("1");
-//        newS.checkDevice(station);
-//        System.out.println("CPT1");
-//        newS.checkDevice(station);
-//        System.out.println("CPT2");
-//        newS.checkDevice(station);
-//        System.out.println("CPT3");
-//        newS.checkDevice(station);
-//        System.out.println("CPT4");
-//        newS.checkDevice(station);
-//        newS.checkDevice(station);
-//    }
-
-//    public TestResponse test(Station device) {
-//        TestResponse response = new TestResponse();
-//        try{
-//            System.out.println("TEST CPT:");
-////            response.setResult());
-//           TelnetWorker client = getConnection(device);
-//            response = client.sendAYT();
-//
-//        }catch (Exception e) {
-//            System.out.println("FIFUFUFU" + e);
-//            response.setResultText("Exception " + e.getMessage());
-//        }
-//        return response;
-//    }
-
-    public static Response createInitResponse() {
-        Response resp = new Response();
-        resp.setResultText("System initializing...");
-        resp.setStatus(Status.INIT);
-        return resp;
-    }
-
-    public void clear() {
-        devices.clear();
-        for(TelnetWorker telnet : telnetStation.values()) {
-            telnet.disconnect();
-        }
-        telnetStation.clear();
-    }
-
     public void updateDevice(Device device) {
+        stop();
         if(device instanceof Station) {
             TelnetWorker telnet = telnetStation.get(device.getId());
             if(telnet!=null){
@@ -365,9 +293,11 @@ public class TelnetScheduler {
         } else {
             devices.put(device.getId(), device);
         }
+        start();
     }
 
     public void deleteDevice(Device device) {
+        stop();
         if(device instanceof Station) {
             TelnetWorker telnet = telnetStation.get(device.getId());
             if(telnet!=null){
@@ -382,6 +312,44 @@ public class TelnetScheduler {
         } else {
             devices.remove(device.getId());
         }
+        start();
+    }
+
+    public List<Device> getDeviceState() {
+        return new ArrayList<Device>(devices.values());
+    }
+
+    private void loadFromDB() {
+        if(timer != null) stop();
+        if (devices == null) devices = new ConcurrentHashMap<Long, Device>();
+        List<Item> items =  DatabaseConnector.getInstance().loadItems();
+        logger.info("Loading information from database: loaded=" + items.size() + " items.");
+        for(Item item : items) {
+            logger.info("Adding item=" + item.getId() + " name=" + item.getName() + " type=" + item.getType());
+            devices.put(item.getId(), item.getData());
+//            if(item.getData() instanceof Station) {
+//                Station station = (Station) item.getData();
+//                TelnetWorker telnet = getConnection(station);
+//                if(!station.getHost().equals(telnet.getHost()) ||
+//                        !station.getPort().equals(telnet.getPort()) ||
+//                        !station.getLogin().equals(telnet.getLogin()) ||
+//                        !station.getPassword().equals(telnet.getPassword())) {
+//                    updateDevice(station);
+//                }
+//            }
+        }
+        if(timer != null) start();
+    }
+
+    public void hardReset() {
+        stop();
+        for(Device device : devices.values()) {
+            device.setStatus(Status.INIT);
+        }
+        for(TelnetWorker telnet : telnetStation.values()) {
+            telnet.disconnect();
+        }
+        start();
     }
 }
 

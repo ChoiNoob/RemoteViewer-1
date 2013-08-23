@@ -312,29 +312,42 @@ public class UICenterField {
     }
 
     private void scheduler() {
-        if (iterator == null)
-            iterator = createIterator();
-        if (iterator.hasNext()) {
-            final Device device = iterator.next();
-            Service.instance.checkDevice(device, new AsyncCallback<Device>() {
-                public void onFailure(Throwable caught) {
-                    stop();
-                    Dialogs.alert("Check device false! " + caught.getMessage());
-                }
+//        if (iterator == null)
+//            iterator = createIterator();
+//        if (iterator.hasNext()) {
+//            final Device device = iterator.next();
+//            Service.instance.checkDevice(device, new AsyncCallback<Device>() {
+//                public void onFailure(Throwable caught) {
+//                    stop();
+//                    Dialogs.alert("Check device false! " + caught.getMessage());
+//                }
+//
+//                public void onSuccess(Device result) {
+//                    if (result != null) {
+//                        System.out.println("result not null=" + result.getStatus());
+//                        updateUIItem(result);
+//                    }
+//                }
+//            });
+//        } else {
+//            iterator = createIterator();
+//        }
+        Service.instance.getItemsState(new AsyncCallback<List<Device>>() {
+            public void onFailure(Throwable caught) {
+                stop();
+                Dialogs.alert("Error loading from DB at scheduler =" + caught.getMessage());
+            }
 
-                public void onSuccess(Device result) {
-                    if (result != null) {
-                        System.out.println("result not null=" + result.getStatus());
-                        updateUIItem(result);
-                    }
+            public void onSuccess(List<Device> result) {
+                for (Device device : result) {
+                    updateUIItem(device);
                 }
-            });
-        } else {
-            iterator = createIterator();
-        }
+                drawConnections(false);
+            }
+        });
     }
 
-    private void updateUIItem(Device device) {
+    private void updateUIItem(Device device) {    //todo load from DB is not exists!!!
         if(device instanceof Station) {
             System.out.println("update ST");
             UIItem station = uiStations.get(device.getId());

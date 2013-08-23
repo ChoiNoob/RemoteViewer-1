@@ -43,7 +43,7 @@ public class BusyChannelPanel implements IsWidget {
     private static final Long MINUTE = 1000 * 60L;
     private static final Long HOUR = 1000 * 60 * 60L;
     private static final Long VISIBLE_PERIOD = HOUR / 2;
-    private static final Long PERIOD_REQUEST = (long)(0.1 * MINUTE);
+    private static final Long PERIOD_REQUEST = (long)(0.5 * MINUTE);
 
     private static final BillingStatsAccess data = GWT.create(BillingStatsAccess.class);
     private static final DateTimeFormat f = DateTimeFormat.getFormat("HH:mm");
@@ -109,14 +109,13 @@ public class BusyChannelPanel implements IsWidget {
         series = new LineSeries<BusyInfo>();
         series.setYAxisPosition(Chart.Position.LEFT);
         series.setYField(data.busy());
-        series.setStroke(new RGB(148, 174, 10));
+        series.setStroke(new RGB(RGB.GREEN));
         series.setShowMarkers(true);
         series.setMarkerIndex(2);
         Sprite marker = Primitives.circle(0, 0, 4);
         marker.setFill(new RGB(148, 174, 10));
         series.setMarkerConfig(marker);
         chart.addSeries(series);
-
 
         update = new Timer() {
             @Override

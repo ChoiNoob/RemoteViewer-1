@@ -3,12 +3,14 @@ package com.damintsev.client.uiframe;
 import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.service.Service;
 import com.damintsev.client.windows.AddDeviceWindow;
 import com.damintsev.client.windows.AddStationWindow;
 import com.damintsev.client.windows.UIFTPSettings;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.util.Margins;
@@ -104,9 +106,16 @@ public class UISettingsPanel {
         });
         buttons.add(edit);
 
-        buttons.add(new TextButton("Настройки FTP", new SelectEvent.SelectHandler() {
+        buttons.add(new TextButton("Hard reset", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
 //                UIFTPSettings.getInstance().show();
+                Service.instance.hardReset(new AsyncCallback<Void>() {
+                    public void onFailure(Throwable caught) {
+                    }
+
+                    public void onSuccess(Void result) {
+                    }
+                });
             }
         }));
         panel.add(buttons);
@@ -115,7 +124,7 @@ public class UISettingsPanel {
             public void onSelect(SelectEvent event) {
                 UICenterField.get().saveItemPositions();
                 collapse();
-                reload();
+//                reload();
             }
         });
         panel.addButton(save);

@@ -3,6 +3,7 @@ package com.damintsev.server.services;
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.BillingStats;
 import com.damintsev.server.db.xmldao.DatabaseConnector;
+import com.damintsev.server.telnet.TelnetWorker;
 
 import java.util.*;
 
@@ -92,5 +93,10 @@ public class BillingStatistics {
             billingInfoList.add(info);
         }
         addBilling(billingInfoList);
+    }
+
+    private void startWorker() {
+        TelnetWorker worker = new TelnetWorker();
+        worker.setHost("192.168.0");
     }
 }

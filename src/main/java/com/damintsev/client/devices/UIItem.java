@@ -133,6 +133,10 @@ public class UIItem extends Label {
 
     public void redraw() {
         System.out.println("redraw");
-        label.setText(getName());
+        label.getElement().setInnerText(getName());
+////          label = new Label(getName());
+//        getElement().removeChild(label.getElement());
+//        label = new Label(getName());
+//        getElement().appendChild(label.getElement());
     }
 }

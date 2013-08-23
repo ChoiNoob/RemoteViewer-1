@@ -13,6 +13,8 @@ import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
+import com.google.gwt.event.dom.client.KeyDownEvent;
+import com.google.gwt.event.dom.client.KeyDownHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -26,6 +28,7 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.BeforeQueryEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
 
@@ -78,16 +81,11 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
             public String getLabel(Station item) {
                 return item.getName() == null ? "Адрес: " + item.getHost() : item.getName() + "(Адрес: " + item.getHost() + ")";
             }
-        }){
-            @Override
-            public Station getValue() {
-                System.out.println("get VVV=" + super.getValue());
-                return super.getValue();    //To change body of overridden methods use File | Settings | File Templates.
-            }
-        };
+        });
         station.setLoader(new PagingLoader<PagingLoadConfig, PagingLoadResult<Station>>(new DataProxy<PagingLoadConfig, PagingLoadResult<Station>>() {
             //            @Override
             public void load(PagingLoadConfig config, final com.google.gwt.core.client.Callback<PagingLoadResult<Station>, Throwable> callback) {
+                System.out.println("load value");
                 Service.instance.getStationList(new AsyncCallback<PagingLoadResult<Station>>() {
                     public void onFailure(Throwable caught) {
                         //To change body of implemented methods use File | Settings | File Templates.
@@ -100,15 +98,20 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                 });
             }
         }));
-        station.addSelectionHandler(new SelectionHandler<Station>() {
-            public void onSelection(SelectionEvent<Station> event) {
-                System.out.println("selecterd = "+ event.getSelectedItem().getId());
-                station.setValue(event.getSelectedItem());
-            }
-        });
+//        station.addSelectionHandler(new SelectionHandler<Station>() {
+//            public void onSelection(SelectionEvent<Station> event) {
+//                System.out.println("selecterd = " + event.getSelectedItem().getId());
+//                station.setValue(event.getSelectedItem());
+//            }
+//        });
         station.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
         station.setEditable(false);
         station.setAllowBlank(false);
+        station.addBeforeQueryHandler(new BeforeQueryEvent.BeforeQueryHandler<Station>() {
+            public void onBeforeQuery(BeforeQueryEvent<Station> stationBeforeQueryEvent) {
+                station.getLoader().load();
+            }
+        });
         panel.add(new FieldLabel(station, "Станция"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         deviceType = new SimpleComboBox<DeviceType>(new LabelProvider<DeviceType>() {
@@ -187,10 +190,12 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
             }
         }));
         window.setWidget(con);
-        driver.initialize(this);
+
     }
 
     public void show(Long id) {
+        driver.initialize(this);
+
         window.show();
         if (id == null) {
             device = new CommonDevice();
