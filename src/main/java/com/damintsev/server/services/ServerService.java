@@ -4,6 +4,7 @@ import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.ClientService;
+import com.damintsev.server.billing.BillingWorker;
 import com.damintsev.server.db.CleanManager;
 import com.damintsev.server.db.xmldao.DatabaseConnector;
 import com.damintsev.server.telnet.TelnetScheduler;
@@ -42,6 +43,7 @@ public class ServerService extends RemoteServiceServlet implements ClientService
                 cal.getTime(),
                 1000 * 60 * 60 * 24 * 7
         );
+        BillingWorker.getInstance();
     }
 
     public Boolean saveItems(List<Item> items) {
@@ -78,12 +80,14 @@ public class ServerService extends RemoteServiceServlet implements ClientService
         logger.info("calling saveDevice()");
         Device dev = DatabaseConnector.getInstance().saveDevice(device);
         TelnetScheduler.getInstance().updateDevice(dev);
+        BillingWorker.getInstance().updateStation(dev);
         return dev;
     }
 
     public void deleteDevice(Device device) {
         TelnetScheduler.getInstance().deleteDevice(device);
         DatabaseConnector.getInstance().deleteDevice(device);
+        BillingWorker.getInstance().deleteStation(device);
     }
 
     public BusyInfo loadBusyInfo(Device device) {

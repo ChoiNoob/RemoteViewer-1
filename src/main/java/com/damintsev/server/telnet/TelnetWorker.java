@@ -48,6 +48,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
     private boolean keepAlive = false;
     private Long timeout;
     private boolean allowTimeout = true;
+    private boolean authentif = true;
 
     public static void main(String[] args) {
         TelnetWorker example = new TelnetWorker();
@@ -65,6 +66,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
     /**
      * Main for the TelnetWorker.
      * *
+     * @return @@
      */
     public Response connect() {
         Response response = new Response();
@@ -93,14 +95,16 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             instr = tc.getInputStream();
             outstr = tc.getOutputStream();
             stream = new ByteArrayOutputStream();
-            Thread reader = new Thread(this);
-            reader.start();
-            Thread.sleep(3000);
-            write("");
-            write(login);
-            write(password);
-//            write("dis-sdsu:all,,pen,per3,1,1,13,0;");
-//           if(sendAYT().isResult()) {
+
+            if (authentif) {
+                Thread reader = new Thread(this);
+                reader.start();
+                Thread.sleep(3000);
+
+                write("");
+                write(login);
+                write(password);
+            }
                logger.debug("connection sucsessful!");
                response.setResult(true);
                response.setResultText("Success");
@@ -284,5 +288,17 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
 
     public void setAllowTimeout(boolean allowTimeout) {
         this.allowTimeout = allowTimeout;
+    }
+
+    public void setAutnentication(boolean authentif) {
+        this.authentif = authentif;
+    }
+
+    public InputStream getInputStream() {
+        return instr;
+    }
+
+    public boolean isConnected() {
+        return tc != null && tc.isConnected();
     }
 }

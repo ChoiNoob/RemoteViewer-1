@@ -100,8 +100,8 @@ public class DatabaseConnector {
         try {
             connection = Mysql.getConnection();
             if (station.getId() == null) {
-                statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port) " +
-                        "VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port,allowStatistics) " +
+                        "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                 statement.setString(1, station.getComment());
                 statement.setString(2, station.getDeviceType().name());
                 statement.setString(3, station.getHost());
@@ -109,6 +109,7 @@ public class DatabaseConnector {
                 statement.setString(5, station.getName());
                 statement.setString(6, station.getPassword());
                 statement.setString(7, station.getPort());
+                statement.setBoolean(8, station.getAllowStatistics());
 
                 statement.executeUpdate();
                 resultSet = statement.getGeneratedKeys();
@@ -118,14 +119,15 @@ public class DatabaseConnector {
                 resultSet.close();
             } else {
                 statement = connection.prepareStatement("UPDATE station SET comment=?, " +
-                        "host=?, login=?, name=?, password=?, port=? WHERE station_id=?");
+                        "host=?, login=?, name=?, password=?, port=?, allowStatistics=? WHERE station_id=?");
                 statement.setString(1, station.getComment());
                 statement.setString(2, station.getHost());
                 statement.setString(3, station.getLogin());
                 statement.setString(4, station.getName());
                 statement.setString(5, station.getPassword());
                 statement.setString(6, station.getPort());
-                statement.setLong(7, station.getId());
+                statement.setBoolean(7, station.getAllowStatistics());
+                statement.setLong(8, station.getId());
                 statement.executeUpdate();
             }
         } catch (Exception e) {
@@ -252,7 +254,6 @@ public class DatabaseConnector {
     }
 
     private Station findStation(Connection connection, Long stationId) {
-        List<Item> items = new ArrayList<Item>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         Station station = null;
@@ -271,6 +272,7 @@ public class DatabaseConnector {
                 station.setLogin(resultSet.getString("login"));
                 station.setPassword(resultSet.getString("password"));
                 station.setName(resultSet.getString("name"));
+                station.setAllowStatistics(resultSet.getBoolean("allowStatistics"));
 //                station.set
             }
             return station;
@@ -317,8 +319,6 @@ public class DatabaseConnector {
                 dev.setStation(findStation(connection, resultSet.getLong("station_id")));
                 return dev;
             }
-
-
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
@@ -630,26 +630,28 @@ public class DatabaseConnector {
         return null; 
     }
 
-    public BillingInfo saveBillingInfo(BillingInfo info) {
+    public List<BillingInfo> saveBillingInfo(List<BillingInfo> billingList) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = Mysql.getConnection();
-            statement = connection.prepareStatement("INSERT INTO billinginfo (date,source,destination,duration,trunk_id,shortDesination) " +
-                    "VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-            statement.executeUpdate();
-            statement.setDate(1, new java.sql.Date(info.getDate().getTime()));
-            statement.setString(2, info.getNumberFrom());
-            statement.setString(3,info.getNumber());
-            statement.setString(4, info.getCallDuration());
-            statement.setLong(5, info.getTrunkNumber());
-            statement.setString(6, info.getNumberShort());
-            resultSet = statement.getGeneratedKeys();
-            if (resultSet.next()) {
-                info.setId(resultSet.getLong(1));
+            for (BillingInfo info : billingList) {
+                statement = connection.prepareStatement("INSERT INTO billinginfo (date,source,destination,duration,trunk_id,shortDesination) " +
+                        "VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                statement.executeUpdate();
+                statement.setDate(1, new java.sql.Date(info.getDate().getTime()));
+                statement.setString(2, info.getNumberFrom());
+                statement.setString(3, info.getNumber());
+                statement.setString(4, info.getCallDuration());
+                statement.setLong(5, info.getTrunkNumber());
+                statement.setString(6, info.getNumberShort());
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    info.setId(resultSet.getLong(1));
+                }
             }
-            return info;
+            return billingList;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
@@ -820,6 +822,47 @@ public class DatabaseConnector {
                 stations.add(station);
             }
             return stations;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public Station getStationWithBilling() {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        Station station = null;
+        Connection connection;
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM station WHERE allowStatistics = ?");
+            statement.setBoolean(1, true);
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                station = new Station();
+                station.setId(resultSet.getLong("station_id"));
+                station.setComment(resultSet.getString("comment"));
+                station.setStatus(Status.INIT);
+                station.setHost(resultSet.getString("host"));
+                station.setPort(resultSet.getString("port"));
+                station.setLogin(resultSet.getString("login"));
+                station.setPassword(resultSet.getString("password"));
+                station.setName(resultSet.getString("name"));
+                station.setAllowStatistics(resultSet.getBoolean("allowStatistics"));
+            }
+            return station;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();

@@ -153,8 +153,4 @@ public class UISettingsPanel {
     public boolean isExpanded() {
         return panel.isExpanded();
     }
-
-    public static native void reload()/*-{
-        $wnd.location = $wnd.location.pathname;
-    }-*/;
 }

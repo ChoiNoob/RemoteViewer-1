@@ -6,6 +6,7 @@ import com.damintsev.client.service.Service;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.user.client.Random;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -42,8 +43,8 @@ public class BusyChannelPanel implements IsWidget {
 
     private static final Long MINUTE = 1000 * 60L;
     private static final Long HOUR = 1000 * 60 * 60L;
-    private static final Long VISIBLE_PERIOD = HOUR / 2;
-    private static final Long PERIOD_REQUEST = (long)(0.5 * MINUTE);
+    private static final Long VISIBLE_PERIOD = HOUR ;
+    private static final Long PERIOD_REQUEST = (long)(0.1 * MINUTE);
 
     private static final BillingStatsAccess data = GWT.create(BillingStatsAccess.class);
     private static final DateTimeFormat f = DateTimeFormat.getFormat("HH:mm");
@@ -52,7 +53,6 @@ public class BusyChannelPanel implements IsWidget {
     private TimeAxis<BusyInfo> time;
     private NumericAxis<BusyInfo> axis;
     private Timer update;
-    private LineSeries<BusyInfo> series;
 
     public BusyChannelPanel(Device device) {
         this.device = device;
@@ -66,7 +66,7 @@ public class BusyChannelPanel implements IsWidget {
 
         Date initial = new Date(new Date().getTime() - 1 * PERIOD_REQUEST);
         for (int i = 0; i < 1; i++) {
-            store.add(new BusyInfo(initial, null, 100L));
+            store.add(new BusyInfo(initial, 0L, 100L));
             initial = new Date(initial.getTime() + PERIOD_REQUEST);
         }
 //        loadStatistics(store, item.getData());
@@ -105,16 +105,18 @@ public class BusyChannelPanel implements IsWidget {
         time.setLabelConfig(sprite);
         chart.addAxis(time);
 
-
-        series = new LineSeries<BusyInfo>();
+        LineSeries<BusyInfo> series = new LineSeries<BusyInfo>();
         series.setYAxisPosition(Chart.Position.LEFT);
         series.setYField(data.busy());
         series.setStroke(new RGB(RGB.GREEN));
         series.setShowMarkers(true);
-        series.setMarkerIndex(2);
-        Sprite marker = Primitives.circle(0, 0, 4);
-        marker.setFill(new RGB(148, 174, 10));
+        series.setSmooth(true);
+//        series.setMarkerIndex(2);
+        series.setFill(new RGB(new RGB(0, 200, 0)));
+        Sprite marker = Primitives.circle(0, 0, 1);
+        marker.setFill(new RGB(RGB.GREEN));
         series.setMarkerConfig(marker);
+        series.setHighlighting(true);
         chart.addSeries(series);
 
         update = new Timer() {
@@ -134,14 +136,14 @@ public class BusyChannelPanel implements IsWidget {
             }
 
             public void onSuccess(List<BusyInfo> result) {
-//                chart.getStore().addAll(result);
-//                chart.redrawChart();
+                chart.getStore().addAll(result);
+                chart.redrawChart();
                 update.run();
                 update.scheduleRepeating(PERIOD_REQUEST.intValue());
             }
         });
     }
-
+          long i = 0;
     private void loadStatistics() {
         Service.instance.loadBusyInfo(device, new AsyncCallback<BusyInfo>() {
             public void onFailure(Throwable caught) {
@@ -151,6 +153,8 @@ public class BusyChannelPanel implements IsWidget {
 
             public void onSuccess(BusyInfo result) {
                 System.out.println("loaded result!!!");
+//                result = new BusyInfo(new Date(),(long) (Math.random() * 20+10), 100L);
+//                result.setId(++i);
                 if(result != null)
                     updateChart(result);
                 else

@@ -108,9 +108,9 @@ public class FTPScheduler {
         }
         BillingStatistics.getInstance().addBilling(billingList);
 
-        for(BillingInfo info : billingList) {
-            DatabaseConnector.getInstance().saveBillingInfo(info);
-        }
+//        for(BillingInfo info : billingList) {
+//            DatabaseConnector.getInstance().saveBillingInfo(info);
+//        }
     }
 
     private FTPWorker getConnection(FTPSettings settings) {

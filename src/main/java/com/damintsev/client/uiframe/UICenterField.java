@@ -347,15 +347,17 @@ public class UICenterField {
         });
     }
 
-    private void updateUIItem(Device device) {    //todo load from DB is not exists!!!
+    private void updateUIItem(Device device) {
         if(device instanceof Station) {
             System.out.println("update ST");
             UIItem station = uiStations.get(device.getId());
+            if(station == null) {stop();reload();return;}
             station.setData(device);
             uiStations.put(device.getId(), station);
         } else {
             System.out.println("update DEV=" + device.getStatus());
             UIItem dev = uiDevices.get(device.getId());
+            if(dev == null) {stop();reload();return;}
             dev.setData(device);
             uiDevices.put(device.getId(), dev);
         }
@@ -402,4 +404,8 @@ public class UICenterField {
         drawConnections(false);
         createIterator();
     }
+
+    public static native void reload()/*-{
+        $wnd.location = $wnd.location.pathname;
+    }-*/;
 }
