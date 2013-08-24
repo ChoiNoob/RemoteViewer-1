@@ -37,7 +37,8 @@ public class PrefixConfigWindow {
         window.setHeadingText("Настройка префиксов номеров телефонов");
 
         ContentPanel panel = new ContentPanel();
-        panel.setHeaderVisible(false);
+        panel.setHeaderVisible(true);
+        panel.setHeadingText("Номер:имя; (7921:МегаФон;)");
         textArea = new TextArea();
         panel.add(textArea);
         panel.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
@@ -45,7 +46,11 @@ public class PrefixConfigWindow {
                 TreeMap<String, String> map = new TreeMap<String, String>();
                 String text = textArea.getText();
                 text = text.replace("\n","");
+                System.out.println("Text=" + text);
                 String[] strings = text.split(";");
+                if(text.equals("")) {
+                    save(map);
+                }else
                 if (strings.length > 0) {
                     for (String keyValue : strings) {
                         String[] kv = keyValue.split(":");
@@ -55,15 +60,7 @@ public class PrefixConfigWindow {
                         }
                         map.put(kv[0], kv[1]);
                     }
-                    Service.instance.savePrefix(map, new AsyncCallback<Void>() {
-                        public void onFailure(Throwable caught) {
-                            Dialogs.alert("Problem with saving =" + caught.getMessage());
-                        }
-
-                        public void onSuccess(Void result) {
-                            window.hide();
-                        }
-                    });
+                    save(map);
                 }
             }
         }));
@@ -89,6 +86,18 @@ public class PrefixConfigWindow {
                     sb.append(entry.getKey()).append(":").append(entry.getValue()).append(";\n");
                 }
                 textArea.setText(sb.toString());
+            }
+        });
+    }
+
+    private void save(TreeMap<String, String> map) {
+        Service.instance.savePrefix(map, new AsyncCallback<Void>() {
+            public void onFailure(Throwable caught) {
+                Dialogs.alert("Problem with saving =" + caught.getMessage());
+            }
+
+            public void onSuccess(Void result) {
+                window.hide();
             }
         });
     }

@@ -119,7 +119,7 @@ public class UISettingsPanel {
             }
         }),new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
-        buttons.add(new TextButton("Настройка прфиксов", new SelectEvent.SelectHandler() {
+        buttons.add(new TextButton("Настройка префиксов", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 PrefixConfigWindow.get().show();
             }

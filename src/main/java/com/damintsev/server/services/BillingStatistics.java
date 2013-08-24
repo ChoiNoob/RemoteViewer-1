@@ -88,7 +88,8 @@ public class BillingStatistics {
         for(String prefix : prefixMap.keySet()) {
             if (info.getNumberShort().startsWith(prefix)) {
                 String tmp = info.getNumberShort();
-                info.setNumberShort(tmp.substring(0, tmp.length() - 1));
+                System.out.println("CPT=" + tmp + " short=" + tmp.substring(0, tmp.length() - 1));
+                info.setNumberShort(tmp.substring(0, prefix.length()));
                 info.setName(prefixMap.get(prefix));
             }
         }

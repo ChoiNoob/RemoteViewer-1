@@ -1,45 +1,28 @@
 package com.damintsev.client.uiframe;
 
-import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.BillingStats;
-import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.Service;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.editor.client.Editor;
-import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.chart.client.chart.Chart;
 import com.sencha.gxt.chart.client.chart.axis.CategoryAxis;
 import com.sencha.gxt.chart.client.chart.axis.NumericAxis;
 import com.sencha.gxt.chart.client.chart.series.BarSeries;
-import com.sencha.gxt.chart.client.chart.series.LineSeries;
-import com.sencha.gxt.chart.client.chart.series.Primitives;
-import com.sencha.gxt.chart.client.draw.Color;
 import com.sencha.gxt.chart.client.draw.RGB;
-import com.sencha.gxt.chart.client.draw.path.PathSprite;
-import com.sencha.gxt.chart.client.draw.sprite.Sprite;
 import com.sencha.gxt.chart.client.draw.sprite.TextSprite;
 import com.sencha.gxt.core.client.ValueProvider;
-import com.sencha.gxt.data.client.loader.RpcProxy;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
-import com.sencha.gxt.data.shared.loader.ListLoadConfig;
-import com.sencha.gxt.data.shared.loader.ListLoader;
-import com.sencha.gxt.data.shared.loader.LoadResultListStoreBinding;
 import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Resizable;
 import com.sencha.gxt.widget.core.client.event.CollapseEvent;
 import com.sencha.gxt.widget.core.client.event.ExpandEvent;
-import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
-import com.sencha.gxt.widget.core.client.grid.ColumnModel;
-import com.sencha.gxt.widget.core.client.grid.Grid;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,6 +66,7 @@ public class UIBillingPanel {
 
         panel.addExpandHandler(new ExpandEvent.ExpandHandler() {
             public void onExpand(ExpandEvent event) {
+                load();
                 start();
             }
         });
@@ -122,7 +106,7 @@ public class UIBillingPanel {
         categoryAxis.setPosition(Chart.Position.BOTTOM);
         categoryAxis.setField(new ValueProvider<BillingStats, String>() {
             public String getValue(BillingStats object) {
-                return object.getName()==null?object.getNumber():object.getName();
+                return object.getName()==null?object.getNumber():(object.getName() + " (" + object.getNumber()) + ")";
             }
 
             public void setValue(BillingStats object, String value) {
@@ -152,13 +136,13 @@ public class UIBillingPanel {
         panel.add(chart);
 
 
-        for(int i = 0; i < 10; i++) {
-            BillingStats info = new BillingStats();
-//            info.setId((long)i);
-            info.setNumber("81296770");
-            info.setQuantity((long)2 * i - i);
-            chart.getStore().add(info);
-        }
+//        for(int i = 0; i < 10; i++) {
+//            BillingStats info = new BillingStats();
+////            info.setId((long)i);
+//            info.setNumber("81296770");
+//            info.setQuantity((long)2 * i - i);
+//            chart.getStore().add(info);
+//        }
         new Resizable(panel);
         panel.collapse();
     }
@@ -167,7 +151,7 @@ public class UIBillingPanel {
         return panel;
     }
 
-    private void scheduler() {
+    private void load() {
         Service.instance.getStatistisc(new AsyncCallback<List<BillingStats>>() {
             public void onFailure(Throwable caught) {
                 Dialogs.alert("Error while getting statistics =" + caught.getMessage());
@@ -196,7 +180,7 @@ public class UIBillingPanel {
     public void schedule() {
         Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
             public boolean execute() {
-                scheduler();
+                load();
                 return runAnother;
             }
         }, 10000);

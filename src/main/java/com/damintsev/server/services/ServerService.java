@@ -44,6 +44,8 @@ public class ServerService extends RemoteServiceServlet implements ClientService
                 1000 * 60 * 60 * 24 * 7
         );
         BillingWorker.getInstance();
+
+       // TestStatistics s = new TestStatistics();    s.start();
     }
 
     public Boolean saveItems(List<Item> items) {
