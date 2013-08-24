@@ -118,4 +118,13 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     public void hardReset() {
         TelnetScheduler.getInstance().hardReset();
     }
+
+    public TreeMap<String, String> loadPrefix() {
+        return DatabaseConnector.getInstance().loadPrefixMap();
+    }
+
+    public void savePrefix(TreeMap<String, String> prefixMap) {
+        logger.info("savePrefix");
+        DatabaseConnector.getInstance().savePrefixMap(prefixMap);
+    }
 }

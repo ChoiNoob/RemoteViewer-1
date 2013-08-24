@@ -237,32 +237,37 @@ public class TelnetScheduler {
 
     public void start() {
         logger.info("Start timer");
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (iterator == null)
-                    createIterator();
-                if (iterator.hasNext())
-                    checkDevice(iterator.next());
-                else
-                    createIterator();
-            }
-        }, 20000, 10000);
-
-        databaseLoader = new Timer();
-        databaseLoader.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                loadFromDB();
-            }
-        }, HOUR, HOUR);
+        if (timer == null) {
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    if (iterator == null)
+                        createIterator();
+                    if (iterator.hasNext())
+                        checkDevice(iterator.next());
+                    else
+                        createIterator();
+                }
+            }, 20000, 10000);
+        }
+        if (databaseLoader == null) {
+            databaseLoader = new Timer();
+            databaseLoader.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    loadFromDB();
+                }
+            }, HOUR, HOUR);
+        }
     }
 
     public void stop() {
         logger.info("Stop timer");
         timer.cancel();
+        timer = null;
         databaseLoader.cancel();
+        databaseLoader = null;
     }
 
     private Iterator<Device> iterator;

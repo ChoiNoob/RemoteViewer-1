@@ -17,6 +17,7 @@ public class BillingInfo implements Serializable {
     private Long quantity;
     private String callDuration;
     private Long trunkNumber;
+    private String name;
 
     public Long getId() {
         return id;
@@ -80,5 +81,13 @@ public class BillingInfo implements Serializable {
 
     public Long getTrunkNumber() {
         return trunkNumber;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -11,6 +11,7 @@ import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Created by adamintsev
@@ -48,4 +49,8 @@ public interface ClientServiceAsync {
     void getItemsState(AsyncCallback<List<Device>> async);
 
     void hardReset(AsyncCallback<Void> async);
+
+    void savePrefix(TreeMap<String, String> prefixMap, AsyncCallback<Void> async);
+
+    void loadPrefix(AsyncCallback<TreeMap<String, String>> async);
 }

@@ -6,6 +6,7 @@ import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service;
 import com.damintsev.client.windows.AddDeviceWindow;
 import com.damintsev.client.windows.AddStationWindow;
+import com.damintsev.client.windows.PrefixConfigWindow;
 import com.damintsev.client.windows.UIFTPSettings;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
@@ -81,7 +82,7 @@ public class UISettingsPanel {
         });
         device.setIcon(Utils.getImage("cloud"));
         device.setIconAlign(ButtonCell.IconAlign.BOTTOM);
-        buttons.add(device);
+        buttons.add(device, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
         TextButton edit = new TextButton("редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
@@ -104,11 +105,10 @@ public class UISettingsPanel {
                 }
             }
         });
-        buttons.add(edit);
+        buttons.add(edit, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
         buttons.add(new TextButton("Hard reset", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-//                UIFTPSettings.getInstance().show();
                 Service.instance.hardReset(new AsyncCallback<Void>() {
                     public void onFailure(Throwable caught) {
                     }
@@ -117,7 +117,13 @@ public class UISettingsPanel {
                     }
                 });
             }
-        }));
+        }),new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
+
+        buttons.add(new TextButton("Настройка прфиксов", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                PrefixConfigWindow.get().show();
+            }
+        }),new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
         panel.add(buttons);
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {

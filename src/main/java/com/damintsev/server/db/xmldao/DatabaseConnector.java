@@ -880,4 +880,80 @@ public class DatabaseConnector {
         }
         return null;
     }
+
+    public TreeMap<String, String> loadPrefixMap() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet;
+        TreeMap<String, String> map = new TreeMap<String, String>();
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM dictionary ");
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                logger.info("Loading prefix=" + resultSet.getString("prefix"));
+                map.put(resultSet.getString("prefix"), resultSet.getString("number"));
+            }
+            return map;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    public void savePrefixMap(TreeMap<String, String> prefixMap) {
+        logger.info("Saving prefix map");
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Mysql.getConnection();
+
+            statement = connection.prepareStatement("SELECT prefix FROM dictionary");
+            ResultSet resultSet = statement.executeQuery();
+            List<String> toDelete = new ArrayList<String>();
+            while (resultSet.next()) {
+                logger.info("Found at database existing prefix =" + resultSet.getString("prefix"));
+                toDelete.add(resultSet.getString("prefix"));
+            }
+            for(String delete : toDelete) {
+                logger.info("Removing existing prefix=" + delete);
+                statement = connection.prepareStatement("DELETE FROM dictionary WHERE prefix = ?");
+                statement.setString(1, delete);
+                statement.executeUpdate();
+            }
+            for (Map.Entry<String, String> entry : prefixMap.entrySet()) {
+                logger.info("Saving items prefix=" + entry.getKey() + " name=" + entry.getValue());
+                statement = connection.prepareStatement("INSERT INTO dictionary (prefix, number) VALUES(?,?)");
+                statement.setString(1, entry.getKey());
+                statement.setString(2, entry.getValue());
+                statement.executeUpdate();
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }

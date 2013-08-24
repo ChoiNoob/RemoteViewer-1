@@ -12,6 +12,7 @@ import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -51,5 +52,9 @@ public interface ClientService extends RemoteService {
     public List<Device> getItemsState();
 
     public void hardReset();
+
+    public TreeMap<String,String> loadPrefix();
+
+    public void savePrefix(TreeMap<String,String> prefixMap);
 }
 

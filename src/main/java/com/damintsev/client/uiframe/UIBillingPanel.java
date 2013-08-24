@@ -32,6 +32,7 @@ import com.sencha.gxt.data.shared.loader.ListLoader;
 import com.sencha.gxt.data.shared.loader.LoadResultListStoreBinding;
 import com.sencha.gxt.fx.client.Draggable;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.Resizable;
 import com.sencha.gxt.widget.core.client.event.CollapseEvent;
 import com.sencha.gxt.widget.core.client.event.ExpandEvent;
 import com.sencha.gxt.widget.core.client.grid.ColumnConfig;
@@ -158,7 +159,7 @@ public class UIBillingPanel {
             info.setQuantity((long)2 * i - i);
             chart.getStore().add(info);
         }
-
+        new Resizable(panel);
         panel.collapse();
     }
 

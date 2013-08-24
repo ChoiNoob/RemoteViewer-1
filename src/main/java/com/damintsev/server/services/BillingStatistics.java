@@ -25,29 +25,29 @@ public class BillingStatistics {
     
     private Map<String,BillingStats> top;
     private List<BillingInfo> tmpBuffer;
+    private TreeMap<String, String> prefixMap;
     
     private BillingStatistics() {
         top = new TreeMap<String, BillingStats>();
         tmpBuffer = new ArrayList<BillingInfo>(30);
+        prefixMap = new TreeMap<String, String>(new Comparator<String>() {
+            public int compare(String o1, String o2) {
+                return o1.length() == o2.length() ? 0 : o1.length() > o2.length() ? 1 : -1;
+            }
+        });
         loadFromDB();
-
+        loadPrefixMap();
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                clearCahche();
+                clearCache();
             }
         }, 1000 * 60 * 15, 1000 * 60 * 15);
+    }
 
-        List<BillingInfo> billingInfoList = new ArrayList<BillingInfo>();
-//        for(int i = 0 ; i < 10; i++) {
-//            BillingInfo info = new BillingInfo();
-//            info.setNumberShort(i>3?"12345":"666");
-//
-//            info.setQuantity((long)i*i);
-//            billingInfoList.add(info);
-//        }
-        addBilling(billingInfoList);
+    private void loadPrefixMap() {
+        prefixMap = DatabaseConnector.getInstance().loadPrefixMap();
     }
 
     private void loadFromDB() {
@@ -56,15 +56,7 @@ public class BillingStatistics {
     
     public void addBilling(List<BillingInfo> billingInfoList) {
         for(BillingInfo info : billingInfoList) {
-            if(top.containsKey(info.getNumberShort())) {
-                top.get(info.getNumberShort()).increaseQuantity();
-            } else {
-                BillingStats stats = new BillingStats();
-                stats.setNumber(info.getNumberShort());
-                stats.setName(DatabaseConnector.getInstance().getDestinationName(info.getNumberShort()));
-                stats.setQuantity(1L);
-                top.put(info.getNumberShort(), stats);
-            }
+           addBilling(info);
         }
     }
 
@@ -73,16 +65,17 @@ public class BillingStatistics {
                 " numberFrom=" + info.getNumberFrom() +
                 " numberTo=" + info.getNumber() +
                 " date="+ info.getDate());
+        findTrimNumber(info);
         if (top.containsKey(info.getNumberShort())) {
             top.get(info.getNumberShort()).increaseQuantity();
         } else {
             BillingStats stats = new BillingStats();
             stats.setNumber(info.getNumberShort());
-            stats.setName(DatabaseConnector.getInstance().getDestinationName(info.getNumberShort()));
+            stats.setName(info.getName());
             stats.setQuantity(1L);
             top.put(info.getNumberShort(), stats);
         }
-        if(tmpBuffer.size() <= 30) {
+        if(tmpBuffer.size() <= 50) {
             tmpBuffer.add(info);
         } else {
             tmpBuffer.add(info);
@@ -90,7 +83,17 @@ public class BillingStatistics {
             tmpBuffer.clear();
         }
     }
-    
+
+    private void findTrimNumber(BillingInfo info) {
+        for(String prefix : prefixMap.keySet()) {
+            if (info.getNumberShort().startsWith(prefix)) {
+                String tmp = info.getNumberShort();
+                info.setNumberShort(tmp.substring(0, tmp.length() - 1));
+                info.setName(prefixMap.get(prefix));
+            }
+        }
+    }
+
     public List<BillingStats> getStatistics() {
         logger.info("Get statistics called from client");
         logger.info("Already have =" + top.values().size());
@@ -110,19 +113,11 @@ public class BillingStatistics {
             return new ArrayList<BillingStats>(statsList.subList(0, 10));
     }
 
-    private void clearCahche() {
+    private void clearCache() {
         top.clear();
         loadFromDB();
-
-        List<BillingInfo> billingInfoList = new ArrayList<BillingInfo>();
-//        for(int i = 0 ; i < 10; i++) {
-//            BillingInfo info = new BillingInfo();
-//            info.setNumberShort(i>3?"12345":"666");
-//
-//            info.setQuantity((long)i*i);
-//            billingInfoList.add(info);
-//        }
-        addBilling(billingInfoList);
+        prefixMap.clear();
+        loadPrefixMap();
     }
 
     private void startWorker() {
