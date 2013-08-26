@@ -45,7 +45,7 @@ public class BillingWorker extends Thread {
     private BillingWorker() {
         logger.info("Initializing BillingWorker");
         try {
-            Thread.sleep(10000);
+            Thread.sleep(20000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -153,7 +153,8 @@ public class BillingWorker extends Thread {
             String shortNum = fields[3].length() >= 6 ? fields[3].substring(0, 6) : fields[3];
             info.setNumberShort(shortNum);
             info.setCallDuration(fields[4]);
-            info.setTrunkNumber(Long.valueOf(fields[5]));
+            if(!fields[5].equals("") || fields[5] !=null)
+                info.setTrunkNumber(Long.valueOf(fields[5]));
             logger.info("Adding new Billing info");
             BillingStatistics.getInstance().addBilling(info);
         }

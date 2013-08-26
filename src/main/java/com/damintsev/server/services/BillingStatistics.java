@@ -75,7 +75,7 @@ public class BillingStatistics {
             stats.setQuantity(1L);
             top.put(info.getNumberShort(), stats);
         }
-        if(tmpBuffer.size() <= 50) {
+        if(tmpBuffer.size() <= 30) {
             tmpBuffer.add(info);
         } else {
             tmpBuffer.add(info);
@@ -115,6 +115,8 @@ public class BillingStatistics {
     }
 
     private void clearCache() {
+        DatabaseConnector.getInstance().saveBillingInfo(tmpBuffer);
+        tmpBuffer.clear();
         top.clear();
         loadFromDB();
         prefixMap.clear();

@@ -19,6 +19,7 @@ public class TestStatistics extends  Thread {
             info.setId((long)i++);
             info.setDate(new Date());
             info.setNumberFrom("666-666");
+            info.setTrunkNumber(959459L);
 //            info.setNumber("" + StrictMath.abs(new Random().nextLong()));
             Random r = new Random();
             int num = r.nextInt(10);

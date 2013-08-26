@@ -631,21 +631,24 @@ public class DatabaseConnector {
     }
 
     public List<BillingInfo> saveBillingInfo(List<BillingInfo> billingList) {
+        logger.info("Saving billing info...");
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = Mysql.getConnection();
+            logger.info("Size of billing info is=" + billingList.size());
             for (BillingInfo info : billingList) {
+                logger.info("Saving : " + info.getNumberShort());
                 statement = connection.prepareStatement("INSERT INTO billinginfo (date,source,destination,duration,trunk_id,shortDesination) " +
                         "VALUES (?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-                statement.executeUpdate();
-                statement.setDate(1, new java.sql.Date(info.getDate().getTime()));
+                statement.setTimestamp(1, new Timestamp(info.getDate().getTime()));
                 statement.setString(2, info.getNumberFrom());
                 statement.setString(3, info.getNumber());
                 statement.setString(4, info.getCallDuration());
                 statement.setLong(5, info.getTrunkNumber());
                 statement.setString(6, info.getNumberShort());
+                statement.executeUpdate();
                 resultSet = statement.getGeneratedKeys();
                 if (resultSet.next()) {
                     info.setId(resultSet.getLong(1));
@@ -688,10 +691,10 @@ public class DatabaseConnector {
                 BillingInfo info = new BillingInfo();
                 info.setId(resultSet.getLong("id"));
                 info.setDate(resultSet.getDate("date"));
-                info.setCallDuration(resultSet.getString("callduration"));
+                info.setCallDuration(resultSet.getString("duration"));
                 info.setNumberFrom(resultSet.getString("source"));
                 info.setNumber(resultSet.getString("destination"));
-                info.setNumberShort(resultSet.getString("shortDestination"));
+                info.setNumberShort(resultSet.getString("shortDesination"));
                 info.setTrunkNumber(resultSet.getLong("trunk_id"));
                 billingInfoList.add(info);
             }

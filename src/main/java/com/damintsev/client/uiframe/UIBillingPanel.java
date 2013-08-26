@@ -117,7 +117,10 @@ public class UIBillingPanel {
                 return null;  //To change body of implemented methods use File | Settings | File Templates.
             }
         });
-
+        sprite = new TextSprite();
+        sprite.setRotation(315);
+        sprite.setFontSize(14);
+        categoryAxis.setLabelConfig(sprite);
         final BarSeries<BillingStats> column = new BarSeries<BillingStats>();
         column.setYAxisPosition(Chart.Position.LEFT);
 //        column.addYField(new ValueProvider<BillingStats, Number>() {

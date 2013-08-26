@@ -10,6 +10,7 @@ import com.damintsev.server.db.xmldao.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
@@ -84,10 +85,10 @@ public class TelnetScheduler {
         logger.info("Calling checkDevice with type=" + device.getDeviceType() + " id=" + device.getId() + " name=" + device.getName());
         try {
             TelnetWorker telnet = getConnection(device.getStation());
-            if (telnet == null) {
-                device.setStatus(Status.ERROR);
-                return;
-            }
+//            if (telnet == null) {
+//                device.setStatus(Status.ERROR);
+//                return;
+//            }
             if (device instanceof Station) {
                 checkStation(telnet, (Station) device);
             } else if (device.getDeviceType() == DeviceType.IP) {
@@ -101,6 +102,7 @@ public class TelnetScheduler {
             telnetStation.remove(device.getId());
             if(telnet!=null)telnet.disconnect();
             device.setStatus(Status.ERROR);
+            devices.put(device.getId(), device);
         }
     }
 
@@ -117,17 +119,17 @@ public class TelnetScheduler {
 
     private void parseBusyResponse(Response resp, Device device) {
         String result = resp.getResultText();
-        logger.info("After ask busy result is: " + result);
+        logger.debug("After ask busy result is: " + result);
         int index = result.indexOf("OTHER");
         BusyInfo info;
         String busy = null;
         if (index > 0) {
             result = result.substring(index + 5);
-            logger.info("After substring result is =" + result);
+            logger.debug("After substring result is =" + result);
             result = result.replace("   ", " ");
             result = result.replace("  ", " ");
             String[] table = result.trim().split(" ");
-            logger.info("After replace =" + result);
+            logger.debug("After replace =" + result);
             if (table.length >= 3) {
                 logger.info("table[0]=" + table[0] + "table[1]=" + table[1] + "table[2]=" + table[2] + "table[3]=" + table[3]);
                 busy = table[3];
@@ -142,15 +144,46 @@ public class TelnetScheduler {
         }
     }
 
-    private void checkIP(TelnetWorker telnet, Device device) {
+    private void checkIP(TelnetWorker telnet, Device device) throws IOException {
         //Check alive
-        Response resp = telnet.execute(((CommonDevice) device).getQuery());
-        parsePingResult(resp, device);
-        device.setResponse(resp);
-        devices.put(device.getId(), device);
-        if(((CommonDevice) device).getQueryBusy() != null) {
-            resp = telnet.execute(((CommonDevice) device).getQueryBusy());
-            parseBusyResponse(resp, device);
+//        Response resp = telnet.execute(((CommonDevice) device).getQuery());
+//        parsePingResult(resp, device);
+//        device.setResponse(resp);
+//        devices.put(device.getId(), device);
+//        if(((CommonDevice) device).getQueryBusy() != null) {
+//            resp = telnet.execute(((CommonDevice) device).getQueryBusy());
+//            parseBusyResponse(resp, device);
+//        }
+        Response resp = new Response();
+        InputStream in = null;
+        BufferedReader reader = null;
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec(((CommonDevice) device).getQuery());
+            in = process.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            resp.setResultText(sb.toString());
+            parsePingResult(resp, device);
+
+        } catch (Exception e) {
+            resp.setResult(false);
+            resp.setStatus(Status.ERROR);
+            device.setStatus(Status.ERROR);
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+            if (in != null) {
+                in.close();
+            }
+            if (process != null) {
+                process.destroy();
+            }
         }
     }
 
@@ -174,11 +207,11 @@ public class TelnetScheduler {
     private void parseAliveResult(Response resp, Device device) {
         logger.info("Parse server response for device id=" + device.getId() + " name=" + device.getName());
         String result = resp.getResultText();
-        logger.info(result);
+        logger.debug(result);
         int index = result.indexOf("PP NW");
         if (index > 0) {
             result = result.substring(index, result.length());
-            logger.info("After substring: " + result);
+            logger.debug("After substring: " + result);
         }
         if (result.contains("READY")) {
             device.setStatus(Status.WORK);
@@ -290,7 +323,7 @@ public class TelnetScheduler {
         stop();
         if(device instanceof Station) {
             TelnetWorker telnet = telnetStation.get(device.getId());
-            if(telnet!=null){
+            if(telnet!=null) {
                 telnet.disconnect();
             }
             telnetStation.remove(device.getId());
