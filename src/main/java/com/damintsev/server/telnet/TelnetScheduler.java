@@ -4,15 +4,17 @@ import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.devices.graph.BusyInfo;
-import com.damintsev.server.db.Hibernate;
-import com.damintsev.server.db.HibernateProxy;
-import com.damintsev.server.db.xmldao.DatabaseConnector;
+import com.damintsev.server.Executor;
+import com.damintsev.server.SingleThread;
+import com.damintsev.server.db.DatabaseConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -26,6 +28,8 @@ public class TelnetScheduler {
     private static final Logger logger = LoggerFactory.getLogger(TelnetScheduler.class);
     private static final Long HOUR = 1000 * 60 * 60L;
     private static TelnetScheduler instance;
+    private static int count = 1;
+    private SingleThread executor = Executor.getInstance().createThread(TelnetScheduler.class);
 
     public static TelnetScheduler getInstance() {
         if (instance == null) instance = new TelnetScheduler();
@@ -34,37 +38,17 @@ public class TelnetScheduler {
 
     private Map<Long, TelnetWorker> telnetStation;
     private ConcurrentHashMap<Long, Device> devices;
-    private Timer timer;
-    private Timer databaseLoader;
+//    private Timer timer;
+//    private Timer databaseLoader;
 
     private TelnetScheduler() {
-        logger.info("Initializing TelnetSheduler");
+        logger.info("Initializing TelnetSheduler id=" + count++);
         telnetStation = new HashMap<Long, TelnetWorker>();
         devices = new ConcurrentHashMap<Long, Device>();
         loadFromDB();
         logger.info("Telnet Scheduler sucsessfylly constructed");
-        start();
+//        start();
     }
-
-//    @Deprecated
-//    public Device getDeviceState(Device device) {
-//        Device response;
-//        if (!devices.containsKey(device.getId())) {
-//            addDevice(device);
-//            response = device;
-//            response.setResponse(TelnetScheduler.createInitResponse());
-//        } else {
-//            response = devices.get(device.getId());
-//        }
-//        return response;
-//    }
-//
-//    private void addDevice(Device device) {
-//        devices.put(device.getId(), device);
-////        if (device instanceof Station) {
-////            initConnection((Station) device);
-////        }
-//    }
 
     private boolean initConnection(Station station) {
         TelnetWorker telnet = new TelnetWorker();
@@ -270,10 +254,7 @@ public class TelnetScheduler {
 
     public void start() {
         logger.info("Start timer");
-        if (timer == null) {
-            timer = new Timer();
-            timer.scheduleAtFixedRate(new TimerTask() {
-                @Override
+            executor.scheduleAtFixedRate(new Runnable() {
                 public void run() {
                     if (iterator == null)
                         createIterator();
@@ -282,25 +263,42 @@ public class TelnetScheduler {
                     else
                         createIterator();
                 }
-            }, 20000, 10000);
-        }
-        if (databaseLoader == null) {
-            databaseLoader = new Timer();
-            databaseLoader.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    loadFromDB();
-                }
-            }, HOUR, HOUR);
-        }
+            }, 100, 10, TimeUnit.SECONDS);
+
+//        if (timer == null) {
+//            timer = new Timer();
+//            timer.scheduleAtFixedRate(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    if (iterator == null)
+//                        createIterator();
+//                    if (iterator.hasNext())
+//                        checkDevice(iterator.next());
+//                    else
+//                        createIterator();
+//                }
+//            }, 20000, 10000);
+//        }
+//        if (databaseLoader == null) {
+//            databaseLoader = new Timer();
+//            databaseLoader.scheduleAtFixedRate(new TimerTask() {
+//                @Override
+//                public void run() {
+//                    loadFromDB();
+//                }
+//            }, HOUR, HOUR);
+//        }
     }
 
     public void stop() {
         logger.info("Stop timer");
-        timer.cancel();
-        timer = null;
-        databaseLoader.cancel();
-        databaseLoader = null;
+//        timer.cancel();
+//        timer = null;
+
+//        if(!shed.())
+//            shed.shutdown();
+//        databaseLoader.cancel();
+//        databaseLoader = null;
     }
 
     private Iterator<Device> iterator;
@@ -358,7 +356,8 @@ public class TelnetScheduler {
     }
 
     private void loadFromDB() {
-        if(timer != null) stop();
+//        if(timer != null)
+            stop();
         if (devices == null) devices = new ConcurrentHashMap<Long, Device>();
         List<Item> items =  DatabaseConnector.getInstance().loadItems();
         logger.info("Loading information from database: loaded=" + items.size() + " items.");
@@ -376,7 +375,8 @@ public class TelnetScheduler {
 //                }
 //            }
         }
-        if(timer != null) start();
+//        if(timer != null)
+            start();
     }
 
     public void hardReset() {

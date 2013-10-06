@@ -3,22 +3,17 @@ package com.damintsev.server.billing;
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
-import com.damintsev.server.db.xmldao.DatabaseConnector;
-import com.damintsev.server.services.BillingStatistics;
+import com.damintsev.server.db.DatabaseConnector;
+import com.damintsev.server.BillingStatistics;
 import com.damintsev.server.telnet.TelnetWorker;
-import com.sun.corba.se.spi.orbutil.fsm.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.Socket;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 

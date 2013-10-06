@@ -1,8 +1,8 @@
-package com.damintsev.server.services;
+package com.damintsev.server;
 
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.BillingStats;
-import com.damintsev.server.db.xmldao.DatabaseConnector;
+import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.telnet.TelnetWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

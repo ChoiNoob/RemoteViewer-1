@@ -1,16 +1,12 @@
-package com.damintsev.server.db.xmldao;
+package com.damintsev.server.db;
 
 import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.devices.graph.BusyInfo;
-import com.damintsev.server.db.Mysql;
-import com.damintsev.server.services.ServerService;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.rowset.serial.SerialArray;
 import java.sql.*;
-import java.sql.Date;
 import java.util.*;
 
 /**
@@ -258,7 +254,6 @@ public class DatabaseConnector {
         ResultSet resultSet = null;
         Station station = null;
         try {
-            connection = Mysql.getConnection();
             statement = connection.prepareStatement("SELECT * FROM station WHERE station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();

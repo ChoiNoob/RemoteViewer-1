@@ -4,13 +4,12 @@ import com.damintsev.client.devices.*;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.graph.BusyInfo;
 import com.damintsev.client.service.ClientService;
+import com.damintsev.server.BillingStatistics;
 import com.damintsev.server.billing.BillingWorker;
 import com.damintsev.server.db.CleanManager;
-import com.damintsev.server.db.xmldao.DatabaseConnector;
+import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.telnet.TelnetScheduler;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.sencha.gxt.data.shared.loader.ListLoadResult;
-import com.sencha.gxt.data.shared.loader.ListLoadResultBean;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public class ServerService extends RemoteServiceServlet implements ClientService
                 cal.getTime(),
                 1000 * 60 * 60 * 24 * 7
         );
-        BillingWorker.getInstance();
+//        BillingWorker.getInstance();
 
        // TestStatistics s = new TestStatistics();    s.start();
     }

@@ -1,4 +1,4 @@
-package com.damintsev.server.services;
+package com.damintsev.server;
 
 import com.damintsev.client.devices.BillingInfo;
 

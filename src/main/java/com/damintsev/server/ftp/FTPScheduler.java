@@ -2,8 +2,8 @@ package com.damintsev.server.ftp;
 
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.FTPSettings;
-import com.damintsev.server.db.xmldao.DatabaseConnector;
-import com.damintsev.server.services.BillingStatistics;
+import com.damintsev.server.db.DatabaseConnector;
+import com.damintsev.server.BillingStatistics;
 import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;

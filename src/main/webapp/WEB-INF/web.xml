@@ -16,6 +16,10 @@
     <url-pattern>/mainGWT/service</url-pattern>
   </servlet-mapping>
 
+
+    <listener>
+        <listener-class>com.damintsev.servlet.Servlet</listener-class>
+    </listener>
     <!--<servlet>-->
         <!--<servlet-name>imageUpload</servlet-name>-->
         <!--<servlet-class>com.damintsev.servlet.ImageUpload</servlet-class>-->
@@ -49,9 +53,17 @@
         <servlet-name>remoteLogging</servlet-name>
         <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>com.damintsev.mainGWT DatabaseService</servlet-name>
+        <servlet-class>com.damintsev.server.services.DatabaseServerService</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>remoteLogging</servlet-name>
         <url-pattern>/mainGWT/remote_logging</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>com.damintsev.mainGWT DatabaseService</servlet-name>
+        <url-pattern>/mainGWT/DatabaseService</url-pattern>
     </servlet-mapping>
 
     <!-- Default page to serve -->
