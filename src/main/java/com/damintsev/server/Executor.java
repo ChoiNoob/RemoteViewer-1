@@ -52,6 +52,7 @@ public class Executor {
 
     public void shutdownAll() {
         for(SingleThread thread : executors.values()) {
+            logger.info("Stopping thread " + thread.toString());
             thread.shutdown();
         }
     }

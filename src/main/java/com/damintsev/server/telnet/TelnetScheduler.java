@@ -256,6 +256,7 @@ public class TelnetScheduler {
         logger.info("Start timer");
             executor.scheduleAtFixedRate(new Runnable() {
                 public void run() {
+                    Thread.currentThread().setName("telnet sched");
                     if (iterator == null)
                         createIterator();
                     if (iterator.hasNext())
@@ -263,7 +264,7 @@ public class TelnetScheduler {
                     else
                         createIterator();
                 }
-            }, 100, 10, TimeUnit.SECONDS);
+            }, 10, 10, TimeUnit.SECONDS);
 
 //        if (timer == null) {
 //            timer = new Timer();

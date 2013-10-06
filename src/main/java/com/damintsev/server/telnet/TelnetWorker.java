@@ -63,11 +63,6 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
 
     }
 
-    /**
-     * Main for the TelnetWorker.
-     * *
-     * @return @@
-     */
     public Response connect() {
         Response response = new Response();
         tc = new org.apache.commons.net.telnet.TelnetClient();
@@ -86,7 +81,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
         try {
             logger.debug("Trying to connect to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password);
             tc.connect(host, Integer.parseInt(port));
-            tc.registerNotifHandler(new TelnetWorker());
+            tc.registerNotifHandler(this);
             tc.setKeepAlive(keepAlive);
             if(allowTimeout)
                 if(timeout == null) tc.setSoTimeout(60000);//1 minute
@@ -101,7 +96,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
                 reader.start();
                 Thread.sleep(3000);
 
-                write("");
+                write("");    //todo customize this!
                 write(login);
                 write(password);
             }

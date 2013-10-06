@@ -28,6 +28,6 @@ public class SingleThread {
     }
 
     public void shutdown() {
-        sched.shutdown();
+        sched.shutdownNow();
     }
 }
