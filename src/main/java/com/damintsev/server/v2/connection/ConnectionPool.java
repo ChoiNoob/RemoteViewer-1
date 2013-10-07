@@ -1,5 +1,8 @@
 package com.damintsev.server.v2.connection;
 
+import com.damintsev.client.devices.Station;
+import com.damintsev.server.v2.Task.Task;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,12 +26,38 @@ public class ConnectionPool {
         connectionMap = new HashMap<Long, Connection>();
     }
 
-    public ConnectionPool addConnection(Connection connection) {
-        connectionMap.put(connection.getId(), connection);
-        return this;
+//    public ConnectionPool addConnection(Connection connection) {
+//        connectionMap.put(connection.getId(), connection);
+//        return this;
+//    }
+
+    public Connection getConnection(Task task) {
+        switch (task.getType()) {
+            case TELNET: {
+                Connection connection = connectionMap.get(task.getStation().getId());
+                if(connection == null) connection = create(task.getStation());
+                return connection;
+            }
+            case IP: {
+                //todo
+            }
+        }
+        return null;
     }
 
-    public Connection getConnection(Long id) {
-        return connectionMap.get(id);
+    public Connection create(Station station) {
+//        switch (station.getType()) {
+//            case TELNET:
+        Connection conn = new TelnetConnection().init(station);
+        connectionMap.put(station.getId(), conn);
+//            default: return null;
+//        }
+        return conn;
+    }
+
+    public void dropConnections() {
+        for(Connection connection : connectionMap.values()) {
+            connection.destroy();
+        }
     }
 }

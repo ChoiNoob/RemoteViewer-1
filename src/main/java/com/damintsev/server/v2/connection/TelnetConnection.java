@@ -3,6 +3,7 @@ package com.damintsev.server.v2.connection;
 import com.damintsev.client.devices.Response;
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.telnet.TelnetWorker;
+import com.damintsev.server.v2.Task.Task;
 
 import java.util.Properties;
 
@@ -17,20 +18,21 @@ public class TelnetConnection extends Connection {
     private Station station;
 
     @Override
-    public void create(Properties properties) {
+    public Connection init(Station station) {
         worker = new TelnetWorker();
-        worker.setLogin(properties.getProperty("login"));
-        worker.setPassword(properties.getProperty("password"));
-        worker.setHost(properties.getProperty("host"));
-        worker.setPort(properties.getProperty("port"));
+//        worker.setLogin(properties.getProperty("login"));
+//        worker.setPassword(properties.getProperty("password"));
+//        worker.setHost(properties.getProperty("host"));
+//        worker.setPort(properties.getProperty("port"));
         worker.connect();
+        return this;
     }
 
     @Override
-    public Response process(String command) {
+    public Response process(Task task) {
        if(worker == null || !worker.isConnected())
            throw new RuntimeException("Telnet worker not initialized!");
-        return worker.execute(command);
+        return task.process(worker.execute(task.getCommand()));
     }
 
     @Override
@@ -42,6 +44,4 @@ public class TelnetConnection extends Connection {
     public Long getId() {
         return station.getId();
     }
-
-
 }
