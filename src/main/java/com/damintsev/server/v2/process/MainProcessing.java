@@ -1,14 +1,10 @@
 package com.damintsev.server.v2.process;
 
-import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Station;
-import com.damintsev.server.db.DatabaseConnector;
-import com.damintsev.server.v2.Task.Task;
+import com.damintsev.server.v2.v3.task.Task;
 
-import java.lang.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: Damintsev Andrey

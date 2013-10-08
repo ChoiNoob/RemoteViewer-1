@@ -1,9 +1,7 @@
-package com.damintsev.server.v2.Task;
+package com.damintsev.server.v2.v3.task;
 
 import com.damintsev.client.devices.Response;
 import com.damintsev.client.devices.Station;
-import com.damintsev.server.v2.Task.Task;
-import com.damintsev.server.v2.connection.Connection;
 import com.damintsev.server.v2.machine.state.TaskState;
 
 /**

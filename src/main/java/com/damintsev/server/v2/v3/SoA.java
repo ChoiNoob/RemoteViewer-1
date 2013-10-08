@@ -2,8 +2,8 @@ package com.damintsev.server.v2.v3;
 
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.db.DatabaseConnector;
-import com.damintsev.server.v2.Task.Task;
-import com.damintsev.server.v2.connection.ConnectionPool;
+import com.damintsev.server.v2.v3.task.Task;
+import com.damintsev.server.v2.v3.connection.ConnectionPool;
 import com.damintsev.server.v2.machine.state.TaskState;
 
 import java.util.ArrayList;

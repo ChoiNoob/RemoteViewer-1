@@ -1,10 +1,8 @@
 package com.damintsev.server.v2.process;
 
-import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Station;
-import com.damintsev.server.v2.Task.Task;
-import com.damintsev.server.v2.connection.Connection;
-import com.damintsev.server.v2.connection.TelnetConnection;
+import com.damintsev.server.v2.v3.task.Task;
+import com.damintsev.server.v2.v3.connection.Connection;
 
 import java.util.List;
 
