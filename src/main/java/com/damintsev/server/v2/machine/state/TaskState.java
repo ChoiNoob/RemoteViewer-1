@@ -9,11 +9,20 @@ import com.damintsev.client.devices.Response;
  */
 public class TaskState {
 
+    private String id;
     private State state;
     private Response response;
 
     public TaskState() {
         state = State.INIT;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Response getResponse() {

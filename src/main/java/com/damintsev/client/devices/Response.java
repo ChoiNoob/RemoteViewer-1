@@ -14,7 +14,6 @@ public class Response implements Serializable {
     private Long id;
     private String resultText;
 //    private String requestText;
-    private Status status;
     private boolean result;
 
     public Response() {
@@ -47,14 +46,6 @@ public class Response implements Serializable {
 
     public void setResultText(String resultText) {
         this.resultText = resultText;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 
     public void setResult(boolean result) {

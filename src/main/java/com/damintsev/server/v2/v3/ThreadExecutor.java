@@ -19,12 +19,13 @@ import java.util.Map;
  */
 public class ThreadExecutor extends Thread {
 
-//    private Station station;
+    private Long stationId;
     private List<Task> tasks;
     private Map<String, TaskState> taskStates;
+    private boolean start = false;
 
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
-//        this.station = station;
+        this.stationId = station.getId();
         this.tasks = tasks;
         this.taskStates = map;
         new Runnable() {
@@ -55,7 +56,7 @@ public class ThreadExecutor extends Thread {
 
     public void run() {
         Iterator<Task> iterator = tasks.iterator();
-        while (true) {
+        while (start) {
             if(iterator.hasNext())
                 executeTask(iterator.next());
             else
@@ -70,14 +71,20 @@ public class ThreadExecutor extends Thread {
 
     @Override
     public void start() {
+        start = true;
         super.start();
     }
 
     @Override
     public void interrupt() {
+        start = false;
         for(Task task : tasks) {
             taskStates.put(task.getId(), new TaskState());
         }
         super.interrupt();
+    }
+
+    public String getThreadId() {
+        return Thread.currentThread().getName() + ":" + stationId;
     }
 }
