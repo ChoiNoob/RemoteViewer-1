@@ -4,6 +4,9 @@ import com.damintsev.client.devices.Response;
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.telnet.TelnetWorker;
 import com.damintsev.server.v2.Task.Task;
+import com.damintsev.server.v2.machine.state.TaskState;
+import com.damintsev.server.v2.v3.exceptions.ConnectException;
+import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 
 import java.util.Properties;
 
@@ -18,7 +21,7 @@ public class TelnetConnection extends Connection {
     private Station station;
 
     @Override
-    public Connection init(Station station) {
+    public Connection init(Station station) throws ConnectException {
         worker = new TelnetWorker();
 //        worker.setLogin(properties.getProperty("login"));
 //        worker.setPassword(properties.getProperty("password"));
@@ -29,7 +32,7 @@ public class TelnetConnection extends Connection {
     }
 
     @Override
-    public Response process(Task task) {
+    public TaskState process(Task task) throws ExecutingTaskException {
        if(worker == null || !worker.isConnected())
            throw new RuntimeException("Telnet worker not initialized!");
         return task.process(worker.execute(task.getCommand()));

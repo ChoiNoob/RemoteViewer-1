@@ -2,6 +2,7 @@ package com.damintsev.server.v2.connection;
 
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.v2.Task.Task;
+import com.damintsev.server.v2.v3.exceptions.ConnectException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,7 +32,7 @@ public class ConnectionPool {
 //        return this;
 //    }
 
-    public Connection getConnection(Task task) {
+    public Connection getConnection(Task task) throws ConnectException{
         switch (task.getType()) {
             case TELNET: {
                 Connection connection = connectionMap.get(task.getStation().getId());
@@ -45,7 +46,7 @@ public class ConnectionPool {
         return null;
     }
 
-    public Connection create(Station station) {
+    public Connection create(Station station) throws ConnectException {
 //        switch (station.getType()) {
 //            case TELNET:
         Connection conn = new TelnetConnection().init(station);

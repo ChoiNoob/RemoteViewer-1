@@ -10,7 +10,7 @@ import java.util.List;
  * Date: 06.10.13
  * Time: 20:40
  */
-public class InitState extends State {
+public class InitState extends ExecuteState {
 
     @Override
     public int getNextState() {

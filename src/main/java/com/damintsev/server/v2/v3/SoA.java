@@ -21,7 +21,7 @@ public class SoA {
 
     private static SoA instance;
     private static Map<String, ThreadExecutor> threads = new HashMap<String, ThreadExecutor>();
-    private Map<String, TaskState> stateMap = new ConcurrentHashMap<String, TaskState>();
+    private Map<Long, TaskState> stateMap = new ConcurrentHashMap<Long, TaskState>();
 
     public static SoA getInstance() {
         if (instance == null) instance = new SoA();
@@ -31,7 +31,7 @@ public class SoA {
     private SoA() {
         List<Station> stations = DatabaseConnector.getInstance().getStationList();
         for(Station station : stations) {
-            List<Task> tasks = new ArrayList<Task>() ;
+            List<Task> tasks = new ArrayList<Task>() ; //todo
             ThreadExecutor thread = new ThreadExecutor(station, tasks, stateMap);
             threads.put(thread.getThreadId(), thread);
         }
@@ -42,5 +42,9 @@ public class SoA {
             thread.interrupt();
         }
         ConnectionPool.getInstance().dropConnections();
+    }
+
+    public Map<Long, TaskState> getStates() {
+        return stateMap;
     }
 }

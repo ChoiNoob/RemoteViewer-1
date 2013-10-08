@@ -3,6 +3,7 @@ package com.damintsev.server.v2.Task;
 import com.damintsev.client.devices.Response;
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.v2.connection.Connection;
+import com.damintsev.server.v2.machine.state.TaskState;
 
 /**
  * User: Damintsev Andrey
@@ -12,12 +13,11 @@ import com.damintsev.server.v2.connection.Connection;
 public abstract class Task {
 
     private TaskType type;
-    private String id;
+    private Long id;
 
     public abstract String getCommand();
     public abstract Station getStation();
-
-    public abstract Response process(Response execute);
+    public abstract TaskState process(Response execute);
 
     public TaskType getType() {
         return type;
@@ -27,11 +27,11 @@ public abstract class Task {
         this.type = type;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 }
