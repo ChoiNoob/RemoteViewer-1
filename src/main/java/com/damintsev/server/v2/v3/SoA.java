@@ -1,8 +1,9 @@
 package com.damintsev.server.v2.v3;
 
 import com.damintsev.client.devices.Station;
-import com.damintsev.server.db.DatabaseConnector;
+import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.task.Task;
+import com.damintsev.server.v2.v3.task.executors.TaskExecutor;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import com.damintsev.server.v2.v3.task.TaskState;
 
@@ -29,9 +30,9 @@ public class SoA {
     }
 
     private SoA() {
-        List<Station> stations = DatabaseConnector.getInstance().getStationList();
+        List<Station> stations = DB.getInstance().getStationList();
         for(Station station : stations) {
-            List<Task> tasks = new ArrayList<Task>() ; //todo
+            List<Task> tasks = DB.getInstance().loadTasksForStation(station);
             ThreadExecutor thread = new ThreadExecutor(station, tasks, stateMap);
             threads.put(thread.getThreadId(), thread);
         }

@@ -3,6 +3,7 @@ package com.damintsev.server.v2.v3.connections;
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.telnet.TelnetWorker;
 import com.damintsev.server.v2.v3.task.Task;
+import com.damintsev.server.v2.v3.task.executors.TaskExecutor;
 import com.damintsev.server.v2.v3.task.TaskState;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
@@ -29,10 +30,10 @@ public class TelnetConnection extends Connection {
     }
 
     @Override
-    public TaskState process(Task task) throws ExecutingTaskException {
+    public String process(Task task) throws ExecutingTaskException {
        if(worker == null || !worker.isConnected())
            throw new RuntimeException("Telnet worker not initialized!");
-        return task.process(worker.execute(task.getCommand()));
+        return worker.execute(task.getCommand()).getResultText(); //todo convert to string!
     }
 
     @Override

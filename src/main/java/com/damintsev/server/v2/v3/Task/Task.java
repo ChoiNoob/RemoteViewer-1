@@ -1,28 +1,26 @@
 package com.damintsev.server.v2.v3.task;
 
-import com.damintsev.client.devices.Response;
 import com.damintsev.client.devices.Station;
 
 /**
  * User: Damintsev Andrey
- * Date: 06.10.13
- * Time: 16:54
+ * Date: 09.10.13
+ * Time: 0:43
  */
-public abstract class Task {
+public class Task {
 
-    private TaskType type;
     private Long id;
+    private String name;
+    private String command;
+    private TaskType type;
+    private Station station;
 
-    public abstract String getCommand();
-    public abstract Station getStation();
-    public abstract TaskState process(Response execute);
-
-    public TaskType getType() {
-        return type;
+    public String getCommand() {
+        return command;
     }
 
-    public void setType(TaskType type) {
-        this.type = type;
+    public void setCommand(String command) {
+        this.command = command;
     }
 
     public Long getId() {
@@ -31,5 +29,29 @@ public abstract class Task {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Station getStation() {
+        return station;
+    }
+
+    public void setStation(Station station) {
+        this.station = station;
+    }
+
+    public TaskType getType() {
+        return type;
+    }
+
+    public void setType(TaskType type) {
+        this.type = type;
     }
 }

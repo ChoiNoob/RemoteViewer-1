@@ -16,15 +16,17 @@ public class TaskState implements Serializable{
     private Response response;
     private String message;
 
-    public TaskState(ExecuteState state, String message) {
-         this.state = state;
-        this.message = message;
-    }
-    public TaskState(ExecuteState state) {
-         this.state = state;
-    }
-        public TaskState() {
+    public TaskState() {
         state = ExecuteState.INIT;
+    }
+
+    public TaskState(ExecuteState state) {
+        this.state = state;
+    }
+
+    public TaskState(ExecuteState state, String message) {
+        this.state = state;
+        this.message = message;
     }
 
     public Long getId() {

@@ -2,6 +2,7 @@ package com.damintsev.server.v2.v3.connections;
 
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.v2.v3.task.Task;
+import com.damintsev.server.v2.v3.task.executors.TaskExecutor;
 import com.damintsev.server.v2.v3.task.TaskState;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
@@ -14,7 +15,11 @@ import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 public abstract class Connection {
 
     protected abstract Connection init(Station station) throws ConnectException;
-    public abstract TaskState process(Task task) throws ExecutingTaskException;
+    protected abstract String process(Task task) throws ExecutingTaskException;
     public abstract void destroy();
     public abstract Long getId();
+
+    public TaskState execute(Task task) throws ExecutingTaskException {
+        return TaskExecutor.process(task, process(task));
+    }
 }
