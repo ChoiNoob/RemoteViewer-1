@@ -1,4 +1,4 @@
-package com.damintsev.server.v2.machine.state;
+package com.damintsev.server.v2.v3.task;
 
 import com.damintsev.client.devices.Response;
 

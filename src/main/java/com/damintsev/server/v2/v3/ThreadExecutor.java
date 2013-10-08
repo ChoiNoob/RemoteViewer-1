@@ -2,10 +2,10 @@ package com.damintsev.server.v2.v3;
 
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.v2.v3.task.Task;
-import com.damintsev.server.v2.v3.connection.Connection;
-import com.damintsev.server.v2.v3.connection.ConnectionPool;
-import com.damintsev.server.v2.machine.state.ExecuteState;
-import com.damintsev.server.v2.machine.state.TaskState;
+import com.damintsev.server.v2.v3.connections.Connection;
+import com.damintsev.server.v2.v3.connections.ConnectionPool;
+import com.damintsev.server.v2.v3.task.ExecuteState;
+import com.damintsev.server.v2.v3.task.TaskState;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 

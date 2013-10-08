@@ -1,4 +1,4 @@
-package com.damintsev.server.v2.v3.connection;
+package com.damintsev.server.v2.v3.connections;
 
 import com.damintsev.client.devices.Station;
 import com.damintsev.server.v2.v3.task.Task;
