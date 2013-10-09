@@ -1,4 +1,4 @@
-package com.damintsev.server.v2.v3.task;
+package com.damintsev.client.v3.items.task;
 
 /**
  * User: Damintsev Andrey

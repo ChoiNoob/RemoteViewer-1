@@ -1,8 +1,6 @@
-package com.damintsev.server.v2.v3.task.executors;
+package com.damintsev.client.v3.items.task.executors;
 
-import com.damintsev.client.devices.Response;
-import com.damintsev.client.devices.Station;
-import com.damintsev.server.v2.v3.task.TaskState;
+import com.damintsev.client.v3.items.task.TaskState;
 
 /**
  * User: Damintsev Andrey

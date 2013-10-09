@@ -1,13 +1,14 @@
-package com.damintsev.server.v2.v3.task;
+package com.damintsev.client.v3.items.task;
 
 import com.damintsev.client.devices.Station;
+import com.damintsev.client.v3.items.Item;
 
 /**
  * User: Damintsev Andrey
  * Date: 09.10.13
  * Time: 0:43
  */
-public class Task {
+public class Task extends Item {
 
     private Long id;
     private String name;

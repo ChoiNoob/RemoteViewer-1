@@ -1,9 +1,9 @@
 package com.damintsev.server.v2.v3.connections;
 
 import com.damintsev.client.devices.Station;
-import com.damintsev.server.v2.v3.task.Task;
-import com.damintsev.server.v2.v3.task.executors.TaskExecutor;
-import com.damintsev.server.v2.v3.task.TaskState;
+import com.damintsev.client.v3.items.task.Task;
+import com.damintsev.client.v3.items.task.executors.TaskExecutor;
+import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 

@@ -8,7 +8,6 @@ import com.damintsev.server.BillingStatistics;
 import com.damintsev.server.billing.BillingWorker;
 import com.damintsev.server.db.CleanManager;
 import com.damintsev.server.db.DatabaseConnector;
-import com.damintsev.server.telnet.TelnetScheduler;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
@@ -81,13 +80,13 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     public Device saveDevice(Device device) {
         logger.info("calling saveDevice()");
         Device dev = DatabaseConnector.getInstance().saveDevice(device);
-        TelnetScheduler.getInstance().updateDevice(dev);
+//        TelnetScheduler.getInstance().updateDevice(dev);
         BillingWorker.getInstance().updateStation(dev);
         return dev;
     }
 
     public void deleteDevice(Device device) {
-        TelnetScheduler.getInstance().deleteDevice(device);
+//        TelnetScheduler.getInstance().deleteDevice(device);
         DatabaseConnector.getInstance().deleteDevice(device);
         BillingWorker.getInstance().deleteStation(device);
     }
@@ -114,11 +113,11 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public List<Device> getItemsState() {
-        return TelnetScheduler.getInstance().getDeviceState();
+        return null;//TelnetScheduler.getInstance().getDeviceState();
     }
 
     public void hardReset() {
-        TelnetScheduler.getInstance().hardReset();
+//        TelnetScheduler.getInstance().hardReset();
     }
 
     public TreeMap<String, String> loadPrefix() {

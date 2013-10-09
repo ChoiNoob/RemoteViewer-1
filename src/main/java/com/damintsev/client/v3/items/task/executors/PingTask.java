@@ -1,8 +1,7 @@
-package com.damintsev.server.v2.v3.task.executors;
+package com.damintsev.client.v3.items.task.executors;
 
-import com.damintsev.client.devices.enums.Status;
-import com.damintsev.server.v2.v3.task.ExecuteState;
-import com.damintsev.server.v2.v3.task.TaskState;
+import com.damintsev.client.v3.items.task.ExecuteState;
+import com.damintsev.client.v3.items.task.TaskState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
