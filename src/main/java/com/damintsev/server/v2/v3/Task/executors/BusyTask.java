@@ -10,18 +10,9 @@ import com.damintsev.server.v2.v3.task.TaskState;
  * Time: 0:18
  */
 public class BusyTask extends TaskExecutor {
-    @Override
-    public String getCommand() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
 
     @Override
-    public Station getStation() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public TaskState process(Response execute) {
+    public TaskState process(String stri) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

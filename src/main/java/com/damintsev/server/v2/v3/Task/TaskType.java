@@ -6,5 +6,5 @@ package com.damintsev.server.v2.v3.task;
  * Time: 22:43
  */
 public enum  TaskType {
-    TELNET, IP
+    TELNET, IP, PING
 }

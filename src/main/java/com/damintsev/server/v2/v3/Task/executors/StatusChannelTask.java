@@ -11,16 +11,6 @@ import com.damintsev.server.v2.v3.task.TaskState;
  */
 public class StatusChannelTask extends TaskExecutor {
 
-//    @Override
-//    public String getCommand() {
-//        return null;  //To change body of implemented methods use File | Settings | File Templates.
-//    }
-
-    @Override
-    public Station getStation() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
-
     @Override
     public TaskState process(String command) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.

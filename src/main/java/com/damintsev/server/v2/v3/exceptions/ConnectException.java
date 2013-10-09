@@ -6,4 +6,12 @@ package com.damintsev.server.v2.v3.exceptions;
  * Time: 22:33
  */
 public class ConnectException extends Exception {
+
+    public ConnectException() {
+        super();
+    }
+
+    public ConnectException(Exception e) {
+        super(e);
+    }
 }

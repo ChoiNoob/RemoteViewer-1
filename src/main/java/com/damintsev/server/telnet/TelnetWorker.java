@@ -7,6 +7,7 @@ package com.damintsev.server.telnet;
 
 import com.damintsev.client.devices.Response;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import org.apache.commons.net.telnet.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
     private boolean allowTimeout = true;
     private boolean authentif = true;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ConnectException {
         TelnetWorker example = new TelnetWorker();
         example.setLogin("root");
         example.setPassword("hicom");
@@ -60,10 +61,9 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
     }
 
     public TelnetWorker() {
-
     }
 
-    public Response connect() {
+    public Response connect() throws ConnectException {
         Response response = new Response();
         tc = new org.apache.commons.net.telnet.TelnetClient();
         TerminalTypeOptionHandler ttopt = new TerminalTypeOptionHandler("VT100", false, false, true, false);
@@ -108,7 +108,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             logger.error("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
             response.setResultText("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
             response.setResult(false);
-            throw new RuntimeException(e);
+            throw new ConnectException(e);
         }
         return response;
     }
@@ -179,28 +179,28 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
         }
     }
 
-    public Response sendAYT() {
-        clearReaded();
-        boolean boolRes = false;
-        try {
-            logger.info("Sending AYT command!");
-            boolRes = tc.sendAYT(3000);
-            Thread.sleep(1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
-        String result = getReaded();
-        logger.info("Test server. Send AYT. result=" + result.contains("yes") + " boolean result=" + boolRes);
-        Response response = new Response();
-        response.setResultText(result);
-        response.setResult(result.contains("yes") && boolRes);
-        if(result.contains("yes") && boolRes)
-            response.setStatus(Status.WORK);
-        else
-            response.setStatus(Status.ERROR);
-        return response;
-    }
+//    public Response sendAYT() {
+//        clearReaded();
+//        boolean boolRes = false;
+//        try {
+//            logger.info("Sending AYT command!");
+//            boolRes = tc.sendAYT(3000);
+//            Thread.sleep(1000);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            throw new RuntimeException(e);
+//        }
+//        String result = getReaded();
+//        logger.info("Test server. Send AYT. result=" + result.contains("yes") + " boolean result=" + boolRes);
+//        Response response = new Response();
+//        response.setResultText(result);
+//        response.setResult(result.contains("yes") && boolRes);
+//        if(result.contains("yes") && boolRes)
+//            response.setStatus(Status.WORK);
+//        else
+//            response.setStatus(Status.ERROR);
+//        return response;
+//    }
 
     /**
      * Callback method called when TelnetWorker receives an option

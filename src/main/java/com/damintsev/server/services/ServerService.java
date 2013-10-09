@@ -58,12 +58,13 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public void start() {
-        TelnetScheduler.getInstance().start();
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     public void stop() {
-        TelnetScheduler.getInstance().stop();
+        //To change body of implemented methods use File | Settings | File Templates.
     }
+
 
     public FTPSettings saveFTPSettings(FTPSettings settings) {
 //        DatabaseProxy proxy = new DatabaseProxy();

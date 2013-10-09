@@ -51,7 +51,7 @@ public class ThreadExecutor extends Thread {
         TaskState state;
         try {
             Connection connection = ConnectionPool.getInstance().getConnection(task);
-            state = connection.process(task);
+            state = connection.execute(task);
             checkForErrors(task);
         }   catch (ConnectException conn) {
             state = createConnectionError(task.getId(), conn, true);

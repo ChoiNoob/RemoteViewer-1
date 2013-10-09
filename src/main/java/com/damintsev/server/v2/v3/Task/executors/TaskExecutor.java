@@ -5,6 +5,8 @@ import com.damintsev.client.devices.Station;
 import com.damintsev.server.v2.v3.task.Task;
 import com.damintsev.server.v2.v3.task.TaskState;
 import com.damintsev.server.v2.v3.task.TaskType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * User: Damintsev Andrey
@@ -13,13 +15,14 @@ import com.damintsev.server.v2.v3.task.TaskType;
  */
 public abstract class TaskExecutor {
 
-//    public abstract Station getStation();
     protected abstract TaskState process(String command);
 
     public static TaskState process(Task task, String result) {
         switch (task.getType()) {
             case TELNET:
                 return new StatusChannelTask().process(result);
+            case PING:
+                return new PingTask().process(result);
         }
         return null;
     }

@@ -21,10 +21,10 @@ public class TelnetConnection extends Connection {
     @Override
     public Connection init(Station station) throws ConnectException {
         worker = new TelnetWorker();
-//        worker.setLogin(properties.getProperty("login"));
-//        worker.setPassword(properties.getProperty("password"));
-//        worker.setHost(properties.getProperty("host"));
-//        worker.setPort(properties.getProperty("port"));
+        worker.setLogin(station.getLogin());
+        worker.setPassword(station.getPassword());
+        worker.setHost(station.getHost());
+        worker.setPort(station.getPort());
         worker.connect();
         return this;
     }
