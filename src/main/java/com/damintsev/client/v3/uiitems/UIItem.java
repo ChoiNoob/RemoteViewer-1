@@ -19,6 +19,12 @@ public abstract class UIItem implements IsWidget, Serializable{
 
     public abstract Widget asWidget();
 
+    /**
+     * Показывает от какого элемента к нему тянется
+     * @return
+     */
+    public abstract Long getSource();
+
     public Long getId() {
         return id;
     }
