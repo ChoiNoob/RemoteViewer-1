@@ -1,5 +1,6 @@
 package com.damintsev.server.services;
 
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.DatabaseService;
@@ -34,7 +35,7 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
         return DB.getInstance().getTask(id);
     }
 
-    public List<UIItem> loadUIItems() {
+    public List<Item> loadUIItems() {
        return DB.getInstance().getUIItemList();
     }
 

@@ -28,11 +28,11 @@ public class BusyChannelWindow {
     }
 
     public void show(UIItem item) {
-        busyChannelPanel = new BusyChannelPanel(item.getData());
-        Position pos = item.getPosition();
-        int width = item.getWidth();
-        window.setPosition(pos.x + width + 10, pos.y);
-        window.add(busyChannelPanel);
+//        busyChannelPanel = new BusyChannelPanel(item.getData());
+//        Position pos = item.getPosition();
+//        int width = item.getWidth();
+//        window.setPosition(pos.x + width + 10, pos.y);
+//        window.add(busyChannelPanel);
         window.show();
     }
 }

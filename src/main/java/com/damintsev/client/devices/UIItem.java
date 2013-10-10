@@ -2,6 +2,7 @@ package com.damintsev.client.devices;
 
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.client.windows.BusyChannelWindow;
 import com.damintsev.utils.Position;
 import com.damintsev.utils.Utils;
@@ -20,34 +21,26 @@ import java.io.Serializable;
  */
 public class UIItem extends Label implements Serializable {
 
-    private Position position;
 //    private Image image;
-    private Device data;
+    private Item item;
 //    private Label label;
 
     public UIItem(){
 
     }
 
-    public UIItem(Device data) {
+    public UIItem(Item item) {
         super();
-        this.data = data;
-        init();
-    }
-
-    public UIItem(Device data, Position position) {
-        super();
-        this.data = data;
-        this.position = position;
+        this.item = item;
         init();
     }
 
     public void savePosition() {
-        if(position == null) position = new Position(getAbsoluteLeft(), getAbsoluteTop());
-        else {
-            position.x = getAbsoluteLeft();
-            position.y = getAbsoluteTop();
-        }
+//        if(position == null) position = new Position(getAbsoluteLeft(), getAbsoluteTop());
+//        else {
+//            position.x = getAbsoluteLeft();
+//            position.y = getAbsoluteTop();
+//        }
     }
 
     private void init() {
@@ -56,16 +49,16 @@ public class UIItem extends Label implements Serializable {
         getElement().appendChild(image.getElement());
 
        Label label = new Label(getName());
-        if(getName() != null || data instanceof Station)
-            getElement().appendChild(label.getElement());
+//        if(getName() != null || item instanceof Station)
+//            getElement().appendChild(label.getElement());
         label.setStyleName("tooltip");
-        super.addDoubleClickHandler(new DoubleClickHandler() {
-            public void onDoubleClick(DoubleClickEvent event) {
-                if (getDeviceType() == DeviceType.STATION) return;
-                BusyChannelWindow panel = new BusyChannelWindow();
-                panel.show(UIItem.this);
-            }
-        });
+//        super.addDoubleClickHandler(new DoubleClickHandler() {
+//            public void onDoubleClick(DoubleClickEvent event) {
+//                if (getDeviceType() == DeviceType.STATION) return;
+//                BusyChannelWindow panel = new BusyChannelWindow();
+//                panel.show(UIItem.this);
+//            }
+//        });
     }
 
     public Position getCenterPosition() {
@@ -75,12 +68,11 @@ public class UIItem extends Label implements Serializable {
     }
 
     public Position getPosition() {
-//        if(position == null) savePosition();
-        return position;
+        return item.getPosition();
     }
     
     public void setPosition(int x, int y) {
-        this.position = new Position(x, y);
+//        this.position = new Position(x, y);//todo really need ?!
     }
 
 //    public Item<T> getItem() {
@@ -90,53 +82,53 @@ public class UIItem extends Label implements Serializable {
 //    }
 
     public ImageResource getImage() {
-        return Utils.getImage(data.getImage());
+        return Utils.getImage("cloud");//todo customize
     }
 
     public String getName() {
-        return "lala";
+        return item.getName();
 //        return data.getName();
     }
 
-    public DeviceType getDeviceType() {
-        return DeviceType.ISDN;
+    public TaskType getDeviceType() {
+        return item.getType();
     }
 
     public int getWidth() {
-        return 50;//image.getWidth();
+        return 50;//image.getWidth();//todo
     }
 
     public int getHeight() {
-        return 50;//image.getHeight();
+        return 50;//image.getHeight();//todo
     }
 
     public void setId(Long id) {
-        data.setId(id);
+//        data.setId(id);
     }
     
-    public Long getId() {
-        return data.getId();
+    public String getId() {
+        return item.getStringId();
     }
 
     public Station getStation() {
-        return data.getStation();
+        return item.getStation();
     }
 
-    public Status getStatus() {
-        return data.getStatus();
-    }
+//    public Status getStatus() {
+//        return data.getStatus();
+//    }
 
     public void setLabelColor() {
 //        label.getElement().getStyle().setBackgroundColor(data.getStatus().getColor());
     }
 
-    public Device getData() {
-        return data;
-    }
-
-    public void setData(Device data) {
-        this.data = data;
-    }
+//    public Device getData() {
+//        return item;
+//    }
+//
+//    public void setData(Device data) {
+//        this.item = data;
+//    }
 
     public void redraw() {
         System.out.println("redraw");

@@ -3,7 +3,7 @@ package com.damintsev.server.billing;
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
-import com.damintsev.server.db.DatabaseConnector;
+//import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.BillingStatistics;
 import com.damintsev.server.telnet.TelnetWorker;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class BillingWorker extends Thread {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if (station == null) station = DatabaseConnector.getInstance().getStationWithBilling();
+//                if (station == null) station = DatabaseConnector.getInstance().getStationWithBilling();
                 if (station == null) return;
                 if(station.getAllowStatistics())
                     if(!telnet.isConnected())

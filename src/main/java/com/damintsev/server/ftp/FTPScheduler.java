@@ -2,7 +2,7 @@ package com.damintsev.server.ftp;
 
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.FTPSettings;
-import com.damintsev.server.db.DatabaseConnector;
+//import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.BillingStatistics;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +31,7 @@ public class FTPScheduler {
     private Timer timer;
 
     private FTPScheduler() {
-        listSettings = DatabaseConnector.getInstance().listFTPSettings();
+//        listSettings = DatabaseConnector.getInstance().listFTPSettings();
 
         ftpService = new HashMap<Long, FTPWorker>();
         try {

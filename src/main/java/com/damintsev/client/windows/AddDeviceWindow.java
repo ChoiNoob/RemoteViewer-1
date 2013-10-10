@@ -177,7 +177,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                     public void onSuccess(Device result) {
                         window.unmask();
                         window.hide();
-                        if (newEntity) UICenterField.get().addItem(new UIItem(result));
+//                        if (newEntity) UICenterField.get().addItem(new UIItem(result));
                         window.hide();
                     }
                 });

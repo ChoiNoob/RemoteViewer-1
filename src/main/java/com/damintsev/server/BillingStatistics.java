@@ -2,7 +2,7 @@ package com.damintsev.server;
 
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.BillingStats;
-import com.damintsev.server.db.DatabaseConnector;
+//import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.telnet.TelnetWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,11 +47,11 @@ public class BillingStatistics {
     }
 
     private void loadPrefixMap() {
-        prefixMap = DatabaseConnector.getInstance().loadPrefixMap();
+//        prefixMap = DatabaseConnector.getInstance().loadPrefixMap();
     }
 
     private void loadFromDB() {
-        addBilling(DatabaseConnector.getInstance().loadBillingInfo());
+//        addBilling(DatabaseConnector.getInstance().loadBillingInfo());
     }
     
     public void addBilling(List<BillingInfo> billingInfoList) {
@@ -79,7 +79,7 @@ public class BillingStatistics {
             tmpBuffer.add(info);
         } else {
             tmpBuffer.add(info);
-            DatabaseConnector.getInstance().saveBillingInfo(tmpBuffer);
+//            DatabaseConnector.getInstance().saveBillingInfo(tmpBuffer);
             tmpBuffer.clear();
         }
     }
@@ -115,7 +115,7 @@ public class BillingStatistics {
     }
 
     private void clearCache() {
-        DatabaseConnector.getInstance().saveBillingInfo(tmpBuffer);
+//        DatabaseConnector.getInstance().saveBillingInfo(tmpBuffer);
         tmpBuffer.clear();
         top.clear();
         loadFromDB();

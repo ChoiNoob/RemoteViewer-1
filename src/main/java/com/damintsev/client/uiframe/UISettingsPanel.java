@@ -90,17 +90,18 @@ public class UISettingsPanel {
                 if (selected == null) Dialogs.alert("Выберите устройство");
                 else {
                     switch (selected.getDeviceType()) {
-                        case STATION:
-                            AddStationWindow.get().show(selected.getId(), new Runnable() {
-                                public void run() {
-                                    selected.redraw();
-                                }
-                            });
-                            break;
-                        case IP:
-                        case ISDN:
-                            AddDeviceWindow.get().show(selected.getId());
-                            break;
+//                        case STATION:
+//                            AddStationWindow.get().show(selected.getId(), new Runnable() {
+//                                public void run() {
+//                                    selected.redraw();
+//                                }
+//                            });
+//                            break;
+//                        case IP:
+//                        case ISDN:
+//                            AddDeviceWindow.get().show(selected.getId());
+//                            break;
+                        //todo
                     }
                 }
             }

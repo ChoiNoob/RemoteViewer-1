@@ -7,7 +7,7 @@ import com.damintsev.client.service.ClientService;
 import com.damintsev.server.BillingStatistics;
 import com.damintsev.server.billing.BillingWorker;
 import com.damintsev.server.db.CleanManager;
-import com.damintsev.server.db.DatabaseConnector;
+//import com.damintsev.server.db.DatabaseConnector;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
@@ -48,12 +48,12 @@ public class ServerService extends RemoteServiceServlet implements ClientService
 
     public Boolean saveItems(List<Item> items) {
         logger.info("Call saveItems()");
-        DatabaseConnector.getInstance().saveUIPosition(items);
+//        DatabaseConnector.getInstance().saveUIPosition(items);
         return true;
     }
 
     public List<Item> loadItems() {
-        return DatabaseConnector.getInstance().loadItems();
+        return null;//;DatabaseConnector.getInstance().loadItems();
     }
 
     public void start() {
@@ -68,35 +68,36 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     public FTPSettings saveFTPSettings(FTPSettings settings) {
 //        DatabaseProxy proxy = new DatabaseProxy();
 //        proxy.saveFTP(settings);
-       return DatabaseConnector.getInstance().saveFTPSettings(settings);
+       return null;//DatabaseConnector.getInstance().saveFTPSettings(settings);
     }
 
     public FTPSettings loadFTPSettings(Station station) {
 //        DatabaseProxy proxy = new DatabaseProxy();
 //        return proxy.loadFTP(station);
-        return DatabaseConnector.getInstance().loadFTPSettings(station);
+        return null;//DatabaseConnector.getInstance().loadFTPSettings(station);
     }
 
     public Device saveDevice(Device device) {
         logger.info("calling saveDevice()");
-        Device dev = DatabaseConnector.getInstance().saveDevice(device);
+//        Device dev = DatabaseConnector.getInstance().saveDevice(device);
 //        TelnetScheduler.getInstance().updateDevice(dev);
-        BillingWorker.getInstance().updateStation(dev);
-        return dev;
+//        BillingWorker.getInstance().updateStation(dev);
+//        return dev;
+        return null;
     }
 
     public void deleteDevice(Device device) {
 //        TelnetScheduler.getInstance().deleteDevice(device);
-        DatabaseConnector.getInstance().deleteDevice(device);
-        BillingWorker.getInstance().deleteStation(device);
+//        DatabaseConnector.getInstance().deleteDevice(device);
+//        BillingWorker.getInstance().deleteStation(device);
     }
 
     public BusyInfo loadBusyInfo(Device device) {
-        return DatabaseConnector.getInstance().getBusyInfo(device);
+        return null;//DatabaseConnector.getInstance().getBusyInfo(device);
     }
 
     public Device loadDevice(Long deviceId, DeviceType deviceType) {
-        return DatabaseConnector.getInstance().loadDevice(deviceId, deviceType);
+        return null;//DatabaseConnector.getInstance().loadDevice(deviceId, deviceType);
     }
 
     public List<BillingStats> getStatistisc() {
@@ -104,12 +105,12 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public PagingLoadResult<Station> getStationList() throws Exception {
-        List<Station> stations = DatabaseConnector.getInstance().getStationList();
-        return new PagingLoadResultBean<Station>(stations, 0, stations.size());
+//        List<Station> stations = DatabaseConnector.getInstance().getStationList();
+        return null;//new PagingLoadResultBean<Station>(stations, 0, stations.size());
     }
 
     public List<BusyInfo> loadBusyInfoStatistics(Device device) {
-        return DatabaseConnector.getInstance().getBusyInfoStatistics(device);
+        return null;//DatabaseConnector.getInstance().getBusyInfoStatistics(device);
     }
 
     public List<Device> getItemsState() {
@@ -121,11 +122,11 @@ public class ServerService extends RemoteServiceServlet implements ClientService
     }
 
     public TreeMap<String, String> loadPrefix() {
-        return DatabaseConnector.getInstance().loadPrefixMap();
+        return null;//DatabaseConnector.getInstance().loadPrefixMap();
     }
 
     public void savePrefix(TreeMap<String, String> prefixMap) {
         logger.info("savePrefix");
-        DatabaseConnector.getInstance().savePrefixMap(prefixMap);
+//        DatabaseConnector.getInstance().savePrefixMap(prefixMap);
     }
 }

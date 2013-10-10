@@ -1,6 +1,7 @@
 package com.damintsev.client.devices;
 
 import com.damintsev.client.devices.enums.DeviceType;
+import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.utils.Position;
 
 import java.io.Serializable;
@@ -10,63 +11,85 @@ import java.io.Serializable;
  * Date: 05.08.13
  * Time: 22:33
  */
-public class Item <T extends Device> implements Serializable {
-   
-    private int coordX;
-    private int coordY;
-    private T data;
+public abstract class Item implements Serializable {
 
-    public Item() {
+    private Position position;
 
+    public Position getPosition() {
+        return position;
     }
 
-    public Item(T data, Position pos) {
-        this.data = data;
-        coordX = pos.x;
-        coordY = pos.y;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public int getCoordX() {
-        return coordX;
+    public void setPosition(int x, int y) {
+        this.position = new Position(x, y);
     }
 
-    public void setCoordX(int coordX) {
-        this.coordX = coordX;
-    }
+    public abstract String getName();
 
-    public int getCoordY() {
-        return coordY;
-    }
+    public abstract TaskType getType();
 
-    public void setCoordY(int coordY) {
-        this.coordY = coordY;
-    }
+    public abstract String getStringId();
 
-    public T getData() {
-        return data;
-    }
+    public abstract Station getStation();
 
-    public void setData(T data) {
-        this.data = data;
-    }
+    //    private int coordX;
+//    private int coordY;
+//    private Object data;
+//
+//    public Item() {
+//
+//    }
 
-    public String getName() {
-        return data.getName();
-    }
+//    public Item(T data, Position pos) {
+//        this.data = data;
+//        coordX = pos.x;
+//        coordY = pos.y;
+//    }
 
-    public DeviceType getType() {
-        return data.getDeviceType();
-    }
-    
-    public String getImage() {
-        return data.getImage();
-    }
-
-    public void setId(Long id) {
-        data.setId(id);
-    }
-
-    public Long getId() {
-        return data.getId();
-    }
+//    public int getCoordX() {
+//        return coordX;
+//    }
+//
+//    public void setCoordX(int coordX) {
+//        this.coordX = coordX;
+//    }
+//
+//    public int getCoordY() {
+//        return coordY;
+//    }
+//
+//    public void setCoordY(int coordY) {
+//        this.coordY = coordY;
+//    }
+//
+//    public Object getData() {
+//        return data;
+//    }
+//
+//    public void setData(Object data) {
+//        this.data = data;
+//    }
+//
+//    public String getName() {
+//        return "asdasd";//data.getName();
+//    }
+//
+////    public DeviceType getType() {
+////        return null;// data.getDeviceType();
+////    }
+//
+//    public String getImage() {
+//        return "cloud";//data.getImage();
+//    }
+//
+//    public void setId(Long id) {
+//        //data.setId(id);
+//    }
+//
+//    public Long getId() {
+//        return 5L;//data.getId();
+//    }
 }

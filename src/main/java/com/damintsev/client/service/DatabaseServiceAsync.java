@@ -1,5 +1,6 @@
 package com.damintsev.client.service;
 
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.v3.items.task.Task;
@@ -12,7 +13,7 @@ public interface DatabaseServiceAsync {
 
     void loadTask(Long id, AsyncCallback<Task> async);
 
-    void loadUIItems(AsyncCallback<List<UIItem>> async);
+    void loadUIItems(AsyncCallback<List<Item>> async);
 
     void saveStation(Station station, AsyncCallback<Void> async);
 

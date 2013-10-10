@@ -1,5 +1,6 @@
 package com.damintsev.server.db;
 
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.v3.items.DatabaseType;
@@ -220,31 +221,31 @@ public class DB {
         return null;
     }
 
-    public List<UIItem> getUIItemList() {
-        List<UIItem> uiItems = new ArrayList<UIItem>();
+    public List<Item> getUIItemList() {
+        List<Item> uiItems = new ArrayList<Item>();
         PreparedStatement statement;
         try{
             statement = Mysql.getConnection().prepareStatement("SELECT * FROM uipositions");
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
             while (resultSet.next()) {
-                UIItem item = null;
+                Item item = null;
                 DatabaseType type = DatabaseType.valueOf(resultSet.getString("ref_type"));
                 Long refId = resultSet.getLong("ref_id");
                 int x = resultSet.getInt("x");
                 int y = resultSet.getInt("y");
                 switch (type) {
                     case TASK:
-                        item = new UITask();
-                        ((UITask)item).setTask(getTask(refId));
-                        item.setPosition(x,y);
+                        item = getTask(refId);
                         break;
                     case STATION:
-                        item = new UIStation();
-                        ((UIStation)item).setStation(getStation(refId));
-                        item.setPosition(x,y);
+//                        item = new UIStation();
+//                        ((UIStation)item).setStation(getStation(refId));
+//                        item.setPosition(x,y);
                         break;
+                    default:item=new Task();//todo сделать чтото а то не красиво
                 }
+                item.setPosition(x, y);
                 uiItems.add(item);
             }
         }   catch (Exception e) {
