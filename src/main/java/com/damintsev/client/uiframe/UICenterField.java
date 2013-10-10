@@ -6,10 +6,10 @@ import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
-import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
@@ -41,11 +41,12 @@ public class UICenterField {
 
     private PickupDragController dragController;
     private AbsolutePanel panel;
-    private Map<Long, UIItem> uiItems;
-
+    private Map<Long, UIItem> uiStations;
+    private Map<Long, UIItem> uiDevices;
 
     private UICenterField() {
-        uiItems = new HashMap<Long, UIItem>();
+        uiStations = new HashMap<Long, UIItem>();
+        uiDevices = new HashMap<Long, UIItem>();
         panel = new AbsolutePanel();
         dragController = new PickupDragController(panel, true) {
             @Override
@@ -107,38 +108,38 @@ public class UICenterField {
     public void addItem(UIItem item, boolean fromDB) {
        insertUpdateItem(item);
 
-        dragController.makeDraggable(item.asWidget());
+        dragController.makeDraggable(item);
         System.out.println("Asdas=" + panel.getWidgetIndex(item));
         if(panel.getWidgetIndex(item) == -1 || fromDB)
             panel.add(item, 0, 0);
         if (item.getPosition() == null) {
-            int centerX = Window.getClientWidth() / 2 - 55 / 2;
-            int centerY = Window.getClientHeight() / 2 - 50 / 2;
-            panel.setWidgetPosition(item.asWidget(), centerX, centerY);
+            int centerX = Window.getClientWidth() / 2 - item.getWidth() / 2;
+            int centerY = Window.getClientHeight() / 2 - item.getHeight() / 2;
+            panel.setWidgetPosition(item, centerX, centerY);
         } else {
             Position pos = item.getPosition();
-            panel.setWidgetPosition(item.asWidget(), pos.x, pos.y);
+            panel.setWidgetPosition(item, pos.x, pos.y);
         }
         drawConnections(false);
     }
 
-//    private UIItem insertUpdateItem(UIItem item) {
-//        if (item.getDeviceType() == DeviceType.STATION) {
-//            System.out.println("CPT=" + uiStations.containsKey(item.getId()));
-////            if (uiStations.containsKey(item.getId())) {
-////                item = uiStations.get(item.getId());
-////                item.setData(item.getData());
-////            } else
-//                uiStations.put(item.getId(), item);
-//        } else {
-////            if (uiDevices.containsKey(item.getId())) {
-////                item = uiDevices.get(item.getId());
-////                item.setData(item.getData());
-////            } else
-//                uiDevices.put(item.getId(), item);
-//        }
-//        return item;
-//    }
+    private UIItem insertUpdateItem(UIItem item) {
+        if (item.getDeviceType() == DeviceType.STATION) {
+            System.out.println("CPT=" + uiStations.containsKey(item.getId()));
+//            if (uiStations.containsKey(item.getId())) {
+//                item = uiStations.get(item.getId());
+//                item.setData(item.getData());
+//            } else
+                uiStations.put(item.getId(), item);
+        } else {
+//            if (uiDevices.containsKey(item.getId())) {
+//                item = uiDevices.get(item.getId());
+//                item.setData(item.getData());
+//            } else
+                uiDevices.put(item.getId(), item);
+        }
+        return item;
+    }
 
     private void allowDrag() {
         for(UIItem station : uiStations.values()) {
