@@ -5,12 +5,14 @@ import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.DatabaseService;
 import com.damintsev.client.v3.items.DatabaseType;
+import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.client.v3.uiitems.UIStation;
 import com.damintsev.client.v3.uiitems.UITask;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.db.Mysql;
+import com.damintsev.server.v2.v3.SoA;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 import java.sql.Connection;
@@ -43,7 +45,11 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
         return DB.getInstance().getStation(id);
     }
 
-    public void saveStation(Station station) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public Station saveStation(Station station) {
+       return null;
+    }
+
+    public List<TaskState> loadTaskStates() {
+        return new ArrayList<TaskState>(SoA.getInstance().getStates().values());
     }
 }

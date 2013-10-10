@@ -4,6 +4,7 @@ import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.v3.items.task.Task;
+import com.damintsev.client.v3.items.task.TaskState;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
 import java.util.List;
@@ -15,7 +16,10 @@ public interface DatabaseServiceAsync {
 
     void loadUIItems(AsyncCallback<List<Item>> async);
 
-    void saveStation(Station station, AsyncCallback<Void> async);
+    void saveStation(Station station, AsyncCallback<Station> async);
 
     void loadStation(Long id, AsyncCallback<Station> async);
+
+    //todo
+    void loadTaskStates(AsyncCallback<List<TaskState>> async);
 }

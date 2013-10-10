@@ -24,14 +24,14 @@ public class ThreadExecutor extends Thread {
     private Long stationId;
     private List<Task> tasks;
     private Map<String, TaskState> taskStates;
-    private Map<Long, Integer> errors;
+    private Map<String, Integer> errors;
     private boolean start = false;
 
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
         this.stationId = station.getId();
         this.tasks = tasks;
         this.taskStates = map;
-        errors = new HashMap<Long, Integer>(tasks.size() + 1);
+        errors = new HashMap<String, Integer>(tasks.size() + 1);
         new Runnable() {
             public void run() {
                 try {
@@ -51,18 +51,19 @@ public class ThreadExecutor extends Thread {
         try {
             Connection connection = ConnectionPool.getInstance().getConnection(task);
             state = connection.execute(task);
+            state.setId(task.getStringId());
             checkForErrors(task);
         }   catch (ConnectException conn) {
-            state = createConnectionError(task.getId(), conn, true);
+            state = createConnectionError(task.getStringId(), conn, true);
         }   catch (ExecutingTaskException exec) {
-            state = createConnectionError(task.getId(), exec, false);
+            state = createConnectionError(task.getStringId(), exec, false);
         }
         taskStates.put(task.getStringId(), state);
     }
 
     private void checkForErrors(Task task) {
-        if(errors.get(task.getId()) != null && errors.get(task.getId()) > 0)
-            errors.put(task.getId(), 0);
+        if(errors.get(task.getStringId()) != null && errors.get(task.getStringId()) > 0)
+            errors.put(task.getStringId(), 0);
     }
 
     public void run() {
@@ -99,7 +100,7 @@ public class ThreadExecutor extends Thread {
         return Thread.currentThread().getName() + ":" + stationId;
     }
 
-    private TaskState createConnectionError(Long taskId, Exception conn, boolean connectionError) {
+    private TaskState createConnectionError(String taskId, Exception conn, boolean connectionError) {
         TaskState task = new TaskState(ExecuteState.ERROR, conn.getMessage());
         if (errors.get(taskId) == null) errors.put(taskId, 1);
         if (errors.get(taskId) <= 2) {

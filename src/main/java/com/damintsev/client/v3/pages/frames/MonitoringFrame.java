@@ -11,11 +11,11 @@ import com.damintsev.client.service.Service2;
 import com.damintsev.client.uiframe.UISettingsPanel;
 import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.client.v3.utilities.DataLoader;
+import com.damintsev.client.v3.utilities.Scheduler;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -175,12 +175,7 @@ public class MonitoringFrame {
     }
 
     public void schedule() {
-        Scheduler.get().scheduleFixedPeriod(new Scheduler.RepeatingCommand() {
-            public boolean execute() {
-                scheduler();
-                return start;
-            }
-        }, 5000);
+
     }
 
     private void scheduler() {
@@ -236,7 +231,7 @@ public class MonitoringFrame {
 //        drawConnections(false);
 //    }
 
-    private Iterator<Device> iterator;
+//    private Iterator<Device> iterator;
 
 //    private Iterator<Device> createIterator() {
 //        List<Device> items = new ArrayList<Device>();
@@ -249,15 +244,29 @@ public class MonitoringFrame {
 //        return items.iterator();
 //    }
 
-    private boolean start;
+//    private boolean start;
 
     public void start() {
-        this.start = true;
+        Scheduler.getInstance().start(this.getClass(), new Runnable() {
+            public void run() {
+                Service2.database.loadTaskStates(new AsyncCallback<List<TaskState>>() {
+                    public void onFailure(Throwable caught) {
+                        //todo грамотно обраотать ошибку!
+                    }
+
+                    public void onSuccess(List<TaskState> result) {
+                        for(TaskState state : result) {
+                            uiItems.get(state.getId()).setTaskState(state);
+                        }
+                        drawConnections();
+                    }
+                });
+            }
+        });
     }
 
     public void stop() {
-        System.out.println("stop");
-        this.start = false;
+        Scheduler.getInstance().stop(this.getClass());
     }
 
     public static native void reload()/*-{
