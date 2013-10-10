@@ -1,13 +1,9 @@
 package com.damintsev.client.devices;
 
-import com.damintsev.client.devices.enums.DeviceType;
-import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.client.v3.items.task.TaskType;
-import com.damintsev.client.windows.BusyChannelWindow;
 import com.damintsev.utils.Position;
 import com.damintsev.utils.Utils;
-import com.google.gwt.event.dom.client.DoubleClickEvent;
-import com.google.gwt.event.dom.client.DoubleClickHandler;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -21,12 +17,10 @@ import java.io.Serializable;
  */
 public class UIItem extends Label implements Serializable {
 
-//    private Image image;
     private Item item;
-//    private Label label;
+    private TaskState taskState;
 
     public UIItem(){
-
     }
 
     public UIItem(Item item) {
@@ -137,5 +131,25 @@ public class UIItem extends Label implements Serializable {
 //        getElement().removeChild(label.getElement());
 //        label = new Label(getName());
 //        getElement().appendChild(label.getElement());
+    }
+
+    public boolean haveChildrens() {
+        return getId().startsWith("s");
+    }
+
+    public boolean isChild(UIItem child) {
+        return child.getId().startsWith("s");
+    }
+
+    public String getParentId() {
+        return item.getStation().getStringId();
+    }
+
+    public TaskState getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(TaskState status) {
+        this.taskState = status;
     }
 }

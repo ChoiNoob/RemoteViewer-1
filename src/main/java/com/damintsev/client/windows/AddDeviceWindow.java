@@ -3,23 +3,16 @@ package com.damintsev.client.windows;
 import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
-import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
-import com.damintsev.client.uiframe.UICenterField;
+import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.utils.Dialogs;
-import com.google.gwt.core.client.Callback;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.event.dom.client.KeyDownHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
-import com.sencha.gxt.data.client.loader.RpcProxy;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.data.shared.ListStore;
 import com.sencha.gxt.data.shared.ModelKeyProvider;
@@ -31,8 +24,6 @@ import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.BeforeQueryEvent;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.*;
-
-import java.util.List;
 
 /**
  * User: Damintsev Andrey
@@ -150,7 +141,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                             }
 
                             public void onSuccess(Void result) {
-                                UICenterField.get().delete(device);
+//                                MonitoringFrame.get().delete(device);
                             }
                         });
                         window.hide();
@@ -177,7 +168,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
                     public void onSuccess(Device result) {
                         window.unmask();
                         window.hide();
-//                        if (newEntity) UICenterField.get().addItem(new UIItem(result));
+//                        if (newEntity) MonitoringFrame.get().addItem(new UIItem(result));
                         window.hide();
                     }
                 });

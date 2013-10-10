@@ -1,9 +1,6 @@
 package com.damintsev.client.uiframe;
 
-import com.damintsev.client.windows.BusyChannelPanel;
-import com.damintsev.utils.Utils;
-import com.google.gwt.dom.client.Style;
-import com.google.gwt.i18n.client.HasDirection;
+import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
@@ -39,7 +36,7 @@ public class UIRootPanel {
         footer.setStyleName("footer");
         body.setSouthWidget(footer, new BorderLayoutContainer.BorderLayoutData(20));
 
-        body.setCenterWidget(UICenterField.get().getContent());
+        body.setCenterWidget(MonitoringFrame.get().getContent());
         final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
 

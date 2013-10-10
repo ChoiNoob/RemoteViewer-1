@@ -1,13 +1,11 @@
 package com.damintsev.client.uiframe;
 
-import com.damintsev.client.devices.CommonDevice;
-import com.damintsev.client.devices.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.windows.AddDeviceWindow;
 import com.damintsev.client.windows.AddStationWindow;
 import com.damintsev.client.windows.PrefixConfigWindow;
-import com.damintsev.client.windows.UIFTPSettings;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
@@ -86,7 +84,7 @@ public class UISettingsPanel {
 
         TextButton edit = new TextButton("редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                final UIItem selected = (UIItem) UICenterField.get().getSelected();
+                final UIItem selected = (UIItem) MonitoringFrame.get().getSelected();
                 if (selected == null) Dialogs.alert("Выберите устройство");
                 else {
                     switch (selected.getDeviceType()) {
@@ -129,7 +127,7 @@ public class UISettingsPanel {
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                UICenterField.get().saveItemPositions();
+                MonitoringFrame.get().saveItemPositions();
                 collapse();
 //                reload();
             }
@@ -137,7 +135,7 @@ public class UISettingsPanel {
         panel.addButton(save);
         TextButton cancel = new TextButton("Отмена", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                UICenterField.get().revertItemPositions();
+                MonitoringFrame.get().stopEditing();
                 collapse();
             }
         });

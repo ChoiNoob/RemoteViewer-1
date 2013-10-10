@@ -3,7 +3,6 @@ package com.damintsev.client.windows;
 import com.damintsev.client.devices.FTPSettings;
 import com.damintsev.client.devices.Station;
 import com.damintsev.client.service.Service;
-import com.damintsev.client.uiframe.UICenterField;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;

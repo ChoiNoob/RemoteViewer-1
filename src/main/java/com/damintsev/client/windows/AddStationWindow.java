@@ -2,18 +2,14 @@ package com.damintsev.client.windows;
 
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Station;
-import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
-import com.damintsev.client.uiframe.TelnetWindow;
-import com.damintsev.client.uiframe.UICenterField;
+import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.google.gwt.event.logical.shared.ValueChangeEvent;
-import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
@@ -107,7 +103,7 @@ public class AddStationWindow implements Editor<Station> {
                             }
 
                             public void onSuccess(Void result) {
-                                UICenterField.get().delete(station);
+//                                MonitoringFrame.get().delete(station);
                             }
                         });
                         window.hide();
@@ -133,7 +129,7 @@ public class AddStationWindow implements Editor<Station> {
                     public void onSuccess(Device result) {
                         window.unmask();
                         window.hide();
-//                        if(newInstance)UICenterField.get().addItem(new UIItem(result));
+//                        if(newInstance)MonitoringFrame.get().addItem(new UIItem(result));
                         if(listener != null)
                             listener.run();
                     }

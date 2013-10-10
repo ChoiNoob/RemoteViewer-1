@@ -11,7 +11,6 @@ import com.damintsev.client.devices.Station;
 public class Task extends Item {
 
     private Long id;
-    private String stringId;
     private String name;
     private String command;
     private TaskType type;
@@ -60,5 +59,4 @@ public class Task extends Item {
     public String getStringId() {
         return station.getStringId() + ":t" + getId();
     }
-
 }
