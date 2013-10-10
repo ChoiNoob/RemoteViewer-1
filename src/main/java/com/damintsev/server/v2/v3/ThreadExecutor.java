@@ -23,11 +23,11 @@ public class ThreadExecutor extends Thread {
 
     private Long stationId;
     private List<Task> tasks;
-    private Map<Long, TaskState> taskStates;
+    private Map<String, TaskState> taskStates;
     private Map<Long, Integer> errors;
     private boolean start = false;
 
-    public ThreadExecutor(final Station station, List<Task> tasks, Map<Long, TaskState> map) {
+    public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
         this.stationId = station.getId();
         this.tasks = tasks;
         this.taskStates = map;
@@ -36,13 +36,13 @@ public class ThreadExecutor extends Thread {
             public void run() {
                 try {
                     ConnectionPool.getInstance().create(station);
-                }catch (ConnectException conn) {
+                } catch (ConnectException conn) {
                     //todo придумать что делать с айдишниками
                 }
             }
         }.run();
         for(Task task : tasks) {
-            taskStates.put(task.getId(), new TaskState(ExecuteState.INIT));
+            taskStates.put(task.getStringId(), new TaskState(ExecuteState.INIT));
         }
     }
 
@@ -57,7 +57,7 @@ public class ThreadExecutor extends Thread {
         }   catch (ExecutingTaskException exec) {
             state = createConnectionError(task.getId(), exec, false);
         }
-        taskStates.put(task.getId(), state);
+        taskStates.put(task.getStringId(), state);
     }
 
     private void checkForErrors(Task task) {
@@ -90,7 +90,7 @@ public class ThreadExecutor extends Thread {
     public void interrupt() {
         start = false;
         for(Task task : tasks) {
-            taskStates.put(task.getId(), new TaskState(ExecuteState.INIT));
+            taskStates.put(task.getStringId(), new TaskState(ExecuteState.INIT));
         }
         super.interrupt();
     }

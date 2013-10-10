@@ -11,6 +11,7 @@ import com.damintsev.client.v3.items.Item;
 public class Task extends Item {
 
     private Long id;
+    private String stringId;
     private String name;
     private String command;
     private TaskType type;
@@ -55,4 +56,9 @@ public class Task extends Item {
     public void setType(TaskType type) {
         this.type = type;
     }
+
+    public String getStringId() {
+        return station.getStringId() + ":t" + getId();
+    }
+
 }

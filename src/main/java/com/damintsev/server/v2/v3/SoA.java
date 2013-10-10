@@ -20,7 +20,7 @@ public class SoA {
 
     private static SoA instance;
     private static Map<String, ThreadExecutor> threads = new HashMap<String, ThreadExecutor>();
-    private Map<Long, TaskState> stateMap = new ConcurrentHashMap<Long, TaskState>();
+    private Map<String, TaskState> stateMap = new ConcurrentHashMap<String, TaskState>();
 
     public static SoA getInstance() {
         if (instance == null) instance = new SoA();
@@ -43,7 +43,7 @@ public class SoA {
         ConnectionPool.getInstance().dropConnections();
     }
 
-    public Map<Long, TaskState> getStates() {
+    public Map<String, TaskState> getStates() {
         return stateMap;
     }
 }

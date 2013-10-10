@@ -137,4 +137,8 @@ public class Station extends Device {
     public void setAllowStatistics(Boolean allowStatistics) {
         this.allowStatistics = allowStatistics;
     }
+
+    public String getStringId() {
+        return "s" + getId();
+    }
 }
