@@ -6,7 +6,7 @@ import java.io.Serializable;
  * Created by adamintsev
  * Date: 09.08.13 12:54
  */
-public class Position {
+public class Position implements Serializable{
 
     public Position(){
 

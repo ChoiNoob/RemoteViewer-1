@@ -10,6 +10,7 @@ import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.service.Service2;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
@@ -43,6 +44,7 @@ public class UICenterField {
     private AbsolutePanel panel;
     private Map<Long, UIItem> uiStations;
     private Map<Long, UIItem> uiDevices;
+    private Map<Long, UIItem> uiItems;
 
     private UICenterField() {
         uiStations = new HashMap<Long, UIItem>();
@@ -235,21 +237,47 @@ public class UICenterField {
         return devices;
     }
 
+//    private void loadFromDatabase() {
+//        System.out.println("load from database!");
+//        Service.instance.loadItems(new AsyncCallback<List<Item>>() {
+//            public void onFailure(Throwable throwable) {
+//                Dialogs.alert("Error loading from database! " + throwable.getMessage());
+//            }
+//
+//            public void onSuccess(List<Item> items) {
+//                System.out.println("loaded " + items.size());
+//                uiDevices.clear();
+//                uiStations.clear();
+//                for (Item item : items) {
+//                    System.out.println("loading from db id=" + item.getId() + " x=" + item.getCoordX() + " y=" + item.getCoordY());
+//                    Position pos = new Position(item.getCoordX(), item.getCoordY());
+//                    addItem(new UIItem(item.getData(), pos), true);
+//                }
+//                if (items.size() != 0) {
+//                    start();
+//                    schedule();
+//                    disAllowDrag();
+//                }
+//                drawConnections(false);
+//            }
+//        });
+//    }
+
     private void loadFromDatabase() {
         System.out.println("load from database!");
-        Service.instance.loadItems(new AsyncCallback<List<Item>>() {
+        Service2.database.loadUIItems(new AsyncCallback<List<UIItem>>() {
             public void onFailure(Throwable throwable) {
                 Dialogs.alert("Error loading from database! " + throwable.getMessage());
             }
 
-            public void onSuccess(List<Item> items) {
+            public void onSuccess(List<UIItem> items) {
                 System.out.println("loaded " + items.size());
                 uiDevices.clear();
                 uiStations.clear();
-                for (Item item : items) {
-                    System.out.println("loading from db id=" + item.getId() + " x=" + item.getCoordX() + " y=" + item.getCoordY());
-                    Position pos = new Position(item.getCoordX(), item.getCoordY());
-                    addItem(new UIItem(item.getData(), pos), true);
+                for (UIItem item : items) {
+                    System.out.println("loading from db id=" + item.getId() + " x=");// + item.getCoordX() + " y=" + item.getCoordY());
+//                    Position pos = new Position(item.getCoordX(), item.getCoordY());
+                    addItem(item, true);
                 }
                 if (items.size() != 0) {
                     start();

@@ -8,5 +8,5 @@ import com.google.gwt.core.client.GWT;
  */
 public class Service {
     public static ClientServiceAsync instance = GWT.create(ClientService.class);
-    public static DatabaseServiceAsync database = GWT.create(DatabaseService.class);
+
 }

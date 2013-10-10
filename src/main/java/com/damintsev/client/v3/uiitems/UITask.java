@@ -1,5 +1,6 @@
 package com.damintsev.client.v3.uiitems;
 
+import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.v3.items.task.Task;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -20,8 +21,8 @@ public class UITask extends UIItem {
         this.task = task;
     }
 
-    @Override
-    public Widget asWidget() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
-    }
+//    @Override
+//    public Widget asWidget() {
+//        return null;  //To change body of implemented methods use File | Settings | File Templates.
+//    }
 }

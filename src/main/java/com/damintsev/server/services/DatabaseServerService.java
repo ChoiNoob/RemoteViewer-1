@@ -1,10 +1,10 @@
 package com.damintsev.server.services;
 
 import com.damintsev.client.devices.Station;
+import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.DatabaseService;
 import com.damintsev.client.v3.items.DatabaseType;
 import com.damintsev.client.v3.items.task.TaskType;
-import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.v3.uiitems.UIStation;
 import com.damintsev.client.v3.uiitems.UITask;
 import com.damintsev.client.v3.items.task.Task;

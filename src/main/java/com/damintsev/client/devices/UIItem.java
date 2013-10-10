@@ -11,17 +11,19 @@ import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 
+import java.io.Serializable;
+
 /**
  * User: Damintsev Andrey
  * Date: 03.08.13
  * Time: 2:09
  */
-public class UIItem extends Label {
+public class UIItem extends Label implements Serializable {
 
     private Position position;
-    private Image image;
+//    private Image image;
     private Device data;
-    private Label label;
+//    private Label label;
 
     public UIItem(){
 
@@ -50,10 +52,10 @@ public class UIItem extends Label {
 
     private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
-        image = new Image(getImage());
+        Image image = new Image(getImage());
         getElement().appendChild(image.getElement());
 
-        label = new Label(getName());
+       Label label = new Label(getName());
         if(getName() != null || data instanceof Station)
             getElement().appendChild(label.getElement());
         label.setStyleName("tooltip");
@@ -67,14 +69,18 @@ public class UIItem extends Label {
     }
 
     public Position getCenterPosition() {
-        int x = getAbsoluteLeft() + image.getWidth() / 2;
-        int y = getAbsoluteTop() + image.getHeight() / 2;
+        int x = getAbsoluteLeft() + 100 / 2;
+        int y = getAbsoluteTop() + 100 / 2;
         return new Position(x, y);
     }
 
     public Position getPosition() {
 //        if(position == null) savePosition();
         return position;
+    }
+    
+    public void setPosition(int x, int y) {
+        this.position = new Position(x, y);
     }
 
 //    public Item<T> getItem() {
@@ -88,19 +94,20 @@ public class UIItem extends Label {
     }
 
     public String getName() {
-        return data.getName();
+        return "lala";
+//        return data.getName();
     }
 
     public DeviceType getDeviceType() {
-        return data.getDeviceType();
+        return DeviceType.ISDN;
     }
 
     public int getWidth() {
-        return image.getWidth();
+        return 50;//image.getWidth();
     }
 
     public int getHeight() {
-        return image.getHeight();
+        return 50;//image.getHeight();
     }
 
     public void setId(Long id) {
@@ -120,7 +127,7 @@ public class UIItem extends Label {
     }
 
     public void setLabelColor() {
-        label.getElement().getStyle().setBackgroundColor(data.getStatus().getColor());
+//        label.getElement().getStyle().setBackgroundColor(data.getStatus().getColor());
     }
 
     public Device getData() {
@@ -133,7 +140,7 @@ public class UIItem extends Label {
 
     public void redraw() {
         System.out.println("redraw");
-        label.getElement().setInnerText(getName());
+//        label.getElement().setInnerText(getName());
 ////          label = new Label(getName());
 //        getElement().removeChild(label.getElement());
 //        label = new Label(getName());
