@@ -143,7 +143,7 @@ public class UIItem extends Label implements Serializable {
     }
 
     public String getParentId() {
-        return item.getStation().getStringId();
+        return item.getParentId();
     }
 
     public TaskState getTaskState() {

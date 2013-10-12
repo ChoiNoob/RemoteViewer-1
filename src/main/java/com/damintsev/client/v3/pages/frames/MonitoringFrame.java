@@ -43,13 +43,10 @@ public class MonitoringFrame {
     private PickupDragController dragController;
     private AbsolutePanel panel;
     private boolean editing = false;
-//    private Map<Long, UIItem> uiDevices;
     private Map<String, UIItem> uiItems;
 
     private MonitoringFrame() {
         uiItems = new HashMap<String, UIItem>();
-//        uiStations = new HashMap<Long, UIItem>();
-//        uiDevices = new HashMap<Long, UIItem>();
         panel = new AbsolutePanel();
         dragController = new PickupDragController(panel, true) {
             @Override
@@ -107,11 +104,13 @@ public class MonitoringFrame {
 
     //todo really need update ?!
     public void addItem(Item item) {
+        System.out.println("add item");
         UIItem uiItem = new UIItem(item);
         uiItems.put(uiItem.getId(), uiItem);
         panel.add(uiItem, 0, 0);
         panel.setWidgetPosition(uiItem, uiItem.getPosition().x, uiItem.getPosition().y);
         if(editing) dragController.makeDraggable(uiItem);
+        drawConnections();
     }
 
     private void startEditing() {
@@ -154,9 +153,12 @@ public class MonitoringFrame {
     }
 
     private void drawConnections() {
+        System.out.println("draw! size=" + uiItems.size());
         clearCanvas();
         for(UIItem uiItem : uiItems.values()) {
+            System.out.println("draw id=" + uiItem.getId());
             UIItem parent = uiItems.get(uiItem.getParentId());
+            System.out.println("parent=" + parent);
             if(parent != null)
                 drawLine(parent.getCenterPosition(), uiItem.getCenterPosition(), uiItem.getTaskState());
         }
@@ -167,8 +169,9 @@ public class MonitoringFrame {
         Context2d context = canvas.getContext2d();
         context.beginPath();
         context.setLineWidth(3);
-        System.out.println("draw s= " + status + " color=" + status.getState().getColor());
-        context.setStrokeStyle(status.getState().getColor());
+        //todo!!!!!
+//        System.out.println("draw s= " + status + " color=" + status.getState().getColor());
+//        context.setStrokeStyle(status.getState().getColor());
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
         context.stroke();

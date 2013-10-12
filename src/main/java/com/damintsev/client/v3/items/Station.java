@@ -31,13 +31,9 @@ public class Station extends Item {
     @Column
     private String password;
     @Column
-    private Status status;
-    @Column
     private String comment;
     @Transient
     private String imageName = "hipath";
-    @Column
-    private DeviceType deviceType = DeviceType.STATION;
     @Column
     private Boolean allowStatistics;
 
@@ -82,10 +78,6 @@ public class Station extends Item {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
-    public DeviceType getDeviceType() {
-        return deviceType;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -102,13 +94,14 @@ public class Station extends Item {
         return imageName;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
     @Override
     public Station getStation() {
         return this;
+    }
+
+    @Override
+    public String getParentId() {
+        return null;
     }
 
     public void setImage(String imageName) {
@@ -139,6 +132,7 @@ public class Station extends Item {
         this.allowStatistics = allowStatistics;
     }
 
+    @Override
     public String getStringId() {
         return "s" + getId();
     }

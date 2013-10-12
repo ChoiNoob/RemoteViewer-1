@@ -35,6 +35,8 @@ public abstract class Item implements Serializable {
 
     public abstract Station getStation();
 
+    public abstract String getParentId();
+
     //    private int coordX;
 //    private int coordY;
 //    private Object data;

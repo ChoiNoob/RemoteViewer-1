@@ -121,7 +121,6 @@ public class AddStationWindow implements Editor<Station> {
             public void onSelect(SelectEvent event) {
                 station = editor.flush();
                 if (editor.hasErrors()) return;
-                station.setStatus(Status.INIT);
                 window.mask();
                 Service2.database.saveStation(station, new AsyncCallback<Station>() {
                     public void onFailure(Throwable caught) {

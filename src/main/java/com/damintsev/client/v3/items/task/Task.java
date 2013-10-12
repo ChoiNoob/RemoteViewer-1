@@ -44,6 +44,11 @@ public class Task extends Item {
         return station;
     }
 
+    @Override
+    public String getParentId() {
+        return getStation().getStringId();
+    }
+
     public void setStation(Station station) {
         this.station = station;
     }
