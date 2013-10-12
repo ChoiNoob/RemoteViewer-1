@@ -1,8 +1,7 @@
 package com.damintsev.client.service;
 
 import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
-import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskState;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -23,7 +22,7 @@ public interface DatabaseService extends RemoteService {
     List<Item> loadUIItems();
     Station loadStation(Long id);
     Station saveStation(Station station);
-
+    void deleteStation(Long id);
 
 
     //todo

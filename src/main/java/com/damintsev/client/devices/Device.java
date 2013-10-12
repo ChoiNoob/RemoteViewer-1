@@ -2,6 +2,7 @@ package com.damintsev.client.devices;
 
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.v3.items.Station;
 
 import java.io.Serializable;
 

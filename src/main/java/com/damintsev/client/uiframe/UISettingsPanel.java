@@ -3,8 +3,8 @@ package com.damintsev.client.uiframe;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
+import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.windows.AddDeviceWindow;
-import com.damintsev.client.windows.AddStationWindow;
 import com.damintsev.client.windows.PrefixConfigWindow;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
@@ -87,7 +87,7 @@ public class UISettingsPanel {
                 final UIItem selected = (UIItem) MonitoringFrame.get().getSelected();
                 if (selected == null) Dialogs.alert("Выберите устройство");
                 else {
-                    switch (selected.getDeviceType()) {
+//                    switch (selected.getDeviceType()) {
 //                        case STATION:
 //                            AddStationWindow.get().show(selected.getId(), new Runnable() {
 //                                public void run() {
@@ -100,7 +100,7 @@ public class UISettingsPanel {
 //                            AddDeviceWindow.get().show(selected.getId());
 //                            break;
                         //todo
-                    }
+//                    }
                 }
             }
         });

@@ -1,11 +1,13 @@
-package com.damintsev.client.windows;
+package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.service.Service2;
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
+import com.damintsev.client.windows.UIFTPSettings;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -82,28 +84,29 @@ public class AddStationWindow implements Editor<Station> {
         checkBox = new CheckBox();
         panel.add(new FieldLabel(checkBox, "Разрешить сбор статистики"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        con.addButton(new TextButton("Сбор данных о звонках", new SelectEvent.SelectHandler() {
-            public void onSelect(SelectEvent event) {
-                station = editor.flush();
-                if (editor.hasErrors()) return;
-                station.setStatus(Status.INIT);
-//                TelnetWindow.getInstance().show(station);
-
-                  UIFTPSettings.getInstance().show(station);
-            }
-        }));
+        //todo вернуть эту кнопку
+//        con.addButton(new TextButton("Сбор данных о звонках", new SelectEvent.SelectHandler() {
+//            public void onSelect(SelectEvent event) {
+//                station = editor.flush();
+//                if (editor.hasErrors()) return;
+//                station.setStatus(Status.INIT);
+////                TelnetWindow.getInstance().show(station);
+//
+//                  UIFTPSettings.getInstance().show(station);
+//            }
+//        }));
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалена станция и все связанные с ней обькты", new Runnable() {
                     public void run() {
 //
-                        Service.instance.deleteDevice(station, new AsyncCallback<Void>() {
+                        Service2.database.deleteStation(station.getId(), new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
-                                //To change body of implemented methods use File | Settings | File Templates.
+                                //todo realize
                             }
 
                             public void onSuccess(Void result) {
-//                                MonitoringFrame.get().delete(station);
+                                MonitoringFrame.get().reloadView();//todo realize deletion
                             }
                         });
                         window.hide();
@@ -119,17 +122,17 @@ public class AddStationWindow implements Editor<Station> {
                 station = editor.flush();
                 if (editor.hasErrors()) return;
                 station.setStatus(Status.INIT);
-                final boolean newInstance = station.getId()==null;
                 window.mask();
-                Service.instance.saveDevice(station, new AsyncCallback<Device>() {
+                Service2.database.saveStation(station, new AsyncCallback<Station>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Error saving station to db " + caught.getMessage());
                     }
 
-                    public void onSuccess(Device result) {
+                    public void onSuccess(Station result) {
                         window.unmask();
+                        MonitoringFrame.get().reloadView();
                         window.hide();
-//                        if(newInstance)MonitoringFrame.get().addItem(new UIItem(result));
+
                         if(listener != null)
                             listener.run();
                     }
@@ -148,20 +151,21 @@ public class AddStationWindow implements Editor<Station> {
 
     public void show(Long stationId, Runnable listener) {
         this.listener = listener;
+        editor.initialize(this);
         if (stationId == null) {
             station = new Station();
             delete.hide();
             editor.edit(station);
         } else {
             window.mask();
-            Service.instance.loadDevice(stationId, DeviceType.STATION, new AsyncCallback<Device>() {
+            Service2.database.loadStation(stationId, new AsyncCallback<Station>() {
                 public void onFailure(Throwable caught) {
                     Dialogs.alert("Error while loading Station =" + caught.getMessage());
                 }
 
-                public void onSuccess(Device result) {
+                public void onSuccess(Station result) {
                     window.unmask();
-                    AddStationWindow.this.station = (Station) result;
+                    AddStationWindow.this.station =  result;
                     editor.edit(station);
                 }
             });

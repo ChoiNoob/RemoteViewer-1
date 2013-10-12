@@ -139,6 +139,7 @@ public class MonitoringFrame {
     }
 
     public void delete(UIItem item) {
+        uiItems.remove(item.getId());
         if(editing) dragController.makeNotDraggable(item);
         panel.remove(item);
         if(item.haveChildrens()) {
@@ -146,6 +147,10 @@ public class MonitoringFrame {
                 if(item.isChild(child))
                     delete(child);
         }
+    }
+
+    public void delete(Item item) {
+        delete(uiItems.get(item.getStringId()));
     }
 
     private void drawConnections() {
@@ -174,78 +179,6 @@ public class MonitoringFrame {
         context.clearRect(0, 0, Window.getClientWidth(), Window.getClientHeight());
     }
 
-    public void schedule() {
-
-    }
-
-    private void scheduler() {
-//        if (iterator == null)
-//            iterator = createIterator();
-//        if (iterator.hasNext()) {
-//            final Device device = iterator.next();
-//            Service.instance.checkDevice(device, new AsyncCallback<Device>() {
-//                public void onFailure(Throwable caught) {
-//                    stop();
-//                    Dialogs.alert("Check device false! " + caught.getMessage());
-//                }
-//
-//                public void onSuccess(Device result) {
-//                    if (result != null) {
-//                        System.out.println("result not null=" + result.getStatus());
-//                        updateUIItem(result);
-//                    }
-//                }
-//            });
-//        } else {
-//            iterator = createIterator();
-//        }
-//        Service.instance.getItemsState(new AsyncCallback<List<Device>>() {
-//            public void onFailure(Throwable caught) {
-//                stop();
-//                Dialogs.alert("Error loading from DB at scheduler =" + caught.getMessage());
-//            }
-//
-//            public void onSuccess(List<Device> result) {
-//                for (Device device : result) {
-//                    updateUIItem(device);
-//                }
-//                drawConnections(false);
-//            }
-//        });
-    }
-
-//    private void updateUIItem(Device device) {
-//        if(device instanceof Station) {
-//            System.out.println("update ST");
-//            UIItem station = uiStations.get(device.getId());
-//            if(station == null) {stop();reload();return;}
-//            station.setData(device);
-//            uiStations.put(device.getId(), station);
-//        } else {
-//            System.out.println("update DEV=" + device.getStatus());
-//            UIItem dev = uiDevices.get(device.getId());
-//            if(dev == null) {stop();reload();return;}
-//            dev.setData(device);
-//            uiDevices.put(device.getId(), dev);
-//        }
-//        drawConnections(false);
-//    }
-
-//    private Iterator<Device> iterator;
-
-//    private Iterator<Device> createIterator() {
-//        List<Device> items = new ArrayList<Device>();
-//        for(UIItem station : uiStations.values()) {
-//            items.add(station.getData());
-//        }
-//        for(UIItem device : uiDevices.values()) {
-//            items.add(device.getData());
-//        }
-//        return items.iterator();
-//    }
-
-//    private boolean start;
-
     public void start() {
         Scheduler.getInstance().start(this.getClass(), new Runnable() {
             public void run() {
@@ -256,7 +189,11 @@ public class MonitoringFrame {
 
                     public void onSuccess(List<TaskState> result) {
                         for(TaskState state : result) {
-                            uiItems.get(state.getId()).setTaskState(state);
+                            if(uiItems.get(state.getId()) != null )
+                                uiItems.get(state.getId()).setTaskState(state);
+                            else     {
+                                int i = 0; //todo!!!!
+                            }
                         }
                         drawConnections();
                     }
@@ -272,4 +209,12 @@ public class MonitoringFrame {
     public static native void reload()/*-{
         $wnd.location = $wnd.location.pathname;
     }-*/;
+
+    public void reloadView() {
+        stop();
+        for(UIItem uiItem : uiItems.values())
+            delete(uiItem);
+        DataLoader.getInstance().load();
+        start();
+    }
 }

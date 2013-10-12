@@ -1,8 +1,7 @@
 package com.damintsev.client.v3.uiitems;
 
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.devices.UIItem;
-import com.google.gwt.user.client.ui.Widget;
 
 /**
  * User: Damintsev Andrey

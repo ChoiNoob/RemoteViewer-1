@@ -1,24 +1,14 @@
 package com.damintsev.server.services;
 
 import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
-import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.service.DatabaseService;
-import com.damintsev.client.v3.items.DatabaseType;
 import com.damintsev.client.v3.items.task.TaskState;
-import com.damintsev.client.v3.items.task.TaskType;
-import com.damintsev.client.v3.uiitems.UIStation;
-import com.damintsev.client.v3.uiitems.UITask;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.server.db.DB;
-import com.damintsev.server.db.Mysql;
 import com.damintsev.server.v2.v3.SoA;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +37,10 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public Station saveStation(Station station) {
        return null;
+    }
+
+    public void deleteStation(Long id) {
+        DB.getInstance().deleteStation(id);
     }
 
     public List<TaskState> loadTaskStates() {

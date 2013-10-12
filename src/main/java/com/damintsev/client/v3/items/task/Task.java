@@ -1,7 +1,7 @@
 package com.damintsev.client.v3.items.task;
 
 import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.v3.items.Station;
 
 /**
  * User: Damintsev Andrey

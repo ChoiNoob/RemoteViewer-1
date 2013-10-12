@@ -17,7 +17,7 @@
         <!--<mapping class="com.damintsev.client.devices.TrunkName"/>-->
         <!--<mapping class="com.damintsev.client.devices.graph.BusyInfo"/>-->
         <!--<mapping class="com.damintsev.client.devices.FTPSettings"/>-->
-        <!--<mapping class="com.damintsev.client.devices.Station"/>-->
+        <!--<mapping class="com.damintsev.client.v3.items.Station"/>-->
     <!--</session-factory>-->
 
 

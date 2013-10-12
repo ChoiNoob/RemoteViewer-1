@@ -1,11 +1,6 @@
 package com.damintsev.client.uiframe;
 
 import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Station;
-import com.damintsev.client.service.Service;
-import com.damintsev.utils.Dialogs;
-import com.damintsev.client.devices.TestResponse;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.form.TextArea;

@@ -1,16 +1,8 @@
 package com.damintsev.server.db;
 
-import com.damintsev.client.devices.CommonDevice;
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
-import com.damintsev.client.devices.enums.DeviceType;
-import com.damintsev.client.devices.enums.Status;
-import com.damintsev.client.devices.graph.BusyInfo;
-import org.hibernate.classic.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.Query;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Calendar;

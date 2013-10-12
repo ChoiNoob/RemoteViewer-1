@@ -1,13 +1,10 @@
 package com.damintsev.server.db;
 
 import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.Station;
-import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.DatabaseType;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskType;
-import com.damintsev.client.v3.uiitems.UIStation;
-import com.damintsev.client.v3.uiitems.UITask;
 import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
@@ -110,6 +107,10 @@ public class DB {
     }
 
     public List<Task> loadTasksForStation(Station station) {
+        return loadTasksForStation(station.getId());
+    }
+
+        public List<Task> loadTasksForStation(Long stationId) {
         List<Task> tasks = new ArrayList<Task>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -117,7 +118,7 @@ public class DB {
         try {
             connection = Mysql.getConnection();
             statement = connection.prepareStatement("SELECT * FROM Task t WHERE t.station_id = ?");
-            statement.setLong(1, station.getId());
+            statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 Task task = new Task();
@@ -239,9 +240,7 @@ public class DB {
                         item = getTask(refId);
                         break;
                     case STATION:
-//                        item = new UIStation();
-//                        ((UIStation)item).setStation(getStation(refId));
-//                        item.setPosition(x,y);
+                        item = getStation(refId);
                         break;
                     default:item=new Task();//todo сделать чтото а то не красиво
                 }
@@ -252,5 +251,50 @@ public class DB {
             e.printStackTrace();
         }
         return uiItems;
+    }
+
+    public void deleteStation(Long stationId) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Mysql.getConnection();
+            List<Task> tasks = loadTasksForStation(stationId);
+            for (Task task : tasks) {
+                deleteTask(task.getId());
+            }
+
+            statement = connection.prepareStatement("DELETE FROM station WHERE station_id = ?");
+            statement.setLong(1, stationId);
+            statement.executeUpdate();
+            statement = connection.prepareStatement("DELETE FROM uipositions " +
+                    "WHERE ref_type = 'STATION' " +
+                    "AND ref_id = ? ");
+            statement.setLong(1, stationId);
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void deleteTask(Long taskId) {
+                //todo не забыть удалить из таблицы UIPositions!!!!
     }
 }

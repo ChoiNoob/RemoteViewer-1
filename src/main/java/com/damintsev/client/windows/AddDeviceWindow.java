@@ -2,11 +2,10 @@ package com.damintsev.client.windows;
 
 import com.damintsev.client.devices.CommonDevice;
 import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
-import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;

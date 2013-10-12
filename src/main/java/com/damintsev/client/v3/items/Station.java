@@ -1,11 +1,12 @@
-package com.damintsev.client.devices;
+package com.damintsev.client.v3.items;
 
+import com.damintsev.client.devices.Device;
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.enums.DeviceType;
 import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.v3.items.task.TaskType;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * User: Damintsev Andrey
@@ -14,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @org.hibernate.annotations.Entity
-public class Station extends Device {
+public class Station extends Item {
     @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "station_id")
@@ -76,6 +77,11 @@ public class Station extends Device {
         return name;
     }
 
+    @Override
+    public TaskType getType() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
     public DeviceType getDeviceType() {
         return deviceType;
     }
@@ -94,11 +100,6 @@ public class Station extends Device {
 
     public String getImage() {
         return imageName;
-    }
-
-    @Override
-    public Status getStatus() {
-        return status;
     }
 
     public void setStatus(Status status) {

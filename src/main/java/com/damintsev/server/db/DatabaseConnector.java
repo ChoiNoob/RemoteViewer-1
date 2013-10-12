@@ -4,16 +4,17 @@
 //import com.damintsev.client.devices.enums.DeviceType;
 //import com.damintsev.client.devices.enums.Status;
 //import com.damintsev.client.devices.graph.BusyInfo;
+//import com.damintsev.client.v3.items.Station;
 //import org.slf4j.LoggerFactory;
 //
 //import java.sql.*;
 //import java.util.*;
 //
 ///**
-// * User: Damintsev Andrey
-// * Date: 19.08.13
-// * Time: 23:36
-// */
+//* User: Damintsev Andrey
+//* Date: 19.08.13
+//* Time: 23:36
+//*/
 //public class DatabaseConnector {
 //
 //    private static DatabaseConnector instance;
@@ -26,11 +27,12 @@
 //
 //    public Device saveDevice(Device device) {
 //        logger.info("Save device");
-//        if (device instanceof Station) {
-//            return saveStation((Station) device);
-//        } else {
-//            return saveCommonDevice((CommonDevice) device);
-//        }
+////        if (device instanceof Station) {
+////            return saveStation((Station) device);
+////        } else {
+////            return saveCommonDevice((CommonDevice) device);
+////        }
+//        return null;
 //    }
 //
 //    private Device saveCommonDevice(CommonDevice device) {
@@ -155,98 +157,99 @@
 //    }
 //
 //    private void savePosition(Item item) {
-//        Connection connection = null;
-//        PreparedStatement statement = null;
-//        try {
-//            connection = Mysql.getConnection();
-//            if (item.getData() instanceof Station)
-//                statement = connection.prepareStatement("REPLACE INTO station_pos SET id = ?, x = ?, y = ?");
-//            else
-//                statement = connection.prepareStatement("REPLACE INTO device_pos SET id = ?, x = ?, y = ?");
-//            logger.info("Saving item: " + statement.toString());
-//            statement.setLong(1, item.getId());
-//            statement.setLong(2, item.getCoordX());
-//            statement.setLong(3, item.getCoordY());
-//            statement.executeUpdate();
-//        } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (statement != null) {
-//                    statement.close();
-//                }
-//                if (connection != null) {
-//                    connection.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
+////        Connection connection = null;
+////        PreparedStatement statement = null;
+////        try {
+////            connection = Mysql.getConnection();
+////            if (item.getData() instanceof Station)
+////                statement = connection.prepareStatement("REPLACE INTO station_pos SET id = ?, x = ?, y = ?");
+////            else
+////                statement = connection.prepareStatement("REPLACE INTO device_pos SET id = ?, x = ?, y = ?");
+////            logger.info("Saving item: " + statement.toString());
+////            statement.setLong(1, item.getId());
+////            statement.setLong(2, item.getCoordX());
+////            statement.setLong(3, item.getCoordY());
+////            statement.executeUpdate();
+////        } catch (Exception e) {
+////            logger.error(e.getMessage(), e);
+////            e.printStackTrace();
+////        } finally {
+////            try {
+////                if (statement != null) {
+////                    statement.close();
+////                }
+////                if (connection != null) {
+////                    connection.close();
+////                }
+////            } catch (SQLException e) {
+////                e.printStackTrace();
+////            }
+////        }
 //    }
 //
 //    public List<Item> loadItems() {
-//        List<Item> items = new ArrayList<Item>();
-//        Connection connection = null;
-//        PreparedStatement statement = null;
-//        try {
-//            connection = Mysql.getConnection();
-//            statement = connection.prepareStatement("SELECT * FROM device LEFT JOIN device_pos ON device.id = device_pos.id ");
-//            ResultSet resultSet = statement.executeQuery();
-//            while (resultSet.next()) {
-//                CommonDevice device = new CommonDevice();
-//                device.setId(resultSet.getLong("device.id"));
-//                device.setStatus(Status.INIT);
-//                device.setQuery(resultSet.getString("query"));
-//                device.setQueryBusy(resultSet.getString("queryBusy"));
-//                device.setDeviceType(DeviceType.valueOf(resultSet.getString("deviceType")));
-//                device.setName(resultSet.getString("name"));
-//                device.setStation(findStation(connection, resultSet.getLong("station_id")));
-//
-//                Item<CommonDevice> item = new Item<CommonDevice>();
-//                item.setData(device);
-//                item.setCoordX(resultSet.getInt("x"));
-//                item.setCoordY(resultSet.getInt("y"));
-//                items.add(item);
-//            }
-//
-//            statement = connection.prepareStatement("SELECT * FROM station LEFT JOIN station_pos ON station.station_id = station_pos.id");
-//            resultSet = statement.executeQuery();
-//            while (resultSet.next()) {
-//                Station station = new Station();
-//                station.setId(resultSet.getLong("station_id"));
-//                station.setComment(resultSet.getString("comment"));
-//                station.setStatus(Status.INIT);
-//                station.setHost(resultSet.getString("host"));
-//                station.setPort(resultSet.getString("port"));
-//                station.setLogin(resultSet.getString("login"));
-//                station.setPassword(resultSet.getString("password"));
-//                station.setName(resultSet.getString("name"));
-//
-//                Item<Station> item = new Item<Station>();
-//                item.setData(station);
-//                item.setCoordX(resultSet.getInt("x"));
-//                item.setCoordY(resultSet.getInt("y"));
-//                items.add(item);
-//            }
-//
-//            resultSet.close();
-//        } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (statement != null) {
-//                    statement.close();
-//                }
-//                if (connection != null) {
-//                    connection.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        return items;
+////        List<Item> items = new ArrayList<Item>();
+////        Connection connection = null;
+////        PreparedStatement statement = null;
+////        try {
+////            connection = Mysql.getConnection();
+////            statement = connection.prepareStatement("SELECT * FROM device LEFT JOIN device_pos ON device.id = device_pos.id ");
+////            ResultSet resultSet = statement.executeQuery();
+////            while (resultSet.next()) {
+////                CommonDevice device = new CommonDevice();
+////                device.setId(resultSet.getLong("device.id"));
+////                device.setStatus(Status.INIT);
+////                device.setQuery(resultSet.getString("query"));
+////                device.setQueryBusy(resultSet.getString("queryBusy"));
+////                device.setDeviceType(DeviceType.valueOf(resultSet.getString("deviceType")));
+////                device.setName(resultSet.getString("name"));
+////                device.setStation(findStation(connection, resultSet.getLong("station_id")));
+////
+////                Item<CommonDevice> item = new Item<CommonDevice>();
+////                item.setData(device);
+////                item.setCoordX(resultSet.getInt("x"));
+////                item.setCoordY(resultSet.getInt("y"));
+////                items.add(item);
+////            }
+////
+////            statement = connection.prepareStatement("SELECT * FROM station LEFT JOIN station_pos ON station.station_id = station_pos.id");
+////            resultSet = statement.executeQuery();
+////            while (resultSet.next()) {
+////                Station station = new Station();
+////                station.setId(resultSet.getLong("station_id"));
+////                station.setComment(resultSet.getString("comment"));
+////                station.setStatus(Status.INIT);
+////                station.setHost(resultSet.getString("host"));
+////                station.setPort(resultSet.getString("port"));
+////                station.setLogin(resultSet.getString("login"));
+////                station.setPassword(resultSet.getString("password"));
+////                station.setName(resultSet.getString("name"));
+////
+////                Item<Station> item = new Item<Station>();
+////                item.setData(station);
+////                item.setCoordX(resultSet.getInt("x"));
+////                item.setCoordY(resultSet.getInt("y"));
+////                items.add(item);
+////            }
+////
+////            resultSet.close();
+////        } catch (Exception e) {
+////            logger.error(e.getMessage(), e);
+////            e.printStackTrace();
+////        } finally {
+////            try {
+////                if (statement != null) {
+////                    statement.close();
+////                }
+////                if (connection != null) {
+////                    connection.close();
+////                }
+////            } catch (SQLException e) {
+////                e.printStackTrace();
+////            }
+////        }
+////        return items;
+//        return null;
 //    }
 //
 //    private Station findStation(Connection connection, Long stationId) {
@@ -297,8 +300,8 @@
 //        try {
 //            connection = Mysql.getConnection();
 //            if (deviceType == DeviceType.STATION) {
-//                device = findStation(connection, deviceId);
-//                return device;
+////                device = findStation(connection, deviceId);
+//                return null;
 //            } else
 //                statement = connection.prepareStatement("SELECT * FROM  device WHERE id = ?");
 //            statement.setLong(1, deviceId);

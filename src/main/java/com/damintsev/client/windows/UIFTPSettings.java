@@ -1,7 +1,7 @@
 package com.damintsev.client.windows;
 
 import com.damintsev.client.devices.FTPSettings;
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.service.Service;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;

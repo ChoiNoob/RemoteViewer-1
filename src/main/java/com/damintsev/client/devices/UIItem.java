@@ -1,5 +1,6 @@
 package com.damintsev.client.devices;
 
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.utils.Position;
@@ -43,8 +44,8 @@ public class UIItem extends Label implements Serializable {
         getElement().appendChild(image.getElement());
 
        Label label = new Label(getName());
-//        if(getName() != null || item instanceof Station)
-//            getElement().appendChild(label.getElement());
+        if(getName() != null)
+            getElement().appendChild(label.getElement());
         label.setStyleName("tooltip");
 //        super.addDoubleClickHandler(new DoubleClickHandler() {
 //            public void onDoubleClick(DoubleClickEvent event) {

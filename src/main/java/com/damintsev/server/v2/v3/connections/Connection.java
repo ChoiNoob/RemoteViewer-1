@@ -1,6 +1,6 @@
 package com.damintsev.server.v2.v3.connections;
 
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.executors.TaskExecutor;
 import com.damintsev.client.v3.items.task.TaskState;

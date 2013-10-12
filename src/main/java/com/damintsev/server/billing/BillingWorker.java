@@ -2,7 +2,7 @@ package com.damintsev.server.billing;
 
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.Station;
+import com.damintsev.client.v3.items.Station;
 //import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.BillingStatistics;
 import com.damintsev.server.telnet.TelnetWorker;
@@ -156,16 +156,16 @@ public class BillingWorker extends Thread {
     }
 
     public void updateStation(Device station) {
-        if(!(station instanceof Station))
-            return;
-        this.station = (Station) station;
-        reconnect();
+//        if(!(station instanceof Station))
+//            return;
+//        this.station = (Station) station;
+//        reconnect();
     }
 
     public void deleteStation(Device device) {
-        if(device instanceof Station) {
-            disconnect();
-            station = null;
-        }
+//        if(device instanceof Station) {
+//            disconnect();
+//            station = null;
+//        }
     }
 }

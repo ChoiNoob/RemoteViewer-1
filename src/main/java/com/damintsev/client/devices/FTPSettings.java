@@ -1,5 +1,7 @@
 package com.damintsev.client.devices;
 
+import com.damintsev.client.v3.items.Station;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

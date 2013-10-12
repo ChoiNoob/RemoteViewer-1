@@ -39,6 +39,6 @@ public class DataLoader {
     }
 
     public void saveUIItems(Collection<UIItem> values) {
-        //To change body of created methods use File | Settings | File Templates.
+        //todo
     }
 }
