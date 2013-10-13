@@ -1,8 +1,7 @@
-package com.damintsev.client.uiframe;
+package com.damintsev.client.v3.pages.frames;
 
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service;
-import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.windows.AddDeviceWindow;
 import com.damintsev.client.windows.PrefixConfigWindow;
@@ -26,16 +25,16 @@ import com.sencha.gxt.widget.core.client.event.SelectEvent;
  * Date: 03.08.13
  * Time: 0:49
  */
-public class UISettingsPanel {
+public class SettingsFrame {
 
-    private static UISettingsPanel instance;
+    private static SettingsFrame instance;
 
-    public static UISettingsPanel get() {
-        if(instance == null) instance = new UISettingsPanel();
+    public static SettingsFrame get() {
+        if(instance == null) instance = new SettingsFrame();
         return instance;
     }
 
-    private UISettingsPanel(){
+    private SettingsFrame(){
     }
 
     private ContentPanel panel;
@@ -127,7 +126,7 @@ public class UISettingsPanel {
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                MonitoringFrame.get().saveItemPositions();
+                MonitoringFrame.get().stopEditing();
                 collapse();
 //                reload();
             }

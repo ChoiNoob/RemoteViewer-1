@@ -1,6 +1,7 @@
 package com.damintsev.client.uiframe;
 
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
+import com.damintsev.client.v3.pages.frames.SettingsFrame;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
@@ -37,7 +38,7 @@ public class UIRootPanel {
         body.setSouthWidget(footer, new BorderLayoutContainer.BorderLayoutData(20));
 
         body.setCenterWidget(MonitoringFrame.get().getContent());
-        final ContentPanel settings = (ContentPanel) UISettingsPanel.get().getContent();
+        final ContentPanel settings = (ContentPanel) SettingsFrame.get().getContent();
         ((AbsolutePanel)body.getCenterWidget()).add(settings);
 
 

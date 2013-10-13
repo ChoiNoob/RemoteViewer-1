@@ -7,6 +7,7 @@ import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,13 +33,25 @@ public class DataLoader {
 
             public void onSuccess(List<Item> result) {
                 for(Item item : result) {
-                    MonitoringFrame.get().addItem(item);
+                    MonitoringFrame.get().add(item);
                 }
             }
         });
     }
 
-    public void saveUIItems(Collection<UIItem> values) {
-        //todo
+    public void saveUIItems(Collection<UIItem> uiItems) {
+        List<Item> items = new ArrayList<Item>();
+        for(UIItem uiItem : uiItems) {
+            items.add(uiItem.getItem());
+        }
+        Service2.database.saveItemPosition(items, new AsyncCallback<Void>() {
+            public void onFailure(Throwable caught) {
+                //todo!!
+            }
+
+            public void onSuccess(Void result) {
+                //todo nothin todo !?!? ^)
+            }
+        });
     }
 }

@@ -22,5 +22,7 @@ public interface DatabaseServiceAsync {
     //todo
     void loadTaskStates(AsyncCallback<List<TaskState>> async);
 
-    void deleteStation(Long id, AsyncCallback<Void> async);
+    void deleteStation(Station station, AsyncCallback<Void> async);
+
+    void saveItemPosition(List<Item> items, AsyncCallback<Void> async);
 }

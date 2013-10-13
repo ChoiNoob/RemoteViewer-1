@@ -16,6 +16,7 @@ public abstract class Item implements Serializable {
     private Position position;
 
     public Position getPosition() {
+        if(position == null) position = new Position(0,0); //если элемент создан с интерфейса
         return position;
     }
 
@@ -30,6 +31,8 @@ public abstract class Item implements Serializable {
     public abstract String getName();
 
     public abstract TaskType getType();
+
+    public abstract Long getId();
 
     public abstract String getStringId();
 

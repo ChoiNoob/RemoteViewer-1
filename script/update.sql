@@ -7,12 +7,11 @@ CREATE TABLE Task (
 );
 
 CREATE TABLE UIPositions (
-  ui_id    INT AUTO_INCREMENT UNIQUE,
   x        INT NOT NULL,
   y        INT NOT NULL,
   ref_id   INT NOT NULL,
   ref_type VARCHAR(20),
-  PRIMARY KEY (ui_id)
+  PRIMARY KEY (ref_type, ref_id)
 );
 
 CREATE TABLE images (

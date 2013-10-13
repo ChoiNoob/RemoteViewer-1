@@ -129,4 +129,12 @@ public class UIItem extends Label implements Serializable {
     public void setTaskState(TaskState status) {
         this.taskState = status;
     }
+
+    public void setItem(Item item) {
+        this.item = item;
+    }
+
+    public Item getItem() {
+        return item;
+    }
 }

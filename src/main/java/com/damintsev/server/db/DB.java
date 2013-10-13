@@ -8,10 +8,7 @@ import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskType;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -254,24 +251,24 @@ public class DB {
         return uiItems;
     }
 
-    public void deleteStation(Long stationId) {
+    public void deleteStation(Station station) {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
             connection = Mysql.getConnection();
-            List<Task> tasks = loadTasksForStation(stationId);
+            List<Task> tasks = loadTasksForStation(station.getId());
             for (Task task : tasks) {
                 deleteTask(task.getId());
             }
-
             statement = connection.prepareStatement("DELETE FROM station WHERE station_id = ?");
-            statement.setLong(1, stationId);
+            statement.setLong(1, station.getId());
             statement.executeUpdate();
-            statement = connection.prepareStatement("DELETE FROM uipositions " +
-                    "WHERE ref_type = 'STATION' " +
-                    "AND ref_id = ? ");
-            statement.setLong(1, stationId);
-            statement.executeUpdate();
+//            statement = connection.prepareStatement("DELETE FROM uipositions " +
+//                    "WHERE ref_type = 'STATION' " +
+//                    "AND ref_id = ? ");
+//            statement.setLong(1, station.getId());
+//            statement.executeUpdate();
+            deleteFromUI(connection, station);
 
         } catch (SQLException e) {
             try {
@@ -280,6 +277,32 @@ public class DB {
                 e1.printStackTrace();
             }
             logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void deleteFromUI(Connection connection, Item item) {
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement("DELETE FROM uipositions " +
+                    "WHERE ref_type = ? " +
+                    "AND ref_id = ? ");
+            statement.setString(1, item.getClass().getSimpleName().toUpperCase());
+            statement.setLong(2, item.getId());
+            statement.executeUpdate();
+
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -335,5 +358,133 @@ public class DB {
             }
         }
         return images;
+    }
+
+    public Station saveStation(Station station) {
+        logger.info("saving Station");
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Mysql.getConnection();
+            if (station.getId() == null) {
+                statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port,allowStatistics) " +
+                        "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, station.getComment());
+                statement.setString(2, "null");//todo избавиться от этой строчки
+                statement.setString(3, station.getHost());
+                statement.setString(4, station.getLogin());
+                statement.setString(5, station.getName());
+                statement.setString(6, station.getPassword());
+                statement.setString(7, station.getPort());
+                statement.setBoolean(8, station.getAllowStatistics());
+
+                statement.executeUpdate();
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    station.setId(resultSet.getLong(1));
+                }
+                resultSet.close();
+            } else {
+                statement = connection.prepareStatement("UPDATE station SET comment=?, " +
+                        "host=?, login=?, name=?, password=?, port=?, allowStatistics=? WHERE station_id=?");
+                statement.setString(1, station.getComment());
+                statement.setString(2, station.getHost());
+                statement.setString(3, station.getLogin());
+                statement.setString(4, station.getName());
+                statement.setString(5, station.getPassword());
+                statement.setString(6, station.getPort());
+                statement.setBoolean(7, station.getAllowStatistics());
+                statement.setLong(8, station.getId());
+                statement.executeUpdate();
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return station;
+    }
+
+    public void saveItemPosition(List<Item> items) {
+        logger.info("saving items position");
+        Connection connection = null;
+        PreparedStatement statementInsert = null;
+        PreparedStatement statementUpdate = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Mysql.getConnection();
+            statementInsert = connection.prepareStatement("INSERT INTO uipositions (x, y, ref_id, ref_type)" +
+                    "VALUES (?,?,?,?) " +
+                    "ON DUPLICATE KEY UPDATE x = VALUES(x), y = VALUES(y)");
+            for(Item item : items) {
+                statementInsert.setInt(1, item.getPosition().x);
+                statementInsert.setInt(2, item.getPosition().y);
+                statementInsert.setLong(3, item.getId());
+                statementInsert.setString(4, item.getClass().getSimpleName().toUpperCase());
+                statementInsert.addBatch();
+            }
+            statementInsert.executeBatch();
+//            if (station.getId() == null) {
+//                statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port,allowStatistics) " +
+//                        "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+//                statement.setString(1, station.getComment());
+//                statement.setString(2, "null");//todo избавиться от этой строчки
+//                statement.setString(3, station.getHost());
+//                statement.setString(4, station.getLogin());
+//                statement.setString(5, station.getName());
+//                statement.setString(6, station.getPassword());
+//                statement.setString(7, station.getPort());
+//                statement.setBoolean(8, station.getAllowStatistics());
+//
+//                statement.executeUpdate();
+//                if (resultSet.next()) {
+//                    station.setId(resultSet.getLong(1));
+//                }
+//                resultSet.close();
+//            } else {
+//                statement = connection.prepareStatement("UPDATE station SET comment=?, " +
+//                        "host=?, login=?, name=?, password=?, port=?, allowStatistics=? WHERE station_id=?");
+//                statement.setString(1, station.getComment());
+//                statement.setString(2, station.getHost());
+//                statement.setString(3, station.getLogin());
+//                statement.setString(4, station.getName());
+//                statement.setString(5, station.getPassword());
+//                statement.setString(6, station.getPort());
+//                statement.setBoolean(7, station.getAllowStatistics());
+//                statement.setLong(8, station.getId());
+//                statement.executeUpdate();
+
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statementInsert != null) {
+                    statementInsert.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

@@ -36,14 +36,18 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     }
 
     public Station saveStation(Station station) {
-       return null;
+       return DB.getInstance().saveStation(station);
     }
 
-    public void deleteStation(Long id) {
-        DB.getInstance().deleteStation(id);
+    public void deleteStation(Station station) {
+        DB.getInstance().deleteStation(station);
     }
 
     public List<TaskState> loadTaskStates() {
         return new ArrayList<TaskState>(SoA.getInstance().getStates().values());
+    }
+
+    public void saveItemPosition(List<Item> items) {
+        DB.getInstance().saveItemPosition(items);
     }
 }

@@ -6,5 +6,15 @@ package com.damintsev.client.v3.items;
  * Time: 23:53
  */
 public enum  DatabaseType {
-    LABEL, STATION, TASK
+    LABEL("Label"), STATION("Station"), TASK("Task");
+
+    private DatabaseType(String label) {
+        this.label = label;
+    }
+
+    private String label;
+
+
+
+
 }

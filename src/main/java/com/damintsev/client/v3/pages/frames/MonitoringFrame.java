@@ -6,7 +6,6 @@ import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service2;
-import com.damintsev.client.uiframe.UISettingsPanel;
 import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;
@@ -41,6 +40,7 @@ public class MonitoringFrame {
     private AbsolutePanel panel;
     private boolean editing = false;
     private Map<String, UIItem> uiItems;
+    private Canvas canvas;
 
     private MonitoringFrame() {
         uiItems = new HashMap<String, UIItem>();
@@ -66,7 +66,7 @@ public class MonitoringFrame {
         final TextButton editButton = new TextButton("Редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 startEditing();
-                UISettingsPanel.get().expand();
+                SettingsFrame.get().expand();
                 stop();
             }
         });
@@ -80,8 +80,6 @@ public class MonitoringFrame {
         DataLoader.getInstance().load();
         drawConnections();
     }
-
-    private Canvas canvas;
 
     private void drawCanvas(AbsolutePanel panel) {
         final int height = Window.getClientHeight();
@@ -99,8 +97,23 @@ public class MonitoringFrame {
         return panel;
     }
 
-    //todo really need update ?!
-    public void addItem(Item item) {
+
+    public void add(Item item) {
+        if(uiItems.containsKey(item.getStringId()))
+            updateItem(item);
+        else
+            addItem(item);
+    }
+
+    private void updateItem(Item item) {
+        System.out.println("update item");
+        UIItem uiItem = uiItems.get(item.getStringId());
+        uiItem.setItem(item);
+
+        //todo need redraw! may be force
+    }
+
+    private void addItem(Item item) {
         System.out.println("add item");
         UIItem uiItem = new UIItem(item);
         uiItems.put(uiItem.getId(), uiItem);
@@ -122,7 +135,9 @@ public class MonitoringFrame {
         dragController.clearSelection();
         for(UIItem item : uiItems.values()) {
             dragController.makeNotDraggable(item);
+            item.savePosition();
         }
+        saveItemPositions();
     }
 
     public void saveItemPositions() {

@@ -63,7 +63,7 @@ public class AddStationWindow implements Editor<Station> {
         con.add(panel);
 
         name = new TextField();
-        panel.add(new FieldLabel(name, "�?мя"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        panel.add(new FieldLabel(name, "�?мя"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         host = new TextField();
         host.setAllowBlank(false);
@@ -129,7 +129,8 @@ public class AddStationWindow implements Editor<Station> {
 
                     public void onSuccess(Station result) {
                         window.unmask();
-                        MonitoringFrame.get().reloadView();
+                        station = result;
+                        MonitoringFrame.get().add(result);
                         window.hide();
 
                         if(listener != null)

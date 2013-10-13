@@ -22,8 +22,8 @@ public interface DatabaseService extends RemoteService {
     List<Item> loadUIItems();
     Station loadStation(Long id);
     Station saveStation(Station station);
-    void deleteStation(Long id);
-
+    void deleteStation(Station station);
+    void saveItemPosition(List<Item> items);
 
     //todo
     List<TaskState> loadTaskStates();
