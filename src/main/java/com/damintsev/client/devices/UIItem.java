@@ -27,15 +27,13 @@ public class UIItem extends Label implements Serializable {
     public UIItem(Item item) {
         super();
         this.item = item;
+        taskState = new TaskState();
         init();
     }
 
     public void savePosition() {
-//        if(position == null) position = new Position(getAbsoluteLeft(), getAbsoluteTop());
-//        else {
-//            position.x = getAbsoluteLeft();
-//            position.y = getAbsoluteTop();
-//        }
+        item.getPosition().x = getAbsoluteLeft();
+        item.getPosition().y = getAbsoluteTop();
     }
 
     private void init() {
@@ -65,28 +63,22 @@ public class UIItem extends Label implements Serializable {
     public Position getPosition() {
         return item.getPosition();
     }
-    
-    public void setPosition(int x, int y) {
-//        this.position = new Position(x, y);//todo really need ?!
-    }
-
-//    public Item<T> getItem() {
-//        item.setCoordX(getPosition().x);
-//        item.setCoordY(getPosition().y);
-//        return item;
-//    }
 
     public ImageResource getImage() {
-        return Utils.getImage("cloud");//todo customize
+//        return Utils.getImage("cloud");//todo customize
+        if(item.getType() == null)   return Utils.getImage("hipath");
+        switch (item.getType()) {
+            case IP:
+            case PING:
+            case TELNET:
+                return Utils.getImage("cloud");
+            default:
+                return Utils.getImage("hipath");
+        }
     }
 
     public String getName() {
         return item.getName();
-//        return data.getName();
-    }
-
-    public TaskType getDeviceType() {
-        return item.getType();
     }
 
     public int getWidth() {
@@ -97,10 +89,6 @@ public class UIItem extends Label implements Serializable {
         return 50;//image.getHeight();//todo
     }
 
-    public void setId(Long id) {
-//        data.setId(id);
-    }
-    
     public String getId() {
         return item.getStringId();
     }
@@ -109,21 +97,9 @@ public class UIItem extends Label implements Serializable {
         return item.getStation();
     }
 
-//    public Status getStatus() {
-//        return data.getStatus();
-//    }
-
-    public void setLabelColor() {
+    public void setLabelColor() { //todo really need ?!
 //        label.getElement().getStyle().setBackgroundColor(data.getStatus().getColor());
     }
-
-//    public Device getData() {
-//        return item;
-//    }
-//
-//    public void setData(Device data) {
-//        this.item = data;
-//    }
 
     public void redraw() {
         System.out.println("redraw");

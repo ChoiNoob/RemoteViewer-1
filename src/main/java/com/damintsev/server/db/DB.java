@@ -3,6 +3,7 @@ package com.damintsev.server.db;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.DatabaseType;
+import com.damintsev.client.v3.items.task.ImageWithType;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskType;
 import org.slf4j.LoggerFactory;
@@ -296,5 +297,43 @@ public class DB {
 
     public void deleteTask(Long taskId) {
                 //todo не забыть удалить из таблицы UIPositions!!!!
+    }
+
+    public List<ImageWithType> loadImages() {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        List<ImageWithType> images = new ArrayList<ImageWithType>();
+        try {
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM images");
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                ImageWithType imageWithType = new ImageWithType();
+                imageWithType.setType(resultSet.getString("type"));
+                imageWithType.setData(resultSet.getString("data"));
+                images.add(imageWithType);
+            }
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return images;
     }
 }

@@ -13,4 +13,10 @@ CREATE TABLE UIPositions (
   ref_id   INT NOT NULL,
   ref_type VARCHAR(20),
   PRIMARY KEY (ui_id)
+);
+
+CREATE TABLE images (
+  TYPE VARCHAR(20) UNIQUE,
+  DATA LONGBLOB,
+  PRIMARY KEY (TYPE)
 )

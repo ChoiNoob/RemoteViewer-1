@@ -3,16 +3,13 @@ package com.damintsev.client.v3.pages.frames;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.UIItem;
-import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service2;
 import com.damintsev.client.uiframe.UISettingsPanel;
 import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;
-import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
@@ -153,12 +150,9 @@ public class MonitoringFrame {
     }
 
     private void drawConnections() {
-        System.out.println("draw! size=" + uiItems.size());
         clearCanvas();
         for(UIItem uiItem : uiItems.values()) {
-            System.out.println("draw id=" + uiItem.getId());
             UIItem parent = uiItems.get(uiItem.getParentId());
-            System.out.println("parent=" + parent);
             if(parent != null)
                 drawLine(parent.getCenterPosition(), uiItem.getCenterPosition(), uiItem.getTaskState());
         }
@@ -169,9 +163,8 @@ public class MonitoringFrame {
         Context2d context = canvas.getContext2d();
         context.beginPath();
         context.setLineWidth(3);
-        //todo!!!!!
-//        System.out.println("draw s= " + status + " color=" + status.getState().getColor());
-//        context.setStrokeStyle(status.getState().getColor());
+        System.out.println("draw s= " + status + " color=" + status.getState().getColor());
+        context.setStrokeStyle(status.getState().getColor());
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
         context.stroke();
@@ -185,16 +178,17 @@ public class MonitoringFrame {
     public void start() {
         Scheduler.getInstance().start(this.getClass(), new Runnable() {
             public void run() {
+                System.out.println("Call loadTaskStates");
                 Service2.database.loadTaskStates(new AsyncCallback<List<TaskState>>() {
                     public void onFailure(Throwable caught) {
                         //todo грамотно обраотать ошибку!
                     }
 
                     public void onSuccess(List<TaskState> result) {
-                        for(TaskState state : result) {
-                            if(uiItems.get(state.getId()) != null )
+                        for (TaskState state : result) {
+                            if (uiItems.get(state.getId()) != null)
                                 uiItems.get(state.getId()).setTaskState(state);
-                            else     {
+                            else {
                                 int i = 0; //todo!!!!
                             }
                         }
@@ -209,10 +203,6 @@ public class MonitoringFrame {
         Scheduler.getInstance().stop(this.getClass());
     }
 
-    public static native void reload()/*-{
-        $wnd.location = $wnd.location.pathname;
-    }-*/;
-
     public void reloadView() {
         stop();
         for(UIItem uiItem : uiItems.values())
@@ -220,4 +210,8 @@ public class MonitoringFrame {
         DataLoader.getInstance().load();
         start();
     }
+
+    public static native void reload()/*-{
+        $wnd.location = $wnd.location.pathname;
+    }-*/;
 }
