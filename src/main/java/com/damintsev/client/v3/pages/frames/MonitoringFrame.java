@@ -202,9 +202,11 @@ public class MonitoringFrame {
                     }
 
                     public void onSuccess(List<TaskState> result) {
+                        System.out.println("res=" + result.size());
                         for (TaskState state : result) {
-                            if (uiItems.get(state.getId()) != null)
-                                uiItems.get(state.getId()).setTaskState(state);
+                            System.out.println("state id=" + state.getId()  + " state="+ state.getState());
+                            if (uiItems.get(state.getId()) != null) {
+                                uiItems.get(state.getId()).setTaskState(state);}
                             else {
                                 int i = 0; //todo!!!!
                             }

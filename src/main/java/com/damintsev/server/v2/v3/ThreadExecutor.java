@@ -110,15 +110,18 @@ public class ThreadExecutor extends Thread {
     }
 
     private TaskState createConnectionError(String taskId, Exception conn, boolean connectionError) {
+        logger.info("Created connection error!");
         TaskState task = new TaskState(ExecuteState.ERROR, conn.getMessage());
+        task.setId(taskId);
         if (errors.get(taskId) == null) errors.put(taskId, 1);
         if (errors.get(taskId) <= 2) {
             task.setState(ExecuteState.WARNING);
         } else if (errors.get(taskId) > 2) {
+            logger.info("Setting ERROR to taskId=" + taskId);
             task.setState(ExecuteState.ERROR);
             if (connectionError) {
                 for (TaskState state : taskStates.values()) {
-                    if (state.getId().equals(taskId)) continue;
+//                    if (state.getId().equals(taskId)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
                     state.setState(ExecuteState.UNKNOWN);
                 }
             }

@@ -23,7 +23,7 @@ public class SoA {
     private static SoA instance;
     private static Map<String, ThreadExecutor> threads = new HashMap<String, ThreadExecutor>();
     private Map<String, TaskState> stateMap = new ConcurrentHashMap<String, TaskState>();
-    private static final Logger logger = LoggerFactory.getLogger(ThreadExecutor.class);
+    private static final Logger logger = LoggerFactory.getLogger(SoA.class);
     private String threadName = Thread.currentThread().getName() + " ";
 
     public static SoA getInstance() {
@@ -32,14 +32,19 @@ public class SoA {
     }
 
     private SoA() {
-        List<Station> stations = DB.getInstance().getStationList();
-        logger.info(threadName +  "Loaded from database " + stations.size() + " stations");
-        for(Station station : stations) {
-            List<Task> tasks = DB.getInstance().loadTasksForStation(station);
-            logger.info(threadName + "For station id=" + station.getId() + " name=" + station.getName() + " loaded tasks=" + tasks.size());
-            ThreadExecutor thread = new ThreadExecutor(station, tasks, stateMap);
-            threads.put(thread.getThreadId(), thread);
-        }
+        System.out.println("construct SoA");
+        new Runnable() {
+            public void run() {
+                List<Station> stations = DB.getInstance().getStationList();
+                logger.info(threadName + "Loaded from database " + stations.size() + " stations");
+                for (Station station : stations) {
+                    List<Task> tasks = DB.getInstance().loadTasksForStation(station);
+                    logger.info(threadName + "For station id=" + station.getId() + " name=" + station.getName() + " loaded tasks=" + tasks.size());
+                    ThreadExecutor thread = new ThreadExecutor(station, tasks, stateMap);
+                    threads.put(thread.getThreadId(), thread);
+                }
+            }
+        }.run();
     }
 
     public void shutdown() {

@@ -18,6 +18,12 @@ import java.util.List;
  * Time: 11:24
  */
 public class DatabaseServerService extends RemoteServiceServlet implements DatabaseService {
+    SoA soA;
+    public DatabaseServerService() {
+        System.out.println("constructed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+//        soA = new SoA();
+    }
 
     public Long saveTask(Task task) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
@@ -45,6 +51,7 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public List<TaskState> loadTaskStates() {
         return new ArrayList<TaskState>(SoA.getInstance().getStates().values());
+//        return new ArrayList<TaskState>(soA.getStates().values());
     }
 
     public void saveItemPosition(List<Item> items) {
