@@ -8,6 +8,8 @@ import com.damintsev.client.v3.items.task.ExecuteState;
 import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,29 +23,35 @@ import java.util.Map;
  */
 public class ThreadExecutor extends Thread {
 
-    private Long stationId;
+    private static final Logger logger = LoggerFactory.getLogger(ThreadExecutor.class);
+    private Station station;
     private List<Task> tasks;
     private Map<String, TaskState> taskStates;
     private Map<String, Integer> errors;
     private boolean start = false;
+    private static long threadId = 0;
+    private long thisThreadId = ++threadId;
 
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
-        this.stationId = station.getId();
+        logger.info("initializing Tread executor with station=" + station.getId() + " name=" + station.getName());
+        this.station = station;
         this.tasks = tasks;
         this.taskStates = map;
         errors = new HashMap<String, Integer>(tasks.size() + 1);
-        new Runnable() {
-            public void run() {
-                try {
-                    ConnectionPool.getInstance().create(station);
-                } catch (ConnectException conn) {
-                    //todo придумать что делать с айдишниками
-                }
-            }
-        }.run();
+//        new Runnable() {
+//            public void run() {
+//                try {
+//                    ConnectionPool.getInstance().create(station);
+//                } catch (ConnectException conn) {
+//                    //todo придумать что делать с айдишниками
+//                }
+//            }
+//        }.run();
         for(Task task : tasks) {
             taskStates.put(task.getStringId(), new TaskState(ExecuteState.INIT));
         }
+        start();
+        logger.info("Starting current thread");
     }
 
     private void executeTask(Task task) {
@@ -67,6 +75,7 @@ public class ThreadExecutor extends Thread {
     }
 
     public void run() {
+        Thread.currentThread().setName("threadI=" + thisThreadId + " id=" + station.getId() + " name=" + station.getName());
         Iterator<Task> iterator = tasks.iterator();
         while (start) {
             if(iterator.hasNext())
@@ -97,7 +106,7 @@ public class ThreadExecutor extends Thread {
     }
 
     public String getThreadId() {
-        return Thread.currentThread().getName() + ":" + stationId;
+        return Thread.currentThread().getName() + ":" + station.getId() + ":" + station.getName();
     }
 
     private TaskState createConnectionError(String taskId, Exception conn, boolean connectionError) {

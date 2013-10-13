@@ -124,6 +124,7 @@ public class MonitoringFrame {
     }
 
     private void startEditing() {
+        stop();
         editing = true;
         for(UIItem item : uiItems.values()) {
             dragController.makeDraggable(item);
@@ -138,6 +139,7 @@ public class MonitoringFrame {
             item.savePosition();
         }
         saveItemPositions();
+        start();
     }
 
     public void saveItemPositions() {
@@ -193,7 +195,7 @@ public class MonitoringFrame {
     public void start() {
         Scheduler.getInstance().start(this.getClass(), new Runnable() {
             public void run() {
-                System.out.println("Call loadTaskStates");
+                System.out.println("Call loadTaskStates date=" + new Date());
                 Service2.database.loadTaskStates(new AsyncCallback<List<TaskState>>() {
                     public void onFailure(Throwable caught) {
                         //todo грамотно обраотать ошибку!

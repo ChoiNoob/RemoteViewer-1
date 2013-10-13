@@ -99,14 +99,14 @@ public class AddStationWindow implements Editor<Station> {
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалена станция и все связанные с ней обькты", new Runnable() {
                     public void run() {
-//
-                        Service2.database.deleteStation(station.getId(), new AsyncCallback<Void>() {
+                        Service2.database.deleteStation(station, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
                                 //todo realize
                             }
 
                             public void onSuccess(Void result) {
-                                MonitoringFrame.get().reloadView();//todo realize deletion
+//                                MonitoringFrame.get().reloadView();//todo realize deletion
+                                MonitoringFrame.get().delete(station);//todo realize deletion
                             }
                         });
                         window.hide();

@@ -34,6 +34,7 @@ public class DataLoader {
             public void onSuccess(List<Item> result) {
                 for(Item item : result) {
                     MonitoringFrame.get().add(item);
+                    MonitoringFrame.get().start();
                 }
             }
         });
