@@ -108,7 +108,7 @@ public class DB {
         return loadTasksForStation(station.getId());
     }
 
-        public List<Task> loadTasksForStation(Long stationId) {
+    public List<Task> loadTasksForStation(Long stationId) {
         List<Task> tasks = new ArrayList<Task>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -488,7 +488,7 @@ public class DB {
     }
 
     public Task saveTask(Task task) {
-        logger.info("saving Tesk");
+        logger.info("saving Task id=" + task.getId() + " name=" + task.getName());
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -510,7 +510,7 @@ public class DB {
                 resultSet.close();
             } else {
                 statement = connection.prepareStatement("UPDATE task SET name=?, " +
-                        "command=?, type=?, station_id=? WHERE station_id=?");
+                        "command=?, type=?, station_id=? WHERE id=?");
                 statement.setString(1, task.getName());
                 statement.setString(2, task.getCommand());
                 statement.setString(3, task.getType().toString());
