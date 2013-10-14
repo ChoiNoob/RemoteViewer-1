@@ -6,6 +6,7 @@ import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskState;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 
 import java.util.List;
 
@@ -17,14 +18,22 @@ import java.util.List;
 @RemoteServiceRelativePath("DatabaseServerService")
 public interface DatabaseService extends RemoteService {
 
-    Long saveTask(Task task);
+    Task saveTask(Task task);
     Task loadTask(Long id);
-    List<Item> loadUIItems();
+    void deleteTask(Task task);
+
     Station loadStation(Long id);
     Station saveStation(Station station);
     void deleteStation(Station station);
+
+    PagingLoadResult<Station> getStationList();
+
     void saveItemPosition(List<Item> items);
+    List<Item> loadUIItems();
 
     //todo
     List<TaskState> loadTaskStates();
+
+
+
 }

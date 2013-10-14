@@ -1,11 +1,11 @@
-package com.damintsev.client.windows;
+package com.damintsev.client.v3.pages.windows;
 
-import com.damintsev.client.devices.CommonDevice;
-import com.damintsev.client.devices.Device;
+import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.items.Station;
-import com.damintsev.client.devices.enums.DeviceType;
-import com.damintsev.client.devices.enums.Status;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.v3.items.task.Task;
+import com.damintsev.client.v3.items.task.TaskType;
+import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -29,28 +29,29 @@ import com.sencha.gxt.widget.core.client.form.*;
  * Date: 06.08.13
  * Time: 1:40
  */
-public class AddDeviceWindow implements Editor<CommonDevice>{
+public class AddTaskWindow implements Editor<Task>{
 
-    private static AddDeviceWindow instance;
+    private static AddTaskWindow instance;
 
-    public static AddDeviceWindow get() {
-        if(instance == null) instance = new AddDeviceWindow();
+    public static AddTaskWindow get() {
+        if(instance == null) instance = new AddTaskWindow();
         return instance;
     }
 
-    private Driver driver = GWT.create(Driver.class);
+    private TaskEditor driver = GWT.create(TaskEditor.class);
     private Window window;
     private TextButton delete;
-    private Device device;
+    private Task task;
 //    @Path("station")
     ComboBox<Station> station;
-    SimpleComboBox<DeviceType> deviceType;
+    SimpleComboBox<TaskType> type;
     TextField name;
-    TextField query;
-    TextField queryBusy;
+    TextField command;
+//    TextField queryBusy; // todo вернуть запрос на проверку
+    @Ignore
     TextArea comment;
 
-    private AddDeviceWindow() {
+    private AddTaskWindow() {
         window = new Window();
         window.setModal(true);
         window.setPixelSize(350, 350);
@@ -76,7 +77,7 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
             //            @Override
             public void load(PagingLoadConfig config, final com.google.gwt.core.client.Callback<PagingLoadResult<Station>, Throwable> callback) {
                 System.out.println("load value");
-                Service.instance.getStationList(new AsyncCallback<PagingLoadResult<Station>>() {
+                Service2.database.getStationList(new AsyncCallback<PagingLoadResult<Station>>() {
                     public void onFailure(Throwable caught) {
                         //To change body of implemented methods use File | Settings | File Templates.
                     }
@@ -104,27 +105,28 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
         });
         panel.add(new FieldLabel(station, "Станция"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
-        deviceType = new SimpleComboBox<DeviceType>(new LabelProvider<DeviceType>() {
-            public String getLabel(DeviceType item) {
+        type = new SimpleComboBox<TaskType>(new LabelProvider<TaskType>() {
+            public String getLabel(TaskType item) {
                 return item.getName();
             }
         });
-        deviceType.add(DeviceType.IP);
-        deviceType.add(DeviceType.ISDN);
-        deviceType.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
-        deviceType.setEditable(false);
-        deviceType.setAllowBlank(false);
-        panel.add(new FieldLabel(deviceType, "Тип"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        type.add(TaskType.IP);
+        type.add(TaskType.ISDN);
+//        type.add(TaskType.PING);
+        type.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
+        type.setEditable(false);
+        type.setAllowBlank(false);
+        panel.add(new FieldLabel(type, "Тип"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         name = new TextField();
         panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
-        query = new TextField();
-        query.setAllowBlank(false);
-        panel.add(new FieldLabel(query, "Запрос состояния канала"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        command = new TextField();
+        command.setAllowBlank(false);
+        panel.add(new FieldLabel(command, "Запрос состояния канала"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
-        queryBusy = new TextField();
-        panel.add(new FieldLabel(queryBusy, "Проверака занятых каналов"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+//        queryBusy = new TextField();
+//        panel.add(new FieldLabel(queryBusy, "Проверака занятых каналов"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         comment = new TextArea();
         comment.setHeight(70);
@@ -134,13 +136,13 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалено утройство", new Runnable() {
                     public void run() {
-                        Service.instance.deleteDevice(device, new AsyncCallback<Void>() {
+                        Service2.database.deleteTask(task, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
                                 //To change body of implemented methods use File | Settings | File Templates.
                             }
 
                             public void onSuccess(Void result) {
-//                                MonitoringFrame.get().delete(device);
+                                MonitoringFrame.get().reloadView();
                             }
                         });
                         window.hide();
@@ -153,21 +155,20 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
         con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                device = driver.flush();
-                device.setStatus(Status.INIT);
+                task = driver.flush();
                 if (driver.hasErrors()) return;
-                final boolean newEntity = device.getId() == null;
-                System.out.println("st id=" + device.getStation());
+                System.out.println("st id=" + task.getStation());
                 window.mask();
-                Service.instance.saveDevice(device, new AsyncCallback<Device>() {
+                Service2.database.saveTask(task, new AsyncCallback<Task>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Cannot save device =" + caught.getMessage());
                     }
 
-                    public void onSuccess(Device result) {
+                    public void onSuccess(Task result) {
                         window.unmask();
                         window.hide();
 //                        if (newEntity) MonitoringFrame.get().addItem(new UIItem(result));
+                        MonitoringFrame.get().add(result);
                         window.hide();
                     }
                 });
@@ -185,30 +186,29 @@ public class AddDeviceWindow implements Editor<CommonDevice>{
 
     public void show(Long id) {
         driver.initialize(this);
-
         window.show();
         if (id == null) {
-            device = new CommonDevice();
+            task = new Task();
             delete.hide();
-            driver.edit((CommonDevice) device);
+            driver.edit(task);
         } else {
             delete.show();
             window.mask();
-            Service.instance.loadDevice(id, DeviceType.ISDN, new AsyncCallback<Device>() {
+            Service2.database.loadTask(id, new AsyncCallback<Task>() {
                 public void onFailure(Throwable caught) {
                     Dialogs.alert("Error loading device =" + caught.getMessage());
                 }
 
-                public void onSuccess(Device result) {
-                    device = result;
+                public void onSuccess(Task result) {
+                    task = result;
                     window.unmask();
-                    driver.edit((CommonDevice) device);
+                    driver.edit(task);
                 }
             });
         }
     }
 
-    interface Driver extends SimpleBeanEditorDriver<CommonDevice, AddDeviceWindow> {
+    interface TaskEditor extends SimpleBeanEditorDriver<Task, AddTaskWindow> {
 
     }
 //

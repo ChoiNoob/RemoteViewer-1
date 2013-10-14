@@ -6,5 +6,16 @@ package com.damintsev.client.v3.items.task;
  * Time: 22:43
  */
 public enum  TaskType {
-    TELNET, IP, PING
+
+    STATION("STATION"), ISDN("ISDN"), IP("IP"), TELNET("telnet"), PING("ping");
+
+    private String name;
+
+    private TaskType(String name) {
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
+    }
 }

@@ -8,6 +8,8 @@ import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.SoA;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
+import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,12 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
         System.out.println("constructed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 //        soA = new SoA();
+        SoA.getInstance();
     }
 
-    public Long saveTask(Task task) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public Task saveTask(Task task) {
+        //todo delete from worker
+        return DB.getInstance().saveTask(task);
     }
 
     public Task loadTask(Long id) {
@@ -42,10 +46,13 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     }
 
     public Station saveStation(Station station) {
+        //todo delete from worker
+       SoA.getInstance().updateStation(station);
        return DB.getInstance().saveStation(station);
     }
 
     public void deleteStation(Station station) {
+        //todo delete from worker
         DB.getInstance().deleteStation(station);
     }
 
@@ -56,5 +63,15 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public void saveItemPosition(List<Item> items) {
         DB.getInstance().saveItemPosition(items);
+    }
+
+    public void deleteTask(Task task) {
+        //todo delete from worker
+        DB.getInstance().deleteTask(task);
+    }
+
+    public PagingLoadResult<Station> getStationList() {
+                List<Station> stations = DB.getInstance().getStationList();   //todo мб можно обойтись одной строкой
+        return new PagingLoadResultBean<Station>(stations, 0, stations.size());
     }
 }

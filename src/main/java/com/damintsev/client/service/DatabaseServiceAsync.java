@@ -5,11 +5,12 @@ import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskState;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 
 import java.util.List;
 
 public interface DatabaseServiceAsync {
-    void saveTask(Task task, AsyncCallback<Long> async);
+    void saveTask(Task task, AsyncCallback<Task> async);
 
     void loadTask(Long id, AsyncCallback<Task> async);
 
@@ -25,4 +26,8 @@ public interface DatabaseServiceAsync {
     void deleteStation(Station station, AsyncCallback<Void> async);
 
     void saveItemPosition(List<Item> items, AsyncCallback<Void> async);
+
+    void deleteTask(Task task, AsyncCallback<Void> asyncCallback);
+
+    void getStationList(AsyncCallback<PagingLoadResult<Station>> async);
 }

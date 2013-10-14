@@ -258,7 +258,7 @@ public class DB {
             connection = Mysql.getConnection();
             List<Task> tasks = loadTasksForStation(station.getId());
             for (Task task : tasks) {
-                deleteTask(task.getId());
+                deleteTask(task);
             }
             statement = connection.prepareStatement("DELETE FROM station WHERE station_id = ?");
             statement.setLong(1, station.getId());
@@ -318,8 +318,38 @@ public class DB {
         }
     }
 
-    public void deleteTask(Long taskId) {
-                //todo не забыть удалить из таблицы UIPositions!!!!
+    public void deleteTask(Task task) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Mysql.getConnection();
+
+            statement = connection.prepareStatement("DELETE FROM task WHERE id = ?");
+            statement.setLong(1, task.getId());
+            statement.executeUpdate();
+
+            deleteFromUI(connection, task);
+
+        } catch (SQLException e) {
+            try {
+                connection.rollback();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public List<ImageWithType> loadImages() {
@@ -422,52 +452,21 @@ public class DB {
     public void saveItemPosition(List<Item> items) {
         logger.info("saving items position");
         Connection connection = null;
-        PreparedStatement statementInsert = null;
-        PreparedStatement statementUpdate = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = Mysql.getConnection();
-            statementInsert = connection.prepareStatement("INSERT INTO uipositions (x, y, ref_id, ref_type)" +
+            statement = connection.prepareStatement("INSERT INTO uipositions (x, y, ref_id, ref_type)" +
                     "VALUES (?,?,?,?) " +
                     "ON DUPLICATE KEY UPDATE x = VALUES(x), y = VALUES(y)");
             for(Item item : items) {
-                statementInsert.setInt(1, item.getPosition().x);
-                statementInsert.setInt(2, item.getPosition().y);
-                statementInsert.setLong(3, item.getId());
-                statementInsert.setString(4, item.getClass().getSimpleName().toUpperCase());
-                statementInsert.addBatch();
+                statement.setInt(1, item.getPosition().x);
+                statement.setInt(2, item.getPosition().y);
+                statement.setLong(3, item.getId());
+                statement.setString(4, item.getClass().getSimpleName().toUpperCase());
+                statement.addBatch();
             }
-            statementInsert.executeBatch();
-//            if (station.getId() == null) {
-//                statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port,allowStatistics) " +
-//                        "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
-//                statement.setString(1, station.getComment());
-//                statement.setString(2, "null");//todo избавиться от этой строчки
-//                statement.setString(3, station.getHost());
-//                statement.setString(4, station.getLogin());
-//                statement.setString(5, station.getName());
-//                statement.setString(6, station.getPassword());
-//                statement.setString(7, station.getPort());
-//                statement.setBoolean(8, station.getAllowStatistics());
-//
-//                statement.executeUpdate();
-//                if (resultSet.next()) {
-//                    station.setId(resultSet.getLong(1));
-//                }
-//                resultSet.close();
-//            } else {
-//                statement = connection.prepareStatement("UPDATE station SET comment=?, " +
-//                        "host=?, login=?, name=?, password=?, port=?, allowStatistics=? WHERE station_id=?");
-//                statement.setString(1, station.getComment());
-//                statement.setString(2, station.getHost());
-//                statement.setString(3, station.getLogin());
-//                statement.setString(4, station.getName());
-//                statement.setString(5, station.getPassword());
-//                statement.setString(6, station.getPort());
-//                statement.setBoolean(7, station.getAllowStatistics());
-//                statement.setLong(8, station.getId());
-//                statement.executeUpdate();
-
+            statement.executeBatch();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
@@ -476,8 +475,8 @@ public class DB {
                 if (resultSet != null) {
                     resultSet.close();
                 }
-                if (statementInsert != null) {
-                    statementInsert.close();
+                if (statement != null) {
+                    statement.close();
                 }
                 if (connection != null) {
                     connection.close();
@@ -486,5 +485,57 @@ public class DB {
                 e.printStackTrace();
             }
         }
+    }
+
+    public Task saveTask(Task task) {
+        logger.info("saving Tesk");
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Mysql.getConnection();
+            if (task.getId() == null) {
+                statement = connection.prepareStatement("INSERT INTO task(name,command,type,station_id) " +
+                        "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, task.getName());
+                statement.setString(2, task.getCommand());
+                statement.setString(3, task.getType().toString());
+                statement.setLong(4, task.getStation().getId());
+
+                statement.executeUpdate();
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    task.setId(resultSet.getLong(1));
+                }
+                resultSet.close();
+            } else {
+                statement = connection.prepareStatement("UPDATE task SET name=?, " +
+                        "command=?, type=?, name=?, station_id=? WHERE station_id=?");
+                statement.setString(1, task.getName());
+                statement.setString(2, task.getCommand());
+                statement.setString(3, task.getType().toString());
+                statement.setLong(4, task.getStation().getId());
+                statement.setLong(5, task.getId());
+                statement.executeUpdate();
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return task;
     }
 }

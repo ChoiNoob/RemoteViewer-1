@@ -31,7 +31,7 @@ public class SoA {
         return instance;
     }
 
-    private SoA() {
+    public SoA() {
         System.out.println("construct SoA");
         new Runnable() {
             public void run() {
@@ -56,5 +56,9 @@ public class SoA {
 
     public Map<String, TaskState> getStates() {
         return stateMap;
+    }
+
+    public void updateStation(Station station) {
+        //todo!
     }
 }

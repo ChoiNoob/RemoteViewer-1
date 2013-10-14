@@ -2,8 +2,8 @@ package com.damintsev.client.v3.pages.frames;
 
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.v3.pages.windows.AddTaskWindow;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
-import com.damintsev.client.windows.AddDeviceWindow;
 import com.damintsev.client.windows.PrefixConfigWindow;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
@@ -74,7 +74,7 @@ public class SettingsFrame {
 
         TextButton device = new TextButton("Добавить устройство",new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                AddDeviceWindow.get().show(null);
+                AddTaskWindow.get().show(null);
             }
         });
         device.setIcon(Utils.getImage("cloud"));
@@ -96,7 +96,7 @@ public class SettingsFrame {
 //                            break;
 //                        case IP:
 //                        case ISDN:
-//                            AddDeviceWindow.get().show(selected.getId());
+//                            AddTaskWindow.get().show(selected.getId());
 //                            break;
                         //todo
 //                    }
