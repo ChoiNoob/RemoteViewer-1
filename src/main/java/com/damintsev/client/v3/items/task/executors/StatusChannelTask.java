@@ -10,7 +10,7 @@ import com.damintsev.client.v3.items.task.TaskState;
 public class StatusChannelTask extends TaskExecutor {
 
     @Override
-    public TaskState process(String command) {
+    public TaskState process(String command)  {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -57,13 +57,22 @@ public class ThreadExecutor extends Thread {
     private void executeTask(Task task) {
         TaskState state;
         try {
+            logger.info("Execturing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType());
             Connection connection = ConnectionPool.getInstance().getConnection(task);
+            System.out.println("conn=" + connection);
             state = connection.execute(task);
             state.setId(task.getStringId());
             checkForErrors(task);
-        }   catch (ConnectException conn) {
+        }
+//        catch (NullPointerException e) {
+//            System.out.println("cufkf");
+//            state = new TaskState();
+//        }
+        catch (ConnectException conn) {
+            logger.info("Caught connection error " + conn.getLocalizedMessage());
             state = createConnectionError(task.getStringId(), conn, true);
         }   catch (ExecutingTaskException exec) {
+            logger.info("Caught executing error " + exec.getLocalizedMessage());
             state = createConnectionError(task.getStringId(), exec, false);
         }
         taskStates.put(task.getStringId(), state);
@@ -100,13 +109,13 @@ public class ThreadExecutor extends Thread {
     public void interrupt() {
         start = false;
         for(Task task : tasks) {
-            taskStates.put(task.getStringId(), new TaskState(ExecuteState.INIT));
+            taskStates.put(task.getStringId(), new TaskState());
         }
         super.interrupt();
     }
 
     public String getThreadId() {
-        return Thread.currentThread().getName() + ":" + station.getId() + ":" + station.getName();
+        return station.getStringId();
     }
 
     private TaskState createConnectionError(String taskId, Exception conn, boolean connectionError) {
@@ -121,12 +130,34 @@ public class ThreadExecutor extends Thread {
             task.setState(ExecuteState.ERROR);
             if (connectionError) {
                 for (TaskState state : taskStates.values()) {
-//                    if (state.getId().equals(taskId)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
-                    state.setState(ExecuteState.UNKNOWN);
+                    if (state.getId().equals(taskId)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
+                        state.setState(ExecuteState.UNKNOWN);
                 }
             }
         }
         errors.put(taskId, errors.get(taskId) + 1);
         return task;
+    }
+
+    public void updateTask(Task newTask) {
+        if(start) interrupt();
+        for(Task oldTask : tasks) {
+            if(oldTask.getStringId().equals(newTask.getStringId())) {
+                tasks.remove(oldTask);
+                tasks.add(newTask);
+            }
+        }
+        taskStates.put(newTask.getStringId(), new TaskState());
+        if(!start) start();
+    }
+
+    public void updateStation(Station station) {
+        if(start) interrupt();
+        ConnectionPool.getInstance().dropConnection(station);
+        for(Task task : tasks) {  //todo не очень красиво как мне кажется
+            task.setStation(station);
+        }
+        if(!start) start();
+
     }
 }

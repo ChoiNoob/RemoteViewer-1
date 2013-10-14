@@ -74,12 +74,13 @@ public class AddTaskWindow implements Editor<Task>{
             }
         });
         station.setLoader(new PagingLoader<PagingLoadConfig, PagingLoadResult<Station>>(new DataProxy<PagingLoadConfig, PagingLoadResult<Station>>() {
-            //            @Override
+
             public void load(PagingLoadConfig config, final com.google.gwt.core.client.Callback<PagingLoadResult<Station>, Throwable> callback) {
                 System.out.println("load value");
                 Service2.database.getStationList(new AsyncCallback<PagingLoadResult<Station>>() {
+
                     public void onFailure(Throwable caught) {
-                        //To change body of implemented methods use File | Settings | File Templates.
+                        //todo ?!
                     }
 
                     public void onSuccess(PagingLoadResult<Station> result) {

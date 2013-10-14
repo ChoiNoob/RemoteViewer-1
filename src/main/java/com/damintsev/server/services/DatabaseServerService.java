@@ -30,6 +30,7 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public Task saveTask(Task task) {
         //todo delete from worker
+        SoA.getInstance().updateTask(task);
         return DB.getInstance().saveTask(task);
     }
 

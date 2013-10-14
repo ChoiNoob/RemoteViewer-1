@@ -32,7 +32,7 @@ public class ConnectionPool {
 //        return this;
 //    }
 
-    public Connection getConnection(Task task) throws ConnectException{
+    public Connection getConnection(Task task) throws ConnectException {
         switch (task.getType()) {
             case TELNET: {
                 Connection connection = connectionMap.get(task.getStation().getId());
@@ -41,9 +41,12 @@ public class ConnectionPool {
             }
             case IP: {
                 //todo
+                System.out.println("case ip");
+                throw new ConnectException();
             }
+            default:throw new ConnectException();
         }
-        return null;
+//        return null;
     }
 
     public Connection create(Station station) throws ConnectException {
@@ -54,6 +57,11 @@ public class ConnectionPool {
 //            default: return null;
 //        }
         return conn;
+    }
+
+    public void dropConnection(Station station) {
+        if(connectionMap.get(station.getId()) != null)
+            connectionMap.get(station.getId()).destroy();
     }
 
     public void dropConnections() {
