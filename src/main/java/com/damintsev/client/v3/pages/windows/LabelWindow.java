@@ -45,12 +45,12 @@ public class LabelWindow implements Editor<Label> {
     private Window window;
     private TextButton delete;
     private Label label;
-    TextField name;
+    TextArea name;
 
     private LabelWindow() {
         window = new Window();
         window.setModal(true);
-        window.setPixelSize(350, 350);
+        window.setPixelSize(350, 200);
         window.setHeadingText("Добавить текст");
         ContentPanel con = new ContentPanel();
         con.setHeaderVisible(false);
@@ -58,8 +58,11 @@ public class LabelWindow implements Editor<Label> {
         final VerticalLayoutContainer panel = new VerticalLayoutContainer();
         con.add(panel);
 
-        name = new TextField();
-        panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        name = new TextArea();
+//        name.setHeight(800);
+        FieldLabel fieldLabel = new FieldLabel(name, "Имя");
+        fieldLabel.setHeight(80);
+        panel.add(fieldLabel, new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
