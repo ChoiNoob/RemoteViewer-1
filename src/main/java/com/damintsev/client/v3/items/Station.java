@@ -75,7 +75,7 @@ public class Station extends Item {
 
     @Override
     public TaskType getType() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return TaskType.STATION;
     }
 
     public void setName(String name) {

@@ -71,6 +71,7 @@ public class UIItem extends Label implements Serializable {
             case IP:
             case PING:
             case TELNET:
+            case ISDN:
                 return Utils.getImage("cloud");
             default:
                 return Utils.getImage("hipath");
