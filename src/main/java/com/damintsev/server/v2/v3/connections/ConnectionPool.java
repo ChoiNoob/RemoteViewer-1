@@ -2,6 +2,7 @@ package com.damintsev.server.v2.v3.connections;
 
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
+import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 
 import java.util.HashMap;
@@ -21,10 +22,10 @@ public class ConnectionPool {
         return instance;
     }
 
-    private Map<Long, Connection> connectionMap;
+    private Map<String, Connection> connectionMap;
 
     private ConnectionPool() {
-        connectionMap = new HashMap<Long, Connection>();
+        connectionMap = new HashMap<String, Connection>();
     }
 
 //    public ConnectionPool addConnection(Connection connection) {
@@ -33,35 +34,44 @@ public class ConnectionPool {
 //    }
 
     public Connection getConnection(Task task) throws ConnectException {
-        switch (task.getType()) {
-            case TELNET: {
-                Connection connection = connectionMap.get(task.getStation().getId());
-                if(connection == null) connection = create(task.getStation());
+//        switch (task.getType()) {
+//            case TELNET: {
+                Connection connection = connectionMap.get(task.getStringId());
+                if(connection == null) connection = create(task.getStation(), task.getType());
                 return connection;
-            }
-            case IP: {
-                //todo
-                System.out.println("case ip");
-                throw new ConnectException();
-            }
-            default:throw new ConnectException();
-        }
+//            }
+//            case IP: {
+//                Connection connection = connectionMap.get(task.getStringId() + "IP");//todo красиво параметризовать
+//                if(connection == null) connection = create(task.getStation(), task.getType());
+//                return connection;
+//            }
+//            default:throw new ConnectException(new Exception("Connection not found!"));
+//        }
 //        return null;
     }
 
-    public Connection create(Station station) throws ConnectException {
-//        switch (station.getType()) {
-//            case TELNET:
-        Connection conn = new TelnetConnection().init(station);
-        connectionMap.put(station.getId(), conn);
-//            default: return null;
-//        }
-        return conn;
+    public Connection create(Station station, TaskType type) throws ConnectException {
+        Connection conn;
+        System.err.println("TYPE=" + type);
+        switch (type) {
+            case TELNET:
+                conn = new TelnetConnection().init(station);
+                connectionMap.put(station.getStringId(), conn);
+                return conn;
+            case IP:
+            case ISDN:
+                conn = new PingConnection().init(station);
+                connectionMap.put(station.getStringId() + "IP", conn);//todo параметризовать
+                return conn;
+            default:
+                throw new ConnectException(new Exception("Connection not found"));
+        }
+//        return conn;
     }
 
     public void dropConnection(Station station) {
-        if(connectionMap.get(station.getId()) != null)
-            connectionMap.get(station.getId()).destroy();
+        if(connectionMap.get(station.getStringId()) != null)
+            connectionMap.get(station.getStringId()).destroy();
     }
 
     public void dropConnections() {

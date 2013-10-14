@@ -19,6 +19,7 @@ public class PingTask extends TaskExecutor {
 
     @Override
     protected TaskState process(String command) {
+        logger.info("Command=" + command);
         TaskState state = new TaskState();
         Pattern pattern = Pattern.compile("[0-9]{1,3} bytes from ");
         Matcher matcher = pattern.matcher(command);

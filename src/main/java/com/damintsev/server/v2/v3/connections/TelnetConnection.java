@@ -39,7 +39,7 @@ public class TelnetConnection extends Connection {
         worker.disconnect();
     }
 
-    @Override
+//    @Override
     public Long getId() {
         return station.getId();
     }

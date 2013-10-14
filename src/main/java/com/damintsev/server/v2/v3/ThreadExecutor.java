@@ -150,8 +150,10 @@ public class ThreadExecutor extends Thread {
                 taskToRemove  = oldTask;
             }
         }
-        if(taskToRemove != null)
-            tasks.add(taskToRemove);
+        if(taskToRemove != null) {
+            logger.info("Deleting old task");
+               tasks.remove(taskToRemove);
+        }
         tasks.add(newTask);
         taskStates.put(newTask.getStringId(), new TaskState());
         iterator = null;

@@ -7,7 +7,7 @@ package com.damintsev.client.v3.items.task;
  */
 public enum  TaskType {
 
-    STATION("STATION"), ISDN("ISDN"), IP("IP"), TELNET("telnet"), PING("ping");
+    STATION("STATION"), ISDN("ISDN"), IP("IP"), TELNET("telnet");
 
     private String name;
 

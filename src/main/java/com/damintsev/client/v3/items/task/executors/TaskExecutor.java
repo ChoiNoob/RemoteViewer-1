@@ -17,7 +17,7 @@ public abstract class TaskExecutor {
         switch (task.getType()) {
             case TELNET:
                 return new StatusChannelTask().process(result);
-            case PING:
+            case IP:
                 return new PingTask().process(result);
         }
         return null;
