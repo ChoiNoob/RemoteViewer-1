@@ -76,10 +76,20 @@ public class SoA {
         thread.updateStation(station);
     }
 
+    public void deleteStation(Station station) {
+        threads.get(station.getStringId()).delete();
+        threads.remove(station.getStringId());
+    }
+
     public void updateTask(Task task) {
-        //todo
         String stationId = task.getParentId();
         ThreadExecutor thread = threads.get(stationId);
         thread.updateTask(task);
+    }
+
+    public void deleteTask(Task task) {
+        ThreadExecutor executor = threads.get(task.getParentId());
+        executor.deleteTask(task);
+
     }
 }

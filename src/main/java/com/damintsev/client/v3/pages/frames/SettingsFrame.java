@@ -1,7 +1,10 @@
 package com.damintsev.client.v3.pages.frames;
 
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.v3.items.Station;
+import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.windows.PrefixConfigWindow;
@@ -83,9 +86,19 @@ public class SettingsFrame {
 
         TextButton edit = new TextButton("редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                final UIItem selected = (UIItem) MonitoringFrame.get().getSelected();
+                final Item selected = ((UIItem) MonitoringFrame.get().getSelected()).getItem();
                 if (selected == null) Dialogs.alert("Выберите устройство");
                 else {
+                    System.out.println("sss="+selected.toString());
+                    if (selected instanceof Task) {
+                        AddTaskWindow.get().show(selected.getId());
+                    } else if (selected instanceof Station) {
+                        AddStationWindow.get().show(selected.getId(), new Runnable() {
+                            public void run() {
+                                //todo надо ли нам руннайбл ?!
+                            }
+                        });
+                    }
 //                    switch (selected.getDeviceType()) {
 //                        case STATION:
 //                            AddStationWindow.get().show(selected.getId(), new Runnable() {

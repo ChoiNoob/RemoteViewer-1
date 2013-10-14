@@ -29,7 +29,6 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     }
 
     public Task saveTask(Task task) {
-        //todo delete from worker
         SoA.getInstance().updateTask(task);
         return DB.getInstance().saveTask(task);
     }
@@ -47,13 +46,12 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     }
 
     public Station saveStation(Station station) {
-        //todo delete from worker
        SoA.getInstance().updateStation(station);
        return DB.getInstance().saveStation(station);
     }
 
     public void deleteStation(Station station) {
-        //todo delete from worker
+        SoA.getInstance().deleteStation(station);
         DB.getInstance().deleteStation(station);
     }
 

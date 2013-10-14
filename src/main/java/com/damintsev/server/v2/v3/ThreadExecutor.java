@@ -23,13 +23,13 @@ import java.util.Map;
  */
 public class ThreadExecutor extends Thread {
 
+    private static long threadId = 0;
     private static final Logger logger = LoggerFactory.getLogger(ThreadExecutor.class);
     private Station station;
     private List<Task> tasks;
     private Map<String, TaskState> taskStates;
     private Map<String, Integer> errors;
     private boolean start = false;
-    private static long threadId = 0;
     private long thisThreadId = ++threadId;
 
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
@@ -40,7 +40,7 @@ public class ThreadExecutor extends Thread {
         errors = new HashMap<String, Integer>(tasks.size() + 1);
 //        new Runnable() {
 //            public void run() {
-//                try {
+//                try {      //todo надо ли это вообще ?
 //                    ConnectionPool.getInstance().create(station);
 //                } catch (ConnectException conn) {
 //                    //todo придумать что делать с айдишниками
@@ -57,18 +57,13 @@ public class ThreadExecutor extends Thread {
     private void executeTask(Task task) {
         TaskState state;
         try {
-            logger.info("Execturing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType());
+            logger.info("Executing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType());
             Connection connection = ConnectionPool.getInstance().getConnection(task);
             System.out.println("conn=" + connection);
             state = connection.execute(task);
             state.setId(task.getStringId());
             checkForErrors(task);
-        }
-//        catch (NullPointerException e) {
-//            System.out.println("cufkf");
-//            state = new TaskState();
-//        }
-        catch (ConnectException conn) {
+        } catch (ConnectException conn) {
             logger.info("Caught connection error " + conn.getLocalizedMessage());
             state = createConnectionError(task.getStringId(), conn, true);
         }   catch (ExecutingTaskException exec) {
@@ -97,6 +92,7 @@ public class ThreadExecutor extends Thread {
                 e.printStackTrace();
             }
         }
+
     }
 
     @Override
@@ -144,9 +140,9 @@ public class ThreadExecutor extends Thread {
         for(Task oldTask : tasks) {
             if(oldTask.getStringId().equals(newTask.getStringId())) {
                 tasks.remove(oldTask);
-                tasks.add(newTask);
             }
         }
+        tasks.add(newTask);
         taskStates.put(newTask.getStringId(), new TaskState());
         if(!start) start();
     }
@@ -158,6 +154,25 @@ public class ThreadExecutor extends Thread {
             task.setStation(station);
         }
         if(!start) start();
+    }
 
+    public void delete() {
+        interrupt();
+        ConnectionPool.getInstance().dropConnection(station);
+        tasks.clear();
+        taskStates.clear();
+        errors.clear();
+    }
+
+    public void deleteTask(Task task) {
+        interrupt();
+        for(Task oldTask : tasks) {
+            if(oldTask.getStringId().equals(task.getStringId())) {
+                tasks.remove(oldTask);
+            }
+        }
+        taskStates.remove(task.getStringId());
+        errors.remove(task.getStringId());
+        start();
     }
 }
