@@ -1,6 +1,7 @@
 package com.damintsev.client.service;
 
 import com.damintsev.client.devices.Item;
+import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskState;
@@ -30,4 +31,10 @@ public interface DatabaseServiceAsync {
     void deleteTask(Task task, AsyncCallback<Void> asyncCallback);
 
     void getStationList(AsyncCallback<PagingLoadResult<Station>> async);
+
+    void deleteLabel(Label label, AsyncCallback<Void> asyncCallback);
+
+    void saveLabel(Label label, AsyncCallback<Label> asyncCallback);
+
+    void loadLabel(Long id, AsyncCallback<Label> async);
 }

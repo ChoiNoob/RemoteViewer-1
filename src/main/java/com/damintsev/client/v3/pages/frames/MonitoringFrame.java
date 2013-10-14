@@ -13,6 +13,7 @@ import com.damintsev.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
@@ -152,14 +153,16 @@ public class MonitoringFrame {
     }
 
     public void delete(UIItem item) {
-        uiItems.remove(item.getId());
-        if(editing) dragController.makeNotDraggable(item);
-        panel.remove(item);
-        if(item.haveChildrens()) {
-            for(UIItem child : uiItems.values())
-                if(item.isChild(child))
-                    delete(child);
-        }
+//        uiItems.remove(item.getId());     todo продуиать нормальное удаление!
+//        if(editing) dragController.makeNotDraggable(item);
+//        panel.remove(item);
+//        System.out.println("CPTTT" + item.getId());
+//        if(item.haveChildrens()) {
+////todo            List<UIItem> childrensToDelete
+//            for(UIItem child : uiItems.values())
+//                if(item.isChild(child))
+//                    delete(child);
+//        }
     }
 
     public void delete(Item item) {
@@ -168,8 +171,10 @@ public class MonitoringFrame {
 
     private void drawConnections() {
         clearCanvas();
+        System.out.println("CCCCCCCCCCCC=" + uiItems.get(null));
         for(UIItem uiItem : uiItems.values()) {
             UIItem parent = uiItems.get(uiItem.getParentId());
+            System.out.println("id=" + uiItem.getId() + " parent=" + uiItem.getParentId());
             if(parent != null)
                 drawLine(parent.getCenterPosition(), uiItem.getCenterPosition(), uiItem.getTaskState());
         }
@@ -180,7 +185,7 @@ public class MonitoringFrame {
         Context2d context = canvas.getContext2d();
         context.beginPath();
         context.setLineWidth(3);
-        System.out.println("draw s= " + status + " color=" + status.getState().getColor());
+//        System.out.println("draw s= " + status + " color=" + status.getState().getColor());
         context.setStrokeStyle(status.getState().getColor());
         context.moveTo(from.x, from.y);
         context.lineTo(to.x, to.y);
@@ -195,7 +200,7 @@ public class MonitoringFrame {
     public void start() {
         Scheduler.getInstance().start(this.getClass(), new Runnable() {
             public void run() {
-                System.out.println("Call loadTaskStates date=" + new Date());
+//                System.out.println("Call loadTaskStates date=" + new Date());
                 Service2.database.loadTaskStates(new AsyncCallback<List<TaskState>>() {
                     public void onFailure(Throwable caught) {
                         //todo грамотно обраотать ошибку!
@@ -224,10 +229,15 @@ public class MonitoringFrame {
 
     public void reloadView() {
         stop();
-        for(UIItem uiItem : uiItems.values())
-            delete(uiItem);
-        DataLoader.getInstance().load();
-        start();
+//        for(UIItem uiItem : uiItems.values())
+//            delete(uiItem);
+//        DataLoader.getInstance().load();
+//        start();
+        com.google.gwt.core.client.Scheduler.get().scheduleDeferred(new Command() {
+            public void execute() {
+                reload();
+            }
+        });
     }
 
     public static native void reload()/*-{

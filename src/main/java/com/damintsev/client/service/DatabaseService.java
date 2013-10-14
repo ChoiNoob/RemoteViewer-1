@@ -1,6 +1,7 @@
 package com.damintsev.client.service;
 
 import com.damintsev.client.devices.Item;
+import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskState;
@@ -35,5 +36,9 @@ public interface DatabaseService extends RemoteService {
     List<TaskState> loadTaskStates();
 
 
+    void deleteLabel(Label label);
 
+    Label saveLabel(Label label);
+
+    Label loadLabel(Long id);
 }

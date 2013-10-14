@@ -1,6 +1,7 @@
 package com.damintsev.server.db;
 
 import com.damintsev.client.devices.Item;
+import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.DatabaseType;
 import com.damintsev.client.v3.items.task.ImageWithType;
@@ -240,7 +241,10 @@ public class DB {
                     case STATION:
                         item = getStation(refId);
                         break;
-                    default:item=new Task();//todo сделать чтото а то не красиво
+                    case LABEL:
+                        item = getLabel(refId);
+                        break;
+                    default:throw new Exception();//todo сделать чтото а то не красиво
                 }
                 item.setPosition(x, y);
                 uiItems.add(item);
@@ -537,5 +541,112 @@ public class DB {
             }
         }
         return task;
+    }
+
+    public void deleteLabel(Label label) {
+        logger.info("delete Label id=" + label.getId() + " name=" + label.getName());
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Mysql.getConnection();
+                statement = connection.prepareStatement("DELETE FROM labels WHERE id = ?");
+                statement.setLong(1, label.getId());
+                statement.executeUpdate();
+            deleteFromUI(connection, label);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Label saveLabel(Label label) {
+        logger.info("save Label id=" + label.getId() + " name=" + label.getName());
+        ResultSet resultSet = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            connection = Mysql.getConnection();
+            if (label.getId() == null) {
+                statement = connection.prepareStatement("INSERT INTO labels (name) values (?)", Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, label.getName());
+                statement.executeUpdate();
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next())
+                    label.setId(resultSet.getLong(1));
+            } else {
+                statement = connection.prepareStatement("UPDATE labels SET name=? WHERE id=?");
+                statement.setString(1, label.getName());
+                statement.setLong(2, label.getId());
+
+                statement.executeUpdate();
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null)
+                    resultSet.close();
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return label;
+    }
+
+
+    public Label getLabel(Long id) {
+        logger.info("load Label id=" + id);
+        ResultSet resultSet = null;
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try {
+            Label label = null;
+            connection = Mysql.getConnection();
+                statement = connection.prepareStatement("SELECT * FROM labels WHERE id = ?");
+                statement.setLong(1, id);
+                resultSet = statement.executeQuery();
+                if (resultSet.next()){
+                    label = new Label();
+                    label.setId(resultSet.getLong("id"));
+                    label.setName(resultSet.getString("name"));
+                }
+                    return label;
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null)
+                    resultSet.close();
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

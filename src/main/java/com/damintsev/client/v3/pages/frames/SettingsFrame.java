@@ -3,10 +3,12 @@ package com.damintsev.client.v3.pages.frames;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
+import com.damintsev.client.v3.pages.windows.LabelWindow;
 import com.damintsev.client.windows.PrefixConfigWindow;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
@@ -84,6 +86,13 @@ public class SettingsFrame {
         device.setIconAlign(ButtonCell.IconAlign.BOTTOM);
         buttons.add(device, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
+        TextButton label = new TextButton("Добавить комментарий",new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                LabelWindow.get().show(null);
+            }
+        });
+        buttons.add(label, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
+
         TextButton edit = new TextButton("редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 final Item selected = ((UIItem) MonitoringFrame.get().getSelected()).getItem();
@@ -98,7 +107,8 @@ public class SettingsFrame {
                                 //todo надо ли нам руннайбл ?!
                             }
                         });
-                    }
+                    } else if(selected instanceof Label)
+                        LabelWindow.get().show(selected.getId());
 //                    switch (selected.getDeviceType()) {
 //                        case STATION:
 //                            AddStationWindow.get().show(selected.getId(), new Runnable() {

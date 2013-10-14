@@ -33,6 +33,7 @@ public class DataLoader {
 
             public void onSuccess(List<Item> result) {
                 for(Item item : result) {
+                    System.out.println("res=" + item + " id=" + item.getId());
                     MonitoringFrame.get().add(item);
                     MonitoringFrame.get().start();
                 }

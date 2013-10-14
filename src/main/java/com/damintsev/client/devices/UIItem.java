@@ -20,9 +20,9 @@ public class UIItem extends Label implements Serializable {
 
     private Item item;
     private TaskState taskState;
+    private transient Image image;
 
-    public UIItem(){
-    }
+    public UIItem(){ }
 
     public UIItem(Item item) {
         super();
@@ -38,9 +38,10 @@ public class UIItem extends Label implements Serializable {
 
     private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
-        Image image = new Image(getImage());
-        getElement().appendChild(image.getElement());
-
+       if(getImage() != null) {
+            image = new Image(getImage());
+            getElement().appendChild(image.getElement());
+       }
        Label label = new Label(getName());
         if(getName() != null)
             getElement().appendChild(label.getElement());
@@ -55,8 +56,8 @@ public class UIItem extends Label implements Serializable {
     }
 
     public Position getCenterPosition() {
-        int x = getAbsoluteLeft() + 100 / 2;
-        int y = getAbsoluteTop() + 100 / 2;
+        int x = getAbsoluteLeft() + getWidth() / 2;
+        int y = getAbsoluteTop() + getHeight() / 2;
         return new Position(x, y);
     }
 
@@ -66,12 +67,13 @@ public class UIItem extends Label implements Serializable {
 
     public ImageResource getImage() {
 //        return Utils.getImage("cloud");//todo customize
-        if(item.getType() == null)   return Utils.getImage("hipath");
         switch (item.getType()) {
             case IP:
             case TELNET:
             case ISDN:
                 return Utils.getImage("cloud");
+            case LABEL:
+                return null;
             default:
                 return Utils.getImage("hipath");
         }
@@ -82,11 +84,11 @@ public class UIItem extends Label implements Serializable {
     }
 
     public int getWidth() {
-        return 50;//image.getWidth();//todo
+        return image==null?super.getAbsoluteTop():image.getWidth();
     }
 
     public int getHeight() {
-        return 50;//image.getHeight();//todo
+        return image==null?super.getOffsetHeight():image.getHeight();
     }
 
     public String getId() {

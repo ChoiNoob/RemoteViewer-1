@@ -1,6 +1,7 @@
 package com.damintsev.server.services;
 
 import com.damintsev.client.devices.Item;
+import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.service.DatabaseService;
 import com.damintsev.client.v3.items.task.TaskState;
@@ -61,7 +62,6 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public List<TaskState> loadTaskStates() {
         return new ArrayList<TaskState>(SoA.getInstance().getStates().values());
-//        return new ArrayList<TaskState>(soA.getStates().values());
     }
 
     public void saveItemPosition(List<Item> items) {
@@ -76,5 +76,17 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     public PagingLoadResult<Station> getStationList() {
                 List<Station> stations = DB.getInstance().getStationList();   //todo мб можно обойтись одной строкой
         return new PagingLoadResultBean<Station>(stations, 0, stations.size());
+    }
+
+    public void deleteLabel(Label label) {
+        DB.getInstance().deleteLabel(label);
+    }
+
+    public Label saveLabel(Label label) {
+        return DB.getInstance().saveLabel(label);
+    }
+
+    public Label loadLabel(Long id) {
+        return DB.getInstance().getLabel(id);
     }
 }
