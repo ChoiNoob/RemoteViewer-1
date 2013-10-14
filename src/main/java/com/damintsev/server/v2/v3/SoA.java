@@ -77,7 +77,7 @@ public class SoA {
     }
 
     public void deleteStation(Station station) {
-        threads.get(station.getStringId()).delete();
+        threads.get(station.getStringId()).destroyProcess();
         threads.remove(station.getStringId());
     }
 
@@ -90,6 +90,5 @@ public class SoA {
     public void deleteTask(Task task) {
         ThreadExecutor executor = threads.get(task.getParentId());
         executor.deleteTask(task);
-
     }
 }

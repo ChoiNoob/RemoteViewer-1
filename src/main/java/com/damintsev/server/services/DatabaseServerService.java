@@ -28,8 +28,12 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
         SoA.getInstance();
     }
 
-    public Task saveTask(Task task) {
-        SoA.getInstance().updateTask(task);
+    public Task saveTask(final Task task) {
+              new Thread(new Runnable() {
+                  public void run() {
+                      SoA.getInstance().updateTask(task);
+                  }
+              }).start();
         return DB.getInstance().saveTask(task);
     }
 

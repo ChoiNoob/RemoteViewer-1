@@ -510,7 +510,7 @@ public class DB {
                 resultSet.close();
             } else {
                 statement = connection.prepareStatement("UPDATE task SET name=?, " +
-                        "command=?, type=?, name=?, station_id=? WHERE station_id=?");
+                        "command=?, type=?, station_id=? WHERE station_id=?");
                 statement.setString(1, task.getName());
                 statement.setString(2, task.getCommand());
                 statement.setString(3, task.getType().toString());

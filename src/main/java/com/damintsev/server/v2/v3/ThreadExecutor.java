@@ -31,6 +31,8 @@ public class ThreadExecutor extends Thread {
     private Map<String, Integer> errors;
     private boolean start = false;
     private long thisThreadId = ++threadId;
+    private Iterator<Task> iterator;
+    private boolean needToPause;
 
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
         logger.info("initializing Tread executor with station=" + station.getId() + " name=" + station.getName());
@@ -80,19 +82,23 @@ public class ThreadExecutor extends Thread {
 
     public void run() {
         Thread.currentThread().setName("threadI=" + thisThreadId + " id=" + station.getId() + " name=" + station.getName());
-        Iterator<Task> iterator = tasks.iterator();
         while (start) {
-            if(iterator.hasNext())
+            if (iterator == null) iterator = tasks.iterator();
+            if (iterator.hasNext())
                 executeTask(iterator.next());
             else
                 iterator = tasks.iterator();
             try {
                 Thread.sleep(5000);   //todo parametrize
+                synchronized (this) {
+                    while (needToPause) {
+                        wait();
+                    }
+                }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     @Override
@@ -107,6 +113,7 @@ public class ThreadExecutor extends Thread {
         for(Task task : tasks) {
             taskStates.put(task.getStringId(), new TaskState());
         }
+        needToPause = false;
         super.interrupt();
     }
 
@@ -126,7 +133,7 @@ public class ThreadExecutor extends Thread {
             task.setState(ExecuteState.ERROR);
             if (connectionError) {
                 for (TaskState state : taskStates.values()) {
-                    if (state.getId().equals(taskId)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
+//todo urgent!                   if (state.getId().equals(taskId)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
                         state.setState(ExecuteState.UNKNOWN);
                 }
             }
@@ -136,36 +143,42 @@ public class ThreadExecutor extends Thread {
     }
 
     public void updateTask(Task newTask) {
-        if(start) interrupt();
+        pause();
+        Task taskToRemove = null;
         for(Task oldTask : tasks) {
             if(oldTask.getStringId().equals(newTask.getStringId())) {
-                tasks.remove(oldTask);
+                taskToRemove  = oldTask;
             }
         }
+        if(taskToRemove != null)
+            tasks.add(taskToRemove);
         tasks.add(newTask);
         taskStates.put(newTask.getStringId(), new TaskState());
-        if(!start) start();
+        iterator = null;
+        unpause();
     }
 
     public void updateStation(Station station) {
-        if(start) interrupt();
+        pause();
         ConnectionPool.getInstance().dropConnection(station);
+        System.out.println("dropped");
         for(Task task : tasks) {  //todo не очень красиво как мне кажется
             task.setStation(station);
         }
-        if(!start) start();
+        iterator = null;
+        unpause();
     }
 
-    public void delete() {
-        interrupt();
+    public void destroyProcess() {
         ConnectionPool.getInstance().dropConnection(station);
         tasks.clear();
         taskStates.clear();
         errors.clear();
+        interrupt();
     }
 
     public void deleteTask(Task task) {
-        interrupt();
+        pause();
         for(Task oldTask : tasks) {
             if(oldTask.getStringId().equals(task.getStringId())) {
                 tasks.remove(oldTask);
@@ -173,6 +186,18 @@ public class ThreadExecutor extends Thread {
         }
         taskStates.remove(task.getStringId());
         errors.remove(task.getStringId());
-        start();
+        iterator = null;
+        unpause();
+    }
+
+    public void pause() {
+        System.out.println("CPT PAUSE");
+        needToPause = true;
+    }
+
+    public synchronized void  unpause() {
+        System.out.println("CPT UNPAUSE");
+        needToPause = false;
+        this.notifyAll();
     }
 }
