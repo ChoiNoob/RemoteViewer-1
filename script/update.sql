@@ -6,7 +6,7 @@ CREATE TABLE Task (
   station_id INT
 );
 
-CREATE TABLE UIPositions (
+CREATE TABLE uipositions (
   x        INT NOT NULL,
   y        INT NOT NULL,
   ref_id   INT NOT NULL,

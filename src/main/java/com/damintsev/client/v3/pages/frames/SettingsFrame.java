@@ -128,17 +128,17 @@ public class SettingsFrame {
         });
         buttons.add(edit, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
-        buttons.add(new TextButton("Hard reset", new SelectEvent.SelectHandler() {
-            public void onSelect(SelectEvent event) {
-                Service.instance.hardReset(new AsyncCallback<Void>() {
-                    public void onFailure(Throwable caught) {
-                    }
-
-                    public void onSuccess(Void result) {
-                    }
-                });
-            }
-        }),new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
+//        buttons.add(new TextButton("Hard reset", new SelectEvent.SelectHandler() {
+//            public void onSelect(SelectEvent event) {
+//                Service.instance.hardReset(new AsyncCallback<Void>() {
+//                    public void onFailure(Throwable caught) {
+//                    }
+//
+//                    public void onSuccess(Void result) {
+//                    }
+//                });
+//            }
+//        }),new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
         buttons.add(new TextButton("Настройка префиксов", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
