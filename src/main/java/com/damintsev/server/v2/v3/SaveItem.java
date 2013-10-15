@@ -6,6 +6,7 @@ import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.visitor.Visitor;
 import com.damintsev.server.db.Mysql;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
@@ -14,12 +15,52 @@ import java.sql.*;
  */
 public class SaveItem implements Visitor<Item> {
 
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SaveItem.class);
+
       public Label visit(Label label) {
-        return new Label();
+          logger.info("save Label id=" + label.getId() + " name=" + label.getName());
+          ResultSet resultSet = null;
+          Connection connection = null;
+          PreparedStatement statement = null;
+          try {
+              connection = Mysql.getConnection();
+              if (label.getId() == null) {
+                  statement = connection.prepareStatement("INSERT INTO labels (name) values (?)", Statement.RETURN_GENERATED_KEYS);
+                  statement.setString(1, label.getName());
+                  statement.executeUpdate();
+                  resultSet = statement.getGeneratedKeys();
+                  if (resultSet.next())
+                      label.setId(resultSet.getLong(1));
+              } else {
+                  statement = connection.prepareStatement("UPDATE labels SET name=? WHERE id=?");
+                  statement.setString(1, label.getName());
+                  statement.setLong(2, label.getId());
+
+                  statement.executeUpdate();
+              }
+          } catch (Exception e) {
+              logger.error(e.getMessage(), e);
+              e.printStackTrace();
+          } finally {
+              try {
+                  if (resultSet != null)
+                      resultSet.close();
+                  if (statement != null) {
+                      statement.close();
+                  }
+                  if (connection != null) {
+                      connection.close();
+                  }
+              } catch (SQLException e) {
+                  e.printStackTrace();
+              }
+          }
+
+          return label;
     }
 
     public Station visit(Station station) {
-//        logger.info("saving Station");
+        logger.info("saving Station");
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -57,7 +98,7 @@ public class SaveItem implements Visitor<Item> {
                 statement.executeUpdate();
             }
         } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
             e.printStackTrace();
         } finally {
             try {
@@ -78,6 +119,54 @@ public class SaveItem implements Visitor<Item> {
     }
 
     public Task visit(Task task) {
-        return new Task();
+        logger.info("saving Task id=" + task.getId() + " name=" + task.getName());
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = Mysql.getConnection();
+            if (task.getId() == null) {
+                statement = connection.prepareStatement("INSERT INTO task(name,command,type,station_id) " +
+                        "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                statement.setString(1, task.getName());
+                statement.setString(2, task.getCommand());
+                statement.setString(3, task.getType().toString());
+                statement.setLong(4, task.getStation().getId());
+
+                statement.executeUpdate();
+                resultSet = statement.getGeneratedKeys();
+                if (resultSet.next()) {
+                    task.setId(resultSet.getLong(1));
+                }
+                resultSet.close();
+            } else {
+                statement = connection.prepareStatement("UPDATE task SET name=?, " +
+                        "command=?, type=?, station_id=? WHERE id=?");
+                statement.setString(1, task.getName());
+                statement.setString(2, task.getCommand());
+                statement.setString(3, task.getType().toString());
+                statement.setLong(4, task.getStation().getId());
+                statement.setLong(5, task.getId());
+                statement.executeUpdate();
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return task;
     }
 }

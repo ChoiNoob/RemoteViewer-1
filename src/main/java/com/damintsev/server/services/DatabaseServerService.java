@@ -42,14 +42,14 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     }
 
-    public Task saveTask(final Task task) {
-              new Thread(new Runnable() {
-                  public void run() {
-                      SoA.getInstance().updateTask(task);
-                  }
-              }).start();
-        return DB.getInstance().saveTask(task);
-    }
+//    public Task saveTask(final Task task) {
+//              new Thread(new Runnable() {
+//                  public void run() {
+//                      SoA.getInstance().updateTask(task);
+//                  }
+//              }).start();
+//        return DB.getInstance().saveTask(task);
+//    }
 
     public Task loadTask(Long id) {
         return DB.getInstance().getTask(id);
@@ -95,9 +95,9 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
         DB.getInstance().deleteLabel(label);
     }
 
-    public Label saveLabel(Label label) {
-        return DB.getInstance().saveLabel(label);
-    }
+//    public Label saveLabel(Label label) {
+//        return DB.getInstance().saveLabel(label);
+//    }
 
     public Label loadLabel(Long id) {
         return DB.getInstance().getLabel(id);
