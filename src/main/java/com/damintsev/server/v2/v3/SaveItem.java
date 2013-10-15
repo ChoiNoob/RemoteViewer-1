@@ -1,5 +1,6 @@
 package com.damintsev.server.v2.v3;
 
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
@@ -11,7 +12,7 @@ import java.sql.*;
 /**
  * User: adamintsev Date: 15.10.13 Time: 16:51
  */
-public class SaveItem<Item> implements Visitor {
+public class SaveItem implements Visitor<Item> {
 
       public Label visit(Label label) {
         return new Label();

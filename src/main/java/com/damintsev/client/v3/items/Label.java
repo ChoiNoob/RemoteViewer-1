@@ -53,7 +53,7 @@ public class Label extends Item {
         this.name = name;
     }
 
-    public <T> T accept(Visitor visitor) {
+    public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);
     }
 }

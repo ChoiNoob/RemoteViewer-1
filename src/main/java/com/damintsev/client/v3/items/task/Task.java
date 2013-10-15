@@ -66,7 +66,7 @@ public class Task extends Item {
         return station.getStringId() + ":t" + getId();
     }
 
-    public <T> T accept(Visitor visitor) {
+    public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);
     }
 }

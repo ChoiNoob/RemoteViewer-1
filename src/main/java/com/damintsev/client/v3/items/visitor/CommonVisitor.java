@@ -15,6 +15,6 @@ public interface CommonVisitor {
      * @param visitor
      * @return
      */
-    <T> T accept(Visitor visitor);
+    <T> T accept(Visitor<T> visitor);
 
 }

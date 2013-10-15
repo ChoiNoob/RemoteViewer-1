@@ -135,7 +135,7 @@ public class Station extends Item {
         return "s" + getId();
     }
 
-    public <T> T accept(Visitor visitor) {
-        return (T) visitor.visit(this);
+    public <T> T accept(Visitor<T> visitor) {
+        return visitor.visit(this);
     }
 }
