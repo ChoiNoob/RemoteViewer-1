@@ -9,6 +9,7 @@ import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
+import com.damintsev.client.v3.uiitems.FileUploadExample;
 import com.damintsev.client.windows.PrefixConfigWindow;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
@@ -108,17 +109,11 @@ public class SettingsFrame {
         });
         buttons.add(edit, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
-//        buttons.add(new TextButton("Hard reset", new SelectEvent.SelectHandler() {
-//            public void onSelect(SelectEvent event) {
-//                Service.instance.hardReset(new AsyncCallback<Void>() {
-//                    public void onFailure(Throwable caught) {
-//                    }
-//
-//                    public void onSuccess(Void result) {
-//                    }
-//                });
-//            }
-//        }),new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
+        buttons.add(new TextButton("Загрузка изображений", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                FileUploadExample.getInstance().show();
+            }
+        }),new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
         buttons.add(new TextButton("Настройка префиксов", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {

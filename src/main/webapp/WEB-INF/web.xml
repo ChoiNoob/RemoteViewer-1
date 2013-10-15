@@ -21,12 +21,19 @@
         <servlet-class>com.damintsev.server.services.DatabaseServerService</servlet-class>
     </servlet>
     <servlet-mapping>
-
         <servlet-name>com.damintsev.mainGWT DatabaseService</servlet-name>
         <url-pattern>/mainGWT/DatabaseServerService</url-pattern>
     </servlet-mapping>
 
-
+    <servlet>
+        <servlet-name>fileUpload</servlet-name>
+        <servlet-class>com.damintsev.servlet.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>fileUpload</servlet-name>
+        <url-pattern>*.fileUpload</url-pattern>
+    </servlet-mapping>
+    
 
     <listener>
         <listener-class>com.damintsev.servlet.Servlet</listener-class>
