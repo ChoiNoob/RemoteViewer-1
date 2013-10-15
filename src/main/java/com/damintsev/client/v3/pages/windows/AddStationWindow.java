@@ -14,15 +14,13 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.form.CheckBox;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
-import com.sencha.gxt.widget.core.client.form.TextArea;
-import com.sencha.gxt.widget.core.client.form.TextField;
+import com.sencha.gxt.widget.core.client.form.*;
 
 /**
  * User: Damintsev Andrey
@@ -49,13 +47,14 @@ public class AddStationWindow implements Editor<Station> {
     TextField login;
     TextField password;
     TextArea comment;
-    @Path(value = "allowStatistics")
-    CheckBox checkBox;
+    NumberField<Integer> delay;
+//    @Path(value = "allowStatistics")
+//    CheckBox checkBox;
 
     private AddStationWindow() {
         window = new Window();
         window.setModal(true);
-        window.setPixelSize(400, 350);
+        window.setPixelSize(400, 370);
         window.setHeadingText("Добавить новую телефонную станцию");
         ContentPanel con = new ContentPanel();
         con.setHeaderVisible(false);
@@ -82,8 +81,17 @@ public class AddStationWindow implements Editor<Station> {
         comment.setHeight(70);
         panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        checkBox = new CheckBox();
-        panel.add(new FieldLabel(checkBox, "Разрешить сбор статистики"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+        //todo биллинг отключен
+//        checkBox = new CheckBox();
+//        FieldLabel label = new FieldLabel(checkBox, "Разрешить сбор статистики");
+//        label.setLabelWidth(300);
+//        panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+
+        delay = new NumberField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
+        FieldLabel label = new FieldLabel(delay, "Период опроса станции в секундах");
+//        label.setWidth(200);
+        label.setLabelWidth(250);
+        panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, 1, new Margins(-1,-1,-1,1)));
 
         //todo вернуть эту кнопку
 //        con.addButton(new TextButton("Сбор данных о звонках", new SelectEvent.SelectHandler() {

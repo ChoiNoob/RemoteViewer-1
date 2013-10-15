@@ -26,6 +26,7 @@ public class ThreadExecutor extends Thread {
     private static long threadId = 0;
     private static final Logger logger = LoggerFactory.getLogger(ThreadExecutor.class);
     private Station station;
+    private int delay;
     private List<Task> tasks;
     private Map<String, TaskState> taskStates;
     private Map<String, Integer> errors;
@@ -37,6 +38,7 @@ public class ThreadExecutor extends Thread {
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
         logger.info("initializing Tread executor with station=" + station.getId() + " name=" + station.getName());
         this.station = station;
+        delay = station.getDelay()==null?5:station.getDelay();
         this.tasks = tasks;
         this.taskStates = map;
         errors = new HashMap<String, Integer>(tasks.size() + 1);
@@ -89,7 +91,7 @@ public class ThreadExecutor extends Thread {
             else
                 iterator = tasks.iterator();
             try {
-                Thread.sleep(5000);   //todo parametrize
+                Thread.sleep(delay);
                 synchronized (this) {
                     while (needToPause) {
                         wait();

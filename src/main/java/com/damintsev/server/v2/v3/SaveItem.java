@@ -67,8 +67,8 @@ public class SaveItem implements Visitor<Item> {
         try {
             connection = Mysql.getConnection();
             if (station.getId() == null) {
-                statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port,allowStatistics) " +
-                        "VALUES (?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port,allowStatistics, delay) " +
+                        "VALUES (?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
                 statement.setString(1, station.getComment());
                 statement.setString(2, "null");//todo избавиться от этой строчки
                 statement.setString(3, station.getHost());
@@ -77,6 +77,7 @@ public class SaveItem implements Visitor<Item> {
                 statement.setString(6, station.getPassword());
                 statement.setString(7, station.getPort());
                 statement.setBoolean(8, station.getAllowStatistics());
+                statement.setInt(9, station.getDelay());
 
                 statement.executeUpdate();
                 resultSet = statement.getGeneratedKeys();
@@ -86,7 +87,7 @@ public class SaveItem implements Visitor<Item> {
                 resultSet.close();
             } else {
                 statement = connection.prepareStatement("UPDATE station SET comment=?, " +
-                        "host=?, login=?, name=?, password=?, port=?, allowStatistics=? WHERE station_id=?");
+                        "host=?, login=?, name=?, password=?, port=?, allowStatistics=?, delay=? WHERE station_id=?");
                 statement.setString(1, station.getComment());
                 statement.setString(2, station.getHost());
                 statement.setString(3, station.getLogin());
@@ -94,7 +95,8 @@ public class SaveItem implements Visitor<Item> {
                 statement.setString(5, station.getPassword());
                 statement.setString(6, station.getPort());
                 statement.setBoolean(7, station.getAllowStatistics());
-                statement.setLong(8, station.getId());
+                statement.setInt(8, station.getDelay());
+                statement.setLong(9, station.getId());
                 statement.executeUpdate();
             }
         } catch (Exception e) {

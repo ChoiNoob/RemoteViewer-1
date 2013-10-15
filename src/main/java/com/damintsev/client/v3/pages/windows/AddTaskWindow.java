@@ -49,8 +49,6 @@ public class AddTaskWindow implements Editor<Task>{
     TextField name;
     TextField command;
 //    TextField queryBusy; // todo вернуть запрос на проверку
-    @Ignore
-    TextArea comment;
 
     private AddTaskWindow() {
         window = new Window();
@@ -129,10 +127,6 @@ public class AddTaskWindow implements Editor<Task>{
 
 //        queryBusy = new TextField();
 //        panel.add(new FieldLabel(queryBusy, "Проверака занятых каналов"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
-
-        comment = new TextArea();
-        comment.setHeight(70);
-        panel.add(new FieldLabel(comment, "Комментарий"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {

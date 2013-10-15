@@ -34,6 +34,7 @@ public class Station extends Item {
     private String imageName = "hipath";
     @Column
     private Boolean allowStatistics;
+    private Integer delay;
 
     public String getHost() {
         return host;
@@ -137,5 +138,13 @@ public class Station extends Item {
 
     public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    public Integer getDelay() {
+        return delay;
+    }
+
+    public void setDelay(Integer delay) {
+        this.delay = delay;
     }
 }

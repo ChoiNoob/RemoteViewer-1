@@ -82,11 +82,11 @@ public abstract class UIItem extends Label {
     }
 
     public int getWidth() {
-        return image==null?super.getAbsoluteTop():image.getWidth();
+        return image == null ? super.getAbsoluteTop() : image.getWidth();
     }
 
     public int getHeight() {
-        return image==null?super.getOffsetHeight():image.getHeight();
+        return image == null ? super.getOffsetHeight() : image.getHeight();
     }
 
     public String getId() {

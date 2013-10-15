@@ -32,9 +32,6 @@ public class SoA {
     }
 
     public SoA() {
-        System.out.println("construct SoA");
-//        new Runnable() {
-//            public void run() {
                 List<Station> stations = DB.getInstance().getStationList();
         logger.info(threadName + "Loaded from database " + stations.size() + " stations");
         for (Station station : stations) {
@@ -52,16 +49,14 @@ public class SoA {
     }
 
     private void createWorker(Station station) {
-
-//        for (Station station : stations) {
-            List<Task> tasks = DB.getInstance().loadTasksForStation(station);
-            logger.info(threadName + "For station id=" + station.getId() + " name=" + station.getName() + " loaded tasks=" + tasks.size());
-            ThreadExecutor thread = new ThreadExecutor(station, tasks, stateMap);
-            threads.put(thread.getThreadId(), thread);
-//        }
+        List<Task> tasks = DB.getInstance().loadTasksForStation(station);
+        logger.info(threadName + "For station id=" + station.getId() + " name=" + station.getName() + " loaded tasks=" + tasks.size());
+        ThreadExecutor thread = new ThreadExecutor(station, tasks, stateMap);
+        threads.put(thread.getThreadId(), thread);
     }
+
     public void shutdown() {
-        for(ThreadExecutor thread : threads.values()) {
+        for (ThreadExecutor thread : threads.values()) {
             thread.interrupt();
         }
         ConnectionPool.getInstance().dropConnections();

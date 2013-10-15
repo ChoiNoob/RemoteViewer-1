@@ -202,6 +202,7 @@ public class DB {
                 station.setPassword(resultSet.getString("password"));
                 station.setName(resultSet.getString("name"));
                 station.setAllowStatistics(resultSet.getBoolean("allowStatistics"));
+                station.setDelay(resultSet.getInt("delay"));
             }
             return station;
         } catch (Exception e) {
