@@ -26,20 +26,7 @@ import java.util.List;
 public class DatabaseServerService extends RemoteServiceServlet implements DatabaseService {
     SoA soA;
     public DatabaseServerService() {
-        Visitor visitor = new UIVisitor();
-        Task task = new Task();
-        task.accept(visitor);
-
-        visitor = new SaveItem();
-        task.accept(visitor);
-
-        System.out.println("constructed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-//        soA = new SoA();
         SoA.getInstance();
-
-
-
     }
 
 //    public Task saveTask(final Task task) {

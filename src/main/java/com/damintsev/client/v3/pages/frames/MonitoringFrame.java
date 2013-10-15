@@ -7,6 +7,7 @@ import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.items.task.TaskState;
+import com.damintsev.client.v3.items.visitor.UIVisitor;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;
 import com.damintsev.utils.Position;
@@ -113,10 +114,11 @@ public class MonitoringFrame {
 
         //todo need redraw! may be force
     }
-
+         private UIVisitor visitor = new UIVisitor();
     private void addItem(Item item) {
         System.out.println("add item");
-        UIItem uiItem = new UIItem(item);
+//        UIItem uiItem = new UIItem(item);
+        UIItem uiItem = item.accept(visitor);
         uiItems.put(uiItem.getId(), uiItem);
         panel.add(uiItem, 0, 0);
         panel.setWidgetPosition(uiItem, uiItem.getPosition().x, uiItem.getPosition().y);

@@ -16,13 +16,11 @@ import java.io.Serializable;
  * Date: 03.08.13
  * Time: 2:09
  */
-public class UIItem extends Label {
+public abstract class UIItem extends Label {
 
     protected Item item;
     protected TaskState taskState;
     protected transient Image image;
-
-    public UIItem(){ }
 
     public UIItem(Item item) {
         super();
@@ -140,8 +138,5 @@ public class UIItem extends Label {
         return item;
     }
 
-    //todo сделть абстранктным и переопределить нафиг
-    public void openEditor(Runnable runnable) {
-
-    }
+    public abstract void openEditor(Runnable runnable);
 }

@@ -115,7 +115,7 @@ public class LabelWindow implements Editor<Label> {
 
     }
 
-    public void show(Long id) {
+    public void show(Long id, Runnable run) {
         driver.initialize(this);
         window.show();
         if (id == null) {

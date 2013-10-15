@@ -3,6 +3,7 @@ package com.damintsev.client.devices;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.client.v3.items.visitor.CommonVisitor;
+import com.damintsev.client.v3.items.visitor.Visitor;
 import com.damintsev.utils.Position;
 
 import java.io.Serializable;
@@ -40,6 +41,8 @@ public abstract class Item implements Serializable, CommonVisitor {
     public abstract Station getStation();
 
     public abstract String getParentId();
+
+    public abstract <T> T accept(Visitor<T> visitor);
 
     //    private int coordX;
 //    private int coordY;

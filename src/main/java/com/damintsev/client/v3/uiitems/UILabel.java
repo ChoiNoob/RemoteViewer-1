@@ -1,20 +1,19 @@
 package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.devices.Item;
-import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
-import com.damintsev.client.v3.pages.windows.AddTaskWindow;
+import com.damintsev.client.v3.pages.windows.LabelWindow;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
  * User: Damintsev Andrey
- * Date: 10.10.13
- * Time: 0:10
+ * Date: 15.10.13
+ * Time: 21:59
  */
-public class UIStation extends UIItem {
+public class UILabel extends UIItem {
 
-    public UIStation(Item item) {
+    public UILabel(Item item) {
         super(item);
     }
 
@@ -25,6 +24,6 @@ public class UIStation extends UIItem {
 
     @Override
     public void openEditor(Runnable runnable) {
-        AddStationWindow.get().show(item.getId(), runnable);
+        LabelWindow.get().show(item.getId(), runnable);
     }
 }

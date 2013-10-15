@@ -4,6 +4,9 @@ import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
+import com.damintsev.client.v3.uiitems.UILabel;
+import com.damintsev.client.v3.uiitems.UIStation;
+import com.damintsev.client.v3.uiitems.UITask;
 
 /**
  * User: adamintsev Date: 15.10.13 Time: 16:55
@@ -12,14 +15,14 @@ import com.damintsev.client.v3.items.task.Task;
 public class UIVisitor implements Visitor<UIItem> {
 
     public UIItem visit(Label label) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new UILabel(label);
     }
 
     public UIItem visit(Station station) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new UIStation(station);
     }
 
     public UIItem visit(Task task) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return new UITask(task);
     }
 }

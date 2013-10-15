@@ -79,7 +79,7 @@ public class SettingsFrame {
 
         TextButton device = new TextButton("Добавить устройство",new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                AddTaskWindow.get().show(null);
+                AddTaskWindow.get().show(null, null);
             }
         });
         device.setIcon(Utils.getImage("cloud"));
@@ -88,41 +88,21 @@ public class SettingsFrame {
 
         TextButton label = new TextButton("Добавить комментарий",new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                LabelWindow.get().show(null);
+                LabelWindow.get().show(null, null);
             }
         });
         buttons.add(label, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
         TextButton edit = new TextButton("редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                final Item selected = ((UIItem) MonitoringFrame.get().getSelected()).getItem();
+                final UIItem selected = (UIItem) MonitoringFrame.get().getSelected();
                 if (selected == null) Dialogs.alert("Выберите устройство");
                 else {
-                    System.out.println("sss="+selected.toString());
-                    if (selected instanceof Task) {
-                        AddTaskWindow.get().show(selected.getId());
-                    } else if (selected instanceof Station) {
-                        AddStationWindow.get().show(selected.getId(), new Runnable() {
-                            public void run() {
-                                //todo надо ли нам руннайбл ?!
-                            }
-                        });
-                    } else if(selected instanceof Label)
-                        LabelWindow.get().show(selected.getId());
-//                    switch (selected.getDeviceType()) {
-//                        case STATION:
-//                            AddStationWindow.get().show(selected.getId(), new Runnable() {
-//                                public void run() {
-//                                    selected.redraw();
-//                                }
-//                            });
-//                            break;
-//                        case IP:
-//                        case ISDN:
-//                            AddTaskWindow.get().show(selected.getId());
-//                            break;
-                        //todo
-//                    }
+                    selected.openEditor(new Runnable() {
+                        public void run() {
+                            //todo ?!?!?!
+                        }
+                    });
                 }
             }
         });

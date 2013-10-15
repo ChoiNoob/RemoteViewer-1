@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class UITask extends UIItem {
 
-
     public UITask(Item item) {
         super(item);
     }
