@@ -1,9 +1,7 @@
 package com.damintsev.client.v3.items;
 
-import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.enums.DeviceType;
-import com.damintsev.client.devices.enums.Status;
+import com.damintsev.client.v3.items.visitor.Visitor;
 import com.damintsev.client.v3.items.task.TaskType;
 
 import javax.persistence.*;
@@ -135,5 +133,9 @@ public class Station extends Item {
     @Override
     public String getStringId() {
         return "s" + getId();
+    }
+
+    public <T> T accept(Visitor visitor) {
+        return (T) visitor.visit(this);
     }
 }

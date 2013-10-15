@@ -1,5 +1,6 @@
 package com.damintsev.client.v3.pages.windows;
 
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
@@ -90,12 +91,12 @@ public class LabelWindow implements Editor<Label> {
                 label = driver.flush();
                 if (driver.hasErrors()) return;
                 window.mask();
-                Service2.database.saveLabel(label, new AsyncCallback<Label>() {
+                Service2.database.saveItem(label, new AsyncCallback<Item>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Cannot save device =" + caught.getMessage());
                     }
 
-                    public void onSuccess(Label result) {
+                    public void onSuccess(Item result) {
                         window.unmask();
                         window.hide();
                         MonitoringFrame.get().add(result);

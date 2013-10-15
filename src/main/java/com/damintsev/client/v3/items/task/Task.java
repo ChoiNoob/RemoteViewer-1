@@ -1,6 +1,7 @@
 package com.damintsev.client.v3.items.task;
 
 import com.damintsev.client.devices.Item;
+import com.damintsev.client.v3.items.visitor.Visitor;
 import com.damintsev.client.v3.items.Station;
 
 /**
@@ -63,5 +64,9 @@ public class Task extends Item {
 
     public String getStringId() {
         return station.getStringId() + ":t" + getId();
+    }
+
+    public <T> T accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 }

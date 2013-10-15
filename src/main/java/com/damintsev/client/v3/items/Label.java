@@ -1,6 +1,7 @@
 package com.damintsev.client.v3.items;
 
 import com.damintsev.client.devices.Item;
+import com.damintsev.client.v3.items.visitor.Visitor;
 import com.damintsev.client.v3.items.task.TaskType;
 
 /**
@@ -50,5 +51,9 @@ public class Label extends Item {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public <T> T accept(Visitor visitor) {
+        return visitor.visit(this);
     }
 }

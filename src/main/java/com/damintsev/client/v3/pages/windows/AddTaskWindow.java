@@ -1,5 +1,6 @@
 package com.damintsev.client.v3.pages.windows;
 
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.service.Service;
@@ -160,12 +161,12 @@ public class AddTaskWindow implements Editor<Task>{
                 if (driver.hasErrors()) return;
                 System.out.println("st id=" + task.getStation());
                 window.mask();
-                Service2.database.saveTask(task, new AsyncCallback<Task>() {
+                Service2.database.saveItem(task, new AsyncCallback<Item>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Cannot save device =" + caught.getMessage());
                     }
 
-                    public void onSuccess(Task result) {
+                    public void onSuccess(Item result) {
                         window.unmask();
                         window.hide();
 //                        if (newEntity) MonitoringFrame.get().addItem(new UIItem(result));

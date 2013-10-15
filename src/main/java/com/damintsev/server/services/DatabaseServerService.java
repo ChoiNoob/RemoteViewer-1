@@ -1,6 +1,9 @@
 package com.damintsev.server.services;
 
 import com.damintsev.client.devices.Item;
+import com.damintsev.server.v2.v3.SaveItem;
+import com.damintsev.client.v3.items.visitor.Visitor;
+import com.damintsev.client.v3.items.visitor.UIVisitor;
 import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.service.DatabaseService;
@@ -23,10 +26,20 @@ import java.util.List;
 public class DatabaseServerService extends RemoteServiceServlet implements DatabaseService {
     SoA soA;
     public DatabaseServerService() {
+        Visitor visitor = new UIVisitor();
+        Task task = new Task();
+        task.accept(visitor);
+
+        visitor = new SaveItem();
+        task.accept(visitor);
+
         System.out.println("constructed!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
 //        soA = new SoA();
         SoA.getInstance();
+
+
+
     }
 
     public Task saveTask(final Task task) {
@@ -50,10 +63,10 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
         return DB.getInstance().getStation(id);
     }
 
-    public Station saveStation(Station station) {
-       SoA.getInstance().updateStation(station);
-       return DB.getInstance().saveStation(station);
-    }
+//    public Station saveStation(Station station) {
+//       SoA.getInstance().updateStation(station);
+//       return DB.getInstance().saveStation(station);
+//    }
 
     public void deleteStation(Station station) {
         SoA.getInstance().deleteStation(station);
@@ -88,5 +101,9 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public Label loadLabel(Long id) {
         return DB.getInstance().getLabel(id);
+    }
+
+    public Item saveItem(Item item) {
+        return DB.getInstance().saveItem(item);
     }
 }

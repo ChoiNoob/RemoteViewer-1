@@ -1,6 +1,7 @@
 package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.devices.Device;
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.devices.enums.DeviceType;
@@ -122,18 +123,18 @@ public class AddStationWindow implements Editor<Station> {
                 station = editor.flush();
                 if (editor.hasErrors()) return;
                 window.mask();
-                Service2.database.saveStation(station, new AsyncCallback<Station>() {
+                Service2.database.saveItem(station, new AsyncCallback<Item>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Error saving station to db " + caught.getMessage());
                     }
 
-                    public void onSuccess(Station result) {
+                    public void onSuccess(Item result) {
                         window.unmask();
-                        station = result;
+                        station = (Station) result;
                         MonitoringFrame.get().add(result);
                         window.hide();
 
-                        if(listener != null)
+                        if (listener != null)
                             listener.run();
                     }
                 });

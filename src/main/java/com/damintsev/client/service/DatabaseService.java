@@ -19,12 +19,12 @@ import java.util.List;
 @RemoteServiceRelativePath("DatabaseServerService")
 public interface DatabaseService extends RemoteService {
 
-    Task saveTask(Task task);
+    Item saveItem(Item item);
     Task loadTask(Long id);
     void deleteTask(Task task);
 
     Station loadStation(Long id);
-    Station saveStation(Station station);
+//    Station saveStation(Station station);
     void deleteStation(Station station);
 
     PagingLoadResult<Station> getStationList();
@@ -38,7 +38,7 @@ public interface DatabaseService extends RemoteService {
 
     void deleteLabel(Label label);
 
-    Label saveLabel(Label label);
+//    Label saveLabel(Label label);
 
     Label loadLabel(Long id);
 }

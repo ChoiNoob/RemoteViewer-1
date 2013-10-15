@@ -2,6 +2,7 @@ package com.damintsev.client.devices;
 
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.TaskType;
+import com.damintsev.client.v3.items.visitor.CommonVisitor;
 import com.damintsev.utils.Position;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * Date: 05.08.13
  * Time: 22:33
  */
-public abstract class Item implements Serializable {
+public abstract class Item implements Serializable, CommonVisitor {
 
     private Position position;
 
