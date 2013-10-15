@@ -16,11 +16,11 @@ import java.io.Serializable;
  * Date: 03.08.13
  * Time: 2:09
  */
-public class UIItem extends Label implements Serializable {
+public class UIItem extends Label {
 
-    private Item item;
-    private TaskState taskState;
-    private transient Image image;
+    protected Item item;
+    protected TaskState taskState;
+    protected transient Image image;
 
     public UIItem(){ }
 
@@ -138,5 +138,10 @@ public class UIItem extends Label implements Serializable {
 
     public Item getItem() {
         return item;
+    }
+
+    //todo сделть абстранктным и переопределить нафиг
+    public void openEditor(Runnable runnable) {
+
     }
 }

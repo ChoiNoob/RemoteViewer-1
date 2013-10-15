@@ -185,8 +185,8 @@ public class AddTaskWindow implements Editor<Task>{
         window.setWidget(con);
 
     }
-
-    public void show(Long id) {
+                                          //todo сделать чтото с раннайблом
+    public void show(Long id, Runnable run) {
         driver.initialize(this);
         window.show();
         if (id == null) {
