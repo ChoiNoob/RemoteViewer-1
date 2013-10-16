@@ -91,7 +91,7 @@ public class ThreadExecutor extends Thread {
             else
                 iterator = tasks.iterator();
             try {
-                Thread.sleep(delay);
+                Thread.sleep(delay * 1000);
                 synchronized (this) {
                     while (needToPause) {
                         wait();
