@@ -4,6 +4,7 @@ import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.UIItem;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -15,10 +16,22 @@ public class UILabel extends UIItem {
 
     public UILabel(Item item) {
         super(item);
+        setWidth("auto");
     }
 
     @Override
-    public Widget asWidget() {
+    public Widget getParent() {
+        System.out.println("FUCKCCKCKCK");
+        return super.getParent();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Widget asWidget() {     //todo этот метод не вызвается! Надо придумать как его ызнвтаь!
+        Label label = new Label(getName(), true);
+//        label.setAutoHorizontalAlignment(ALIGN_JUSTIFY);
+//        label.setSize("200px");
+        label.getElement().getStyle().setProperty("width", "auto");
+//        super.setWidth("auto");
         return this;
     }
 

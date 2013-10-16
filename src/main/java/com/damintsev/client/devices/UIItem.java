@@ -22,6 +22,8 @@ public abstract class UIItem extends Label {
     protected TaskState taskState;
     protected transient Image image;
 
+    public UIItem(){ }
+
     public UIItem(Item item) {
         super();
         this.item = item;
@@ -82,11 +84,11 @@ public abstract class UIItem extends Label {
     }
 
     public int getWidth() {
-        return image == null ? super.getAbsoluteTop() : image.getWidth();
+        return image==null?super.getAbsoluteTop():image.getWidth();
     }
 
     public int getHeight() {
-        return image == null ? super.getOffsetHeight() : image.getHeight();
+        return image==null?super.getOffsetHeight():image.getHeight();
     }
 
     public String getId() {
@@ -138,5 +140,8 @@ public abstract class UIItem extends Label {
         return item;
     }
 
-    public abstract void openEditor(Runnable runnable);
+    //todo сделть абстранктным и переопределить нафиг
+    public void openEditor(Runnable runnable) {
+
+    }
 }
