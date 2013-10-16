@@ -26,25 +26,26 @@ public class UIRootPanel {
     }
 
     public Widget getContent() {
-        Viewport viewport = new Viewport();
-        viewport.setStyleName("gwt_main");
+//        Viewport viewport = new Viewport();
+//        viewport.setStyleName("gwt_main");
 
         BorderLayoutContainer body = new BorderLayoutContainer();
-        viewport.add(body);
+//        viewport.add(body);
 
         FlowLayoutContainer footer = new FlowLayoutContainer();
         footer.setHeight(20);
         footer.setStyleName("footer");
         body.setSouthWidget(footer, new BorderLayoutContainer.BorderLayoutData(20));
-
-        body.setCenterWidget(MonitoringFrame.get().getContent());
+        AbsolutePanel frame = (AbsolutePanel) MonitoringFrame.get().getContent();
+        body.setCenterWidget(frame);
         final ContentPanel settings = (ContentPanel) SettingsFrame.get().getContent();
-        ((AbsolutePanel)body.getCenterWidget()).add(settings);
+        frame.add(settings);
+//        ((AbsolutePanel)body.getCenterWidget()).add(settings);
 
-
-        ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
 
 //        ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
-        return viewport;
+          frame.add(UIBillingPanel.getInstance().getContent());
+//        ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
+        return frame;
     }
 }
