@@ -1,20 +1,14 @@
 package com.damintsev.client.v3.pages.frames;
 
-import com.damintsev.client.devices.Item;
 import com.damintsev.client.devices.UIItem;
-import com.damintsev.client.service.Service;
-import com.damintsev.client.v3.items.Label;
-import com.damintsev.client.v3.items.Station;
-import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
-import com.damintsev.client.v3.uiitems.FileUploadExample;
+import com.damintsev.client.v3.uiitems.FileUploadWindow;
 import com.damintsev.client.windows.PrefixConfigWindow;
 import com.damintsev.utils.Dialogs;
 import com.damintsev.utils.Utils;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.util.Margins;
@@ -111,7 +105,7 @@ public class SettingsFrame {
 
         buttons.add(new TextButton("Загрузка изображений", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                FileUploadExample.getInstance().show();
+                FileUploadWindow.getInstance().show();
             }
         }),new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 

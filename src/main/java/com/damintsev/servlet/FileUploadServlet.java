@@ -34,19 +34,23 @@ public class FileUploadServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("xyuxyuxyuxyxuyxuyxu");
+        System.out.println("queried=" + req.getParameter("type"));
+
         if(ServletFileUpload.isMultipartContent(req)){
             try {
+                System.out.println("multipart");
                 FileItemFactory fileItemFactory = new DiskFileItemFactory();
                 ServletFileUpload uploadHandlr = new ServletFileUpload(fileItemFactory);
                 List<FileItem> uploadItems = uploadHandlr.parseRequest(req);
-
+                System.out.println("test");
+                System.out.println("size=" + uploadItems.size());
 //                String filePath = "";
 //                String fileSeparator = System.getProperty("file.separator");
 //                String basePath = System.getProperty("user.home");
 //                String filesDir = basePath + fileSeparator + "SSA_Files";
 
                 for (FileItem fileItem : uploadItems) {
+                    System.out.println("file lalalalalalalal");
                     if(!fileItem.isFormField()){
                         System.out.println("file lalalalalalalal");
 //                        if(ensureFilesDir(filesDir)){
@@ -62,8 +66,10 @@ public class FileUploadServlet extends HttpServlet {
                 }
             } catch (FileUploadException ex) {
                 logger.error(ex.getMessage());
+                ex.printStackTrace();
             } catch (Exception ex){
                 logger.error(ex.getMessage());
+                ex.printStackTrace();
             }
         }
         super.doPost(req, resp);

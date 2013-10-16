@@ -1,13 +1,18 @@
 package com.damintsev.client.v3.uiitems;
 
-import com.sencha.gxt.core.client.Style;
+import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
+import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.SubmitCompleteEvent;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.FileUploadField;
 import com.sencha.gxt.widget.core.client.form.FormPanel;
-import com.sun.javafx.property.adapter.PropertyDescriptor;
+import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
+import com.sencha.gxt.widget.core.client.info.Info;
 
 /**
 * User: Damintsev Andrey
@@ -44,37 +49,68 @@ import com.sun.javafx.property.adapter.PropertyDescriptor;
 //import com.sencha.gxt.widget.core.client.form.TextField;
 //import com.sencha.gxt.widget.core.client.info.Info;
 //
-public class FileUploadExample extends Window{
+public class FileUploadWindow extends Window{
 
-    private static FileUploadExample instance;
+    private static FileUploadWindow instance;
 
-    public static FileUploadExample getInstance() {
-        if(instance == null) instance = new FileUploadExample();
+    public static FileUploadWindow getInstance() {
+        if(instance == null) instance = new FileUploadWindow();
         return instance;
     }
 
-    protected FileUploadExample() {
+    protected FileUploadWindow() {
         setPixelSize(300,300);
-        ContentPanel panel = new ContentPanel();
-        panel.setHeaderVisible(false);
+        VerticalLayoutContainer panel = new VerticalLayoutContainer();
+        ContentPanel con = new ContentPanel();
+        con.setHeaderVisible(false);
+        con.add(panel);
+        con.setBodyStyle("padding: 5px");
+        final SimpleComboBox<Types> comboBox = new SimpleComboBox<Types>(new LabelProvider<Types>() {
+            public String getLabel(Types item) {
+                return item.rus;
+            }
+        });
+        comboBox.add(new Types("Станция", "station"));
+        comboBox.add(new Types("Маршрут", "task"));
+        comboBox.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
+        comboBox.setAllowBlank(false);
+        FieldLabel label = new FieldLabel(comboBox, "Тип");
+        label.setLabelWidth(100);
+        panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
         final FormPanel form = new FormPanel();
-        panel.add(form);
+//        panel.add(form);
+//        form.add(panel);
         form.setEncoding(FormPanel.Encoding.MULTIPART);
         form.setMethod(FormPanel.Method.POST);
-        form.setAction("uploader.fileUpload");
+//        form.setAction("uploader.fileUpload");
 
-        FileUploadField field = new FileUploadField();
-        form.add(field);
+        FileUploadField fileUploadField = new FileUploadField();
+       fileUploadField.setName("tes test test");
+        label = new FieldLabel(fileUploadField, "Изображение");
+        panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        panel.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
+        con.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                System.out.println("fuck!");
+                if(!comboBox.validate())return;
+                form.setAction("/fileUpload/upload?type=" + comboBox.getValue().eng);
                 form.submit();
                 System.out.println("fuck!2");
             }
         }));
+//        con.add(form);
 
-        setWidget(panel);
+        form.setWidget(con);
+        setWidget(form);
+    }
+
+    class Types {
+        String rus;
+        String eng;
+
+        Types(String rus, String eng) {
+            this.rus = rus;
+            this.eng = eng;
+        }
     }
 }
 //
