@@ -5,14 +5,18 @@ package com.damintsev.servlet;
  * Date: 15.10.13
  * Time: 23:12
  */
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.damintsev.server.db.ImageHandler;
 import com.sun.corba.se.impl.orbutil.ORBUtility;
 import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.commons.fileupload.*;
@@ -45,7 +49,7 @@ public class FileUploadServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("queried=" + request.getParameter("type"));
         ServletFileUpload upload = new ServletFileUpload();
-
+        InputStream stream = null;
         try{
             FileItemIterator iter = upload.getItemIterator(request);
 
@@ -53,105 +57,42 @@ public class FileUploadServlet extends HttpServlet {
                 FileItemStream item = iter.next();
 
                 String name = item.getFieldName();
-                InputStream stream = item.openStream();
+
+                stream = item.openStream();
                 System.out.println("FFFFF=" + name);
 
-                FileOutputStream storeFile = new FileOutputStream("C:\\temp\\test.png");
-//                stream.
-//                storeFile.
-//                        // saves the file on disk
-//                        item.write(storeFile);
-
                 // Process the input stream
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                int len;
-                byte[] buffer = new byte[8192];
-                while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
-                    storeFile.write(buffer, 0, len);
-                }
-
-                int maxFileSize = 10*(1024*1024); //10 megs max
-                if (out.size() > maxFileSize) {
-                    throw new RuntimeException("File is > than " + maxFileSize);
-                }
+                BufferedImage image = ImageIO.read(stream);
+                ImageHandler.getInstance().setImageData(resizeImage(image));
+//              /  ByteArrayOutputStream out = new ByteArrayOutputStream();
+//                int len;
+//                byte[] buffer = new byte[8192];
+//                while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
+//                    out.write(buffer, 0, len);
+//                }
+//
+//                int maxFileSize = 10*(1024*1024); //10 megs max
+//                if (out.size() > maxFileSize) {
+//                    throw new RuntimeException("File is > than " + maxFileSize);
+//                }
             }
         }
         catch(Exception e){
             throw new RuntimeException(e);
+        }  finally {
+            if (stream != null) {
+                stream.close();
+            }
         }
-
-//        // checks if the request actually contains upload file
-//        if (!ServletFileUpload.isMultipartContent(request)) {
-//            // if not, we stop here
-//            PrintWriter writer = response.getWriter();
-//            writer.println("Error: Form must has enctype=multipart/form-data.");
-//            writer.flush();
-//            return;
-//        }
-//
-//        // configures upload settings
-//        DiskFileItemFactory factory = new DiskFileItemFactory();
-//        // sets memory threshold - beyond which files are stored in disk
-//        factory.setSizeThreshold(MEMORY_THRESHOLD);
-//        // sets temporary location to store files
-//        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
-//
-//        ServletFileUpload upload = new ServletFileUpload(factory);
-//
-//        // sets maximum size of upload file
-//        upload.setFileSizeMax(MAX_FILE_SIZE);
-//
-//        // sets maximum size of request (include file + form data)
-//        upload.setSizeMax(MAX_REQUEST_SIZE);
-//
-//        // constructs the directory path to store upload file
-//        // this path is relative to application's directory
-//        String uploadPath = getServletContext().getRealPath("")
-//                + File.separator + UPLOAD_DIRECTORY;
-//
-//        // creates the directory if it does not exist
-//        File uploadDir = new File(uploadPath);
-//        if (!uploadDir.exists()) {
-//            uploadDir.mkdir();
-//        }
-//
-//        try {
-//            // parses the request's content to extract file data
-//            @SuppressWarnings("unchecked")
-//            List<FileItem> formItems = upload.parseRequest(request);
-//
-//            if (formItems != null && formItems.size() > 0) {
-//                // iterates over form's fields
-//                for (FileItem item : formItems) {
-//                    // processes only fields that are not form fields
-//                    if (!item.isFormField()) {
-//                        String fileName = new File(item.getName()).getName();
-//                        String filePath = uploadPath + File.separator + fileName;
-//                        File storeFile = new File(filePath);
-//
-//                        // saves the file on disk
-//                        item.write(storeFile);
-//                        request.setAttribute("message",
-//                                "Upload has been done successfully!");
-//                    }
-//                }
-//            }
-//        } catch (Exception ex) {
-//            request.setAttribute("message",
-//                    "There was an error: " + ex.getMessage());
-//        }
-//        // redirects client to message page
-//        getServletContext().getRequestDispatcher("/message.jsp").forward(
-//                request, response);
     }
 
-    private boolean ensureFilesDir(String path){
-        File dir = new File(path);
-        boolean status = dir.exists();
-        if(!status){
-            status = dir.mkdir();
-        }
-        return status;
+    private static BufferedImage resizeImage(BufferedImage originalImage){
+        BufferedImage resizedImage = new BufferedImage(150, 150, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = resizedImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, 150, 150, null);
+        g.dispose();
+
+        return resizedImage;
     }
 
 }
