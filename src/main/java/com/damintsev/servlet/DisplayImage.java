@@ -1,5 +1,6 @@
 package com.damintsev.servlet;
 
+import com.damintsev.server.db.DB;
 import com.damintsev.server.db.ImageHandler;
 
 import javax.imageio.ImageIO;
@@ -17,37 +18,30 @@ import java.io.*;
 public class DisplayImage  extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        if(ImageHandler.getInstance().getImage() == null) {
-            //todo как-то красиво обыграть чтоли!
-            response.setContentType("text/html");
-            response.getOutputStream().println("<html><head><title>Person Photo</title></head>");
-            response.getOutputStream().println("<body><h1>No photo found for </h1></body></html>");
-            return;
+        System.err.println("FUCK="+request.getParameter("type"));
+//        if(ImageHandler.getInstance().getImage() == null) {
+//            //todo как-то красиво обыграть чтоли!
+//            response.setContentType("text/html");
+//            response.getOutputStream().println("<html><head><title>Person Photo</title></head>");
+//            response.getOutputStream().println("<body><h1>No photo found for </h1></body></html>");
+//            return;
+//        }
+        byte []image;
+        if("tmp".equals(request.getParameter("type"))){
+            System.out.println("writing tmp");
+            BufferedImage tmpImage = ImageHandler.getInstance().getImage();
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(tmpImage, "png", os);
+            image = os.toByteArray();
+        } else {
+            System.out.println("writing from DB=" + request.getParameter("type"));
+          image =  DB.getInstance().loadImages(request.getParameter("type"));
         }
-        BufferedImage image = ImageHandler.getInstance().getImage();
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", os);
-        InputStream imageOut = new ByteArrayInputStream(os.toByteArray());
-        byte []bb = os.toByteArray();
-
-
-//        ImageOutputStream imageOut = ImageIO.(image);
         response.reset();
         response.setContentType("image/jpg");
-//        int length =(int)imageOut.s();
-        response.setContentLength(bb.length);
+        response.setContentLength(image.length);
         BufferedOutputStream out = new BufferedOutputStream(response.getOutputStream());
-
-//        int bufferSize = 1024;
-//        byte[] buffer = new byte[bufferSize];
-
-//        while ((length = imageOut.read(buffer)) != -1) {
-//            System.out.println("writing " + length + " bytes");
-//            out.write(bb, 0, length);
-//        }
-        out.write(bb);
+        out.write(image);
         out.flush();
     }
 }

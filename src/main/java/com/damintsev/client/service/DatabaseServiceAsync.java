@@ -39,4 +39,6 @@ public interface DatabaseServiceAsync {
     void loadLabel(Long id, AsyncCallback<Label> async);
 
     void saveItem(Item item, AsyncCallback<Item> async);
+
+    void saveImage(String type, AsyncCallback<Void> async);
 }

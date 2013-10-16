@@ -40,7 +40,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>imageShow</servlet-name>
-        <url-pattern>/getImage</url-pattern>
+        <url-pattern>/image</url-pattern>
     </servlet-mapping>
 
     <listener>

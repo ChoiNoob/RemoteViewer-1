@@ -20,6 +20,11 @@ public class UILabel extends UIItem {
     }
 
     @Override
+    protected String initImage() {
+        return null;
+    }
+
+    @Override
     public Widget getParent() {
         System.out.println("FUCKCCKCKCK");
         return super.getParent();    //To change body of overridden methods use File | Settings | File Templates.

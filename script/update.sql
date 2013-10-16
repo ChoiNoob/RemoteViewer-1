@@ -1,10 +1,10 @@
-CREATE TABLE Task (
+CREATE TABLE task (
   id         INT AUTO_INCREMENT UNIQUE,
   name       VARCHAR(200),
   command    VARCHAR(200),
   type       VARCHAR(200),
   station_id INT
-);
+) DEFAULT CHARSET=utf8;
 
 CREATE TABLE uipositions (
   x        INT NOT NULL,
@@ -12,13 +12,13 @@ CREATE TABLE uipositions (
   ref_id   INT NOT NULL,
   ref_type VARCHAR(20),
   PRIMARY KEY (ref_type, ref_id)
-);
+) DEFAULT CHARSET=utf8;
 
 CREATE TABLE images (
   TYPE VARCHAR(20) UNIQUE,
   DATA LONGBLOB,
   PRIMARY KEY (TYPE)
-);
+) DEFAULT CHARSET=utf8;;
 
 CREATE TABLE labels (
   id   INT AUTO_INCREMENT UNIQUE,

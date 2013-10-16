@@ -37,14 +37,6 @@ public class FileUploadServlet extends HttpServlet {
         super();
     }
 
-    // location to store file uploaded
-    private static final String UPLOAD_DIRECTORY = "upload";
-
-    // upload settings
-    private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
-    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
-    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("queried=" + request.getParameter("type"));
@@ -87,12 +79,8 @@ public class FileUploadServlet extends HttpServlet {
     }
 
     private static BufferedImage resizeImage(BufferedImage originalImage){
-        BufferedImage resizedImage = new BufferedImage(150, 150, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = resizedImage.createGraphics();
-        g.drawImage(originalImage, 0, 0, 150, 150, null);
-        g.dispose();
 
-        return resizedImage;
+        return ImageManager.resizeImageJpeg(originalImage, 300,300);
     }
 
 }

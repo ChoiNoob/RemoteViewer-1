@@ -1,6 +1,12 @@
 package com.damintsev.client.v3.uiitems;
 
+import com.damintsev.client.service.Service;
+import com.damintsev.client.service.Service2;
+import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.utils.Dialogs;
+import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.data.shared.LabelProvider;
@@ -63,7 +69,7 @@ public class FileUploadWindow extends Window{
     Image image;
 
     protected FileUploadWindow() {
-        setPixelSize(300,300);
+        setPixelSize(400,400);
         VerticalLayoutContainer panel = new VerticalLayoutContainer();
         ContentPanel con = new ContentPanel();
         con.setHeaderVisible(false);
@@ -95,21 +101,43 @@ public class FileUploadWindow extends Window{
 
         image = new Image("getImage");
         label = new FieldLabel(image);
+//        label.setWidth(10);
         panel.add(label);
 
         con.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 if(!comboBox.validate())return;
-                form.setAction("/fileUpload/upload");//?type=" + comboBox.getValue().eng);
+                form.setAction("fileUpload/upload");//?type=" + comboBox.getValue().eng);
                 form.submit();
                 System.out.println("fuck!2");
             }
         }));
-//        con.add(form);
+        con.addButton(new TextButton("Save", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+                Service2.database.saveImage(comboBox.getValue().eng, new AsyncCallback<Void>() {
+                    public void onFailure(Throwable caught) {
+                        //Todo change body of implemented methods use File | Settings | File Templates.
+                    }
+
+                    public void onSuccess(Void result) {
+                        Dialogs.confirm("Suscsess", new Runnable() {
+                            public void run() {
+                                Scheduler.get().scheduleDeferred(new Command() {
+                                    public void execute() {
+                                        MonitoringFrame.reload();
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }));
         form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
             public void onSubmitComplete(SubmitCompleteEvent event) {
-                Dialogs.alert("FUCK!!!!");
-                image.setUrl("getImage");
+//                Dialogs.alert("FUCK!!!!");
+                image.setUrl("image?type=tmp");
+
             }
         });
         form.setWidget(con);

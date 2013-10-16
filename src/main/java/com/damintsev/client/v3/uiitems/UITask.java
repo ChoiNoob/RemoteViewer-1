@@ -23,8 +23,7 @@ public class UITask extends UIItem {
     public Widget asWidget() {
         setHorizontalAlignment(ALIGN_CENTER);
         if(getImage() != null) {
-            image = new Image(getImage());
-            getElement().appendChild(image.getElement());
+            getElement().appendChild(getImage().getElement());
         }
         Label label = new Label(getName());
         if(getName() != null)
@@ -36,5 +35,10 @@ public class UITask extends UIItem {
     @Override
     public void openEditor(Runnable runnable) {
         AddTaskWindow.get().show(item.getId(), runnable);
+    }
+
+    @Override
+    protected String initImage() {
+        return "task";
     }
 }

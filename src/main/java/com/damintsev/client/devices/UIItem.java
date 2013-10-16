@@ -39,8 +39,8 @@ public abstract class UIItem extends Label {
     private void init() {
         setHorizontalAlignment(ALIGN_CENTER);
        if(getImage() != null) {
-            image = new Image(getImage());
-            getElement().appendChild(image.getElement());
+//            image = new Image(getImage());
+            getElement().appendChild(getImage().getElement());
        }
        Label label = new Label(getName());
         if(getName() != null)
@@ -65,30 +65,23 @@ public abstract class UIItem extends Label {
         return item.getPosition();
     }
 
-    public ImageResource getImage() {
-//        return Utils.getImage("cloud");//todo customize
-        switch (item.getType()) {
-            case IP:
-            case TELNET:
-            case ISDN:
-                return Utils.getImage("cloud");
-            case LABEL:
-                return null;
-            default:
-                return Utils.getImage("hipath");
-        }
+    public Image getImage() {     //todo тут бля не красиво!
+        if(image == null && initImage() != null) image = new Image("image?type=" + initImage());   //todo как нибудь ссылку передать
+        return image;
     }
+
+    protected abstract String initImage();
 
     public String getName() {
         return item.getName();
     }
 
     public int getWidth() {
-        return image==null?super.getAbsoluteTop():image.getWidth();
+        return getImage() == null ? super.getAbsoluteTop() : getImage().getWidth();
     }
 
     public int getHeight() {
-        return image==null?super.getOffsetHeight():image.getHeight();
+        return getImage() == null ? super.getOffsetHeight() : getImage().getHeight();
     }
 
     public String getId() {

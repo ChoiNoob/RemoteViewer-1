@@ -43,4 +43,6 @@ public interface DatabaseService extends RemoteService {
 
     Label loadLabel(Long id);
 
+    void saveImage(String type);
+
 }

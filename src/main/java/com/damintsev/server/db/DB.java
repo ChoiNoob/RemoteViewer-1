@@ -10,6 +10,9 @@ import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.server.v2.v3.SaveItem;
 import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,7 +120,7 @@ public class DB {
         Connection connection;
         try {
             connection = Mysql.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM Task t WHERE t.station_id = ?");
+            statement = connection.prepareStatement("SELECT * FROM task t WHERE t.station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -154,7 +157,7 @@ public class DB {
         Connection connection;
         try {
             connection = Mysql.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM Task t WHERE t.id = ?");
+            statement = connection.prepareStatement("SELECT * FROM task t WHERE t.id = ?");
             statement.setLong(1, taskId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -358,27 +361,39 @@ public class DB {
         }
     }
 
-    public List<ImageWithType> loadImages() {
+    public byte[] loadImages(String type) {
         Connection connection = null;
         PreparedStatement statement = null;
-        List<ImageWithType> images = new ArrayList<ImageWithType>();
         try {
             connection = Mysql.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM images");
+            statement = connection.prepareStatement("SELECT * FROM images WHERE type = ?");
+            statement.setString(1, type);
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
-            while (resultSet.next()) {
-                ImageWithType imageWithType = new ImageWithType();
-                imageWithType.setType(resultSet.getString("type"));
-                imageWithType.setData(resultSet.getString("data"));
-                images.add(imageWithType);
+            InputStream is;
+            if (resultSet.next()) {
+                is = resultSet.getBinaryStream("data");
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+                int nRead;
+                byte[] data = new byte[1024];
+                try {
+                    while ((nRead = is.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, nRead);
+                    }
+                    buffer.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }   finally {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return buffer.toByteArray();
             }
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
             logger.error(e.getMessage(), e);
             e.printStackTrace();
         } finally {
@@ -392,13 +407,67 @@ public class DB {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-        return images;
+        } return null;
     }
 
-//    public Station saveStation(Station station) {
+    public void saveImage(String type) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+
+        try {
+            BufferedImage image = ImageHandler.getInstance().getImage();
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", os);
+            InputStream is = new ByteArrayInputStream(os.toByteArray());
+
+            connection = Mysql.getConnection();
+            statement = connection.prepareStatement("INSERT INTO images (TYPE, DATA) VALUES (?,?) " +
+                    "ON DUPLICATE KEY UPDATE data = VALUES(DATA)");
+            statement.setString(1, type);
+
+            statement.setBinaryStream(2, is);
+            statement.executeUpdate();
+            is.close();
+//            ResultSet resultSet = statement.getResultSet();
+//            if (resultSet.next()) {
+//                is = resultSet.getBinaryStream("data");
+//                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
 //
-//    }
+//                int nRead;
+//                byte[] data = new byte[1024];
+//                try {
+//                    while ((nRead = is.read(data, 0, data.length)) != -1) {
+//                        buffer.write(data, 0, nRead);
+//                    }
+//                    buffer.flush();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }   finally {
+//                    try {
+//                        is.close();
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public void saveItemPosition(List<Item> items) {
         logger.info("saving items position");

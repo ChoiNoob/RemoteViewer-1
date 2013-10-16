@@ -93,4 +93,8 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     public Item saveItem(Item item) {
         return DB.getInstance().saveItem(item);
     }
+
+    public void saveImage(String type) {
+        DB.getInstance().saveImage(type);
+    }
 }
