@@ -5,16 +5,17 @@ package com.damintsev.servlet;
  * Date: 15.10.13
  * Time: 23:12
  */
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileItemFactory;
-import org.apache.commons.fileupload.FileUploadException;
+
+import com.sun.corba.se.impl.orbutil.ORBUtility;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
@@ -32,47 +33,116 @@ public class FileUploadServlet extends HttpServlet {
         super();
     }
 
+    // location to store file uploaded
+    private static final String UPLOAD_DIRECTORY = "upload";
+
+    // upload settings
+    private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
+    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 40; // 40MB
+    private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 50; // 50MB
+
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("queried=" + req.getParameter("type"));
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("queried=" + request.getParameter("type"));
+        ServletFileUpload upload = new ServletFileUpload();
 
-        if(ServletFileUpload.isMultipartContent(req)){
-            try {
-                System.out.println("multipart");
-                FileItemFactory fileItemFactory = new DiskFileItemFactory();
-                ServletFileUpload uploadHandlr = new ServletFileUpload(fileItemFactory);
-                List<FileItem> uploadItems = uploadHandlr.parseRequest(req);
-                System.out.println("test");
-                System.out.println("size=" + uploadItems.size());
-//                String filePath = "";
-//                String fileSeparator = System.getProperty("file.separator");
-//                String basePath = System.getProperty("user.home");
-//                String filesDir = basePath + fileSeparator + "SSA_Files";
+        try{
+            FileItemIterator iter = upload.getItemIterator(request);
 
-                for (FileItem fileItem : uploadItems) {
-                    System.out.println("file lalalalalalalal");
-                    if(!fileItem.isFormField()){
-                        System.out.println("file lalalalalalalal");
-//                        if(ensureFilesDir(filesDir)){
-//                            filePath = filesDir + fileSeparator + fileItem.getName();
-//                            File file = new File(filePath);
-//                            fileItem.write(file);
-//
-//                            logger.error(filePath);
-//                            logger.error(fileItem.getName() + "." + fileItem.getContentType() + " [" + fileItem.getSize() + "]");
-//                        }
-                        //todo write to DB
-                    }
+            while (iter.hasNext()) {
+                FileItemStream item = iter.next();
+
+                String name = item.getFieldName();
+                InputStream stream = item.openStream();
+                System.out.println("FFFFF=" + name);
+
+                FileOutputStream storeFile = new FileOutputStream("C:\\temp\\test.png");
+//                stream.
+//                storeFile.
+//                        // saves the file on disk
+//                        item.write(storeFile);
+
+                // Process the input stream
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                int len;
+                byte[] buffer = new byte[8192];
+                while ((len = stream.read(buffer, 0, buffer.length)) != -1) {
+                    storeFile.write(buffer, 0, len);
                 }
-            } catch (FileUploadException ex) {
-                logger.error(ex.getMessage());
-                ex.printStackTrace();
-            } catch (Exception ex){
-                logger.error(ex.getMessage());
-                ex.printStackTrace();
+
+                int maxFileSize = 10*(1024*1024); //10 megs max
+                if (out.size() > maxFileSize) {
+                    throw new RuntimeException("File is > than " + maxFileSize);
+                }
             }
         }
-        super.doPost(req, resp);
+        catch(Exception e){
+            throw new RuntimeException(e);
+        }
+
+//        // checks if the request actually contains upload file
+//        if (!ServletFileUpload.isMultipartContent(request)) {
+//            // if not, we stop here
+//            PrintWriter writer = response.getWriter();
+//            writer.println("Error: Form must has enctype=multipart/form-data.");
+//            writer.flush();
+//            return;
+//        }
+//
+//        // configures upload settings
+//        DiskFileItemFactory factory = new DiskFileItemFactory();
+//        // sets memory threshold - beyond which files are stored in disk
+//        factory.setSizeThreshold(MEMORY_THRESHOLD);
+//        // sets temporary location to store files
+//        factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
+//
+//        ServletFileUpload upload = new ServletFileUpload(factory);
+//
+//        // sets maximum size of upload file
+//        upload.setFileSizeMax(MAX_FILE_SIZE);
+//
+//        // sets maximum size of request (include file + form data)
+//        upload.setSizeMax(MAX_REQUEST_SIZE);
+//
+//        // constructs the directory path to store upload file
+//        // this path is relative to application's directory
+//        String uploadPath = getServletContext().getRealPath("")
+//                + File.separator + UPLOAD_DIRECTORY;
+//
+//        // creates the directory if it does not exist
+//        File uploadDir = new File(uploadPath);
+//        if (!uploadDir.exists()) {
+//            uploadDir.mkdir();
+//        }
+//
+//        try {
+//            // parses the request's content to extract file data
+//            @SuppressWarnings("unchecked")
+//            List<FileItem> formItems = upload.parseRequest(request);
+//
+//            if (formItems != null && formItems.size() > 0) {
+//                // iterates over form's fields
+//                for (FileItem item : formItems) {
+//                    // processes only fields that are not form fields
+//                    if (!item.isFormField()) {
+//                        String fileName = new File(item.getName()).getName();
+//                        String filePath = uploadPath + File.separator + fileName;
+//                        File storeFile = new File(filePath);
+//
+//                        // saves the file on disk
+//                        item.write(storeFile);
+//                        request.setAttribute("message",
+//                                "Upload has been done successfully!");
+//                    }
+//                }
+//            }
+//        } catch (Exception ex) {
+//            request.setAttribute("message",
+//                    "There was an error: " + ex.getMessage());
+//        }
+//        // redirects client to message page
+//        getServletContext().getRequestDispatcher("/message.jsp").forward(
+//                request, response);
     }
 
     private boolean ensureFilesDir(String path){

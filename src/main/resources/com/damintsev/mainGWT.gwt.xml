@@ -11,6 +11,8 @@
 
     <extend-property name="locale" values="ru_RU"/>
     <set-property name="gwt.logging.simpleRemoteHandler" value="ENABLED" />
+
+
 <!---->
     <!--<set-property name="compiler.stackMode"-->
                   <!--value="emulated" />-->

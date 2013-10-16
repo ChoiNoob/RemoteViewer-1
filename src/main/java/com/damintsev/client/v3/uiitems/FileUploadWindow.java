@@ -1,5 +1,6 @@
 package com.damintsev.client.v3.uiitems;
 
+import com.damintsev.utils.Dialogs;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -85,20 +86,24 @@ public class FileUploadWindow extends Window{
 //        form.setAction("uploader.fileUpload");
 
         FileUploadField fileUploadField = new FileUploadField();
-       fileUploadField.setName("tes test test");
+       fileUploadField.setName("upload");
         label = new FieldLabel(fileUploadField, "Изображение");
         panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         con.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 if(!comboBox.validate())return;
-                form.setAction("/fileUpload/upload?type=" + comboBox.getValue().eng);
+                form.setAction("/fileUpload/upload");//?type=" + comboBox.getValue().eng);
                 form.submit();
                 System.out.println("fuck!2");
             }
         }));
 //        con.add(form);
-
+        form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
+            public void onSubmitComplete(SubmitCompleteEvent event) {
+                Dialogs.alert("FUCK!!!!");
+            }
+        });
         form.setWidget(con);
         setWidget(form);
     }
