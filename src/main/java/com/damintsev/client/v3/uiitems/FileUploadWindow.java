@@ -1,6 +1,7 @@
 package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.utils.Dialogs;
+import com.google.gwt.user.client.ui.Image;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
@@ -59,6 +60,8 @@ public class FileUploadWindow extends Window{
         return instance;
     }
 
+    Image image;
+
     protected FileUploadWindow() {
         setPixelSize(300,300);
         VerticalLayoutContainer panel = new VerticalLayoutContainer();
@@ -86,9 +89,13 @@ public class FileUploadWindow extends Window{
 //        form.setAction("uploader.fileUpload");
 
         FileUploadField fileUploadField = new FileUploadField();
-       fileUploadField.setName("upload");
+        fileUploadField.setName("upload");
         label = new FieldLabel(fileUploadField, "Изображение");
         panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
+
+        image = new Image("getImage");
+        label = new FieldLabel(image);
+        panel.add(label);
 
         con.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
@@ -102,6 +109,7 @@ public class FileUploadWindow extends Window{
         form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
             public void onSubmitComplete(SubmitCompleteEvent event) {
                 Dialogs.alert("FUCK!!!!");
+                image.setUrl("getImage");
             }
         });
         form.setWidget(con);

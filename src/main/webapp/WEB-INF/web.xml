@@ -33,7 +33,15 @@
         <servlet-name>fileUpload</servlet-name>
         <url-pattern>/fileUpload/*</url-pattern>
     </servlet-mapping>
-    
+
+    <servlet>
+        <servlet-name>imageShow</servlet-name>
+        <servlet-class>com.damintsev.servlet.DisplayImage</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>imageShow</servlet-name>
+        <url-pattern>/getImage</url-pattern>
+    </servlet-mapping>
 
     <listener>
         <listener-class>com.damintsev.servlet.Servlet</listener-class>
