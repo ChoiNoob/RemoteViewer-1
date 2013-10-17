@@ -5,14 +5,21 @@ import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.utils.Dialogs;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Command;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
+import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SubmitCompleteEvent;
@@ -66,7 +73,7 @@ public class FileUploadWindow extends Window{
         return instance;
     }
 
-    Image image;
+    private Image newImage;
 
     protected FileUploadWindow() {
         setPixelSize(400,400);
@@ -84,6 +91,7 @@ public class FileUploadWindow extends Window{
         comboBox.add(new Types("Маршрут", "task"));
         comboBox.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
         comboBox.setAllowBlank(false);
+
         FieldLabel label = new FieldLabel(comboBox, "Тип");
         label.setLabelWidth(100);
         panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
@@ -99,14 +107,38 @@ public class FileUploadWindow extends Window{
         label = new FieldLabel(fileUploadField, "Изображение");
         panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        image = new Image("getImage");
-        label = new FieldLabel(image);
+
+        newImage = new Image("getImage");
+//        label = new FieldLabel(newImage);
 //        label.setWidth(10);
+        Element table = DOM.createTable();
+        Element tr = DOM.createTR();
+        tr.getStyle().setWidth(400, Style.Unit.PX);
+        Element td = DOM.createTD();
+        td.getStyle().setWidth(200, Style.Unit.PX);
+        td.appendChild(newImage.getElement());
+        tr.appendChild(td);
+//        hor.add(newImage);
+        Image oldImage = new Image("image?type=station");
+        td = DOM.createTR();
+        td.getStyle().setWidth(200, Style.Unit.PX);
+        td.appendChild(oldImage.getElement());
+        tr.appendChild(td);
+
+        table.appendChild(tr);
+//        label = new FieldLabel(oldImage);
+//        hor.add(oldImage);
+//        Label test = new Label("");
+//        test.getElement().appendChild(table);
+        label = new FieldLabel();
+        label.setText("");
+        label.getElement().appendChild(table);
+                label.setLabelWidth(1);
         panel.add(label);
 
         con.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                if(!comboBox.validate())return;
+                if (!comboBox.validate()) return;
                 form.setAction("fileUpload/upload");//?type=" + comboBox.getValue().eng);
                 form.submit();
                 System.out.println("fuck!2");
@@ -136,7 +168,7 @@ public class FileUploadWindow extends Window{
         form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
             public void onSubmitComplete(SubmitCompleteEvent event) {
 //                Dialogs.alert("FUCK!!!!");
-                image.setUrl("image?type=tmp");
+                newImage.setUrl("image?type=tmp");
 
             }
         });
