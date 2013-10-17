@@ -18,7 +18,7 @@ public class IPTask extends TaskProcessor {
     private static final Logger logger = LoggerFactory.getLogger(TaskProcessor.class);
 
     @Override
-    protected TaskState process(String command) {
+    public TaskState process(String command) {
         logger.info("Command=" + command);
         TaskState state = new TaskState();
         Pattern pattern = Pattern.compile("[0-9]{1,3} bytes from ");

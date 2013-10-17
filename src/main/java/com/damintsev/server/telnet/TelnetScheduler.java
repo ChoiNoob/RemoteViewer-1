@@ -141,10 +141,10 @@
 //        Response resp = new Response();
 //        InputStream in = null;
 //        BufferedReader reader = null;
-//        Process process = null;
+//        Process execute = null;
 //        try {
-//            process = Runtime.getRuntime().exec(((CommonDevice) device).getQuery());
-//            in = process.getInputStream();
+//            execute = Runtime.getRuntime().exec(((CommonDevice) device).getQuery());
+//            in = execute.getInputStream();
 //            reader = new BufferedReader(new InputStreamReader(in));
 //            StringBuilder sb = new StringBuilder();
 //            String line;
@@ -165,8 +165,8 @@
 //            if (in != null) {
 //                in.close();
 //            }
-//            if (process != null) {
-//                process.destroy();
+//            if (execute != null) {
+//                execute.destroy();
 //            }
 //        }
 //    }

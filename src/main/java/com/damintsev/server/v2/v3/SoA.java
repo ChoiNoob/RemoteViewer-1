@@ -32,20 +32,11 @@ public class SoA {
     }
 
     public SoA() {
-                List<Station> stations = DB.getInstance().getStationList();
+        List<Station> stations = DB.getInstance().getStationList();
         logger.info(threadName + "Loaded from database " + stations.size() + " stations");
         for (Station station : stations) {
             createWorker(station);
         }
-//                logger.info(threadName + "Loaded from database " + stations.size() + " stations");
-//                for (Station station : stations) {
-//                    List<Task> tasks = DB.getInstance().loadTasksForStation(station);
-//                    logger.info(threadName + "For station id=" + station.getId() + " name=" + station.getName() + " loaded tasks=" + tasks.size());
-//                    ThreadExecutor thread = new ThreadExecutor(station, tasks, stateMap);
-//                    threads.put(thread.getThreadId(), thread);
-//                }
-//            }
-//        }.run();
     }
 
     private void createWorker(Station station) {

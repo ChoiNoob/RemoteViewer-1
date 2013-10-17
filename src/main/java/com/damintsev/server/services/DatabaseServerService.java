@@ -24,19 +24,10 @@ import java.util.List;
  * Time: 11:24
  */
 public class DatabaseServerService extends RemoteServiceServlet implements DatabaseService {
-    SoA soA;
+
     public DatabaseServerService() {
         SoA.getInstance();
     }
-
-//    public Task saveTask(final Task task) {
-//              new Thread(new Runnable() {
-//                  public void run() {
-//                      SoA.getInstance().updateTask(task);
-//                  }
-//              }).start();
-//        return DB.getInstance().saveTask(task);
-//    }
 
     public Task loadTask(Long id) {
         return DB.getInstance().getTask(id);
@@ -49,11 +40,6 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     public Station loadStation(Long id) {
         return DB.getInstance().getStation(id);
     }
-
-//    public Station saveStation(Station station) {
-//       SoA.getInstance().updateStation(station);
-//       return DB.getInstance().saveStation(station);
-//    }
 
     public void deleteStation(Station station) {
         SoA.getInstance().deleteStation(station);
@@ -74,17 +60,13 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     }
 
     public PagingLoadResult<Station> getStationList() {
-                List<Station> stations = DB.getInstance().getStationList();   //todo мб можно обойтись одной строкой
+        List<Station> stations = DB.getInstance().getStationList();   //todo мб можно обойтись одной строкой
         return new PagingLoadResultBean<Station>(stations, 0, stations.size());
     }
 
     public void deleteLabel(Label label) {
         DB.getInstance().deleteLabel(label);
     }
-
-//    public Label saveLabel(Label label) {
-//        return DB.getInstance().saveLabel(label);
-//    }
 
     public Label loadLabel(Long id) {
         return DB.getInstance().getLabel(id);

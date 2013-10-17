@@ -15,7 +15,9 @@ import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 public abstract class Connection {
 
     public abstract Connection init(Station station) throws ConnectException;
-    public abstract String process(Task task) throws ExecutingTaskException;
+
+    public abstract String execute(Task task) throws ExecutingTaskException;
+
     public abstract void destroy();
 
 }

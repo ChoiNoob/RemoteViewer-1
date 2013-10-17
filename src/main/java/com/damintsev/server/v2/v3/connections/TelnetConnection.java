@@ -28,7 +28,7 @@ public class TelnetConnection extends Connection {
     }
 
     @Override
-    public String process(Task task) throws ExecutingTaskException {
+    public String execute(Task task) throws ExecutingTaskException {
        if(worker == null || !worker.isConnected())
            throw new RuntimeException("Telnet worker not initialized!");
         return worker.execute(task.getCommand()).getResultText(); //todo convert to string!
@@ -37,10 +37,5 @@ public class TelnetConnection extends Connection {
     @Override
     public void destroy() {
         worker.disconnect();
-    }
-
-//    @Override
-    public Long getId() {
-        return station.getId();
     }
 }

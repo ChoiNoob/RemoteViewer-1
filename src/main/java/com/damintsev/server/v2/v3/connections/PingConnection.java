@@ -21,12 +21,12 @@ public class PingConnection extends Connection {
     private InputStream is = null;
 
     @Override
-    protected Connection init(Station station) throws ConnectException {
+    public Connection init(Station station) throws ConnectException {
         return this;
     }
 
     @Override
-    protected String process(Task task) throws ExecutingTaskException {
+    public String execute(Task task) throws ExecutingTaskException {
 
         try {
             process = Runtime.getRuntime().exec(task.getCommand());
@@ -49,12 +49,12 @@ public class PingConnection extends Connection {
                 }
             }
         }
-
     }
 
     @Override
     public void destroy() {
-        process.destroy();
+        if (process!=null)
+            process.destroy();
         if (is != null) {
             try {
                 is.close();
@@ -62,10 +62,5 @@ public class PingConnection extends Connection {
                 e.printStackTrace();  //todo нужно что-то делать ?!
             }
         }
-    }
-
-//    @Override
-    public Long getId() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

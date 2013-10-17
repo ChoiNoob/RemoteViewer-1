@@ -28,26 +28,10 @@ public class ConnectionPool {
         connectionMap = new HashMap<String, Connection>();
     }
 
-//    public ConnectionPool addConnection(Connection connection) {
-//        connectionMap.put(connection.getId(), connection);
-//        return this;
-//    }
-
     public Connection getConnection(Task task) throws ConnectException {
-//        switch (task.getType()) {
-//            case TELNET: {
-                Connection connection = connectionMap.get(task.getStringId());
-                if(connection == null) connection = create(task.getStation(), task.getType());
-                return connection;
-//            }
-//            case IP: {
-//                Connection connection = connectionMap.get(task.getStringId() + "IP");//todo красиво параметризовать
-//                if(connection == null) connection = create(task.getStation(), task.getType());
-//                return connection;
-//            }
-//            default:throw new ConnectException(new Exception("Connection not found!"));
-//        }
-//        return null;
+        Connection connection = connectionMap.get(task.getStringId());
+        if (connection == null) connection = create(task.getStation(), task.getType());
+        return connection;
     }
 
     public Connection create(Station station, TaskType type) throws ConnectException {
@@ -70,13 +54,17 @@ public class ConnectionPool {
     }
 
     public void dropConnection(Station station) {
-        if(connectionMap.get(station.getStringId()) != null)
+        if(connectionMap.get(station.getStringId()) != null) {
+            System.out.println("destroyng connection=" +station.getStringId());
             connectionMap.get(station.getStringId()).destroy();
+            connectionMap.remove(station.getStringId());
+        }
     }
 
     public void dropConnections() {
         for(Connection connection : connectionMap.values()) {
             connection.destroy();
         }
+        connectionMap.clear();
     }
 }

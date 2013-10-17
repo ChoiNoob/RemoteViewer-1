@@ -44,15 +44,7 @@ public class ThreadExecutor extends Thread {
         this.tasks = tasks;
         this.taskStates = map;
         errors = new HashMap<String, Integer>(tasks.size() + 1);
-//        new Runnable() {
-//            public void run() {
-//                try {      //todo надо ли это вообще ?
-//                    ConnectionPool.getInstance().create(station);
-//                } catch (ConnectException conn) {
-//                    //todo придумать что делать с айдишниками
-//                }
-//            }
-//        }.run();
+        //todo надо ли инициализировать коннект сейчас ?
         for(Task task : tasks) {
             taskStates.put(task.getStringId(), new TaskState(ExecuteState.INIT));
         }
@@ -66,7 +58,7 @@ public class ThreadExecutor extends Thread {
             logger.info("Executing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType());
             Connection connection = ConnectionPool.getInstance().getConnection(task);
             TaskProcessor taskProcessor = TaskPool.getInstance().getTaskProcessor(task.getType());
-            state = taskProcessor.process(connection.process(task));
+            state = taskProcessor.process(connection.execute(task));
             state.setId(task.getStringId());
             checkForErrors(task);
         } catch (ConnectException conn) {
@@ -137,7 +129,7 @@ public class ThreadExecutor extends Thread {
             task.setState(ExecuteState.ERROR);
             if (connectionError) {
                 for (TaskState state : taskStates.values()) {
-//todo urgent!                   if (state.getId().equals(taskId)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
+                   if (state.getId().equals(taskId)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
                         state.setState(ExecuteState.UNKNOWN);
                 }
             }
@@ -149,16 +141,16 @@ public class ThreadExecutor extends Thread {
     public void updateTask(Task newTask) {
         pause();
         Task taskToRemove = null;
-        for(Task oldTask : tasks) {
-            if(oldTask.getStringId().equals(newTask.getStringId())) {
-                taskToRemove  = oldTask;
+        for (Task oldTask : tasks) {
+            if (oldTask.getStringId().equals(newTask.getStringId())) {
+                taskToRemove = oldTask;
             }
         }
-        if(taskToRemove != null) {
+        if (taskToRemove != null) {
             logger.info("Deleting old task");
-               tasks.remove(taskToRemove);
-                           //todo не нравится мне это!!!
-                ConnectionPool.getInstance().dropConnection(taskToRemove.getStation());
+            tasks.remove(taskToRemove);
+            //todo не нравится мне это!!!
+            ConnectionPool.getInstance().dropConnection(taskToRemove.getStation());
         }
         tasks.add(newTask);
         taskStates.put(newTask.getStringId(), new TaskState());
