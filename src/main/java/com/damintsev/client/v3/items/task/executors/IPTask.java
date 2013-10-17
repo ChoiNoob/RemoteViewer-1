@@ -13,9 +13,9 @@ import java.util.regex.Pattern;
  * Date: 09.10.13
  * Time: 21:19
  */
-public class PingTask extends TaskExecutor {
+public class IPTask extends TaskProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskExecutor.class);
+    private static final Logger logger = LoggerFactory.getLogger(TaskProcessor.class);
 
     @Override
     protected TaskState process(String command) {

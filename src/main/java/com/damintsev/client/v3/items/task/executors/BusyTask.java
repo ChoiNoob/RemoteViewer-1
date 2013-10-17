@@ -7,7 +7,7 @@ import com.damintsev.client.v3.items.task.TaskState;
  * Date: 09.10.13
  * Time: 0:18
  */
-public class BusyTask extends TaskExecutor {
+public class BusyTask extends TaskProcessor {
 
     @Override
     public TaskState process(String stri) {

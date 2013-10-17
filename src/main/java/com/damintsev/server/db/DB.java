@@ -4,7 +4,6 @@ import com.damintsev.client.devices.Item;
 import com.damintsev.client.v3.items.Label;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.DatabaseType;
-import com.damintsev.client.v3.items.task.ImageWithType;
 import com.damintsev.client.v3.items.task.Task;
 import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.server.v2.v3.SaveItem;
@@ -506,10 +505,6 @@ public class DB {
             }
         }
     }
-//
-//    public Task saveTask(Task task) {
-//
-//    }
 
     public void deleteLabel(Label label) {
         logger.info("delete Label id=" + label.getId() + " name=" + label.getName());
@@ -537,11 +532,6 @@ public class DB {
             }
         }
     }
-
-//    public Label saveLabel(Label label) {
-//
-//    }
-
 
     public Label getLabel(Long id) {
         logger.info("load Label id=" + id);

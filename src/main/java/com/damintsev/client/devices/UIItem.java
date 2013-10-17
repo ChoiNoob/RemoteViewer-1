@@ -133,8 +133,5 @@ public abstract class UIItem extends Label {
         return item;
     }
 
-    //todo сделть абстранктным и переопределить нафиг
-    public void openEditor(Runnable runnable) {
-
-    }
+    public abstract void openEditor(Runnable runnable);
 }

@@ -2,6 +2,8 @@ package com.damintsev.server.v2.v3;
 
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.Task;
+import com.damintsev.client.v3.items.task.executors.TaskPool;
+import com.damintsev.client.v3.items.task.executors.TaskProcessor;
 import com.damintsev.server.v2.v3.connections.Connection;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import com.damintsev.client.v3.items.task.ExecuteState;
@@ -63,8 +65,8 @@ public class ThreadExecutor extends Thread {
         try {
             logger.info("Executing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType());
             Connection connection = ConnectionPool.getInstance().getConnection(task);
-            System.out.println("conn=" + connection);
-            state = connection.execute(task);
+            TaskProcessor taskProcessor = TaskPool.getInstance().getTaskProcessor(task.getType());
+            state = taskProcessor.process(connection.process(task));
             state.setId(task.getStringId());
             checkForErrors(task);
         } catch (ConnectException conn) {
@@ -155,9 +157,12 @@ public class ThreadExecutor extends Thread {
         if(taskToRemove != null) {
             logger.info("Deleting old task");
                tasks.remove(taskToRemove);
+                           //todo не нравится мне это!!!
+                ConnectionPool.getInstance().dropConnection(taskToRemove.getStation());
         }
         tasks.add(newTask);
         taskStates.put(newTask.getStringId(), new TaskState());
+
         iterator = null;
         unpause();
     }

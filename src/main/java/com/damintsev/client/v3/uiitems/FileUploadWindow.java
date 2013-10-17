@@ -19,7 +19,9 @@ import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
+import com.sencha.gxt.widget.core.client.container.AbstractHtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HorizontalLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.HtmlLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SubmitCompleteEvent;
@@ -76,7 +78,7 @@ public class FileUploadWindow extends Window{
     private Image newImage;
 
     protected FileUploadWindow() {
-        setPixelSize(400,400);
+        setPixelSize(550,450);
         VerticalLayoutContainer panel = new VerticalLayoutContainer();
         ContentPanel con = new ContentPanel();
         con.setHeaderVisible(false);
@@ -116,12 +118,14 @@ public class FileUploadWindow extends Window{
         tr.getStyle().setWidth(400, Style.Unit.PX);
         Element td = DOM.createTD();
         td.getStyle().setWidth(200, Style.Unit.PX);
+        td.getStyle().setHeight(200, Style.Unit.PX);
         td.appendChild(newImage.getElement());
         tr.appendChild(td);
 //        hor.add(newImage);
         Image oldImage = new Image("image?type=station");
         td = DOM.createTR();
         td.getStyle().setWidth(200, Style.Unit.PX);
+        td.getStyle().setHeight(200, Style.Unit.PX);
         td.appendChild(oldImage.getElement());
         tr.appendChild(td);
 
@@ -130,11 +134,13 @@ public class FileUploadWindow extends Window{
 //        hor.add(oldImage);
 //        Label test = new Label("");
 //        test.getElement().appendChild(table);
-        label = new FieldLabel();
-        label.setText("");
-        label.getElement().appendChild(table);
-                label.setLabelWidth(1);
-        panel.add(label);
+//        label = new FieldLabel();
+//        label.setText("");
+//        label.getElement().appendChild(table);
+//                label.setLabelWidth(1);
+        DOM.appendChild(panel.getElement(), table);
+
+//        panel.add(label);
 
         con.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
