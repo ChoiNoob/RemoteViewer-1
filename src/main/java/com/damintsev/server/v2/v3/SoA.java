@@ -1,5 +1,6 @@
 package com.damintsev.server.v2.v3;
 
+import com.damintsev.client.devices.Item;
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.server.db.DB;
 import com.damintsev.client.v3.items.task.Task;
@@ -27,7 +28,7 @@ public class SoA {
     private String threadName = Thread.currentThread().getName() + " ";
 
     public static SoA getInstance() {
-        if (instance == null) {instance = new SoA();logger.info("new instance!");}
+        if (instance == null) {instance = new SoA();}
         return instance;
     }
 
@@ -57,24 +58,10 @@ public class SoA {
         return stateMap;
     }
 
-    public void updateStation(Station station) {
-        ThreadExecutor thread = threads.get(station.getStringId());
-        thread.updateStation(station);
-    }
-
-    public void deleteStation(Station station) {
-        threads.get(station.getStringId()).destroyProcess();
-        threads.remove(station.getStringId());
-    }
-
-    public void updateTask(Task task) {
-        String stationId = task.getParentId();
-        ThreadExecutor thread = threads.get(stationId);
-        thread.updateTask(task);
-    }
-
-    public void deleteTask(Task task) {
-        ThreadExecutor executor = threads.get(task.getParentId());
-        executor.deleteTask(task);
+    public void updateEvent(Item item) {
+        if(item.getStation() == null) return;
+        ThreadExecutor threadExecutor = threads.get(item.getStation().getStringId());
+        threadExecutor.destroyProcess();
+        createWorker(item.getStation());
     }
 }

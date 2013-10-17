@@ -42,8 +42,8 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     }
 
     public void deleteStation(Station station) {
-        SoA.getInstance().deleteStation(station);
         DB.getInstance().deleteStation(station);
+        SoA.getInstance().updateEvent(station);
     }
 
     public List<TaskState> loadTaskStates() {
@@ -55,8 +55,8 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     }
 
     public void deleteTask(Task task) {
-        SoA.getInstance().deleteTask(task);
         DB.getInstance().deleteTask(task);
+        SoA.getInstance().updateEvent(task);
     }
 
     public PagingLoadResult<Station> getStationList() {
@@ -73,7 +73,9 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
     }
 
     public Item saveItem(Item item) {
-        return DB.getInstance().saveItem(item);
+        item = DB.getInstance().saveItem(item);
+        SoA.getInstance().updateEvent(item);
+        return item;
     }
 
     public void saveImage(String type) {

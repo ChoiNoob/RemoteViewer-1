@@ -138,37 +138,37 @@ public class ThreadExecutor extends Thread {
         return task;
     }
 
-    public void updateTask(Task newTask) {
-        pause();
-        Task taskToRemove = null;
-        for (Task oldTask : tasks) {
-            if (oldTask.getStringId().equals(newTask.getStringId())) {
-                taskToRemove = oldTask;
-            }
-        }
-        if (taskToRemove != null) {
-            logger.info("Deleting old task");
-            tasks.remove(taskToRemove);
-            //todo не нравится мне это!!!
-            ConnectionPool.getInstance().dropConnection(taskToRemove.getStation());
-        }
-        tasks.add(newTask);
-        taskStates.put(newTask.getStringId(), new TaskState());
-
-        iterator = null;
-        unpause();
-    }
-
-    public void updateStation(Station station) {
-        pause();
-        ConnectionPool.getInstance().dropConnection(station);
-        System.out.println("dropped");
-        for(Task task : tasks) {  //todo не очень красиво как мне кажется
-            task.setStation(station);
-        }
-        iterator = null;
-        unpause();
-    }
+//    public void updateTask(Task newTask) {
+//        pause();
+//        Task taskToRemove = null;
+//        for (Task oldTask : tasks) {
+//            if (oldTask.getStringId().equals(newTask.getStringId())) {
+//                taskToRemove = oldTask;
+//            }
+//        }
+//        if (taskToRemove != null) {
+//            logger.info("Deleting old task");
+//            tasks.remove(taskToRemove);
+//            //todo не нравится мне это!!!
+//            ConnectionPool.getInstance().dropConnection(taskToRemove.getStation());
+//        }
+//        tasks.add(newTask);
+//        taskStates.put(newTask.getStringId(), new TaskState());
+//
+//        iterator = null;
+//        unpause();
+//    }
+//
+//    public void updateStation(Station station) {
+//        pause();
+//        ConnectionPool.getInstance().dropConnection(station);
+//        System.out.println("dropped");
+//        for(Task task : tasks) {  //todo не очень красиво как мне кажется
+//            task.setStation(station);
+//        }
+//        iterator = null;
+//        unpause();
+//    }
 
     public void destroyProcess() {
         ConnectionPool.getInstance().dropConnection(station);
@@ -178,18 +178,18 @@ public class ThreadExecutor extends Thread {
         interrupt();
     }
 
-    public void deleteTask(Task task) {
-        pause();
-        for(Task oldTask : tasks) {
-            if(oldTask.getStringId().equals(task.getStringId())) {
-                tasks.remove(oldTask);
-            }
-        }
-        taskStates.remove(task.getStringId());
-        errors.remove(task.getStringId());
-        iterator = null;
-        unpause();
-    }
+//    public void deleteTask(Task task) {
+//        pause();
+//        for(Task oldTask : tasks) {
+//            if(oldTask.getStringId().equals(task.getStringId())) {
+//                tasks.remove(oldTask);
+//            }
+//        }
+//        taskStates.remove(task.getStringId());
+//        errors.remove(task.getStringId());
+//        iterator = null;
+//        unpause();
+//    }
 
     public void pause() {
         System.out.println("CPT PAUSE");

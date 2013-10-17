@@ -29,7 +29,7 @@ public class ConnectionPool {
     }
 
     public Connection getConnection(Task task) throws ConnectException {
-        Connection connection = connectionMap.get(task.getStringId());
+        Connection connection = connectionMap.get(task.getStringId() + task.getType());
         if (connection == null) connection = create(task.getStation(), task.getType());
         return connection;
     }
@@ -38,14 +38,14 @@ public class ConnectionPool {
         Connection conn;
         System.err.println("TYPE=" + type);
         switch (type) {
-            case TELNET:
+//            case TELNET:
+            case ISDN:
                 conn = new TelnetConnection().init(station);
-                connectionMap.put(station.getStringId(), conn);
+                connectionMap.put(station.getStringId() + type, conn);
                 return conn;
             case IP:
-            case ISDN:
                 conn = new PingConnection().init(station);
-                connectionMap.put(station.getStringId() + "IP", conn);//todo параметризовать
+                connectionMap.put(station.getStringId() + type, conn);//todo параметризовать
                 return conn;
             default:
                 throw new ConnectException(new Exception("Connection not found"));

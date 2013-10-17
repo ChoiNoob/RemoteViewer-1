@@ -55,12 +55,10 @@ public class SaveItem implements Visitor<Item> {
                   e.printStackTrace();
               }
           }
-
           return label;
     }
 
     public Station visit(Station station) {
-        SoA.getInstance().updateStation(station);   //todo вынести отсюда ибо этот класс для работы с БД
         logger.info("saving Station");
         Connection connection = null;
         PreparedStatement statement = null;
@@ -123,7 +121,6 @@ public class SaveItem implements Visitor<Item> {
 
     public Task visit(Task task) {
         logger.info("saving Task id=" + task.getId() + " name=" + task.getName());
-        SoA.getInstance().updateTask(task);//todo вынести отсюда ибо это для работы с БД
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
