@@ -65,6 +65,7 @@
     <orderEntry type="library" name="Maven: com.sencha.gxt:gxt:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.allen-sauer.gwt.dnd:gwt-dnd:3.1.2" level="project" />
     <orderEntry type="library" name="Maven: commons-net:commons-net:3.3" level="project" />
+    <orderEntry type="library" name="Maven: commons-fileupload:commons-fileupload:1.2.2" level="project" />
     <orderEntry type="library" name="Maven: com.sencha.gxt:gxt-chart:3.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.5" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.6.1" level="project" />
