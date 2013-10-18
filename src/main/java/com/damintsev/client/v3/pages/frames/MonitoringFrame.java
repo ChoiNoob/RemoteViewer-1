@@ -3,11 +3,11 @@ package com.damintsev.client.v3.pages.frames;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.UIItem;
-import com.damintsev.client.service.Service2;
-import com.damintsev.client.v3.items.task.TaskState;
-import com.damintsev.client.v3.items.visitor.UIVisitor;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.old.devices.UIItem;
+import com.damintsev.client.service.Service;
+import com.damintsev.common.pojo.TaskState;
+import com.damintsev.common.visitor.UIVisitor;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;
 import com.damintsev.client.utils.Position;
@@ -203,7 +203,7 @@ public class MonitoringFrame {
         Scheduler.getInstance().start(this.getClass(), new Runnable() {
             public void run() {
 //                System.out.println("Call loadTaskStates date=" + new Date());
-                Service2.database.loadTaskStates(new AsyncCallback<List<TaskState>>() {
+                Service.instance.loadTaskStates(new AsyncCallback<List<TaskState>>() {
                     public void onFailure(Throwable caught) {
                         //todo грамотно обраотать ошибку!
                     }

@@ -1,15 +1,16 @@
 package com.damintsev.client.service;
 
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.v3.items.Label;
-import com.damintsev.client.v3.items.Station;
-import com.damintsev.client.v3.items.task.Task;
-import com.damintsev.client.v3.items.task.TaskState;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.common.pojo.Label;
+import com.damintsev.common.pojo.Station;
+import com.damintsev.common.pojo.Label;
+import com.damintsev.common.pojo.Station;
+import com.damintsev.common.pojo.Task;
+import com.damintsev.common.pojo.TaskState;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 
-import java.io.InputStream;
 import java.util.List;
 
 /**

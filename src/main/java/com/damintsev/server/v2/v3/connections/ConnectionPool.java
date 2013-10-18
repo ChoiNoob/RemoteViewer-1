@@ -1,8 +1,9 @@
 package com.damintsev.server.v2.v3.connections;
 
-import com.damintsev.client.v3.items.Station;
-import com.damintsev.client.v3.items.task.Task;
-import com.damintsev.client.v3.items.task.TaskType;
+import com.damintsev.common.pojo.Station;
+import com.damintsev.common.pojo.Station;
+import com.damintsev.common.pojo.Task;
+import com.damintsev.common.pojo.TaskType;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 
 import java.util.HashMap;

@@ -1,7 +1,7 @@
 package com.damintsev.server.old;
 
-import com.damintsev.client.devices.Device;
-import com.damintsev.client.devices.graph.BusyInfo;
+import com.damintsev.client.old.devices.Device;
+import com.damintsev.client.old.devices.graph.BusyInfo;
 import org.hibernate.Query;
 import org.hibernate.Session;
 

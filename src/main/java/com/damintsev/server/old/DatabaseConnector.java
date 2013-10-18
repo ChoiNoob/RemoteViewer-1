@@ -1,10 +1,10 @@
 //package com.damintsev.server.db;
 //
-//import com.damintsev.client.devices.*;
-//import com.damintsev.client.devices.enums.DeviceType;
-//import com.damintsev.client.devices.enums.Status;
-//import com.damintsev.client.devices.graph.BusyInfo;
-//import com.damintsev.client.v3.items.Station;
+//import com.damintsev.client.old.devices.*;
+//import com.damintsev.client.old.devices.enums.DeviceType;
+//import com.damintsev.client.old.devices.enums.Status;
+//import com.damintsev.client.old.devices.graph.BusyInfo;
+//import com.damintsev.common.pojo.Station;
 //import org.slf4j.LoggerFactory;
 //
 //import java.sql.*;
@@ -925,7 +925,7 @@
 //            ResultSet resultSet = statement.executeQuery();
 //            List<String> toDelete = new ArrayList<String>();
 //            while (resultSet.next()) {
-//                logger.info("Found at database existing prefix =" + resultSet.getString("prefix"));
+//                logger.info("Found at instance existing prefix =" + resultSet.getString("prefix"));
 //                toDelete.add(resultSet.getString("prefix"));
 //            }
 //            for(String delete : toDelete) {

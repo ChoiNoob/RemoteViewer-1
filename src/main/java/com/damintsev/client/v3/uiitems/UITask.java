@@ -1,10 +1,8 @@
 package com.damintsev.client.v3.uiitems;
 
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.UIItem;
-import com.damintsev.client.v3.items.task.Task;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.old.devices.UIItem;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 

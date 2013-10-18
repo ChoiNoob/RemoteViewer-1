@@ -1,7 +1,7 @@
 package com.damintsev.server.old.ftp;
 
-import com.damintsev.client.devices.BillingInfo;
-import com.damintsev.client.devices.FTPSettings;
+import com.damintsev.client.old.devices.BillingInfo;
+import com.damintsev.client.old.devices.FTPSettings;
 //import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.old.BillingStatistics;
 import org.slf4j.LoggerFactory;

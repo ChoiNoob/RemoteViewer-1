@@ -1,9 +1,9 @@
-//package com.damintsev.server.telnet;
+//package com.damintsev.server.v2.v3.connections.telnet;
 //
-//import com.damintsev.client.devices.*;
-//import com.damintsev.client.devices.enums.DeviceType;
-//import com.damintsev.client.devices.enums.Status;
-//import com.damintsev.client.devices.graph.BusyInfo;
+//import com.damintsev.client.old.devices.*;
+//import com.damintsev.client.old.devices.enums.DeviceType;
+//import com.damintsev.client.old.devices.enums.Status;
+//import com.damintsev.client.old.devices.graph.BusyInfo;
 //import com.damintsev.server.old.Executor;
 //import com.damintsev.server.old.SingleThread;
 //import com.damintsev.server.db.DatabaseConnector;
@@ -361,7 +361,7 @@
 //            stop();
 //        if (devices == null) devices = new ConcurrentHashMap<Long, Device>();
 //        List<Item> items =  DatabaseConnector.getInstance().loadItems();
-//        logger.info("Loading information from database: loaded=" + items.size() + " items.");
+//        logger.info("Loading information from instance: loaded=" + items.size() + " items.");
 //        for(Item item : items) {
 //            logger.info("Adding item=" + item.getId() + " name=" + item.getName() + " type=" + item.getType());
 //            devices.put(item.getId(), item.getData());

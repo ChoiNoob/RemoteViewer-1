@@ -1,7 +1,7 @@
 package com.damintsev.server.old.ftp;
 
-import com.damintsev.client.devices.BillingInfo;
-import com.damintsev.client.devices.FTPSettings;
+import com.damintsev.client.old.devices.BillingInfo;
+import com.damintsev.client.old.devices.FTPSettings;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;

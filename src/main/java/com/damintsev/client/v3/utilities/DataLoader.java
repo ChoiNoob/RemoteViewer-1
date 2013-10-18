@@ -1,9 +1,8 @@
 package com.damintsev.client.v3.utilities;
 
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.old.devices.UIItem;
 import com.damintsev.client.service.Service;
-import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -26,7 +25,7 @@ public class DataLoader {
     }
 
     public void load() {
-        Service2.database.loadUIItems(new AsyncCallback<List<Item>>() {
+        Service.instance.loadUIItems(new AsyncCallback<List<Item>>() {
             public void onFailure(Throwable caught) {
                 //todo!!
             }
@@ -46,7 +45,7 @@ public class DataLoader {
         for(UIItem uiItem : uiItems) {
             items.add(uiItem.getItem());
         }
-        Service2.database.saveItemPosition(items, new AsyncCallback<Void>() {
+        Service.instance.saveItemPosition(items, new AsyncCallback<Void>() {
             public void onFailure(Throwable caught) {
                 //todo!!
             }

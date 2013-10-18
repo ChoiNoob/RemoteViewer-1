@@ -1,10 +1,11 @@
 package com.damintsev.client.v3.pages.windows;
 
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.service.Service2;
-import com.damintsev.client.v3.items.Label;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.service.Service;
+import com.damintsev.common.pojo.Label;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.utils.Dialogs;
+import com.damintsev.common.pojo.Label;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -57,7 +58,7 @@ public class LabelWindow implements Editor<Label> {
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалено утройство", new Runnable() {
                     public void run() {
-                        Service2.database.deleteLabel(label, new AsyncCallback<Void>() {
+                        Service.instance.deleteLabel(label, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
                                 //To change body of implemented methods use File | Settings | File Templates.
                             }
@@ -79,7 +80,7 @@ public class LabelWindow implements Editor<Label> {
                 label = driver.flush();
                 if (driver.hasErrors()) return;
                 window.mask();
-                Service2.database.saveItem(label, new AsyncCallback<Item>() {
+                Service.instance.saveItem(label, new AsyncCallback<Item>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Cannot save device =" + caught.getMessage());
                     }
@@ -113,7 +114,7 @@ public class LabelWindow implements Editor<Label> {
         } else {
             delete.show();
             window.mask();
-            Service2.database.loadLabel(id, new AsyncCallback<Label>() {
+            Service.instance.loadLabel(id, new AsyncCallback<Label>() {
                 public void onFailure(Throwable caught) {
                     Dialogs.alert("Error loading device =" + caught.getMessage());
                 }

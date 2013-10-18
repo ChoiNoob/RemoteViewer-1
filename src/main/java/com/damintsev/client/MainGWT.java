@@ -1,8 +1,7 @@
 package com.damintsev.client;
 
-import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
-import com.damintsev.client.uiframe.UIRootPanel;
+import com.damintsev.client.old.devices.uiframe.UIRootPanel;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -50,13 +49,6 @@ public class MainGWT implements EntryPoint {
 
     private void onModuleLoad2() {
         RootPanel.get().add(UIRootPanel.get().getContent());
-        Service.instance.start(new AsyncCallback<Void>() {
-            public void onFailure(Throwable caught) {
-            }
-
-            public void onSuccess(Void result) {
-            }
-        });
         Window.addCloseHandler(new CloseHandler<Window>() {
             public void onClose(CloseEvent<Window> event) {
                 MonitoringFrame.get().stop();

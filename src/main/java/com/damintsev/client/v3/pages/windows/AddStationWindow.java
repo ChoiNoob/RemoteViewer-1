@@ -1,10 +1,11 @@
 package com.damintsev.client.v3.pages.windows;
 
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.service.Service2;
-import com.damintsev.client.v3.items.Station;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.service.Service;
+import com.damintsev.common.pojo.Station;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.utils.Dialogs;
+import com.damintsev.common.pojo.Station;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
@@ -103,7 +104,7 @@ public class AddStationWindow implements Editor<Station> {
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалена станция и все связанные с ней обькты", new Runnable() {
                     public void run() {
-                        Service2.database.deleteStation(station, new AsyncCallback<Void>() {
+                        Service.instance.deleteStation(station, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
                                 //todo realize
                             }
@@ -126,7 +127,7 @@ public class AddStationWindow implements Editor<Station> {
                 station = editor.flush();
                 if (editor.hasErrors()) return;
                 window.mask();
-                Service2.database.saveItem(station, new AsyncCallback<Item>() {
+                Service.instance.saveItem(station, new AsyncCallback<Item>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Error saving station to db " + caught.getMessage());
                     }
@@ -162,7 +163,7 @@ public class AddStationWindow implements Editor<Station> {
             editor.edit(station);
         } else {
             window.mask();
-            Service2.database.loadStation(stationId, new AsyncCallback<Station>() {
+            Service.instance.loadStation(stationId, new AsyncCallback<Station>() {
                 public void onFailure(Throwable caught) {
                     Dialogs.alert("Error while loading Station =" + caught.getMessage());
                 }

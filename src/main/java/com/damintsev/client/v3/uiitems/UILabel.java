@@ -1,7 +1,7 @@
 package com.damintsev.client.v3.uiitems;
 
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.old.devices.UIItem;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
 import com.google.gwt.user.client.ui.Label;

@@ -16,5 +16,6 @@
 <!--osdijfsl;dfjlsfj;liasjf;liasfasf-->
     <collapse-all-properties />
     <source path='client'/>
+    <source path='common'/>
 
 </module>

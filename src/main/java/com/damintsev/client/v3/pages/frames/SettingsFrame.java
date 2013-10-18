@@ -1,11 +1,11 @@
 package com.damintsev.client.v3.pages.frames;
 
-import com.damintsev.client.devices.UIItem;
+import com.damintsev.client.old.devices.UIItem;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
-import com.damintsev.client.v3.uiitems.FileUploadWindow;
-import com.damintsev.client.windows.PrefixConfigWindow;
+import com.damintsev.client.v3.pages.windows.FileUploadWindow;
+import com.damintsev.client.old.devices.windows.PrefixConfigWindow;
 import com.damintsev.client.utils.Dialogs;
 import com.damintsev.client.utils.Utils;
 import com.google.gwt.dom.client.Style;

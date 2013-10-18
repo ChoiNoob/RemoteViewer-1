@@ -4,9 +4,8 @@ import com.google.gwt.core.client.GWT;
 
 /**
  * Created by adamintsev
- * Date: 08.08.13 15:30
+ * Date: 10.10.13 18:54
  */
 public class Service {
-    public static ClientServiceAsync instance = GWT.create(ClientService.class);
-
+    public static DatabaseServiceAsync instance = GWT.create(DatabaseService.class);
 }

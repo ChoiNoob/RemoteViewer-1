@@ -1,6 +1,6 @@
 package com.damintsev.server;
 
-import com.damintsev.client.devices.BillingInfo;
+import com.damintsev.client.old.devices.BillingInfo;
 import com.damintsev.server.old.BillingStatistics;
 
 import java.util.Date;

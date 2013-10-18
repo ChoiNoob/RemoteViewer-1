@@ -1,10 +1,10 @@
 //package com.damintsev.server.services;
 //
-//import com.damintsev.client.devices.*;
-//import com.damintsev.client.devices.enums.DeviceType;
-//import com.damintsev.client.devices.graph.BusyInfo;
+//import com.damintsev.client.old.devices.*;
+//import com.damintsev.client.old.devices.enums.DeviceType;
+//import com.damintsev.client.old.devices.graph.BusyInfo;
 //import com.damintsev.client.service.ClientService;
-//import com.damintsev.client.v3.items.Station;
+//import com.damintsev.common.pojo.Station;
 //import com.damintsev.server.old.BillingStatistics;
 //import com.damintsev.server.old.CleanManager;
 ////import com.damintsev.server.db.DatabaseConnector;

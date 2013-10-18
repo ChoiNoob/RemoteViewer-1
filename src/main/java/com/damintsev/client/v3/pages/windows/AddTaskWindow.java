@@ -1,10 +1,11 @@
 package com.damintsev.client.v3.pages.windows;
 
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.service.Service2;
-import com.damintsev.client.v3.items.Station;
-import com.damintsev.client.v3.items.task.Task;
-import com.damintsev.client.v3.items.task.TaskType;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.service.Service;
+import com.damintsev.common.pojo.Station;
+import com.damintsev.common.pojo.Station;
+import com.damintsev.common.pojo.Task;
+import com.damintsev.common.pojo.TaskType;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
@@ -75,7 +76,7 @@ public class AddTaskWindow implements Editor<Task>{
 
             public void load(PagingLoadConfig config, final com.google.gwt.core.client.Callback<PagingLoadResult<Station>, Throwable> callback) {
                 System.out.println("load value");
-                Service2.database.getStationList(new AsyncCallback<PagingLoadResult<Station>>() {
+                Service.instance.getStationList(new AsyncCallback<PagingLoadResult<Station>>() {
 
                     public void onFailure(Throwable caught) {
                         //todo ?!
@@ -131,7 +132,7 @@ public class AddTaskWindow implements Editor<Task>{
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалено утройство", new Runnable() {
                     public void run() {
-                        Service2.database.deleteTask(task, new AsyncCallback<Void>() {
+                        Service.instance.deleteTask(task, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
                                 //To change body of implemented methods use File | Settings | File Templates.
                             }
@@ -154,7 +155,7 @@ public class AddTaskWindow implements Editor<Task>{
                 if (driver.hasErrors()) return;
                 System.out.println("st id=" + task.getStation());
                 window.mask();
-                Service2.database.saveItem(task, new AsyncCallback<Item>() {
+                Service.instance.saveItem(task, new AsyncCallback<Item>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Cannot save device =" + caught.getMessage());
                     }
@@ -189,7 +190,7 @@ public class AddTaskWindow implements Editor<Task>{
         } else {
             delete.show();
             window.mask();
-            Service2.database.loadTask(id, new AsyncCallback<Task>() {
+            Service.instance.loadTask(id, new AsyncCallback<Task>() {
                 public void onFailure(Throwable caught) {
                     Dialogs.alert("Error loading device =" + caught.getMessage());
                 }

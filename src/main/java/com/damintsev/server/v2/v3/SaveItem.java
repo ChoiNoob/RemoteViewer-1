@@ -1,10 +1,10 @@
 package com.damintsev.server.v2.v3;
 
-import com.damintsev.client.devices.Item;
-import com.damintsev.client.v3.items.Label;
-import com.damintsev.client.v3.items.Station;
-import com.damintsev.client.v3.items.task.Task;
-import com.damintsev.client.v3.items.visitor.Visitor;
+import com.damintsev.client.old.devices.Item;
+import com.damintsev.common.pojo.Label;
+import com.damintsev.common.pojo.Station;
+import com.damintsev.common.pojo.Task;
+import com.damintsev.common.visitor.Visitor;
 import com.damintsev.server.db.Mysql;
 import org.slf4j.LoggerFactory;
 
