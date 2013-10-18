@@ -10,7 +10,7 @@ import com.damintsev.client.v3.items.task.TaskState;
 import com.damintsev.client.v3.items.visitor.UIVisitor;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;
-import com.damintsev.utils.Position;
+import com.damintsev.client.utils.Position;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.Style;

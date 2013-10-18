@@ -1,4 +1,4 @@
-package com.damintsev.server.db;
+package com.damintsev.server.old;
 
 
 import org.hibernate.SessionFactory;

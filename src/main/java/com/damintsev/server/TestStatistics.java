@@ -1,6 +1,7 @@
 package com.damintsev.server;
 
 import com.damintsev.client.devices.BillingInfo;
+import com.damintsev.server.old.BillingStatistics;
 
 import java.util.Date;
 import java.util.Random;

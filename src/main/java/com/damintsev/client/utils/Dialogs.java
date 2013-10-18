@@ -1,4 +1,4 @@
-package com.damintsev.utils;
+package com.damintsev.client.utils;
 
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.user.client.Event;

@@ -1,6 +1,5 @@
-package com.damintsev.server.ftp;
+package com.damintsev.server.old.ftp;
 
-import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.FTPSettings;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -10,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User: Damintsev Andrey

@@ -1,7 +1,6 @@
 package com.damintsev.client.windows;
 
 import com.damintsev.client.devices.UIItem;
-import com.damintsev.utils.Position;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.event.HideEvent;
 

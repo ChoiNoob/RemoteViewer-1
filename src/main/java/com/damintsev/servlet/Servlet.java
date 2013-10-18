@@ -6,7 +6,8 @@ package com.damintsev.servlet;
  * Time: 11:13
  */
 
-import com.damintsev.server.Executor;
+import com.damintsev.server.old.Executor;
+import com.damintsev.server.old.Executor;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

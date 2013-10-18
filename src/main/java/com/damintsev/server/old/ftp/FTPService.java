@@ -1,4 +1,4 @@
-package com.damintsev.server.ftp;
+package com.damintsev.server.old.ftp;
 
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.FTPSettings;

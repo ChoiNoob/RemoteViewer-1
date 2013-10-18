@@ -1,10 +1,10 @@
-package com.damintsev.server.billing;
+package com.damintsev.server.old.billing;
 
 import com.damintsev.client.devices.BillingInfo;
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.v3.items.Station;
 //import com.damintsev.server.db.DatabaseConnector;
-import com.damintsev.server.BillingStatistics;
+import com.damintsev.server.old.BillingStatistics;
 import com.damintsev.server.telnet.TelnetWorker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

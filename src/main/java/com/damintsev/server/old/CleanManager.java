@@ -1,5 +1,6 @@
-package com.damintsev.server.db;
+package com.damintsev.server.old;
 
+import com.damintsev.server.db.Mysql;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

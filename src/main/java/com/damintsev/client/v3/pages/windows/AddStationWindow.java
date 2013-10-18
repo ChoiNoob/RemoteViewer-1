@@ -1,15 +1,10 @@
 package com.damintsev.client.v3.pages.windows;
 
-import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.Item;
 import com.damintsev.client.service.Service2;
 import com.damintsev.client.v3.items.Station;
-import com.damintsev.client.devices.enums.DeviceType;
-import com.damintsev.client.devices.enums.Status;
-import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
-import com.damintsev.client.windows.UIFTPSettings;
-import com.damintsev.utils.Dialogs;
+import com.damintsev.client.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;

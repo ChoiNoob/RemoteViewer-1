@@ -1,4 +1,4 @@
-package com.damintsev.server.db;
+package com.damintsev.server.old;
 
 import com.damintsev.client.devices.Device;
 import com.damintsev.client.devices.graph.BusyInfo;

@@ -1,8 +1,7 @@
 package com.damintsev.client.windows;
 
 import com.damintsev.client.service.Service;
-import com.damintsev.utils.Dialogs;
-import com.google.gwt.core.client.GWT;
+import com.damintsev.client.utils.Dialogs;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;

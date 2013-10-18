@@ -2,14 +2,9 @@ package com.damintsev.client.devices;
 
 import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.TaskState;
-import com.damintsev.client.v3.items.task.TaskType;
-import com.damintsev.utils.Position;
-import com.damintsev.utils.Utils;
-import com.google.gwt.resources.client.ImageResource;
+import com.damintsev.client.utils.Position;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-
-import java.io.Serializable;
 
 /**
  * User: Damintsev Andrey

@@ -4,7 +4,7 @@ import com.damintsev.client.v3.items.Station;
 import com.damintsev.client.v3.items.task.TaskType;
 import com.damintsev.client.v3.items.visitor.CommonVisitor;
 import com.damintsev.client.v3.items.visitor.Visitor;
-import com.damintsev.utils.Position;
+import com.damintsev.client.utils.Position;
 
 import java.io.Serializable;
 

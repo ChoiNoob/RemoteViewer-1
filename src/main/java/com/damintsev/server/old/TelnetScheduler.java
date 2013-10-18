@@ -4,8 +4,8 @@
 //import com.damintsev.client.devices.enums.DeviceType;
 //import com.damintsev.client.devices.enums.Status;
 //import com.damintsev.client.devices.graph.BusyInfo;
-//import com.damintsev.server.Executor;
-//import com.damintsev.server.SingleThread;
+//import com.damintsev.server.old.Executor;
+//import com.damintsev.server.old.SingleThread;
 //import com.damintsev.server.db.DatabaseConnector;
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;

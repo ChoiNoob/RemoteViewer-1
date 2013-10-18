@@ -12,29 +12,9 @@
     <extend-property name="locale" values="ru_RU"/>
     <set-property name="gwt.logging.simpleRemoteHandler" value="ENABLED" />
 
-
-<!---->
-    <!--<set-property name="compiler.stackMode"-->
-                  <!--value="emulated" />-->
-    <!--<set-configuration-property name="compiler.emulatedStack.recordLineNumbers"-->
-                                <!--value="true"/>-->
-    <!--<set-configuration-property name="compiler.emulatedStack.recordFileNames"-->
-                                <!--value="true"/>-->
-
-    <!--<set-property name="compiler.stackMode"-->
-                  <!--value="emulated" />-->
-    <!--<set-configuration-property name="compiler.emulatedStack.recordLineNumbers"-->
-                                <!--value="true"/>-->
-    <!--<set-configuration-property name="compiler.emulatedStack.recordFileNames"-->
-                                <!--value="true"/>-->
-
-
     <entry-point class='com.damintsev.client.MainGWT'/>
 <!--osdijfsl;dfjlsfj;liasjf;liasfasf-->
-    <!--<extend-property name="user.agent" values="gecko1_8" />-->
     <collapse-all-properties />
-                                    <!--asdasdasdasdasdasd-->
     <source path='client'/>
-    <source path='utils'/>
 
 </module>
