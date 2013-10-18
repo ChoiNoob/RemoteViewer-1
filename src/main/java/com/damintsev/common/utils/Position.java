@@ -1,4 +1,4 @@
-package com.damintsev.client.utils;
+package com.damintsev.common.utils;
 
 import java.io.Serializable;
 

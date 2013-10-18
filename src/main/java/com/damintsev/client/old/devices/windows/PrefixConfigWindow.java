@@ -1,14 +1,12 @@
 package com.damintsev.client.old.devices.windows;
 
-import com.damintsev.client.utils.Dialogs;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.damintsev.common.utils.Dialogs;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.form.TextArea;
 
-import java.util.Map;
 import java.util.TreeMap;
 
 /**

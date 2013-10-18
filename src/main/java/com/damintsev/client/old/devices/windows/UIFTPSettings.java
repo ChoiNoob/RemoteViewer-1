@@ -2,12 +2,9 @@ package com.damintsev.client.old.devices.windows;
 
 import com.damintsev.client.old.devices.FTPSettings;
 import com.damintsev.common.pojo.Station;
-import com.damintsev.client.utils.Dialogs;
-import com.damintsev.common.pojo.Station;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;

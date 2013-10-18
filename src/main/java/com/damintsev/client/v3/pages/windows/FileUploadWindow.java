@@ -2,7 +2,7 @@ package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
-import com.damintsev.client.utils.Dialogs;
+import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Command;

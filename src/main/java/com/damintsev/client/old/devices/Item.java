@@ -4,7 +4,7 @@ import com.damintsev.common.pojo.Station;
 import com.damintsev.common.pojo.TaskType;
 import com.damintsev.common.visitor.CommonVisitor;
 import com.damintsev.common.visitor.Visitor;
-import com.damintsev.client.utils.Position;
+import com.damintsev.common.utils.Position;
 
 import java.io.Serializable;
 

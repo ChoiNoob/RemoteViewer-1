@@ -2,11 +2,9 @@ package com.damintsev.client.old.devices.windows;
 
 import com.damintsev.client.old.devices.Device;
 import com.damintsev.client.old.devices.graph.BusyInfo;
-import com.damintsev.client.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Timer;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.chart.client.chart.Chart;
@@ -24,7 +22,6 @@ import com.sencha.gxt.data.shared.ModelKeyProvider;
 import com.sencha.gxt.data.shared.PropertyAccess;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by adamintsev

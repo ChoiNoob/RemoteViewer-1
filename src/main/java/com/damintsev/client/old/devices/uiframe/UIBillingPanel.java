@@ -1,11 +1,9 @@
 package com.damintsev.client.old.devices.uiframe;
 
 import com.damintsev.client.old.devices.BillingStats;
-import com.damintsev.client.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.chart.client.chart.Chart;
 import com.sencha.gxt.chart.client.chart.axis.CategoryAxis;
 import com.sencha.gxt.chart.client.chart.axis.NumericAxis;
@@ -21,8 +19,6 @@ import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Resizable;
 import com.sencha.gxt.widget.core.client.event.CollapseEvent;
 import com.sencha.gxt.widget.core.client.event.ExpandEvent;
-
-import java.util.List;
 
 /**
  * Created by adamintsev

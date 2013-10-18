@@ -1,4 +1,4 @@
-package com.damintsev.client.utils;
+package com.damintsev.common.utils;
 
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
