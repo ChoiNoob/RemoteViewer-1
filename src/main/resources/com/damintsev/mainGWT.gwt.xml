@@ -13,7 +13,7 @@
     <set-property name="gwt.logging.simpleRemoteHandler" value="ENABLED" />
 
     <entry-point class='com.damintsev.client.MainGWT'/>
-<!--osdijfsl;dfjlsfj;liasjf;liasfasf-->
+
     <collapse-all-properties />
     <source path='client'/>
     <source path='common'/>
