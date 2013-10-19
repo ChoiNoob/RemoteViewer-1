@@ -16,7 +16,7 @@ import javax.servlet.ServletContextListener;
  * Created by adamintsev
  * Date: 28.08.13 12:11
  */
-public class Servlet implements ServletContextListener{
+public class ShutdownServlet implements ServletContextListener{
 
 //    private ScheduledExecutorService scheduler;
 

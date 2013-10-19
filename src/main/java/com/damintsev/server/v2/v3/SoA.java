@@ -28,7 +28,7 @@ public class SoA {
     private String threadName = Thread.currentThread().getName() + " ";
 
     public static SoA getInstance() {
-        if (instance == null) {instance = new SoA();}
+        if (instance == null) instance = new SoA();
         return instance;
     }
 

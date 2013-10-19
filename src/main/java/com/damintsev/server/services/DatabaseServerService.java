@@ -60,7 +60,7 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public PagingLoadResult<Station> getStationList() {
         List<Station> stations = DB.getInstance().getStationList();   //todo мб можно обойтись одной строкой
-        return new PagingLoadResultBean<Station>(stations, 0, stations.size());
+        return new PagingLoadResultBean<>(stations, 0, stations.size());
     }
 
     public void deleteLabel(Label label) {

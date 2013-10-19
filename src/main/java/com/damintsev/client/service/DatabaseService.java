@@ -22,16 +22,19 @@ import java.util.List;
 public interface DatabaseService extends RemoteService {
 
     Item saveItem(Item item);
+
     Task loadTask(Long id);
+
     void deleteTask(Task task);
 
     Station loadStation(Long id);
-//    Station saveStation(Station station);
+
     void deleteStation(Station station);
 
     PagingLoadResult<Station> getStationList();
 
     void saveItemPosition(List<Item> items);
+
     List<Item> loadUIItems();
 
     //todo
@@ -40,10 +43,7 @@ public interface DatabaseService extends RemoteService {
 
     void deleteLabel(Label label);
 
-//    Label saveLabel(Label label);
-
     Label loadLabel(Long id);
 
     void saveImage(String type);
-
 }

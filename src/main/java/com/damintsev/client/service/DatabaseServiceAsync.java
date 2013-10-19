@@ -12,13 +12,10 @@ import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import java.util.List;
 
 public interface DatabaseServiceAsync {
-//    void saveTask(Task task, AsyncCallback<Task> async);
 
     void loadTask(Long id, AsyncCallback<Task> async);
 
     void loadUIItems(AsyncCallback<List<Item>> async);
-
-//    void saveStation(Station station, AsyncCallback<Station> async);
 
     void loadStation(Long id, AsyncCallback<Station> async);
 
@@ -34,8 +31,6 @@ public interface DatabaseServiceAsync {
     void getStationList(AsyncCallback<PagingLoadResult<Station>> async);
 
     void deleteLabel(Label label, AsyncCallback<Void> asyncCallback);
-
-//    void saveLabel(Label label, AsyncCallback<Label> asyncCallback);
 
     void loadLabel(Long id, AsyncCallback<Label> async);
 

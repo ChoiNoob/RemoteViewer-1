@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.Viewport;
 
 /**
  * User: Damintsev Andrey
@@ -25,11 +26,12 @@ public class UIRootPanel {
     }
 
     public Widget getContent() {
-//        Viewport viewport = new Viewport();
-//        viewport.setStyleName("gwt_main");
+        Viewport viewport = new Viewport();
+        viewport.setStyleName("gwt_main");
 
         BorderLayoutContainer body = new BorderLayoutContainer();
-//        viewport.add(body);
+        body.getElement().getStyle().setBackgroundColor("white");
+        viewport.add(body);
 
         FlowLayoutContainer footer = new FlowLayoutContainer();
         footer.setHeight(20);
@@ -39,12 +41,7 @@ public class UIRootPanel {
         body.setCenterWidget(frame);
         final ContentPanel settings = (ContentPanel) SettingsFrame.get().getContent();
         frame.add(settings);
-//        ((AbsolutePanel)body.getCenterWidget()).add(settings);
-
-
-//        ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
           frame.add(UIBillingPanel.getInstance().getContent());
-//        ((AbsolutePanel)body.getCenterWidget()).add(UIBillingPanel.getInstance().getContent());
-        return frame;
+        return viewport;
     }
 }

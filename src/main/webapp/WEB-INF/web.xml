@@ -36,7 +36,7 @@
 
     <servlet>
         <servlet-name>imageShow</servlet-name>
-        <servlet-class>com.damintsev.servlet.DisplayImage</servlet-class>
+        <servlet-class>com.damintsev.servlet.ShowImageServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>imageShow</servlet-name>
@@ -44,7 +44,7 @@
     </servlet-mapping>
 
     <listener>
-        <listener-class>com.damintsev.servlet.Servlet</listener-class>
+        <listener-class>com.damintsev.servlet.ShutdownServlet</listener-class>
     </listener>
     <!--<servlet>-->
         <!--<servlet-name>imageUpload</servlet-name>-->

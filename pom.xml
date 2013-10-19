@@ -125,10 +125,16 @@
                 <version>2.5.1</version>
                 <executions>
                     <execution>
+                        <configuration>
+                            <extraJvmArgs>-XX:MaxPermSize=200m -Xmx1024m -Xss2m</extraJvmArgs>
+                            <modules>
+                                <module>com.damintsev.mainGWT</module>
+                            </modules>
+                        </configuration>
                         <goals>
                             <goal>compile</goal>
                             <goal>test</goal>
-                            <goal>i18n</goal>
+                            <!--<goal>i18n</goal>-->
                             <goal>generateAsync</goal>
                         </goals>
                     </execution>
@@ -164,8 +170,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                 </configuration>
             </plugin>
         </plugins>

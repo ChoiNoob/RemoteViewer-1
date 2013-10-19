@@ -15,7 +15,7 @@ import java.io.*;
 /**
  * User: adamintsev Date: 16.10.13 Time: 17:46
  */
-public class DisplayImage  extends HttpServlet {
+public class ShowImageServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.err.println("FUCK="+request.getParameter("type"));

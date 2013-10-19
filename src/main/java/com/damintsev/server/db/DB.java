@@ -261,7 +261,7 @@ public class DB {
     public void deleteStation(Station station) {
         Connection connection = null;
         PreparedStatement statement = null;
-        try {
+        try  {
             connection = Mysql.getConnection();
             List<Task> tasks = loadTasksForStation(station.getId());
             for (Task task : tasks) {
@@ -270,11 +270,6 @@ public class DB {
             statement = connection.prepareStatement("DELETE FROM station WHERE station_id = ?");
             statement.setLong(1, station.getId());
             statement.executeUpdate();
-//            statement = connection.prepareStatement("DELETE FROM uipositions " +
-//                    "WHERE ref_type = 'STATION' " +
-//                    "AND ref_id = ? ");
-//            statement.setLong(1, station.getId());
-//            statement.executeUpdate();
             deleteFromUI(connection, station);
 
         } catch (SQLException e) {
@@ -426,28 +421,6 @@ public class DB {
             statement.setBinaryStream(2, is);
             statement.executeUpdate();
             is.close();
-//            ResultSet resultSet = statement.getResultSet();
-//            if (resultSet.next()) {
-//                is = resultSet.getBinaryStream("data");
-//                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-//
-//                int nRead;
-//                byte[] data = new byte[1024];
-//                try {
-//                    while ((nRead = is.read(data, 0, data.length)) != -1) {
-//                        buffer.write(data, 0, nRead);
-//                    }
-//                    buffer.flush();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }   finally {
-//                    try {
-//                        is.close();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
             e.printStackTrace();
