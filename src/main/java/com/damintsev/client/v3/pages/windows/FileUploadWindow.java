@@ -42,6 +42,7 @@ public class FileUploadWindow extends Window {
     }
 
     private Image newImage;
+    private FormPanel form;
 
     protected FileUploadWindow() {
         setPixelSize(650,450);
@@ -64,7 +65,8 @@ public class FileUploadWindow extends Window {
         FieldLabel label = new FieldLabel(comboBox, "Тип");
         label.setLabelWidth(100);
         panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
-        final FormPanel form = new FormPanel();
+
+        form = new FormPanel();
 //        panel.add(form);
 //        form.add(panel);
         form.setEncoding(FormPanel.Encoding.MULTIPART);
@@ -108,14 +110,14 @@ public class FileUploadWindow extends Window {
         });
         DOM.appendChild(panel.getElement(), table);
 
-        con.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
+        con.addButton(new TextButton("Загрузить на сервер", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 if (!comboBox.validate()) return;
                 form.setAction("fileUpload/upload");//?type=" + comboBox.getValue().eng);
                 form.submit();
             }
         }));
-        con.addButton(new TextButton("Save", new SelectEvent.SelectHandler() {
+        con.addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 Service.instance.saveImage(comboBox.getValue().eng, new AsyncCallback<Void>() {
                     public void onFailure(Throwable caught) {
@@ -123,7 +125,7 @@ public class FileUploadWindow extends Window {
                     }
 
                     public void onSuccess(Void result) {
-                        Dialogs.confirm("Suscsess", new Runnable() {
+                        Dialogs.message("Изображение успешно сохранено", new Runnable() {
                             public void run() {
                                 Scheduler.get().scheduleDeferred(new Command() {
                                     public void execute() {
@@ -136,6 +138,12 @@ public class FileUploadWindow extends Window {
                 });
             }
         }));
+        con.addButton(new TextButton("Отменить", new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                hide();
+            }
+        }));
         form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
             public void onSubmitComplete(SubmitCompleteEvent event) {
                 newImage.setUrl("image?type=tmp");
@@ -145,7 +153,13 @@ public class FileUploadWindow extends Window {
         setWidget(form);
     }
 
-    class Types {
+    @Override
+    public void show() {
+        form.clear();
+        super.show();
+    }
+
+    private class Types {
         String rus;
         String eng;
 
