@@ -4,7 +4,11 @@ import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.DivElement;
+import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.logical.shared.SelectionEvent;
+import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
@@ -28,7 +32,7 @@ import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
 * Date: 15.10.13
 * Time: 23:18
 */
-public class FileUploadWindow extends Window{
+public class FileUploadWindow extends Window {
 
     private static FileUploadWindow instance;
 
@@ -40,7 +44,7 @@ public class FileUploadWindow extends Window{
     private Image newImage;
 
     protected FileUploadWindow() {
-        setPixelSize(550,450);
+        setPixelSize(650,450);
         VerticalLayoutContainer panel = new VerticalLayoutContainer();
         ContentPanel con = new ContentPanel();
         con.setHeaderVisible(false);
@@ -55,6 +59,7 @@ public class FileUploadWindow extends Window{
         comboBox.add(new Types("Маршрут", "task"));
         comboBox.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
         comboBox.setAllowBlank(false);
+        comboBox.setEditable(false);
 
         FieldLabel label = new FieldLabel(comboBox, "Тип");
         label.setLabelWidth(100);
@@ -68,48 +73,46 @@ public class FileUploadWindow extends Window{
 
         FileUploadField fileUploadField = new FileUploadField();
         fileUploadField.setName("upload");
+//        DivElement wrapper = Document.get().createDivElement();
+//        wrapper.appendChild(fileUploadField.getElement());
+//        TextButton button = new TextButton("adasd");
+//        wrapper.appendChild(bu)
         label = new FieldLabel(fileUploadField, "Изображение");
         panel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         newImage = new Image("getImage");
-//        label = new FieldLabel(newImage);
-//        label.setWidth(10);
         Element table = DOM.createTable();
         table.getStyle().setWidth(100, Style.Unit.PCT);
         Element tr = DOM.createTR();
         Element td = DOM.createTD();
         td.getStyle().setWidth(50, Style.Unit.PCT);
-//        td.getStyle().setHeight(200, Style.Unit.PX);
         td.appendChild(newImage.getElement());
+        td.setInnerText("Новое изображение");
         tr.appendChild(td);
-//        hor.add(newImage);
-        Image oldImage = new Image("image?type=station");
-        oldImage.setWidth("inherit");
+        final Image oldImage = new Image();
+
+//        oldImage.setWidth("inherit");
         td = DOM.createTR();
         td.getStyle().setWidth(50, Style.Unit.PCT);
-//        td.getStyle().setHeight(50, Style.Unit.PC);
+        td.setInnerText("Существующее изображение");
         td.appendChild(oldImage.getElement());
         tr.appendChild(td);
 
         table.appendChild(tr);
-//        label = new FieldLabel(oldImage);
-//        hor.add(oldImage);
-//        Label test = new Label("");
-//        test.getElement().appendChild(table);
-//        label = new FieldLabel();
-//        label.setText("");
-//        label.getElement().appendChild(table);
-//                label.setLabelWidth(1);
-        DOM.appendChild(panel.getElement(), table);
 
-//        panel.add(label);
+        comboBox.addSelectionHandler(new SelectionHandler<Types>() {
+            @Override
+            public void onSelection(SelectionEvent<Types> event) {
+                oldImage.setUrl("image?type=" + event.getSelectedItem().eng);
+            }
+        });
+        DOM.appendChild(panel.getElement(), table);
 
         con.addButton(new TextButton("Submit", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
                 if (!comboBox.validate()) return;
                 form.setAction("fileUpload/upload");//?type=" + comboBox.getValue().eng);
                 form.submit();
-                System.out.println("fuck!2");
             }
         }));
         con.addButton(new TextButton("Save", new SelectEvent.SelectHandler() {
@@ -136,7 +139,6 @@ public class FileUploadWindow extends Window{
         form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
             public void onSubmitComplete(SubmitCompleteEvent event) {
                 newImage.setUrl("image?type=tmp");
-
             }
         });
         form.setWidget(con);
