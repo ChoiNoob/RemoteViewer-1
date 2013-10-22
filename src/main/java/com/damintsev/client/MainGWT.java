@@ -1,6 +1,8 @@
 package com.damintsev.client;
 
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
+import com.damintsev.common.utils.async.Async;
+import com.damintsev.common.utils.async.AsyncTask;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -48,20 +50,10 @@ public class MainGWT implements EntryPoint {
     }
 
     private void onModuleLoad2() {
-        GWT.runAsync(new RunAsyncCallback() {
-            @Override
-            public void onFailure(Throwable reason) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
-
+        Async.runAsync(new AsyncTask() {
             @Override
             public void onSuccess() {
                 RootPanel.get().add(UIRootPanel.get().getContent());
-            }
-        });
-        Window.addCloseHandler(new CloseHandler<Window>() {
-            public void onClose(CloseEvent<Window> event) {
-                MonitoringFrame.get().stop();
             }
         });
     }

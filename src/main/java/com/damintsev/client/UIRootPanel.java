@@ -22,9 +22,6 @@ public class UIRootPanel {
         return instance;
     }
 
-    private UIRootPanel(){
-    }
-
     public Widget getContent() {
         Viewport viewport = new Viewport();
         viewport.setStyleName("gwt_main");
@@ -37,6 +34,7 @@ public class UIRootPanel {
         footer.setHeight(20);
         footer.setStyleName("footer");
         body.setSouthWidget(footer, new BorderLayoutContainer.BorderLayoutData(20));
+
         AbsolutePanel frame = (AbsolutePanel) MonitoringFrame.get().getContent();
         body.setCenterWidget(frame);
         final ContentPanel settings = (ContentPanel) SettingsFrame.get().getContent();

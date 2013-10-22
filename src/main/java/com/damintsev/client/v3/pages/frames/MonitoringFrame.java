@@ -114,7 +114,9 @@ public class MonitoringFrame {
 
         //todo need redraw! may be force
     }
-         private UIVisitor visitor = new UIVisitor();
+
+    private UIVisitor visitor = new UIVisitor();
+
     private void addItem(Item item) {
         System.out.println("add item");
 //        UIItem uiItem = new UIItem(item);
@@ -122,7 +124,7 @@ public class MonitoringFrame {
         uiItems.put(uiItem.getId(), uiItem);
         panel.add(uiItem, 0, 0);
         panel.setWidgetPosition(uiItem, uiItem.getPosition().x, uiItem.getPosition().y);
-        if(editing) dragController.makeDraggable(uiItem);
+        if (editing) dragController.makeDraggable(uiItem);
         drawConnections();
     }
 

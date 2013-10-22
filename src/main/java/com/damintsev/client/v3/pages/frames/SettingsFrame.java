@@ -8,6 +8,8 @@ import com.damintsev.client.v3.pages.windows.FileUploadWindow;
 import com.damintsev.client.old.devices.windows.PrefixConfigWindow;
 import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Utils;
+import com.damintsev.common.utils.async.Async;
+import com.damintsev.common.utils.async.AsyncTask;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style;
@@ -67,12 +69,7 @@ public class SettingsFrame {
 
         TextButton station = new TextButton("Добавить станцию", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                GWT.runAsync(new RunAsyncCallback() {
-                    @Override
-                    public void onFailure(Throwable reason) {
-                        //To change body of implemented methods use File | Settings | File Templates.
-                    }
-
+                Async.runAsync(new AsyncTask() {
                     @Override
                     public void onSuccess() {
                         AddStationWindow.getInstance().show(null, null);
@@ -86,18 +83,12 @@ public class SettingsFrame {
 
         TextButton device = new TextButton("Добавить устройство",new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                GWT.runAsync(new RunAsyncCallback() {
-                    @Override
-                    public void onFailure(Throwable reason) {
-                        //To change body of implemented methods use File | Settings | File Templates.
-                    }
-
+                Async.runAsync(new AsyncTask() {
                     @Override
                     public void onSuccess() {
                         AddTaskWindow.get().show(null, null);
                     }
                 });
-
             }
         });
         device.setIcon(Utils.getImage("cloud"));
@@ -106,12 +97,7 @@ public class SettingsFrame {
 
         TextButton label = new TextButton("Добавить комментарий",new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                GWT.runAsync(new RunAsyncCallback() {
-                    @Override
-                    public void onFailure(Throwable reason) {
-                        //To change body of implemented methods use File | Settings | File Templates.
-                    }
-
+                Async.runAsync(new AsyncTask() {
                     @Override
                     public void onSuccess() {
                         LabelWindow.get().show(null, null);
@@ -121,14 +107,9 @@ public class SettingsFrame {
         });
         buttons.add(label, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
-        TextButton edit = new TextButton("редактировать", new SelectEvent.SelectHandler() {
+        TextButton edit = new TextButton("Редактировать", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                GWT.runAsync(new RunAsyncCallback() {
-                    @Override
-                    public void onFailure(Throwable reason) {
-                        //To change body of implemented methods use File | Settings | File Templates.
-                    }
-
+                Async.runAsync(new AsyncTask() {
                     @Override
                     public void onSuccess() {
                         final UIItem selected = (UIItem) MonitoringFrame.get().getSelected();
@@ -142,19 +123,13 @@ public class SettingsFrame {
                         }
                     }
                 });
-
             }
         });
         buttons.add(edit, new BoxLayoutContainer.BoxLayoutData(new Margins(5)));
 
         buttons.add(new TextButton("Загрузка изображений", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                GWT.runAsync(new RunAsyncCallback() {
-                    @Override
-                    public void onFailure(Throwable reason) {
-                        //To change body of implemented methods use File | Settings | File Templates.
-                    }
-
+                Async.runAsync(new AsyncTask() {
                     @Override
                     public void onSuccess() {
                         FileUploadWindow.getInstance().show();
@@ -165,12 +140,7 @@ public class SettingsFrame {
 
         buttons.add(new TextButton("Настройка префиксов", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                GWT.runAsync(new RunAsyncCallback() {
-                    @Override
-                    public void onFailure(Throwable reason) {
-                        //To change body of implemented methods use File | Settings | File Templates.
-                    }
-
+                Async.runAsync(new AsyncTask() {
                     @Override
                     public void onSuccess() {
                         PrefixConfigWindow.get().show();

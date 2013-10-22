@@ -26,8 +26,7 @@ public class LabelWindow implements Editor<Label> {
     private static LabelWindow instance;
 
     public static LabelWindow get() {
-//        if(instance == null)
-            instance = new LabelWindow();
+        if(instance == null) instance = new LabelWindow();
         return instance;
     }
 
