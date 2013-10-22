@@ -1,7 +1,5 @@
 package com.damintsev.client.old.devices;
 
-import com.damintsev.client.old.devices.enums.Status;
-
 import java.io.Serializable;
 
 /**

@@ -1,9 +1,9 @@
 package com.damintsev.client;
 
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
-import com.damintsev.client.old.devices.uiframe.UIRootPanel;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
@@ -48,7 +48,17 @@ public class MainGWT implements EntryPoint {
     }
 
     private void onModuleLoad2() {
-        RootPanel.get().add(UIRootPanel.get().getContent());
+        GWT.runAsync(new RunAsyncCallback() {
+            @Override
+            public void onFailure(Throwable reason) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onSuccess() {
+                RootPanel.get().add(UIRootPanel.get().getContent());
+            }
+        });
         Window.addCloseHandler(new CloseHandler<Window>() {
             public void onClose(CloseEvent<Window> event) {
                 MonitoringFrame.get().stop();

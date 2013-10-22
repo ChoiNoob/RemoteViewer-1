@@ -28,7 +28,7 @@ public class Scheduler {
     }
 
     public void start(final Class clazz, final Runnable run, int repeating) {
-//        if(continuePointer.get(clazz.getName()) )
+//        if(continuePointer.getInstance(clazz.getName()) )
 //            continuePointer.put(clazz.getName(), false); //todo заврешим старый поток
         continuePointer.put(clazz.getName(), true);
         com.google.gwt.core.client.Scheduler.get().scheduleFixedPeriod(new com.google.gwt.core.client.Scheduler.RepeatingCommand() {

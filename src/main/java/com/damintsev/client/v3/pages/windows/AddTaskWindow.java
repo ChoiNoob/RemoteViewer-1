@@ -9,6 +9,7 @@ import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
+import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
@@ -34,7 +35,8 @@ public class AddTaskWindow implements Editor<Task>{
     private static AddTaskWindow instance;
 
     public static AddTaskWindow get() {
-        if(instance == null) instance = new AddTaskWindow();
+//        if(instance == null)
+            instance = new AddTaskWindow();
         return instance;
     }
 
@@ -162,7 +164,7 @@ public class AddTaskWindow implements Editor<Task>{
                     public void onSuccess(Item result) {
                         window.unmask();
                         window.hide();
-//                        if (newEntity) MonitoringFrame.get().addItem(new UIItem(result));
+//                        if (newEntity) MonitoringFrame.getInstance().addItem(new UIItem(result));
                         MonitoringFrame.get().add(result);
                         window.hide();
                     }
@@ -176,16 +178,15 @@ public class AddTaskWindow implements Editor<Task>{
             }
         }));
         window.setWidget(con);
-
     }
                                           //todo сделать чтото с раннайблом
     public void show(Long id, Runnable run) {
         driver.initialize(this);
+
         window.show();
         if (id == null) {
             task = new Task();
             delete.hide();
-            driver.edit(task);
         } else {
             delete.show();
             window.mask();
@@ -197,10 +198,10 @@ public class AddTaskWindow implements Editor<Task>{
                 public void onSuccess(Task result) {
                     task = result;
                     window.unmask();
-                    driver.edit(task);
                 }
             });
         }
+        driver.edit(task);
     }
 
     interface TaskEditor extends SimpleBeanEditorDriver<Task, AddTaskWindow> {
@@ -222,7 +223,7 @@ public class AddTaskWindow implements Editor<Task>{
 //        }){
 //            @Override
 //            public Station getValue() {
-//                System.out.println("get VVV=" + super.getValue());
+//                System.out.println("getInstance VVV=" + super.getValue());
 //                return super.getValue();    //To change body of overridden methods use File | Settings | File Templates.
 //            }
 //        };

@@ -1,7 +1,6 @@
 package com.damintsev.server.old.billing;
 
 import com.damintsev.client.old.devices.BillingInfo;
-import com.damintsev.client.old.devices.Device;
 import com.damintsev.common.pojo.Station;
 //import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.old.BillingStatistics;
@@ -155,17 +154,17 @@ public class BillingWorker extends Thread {
         }
     }
 
-    public void updateStation(Device station) {
-//        if(!(station instanceof Station))
-//            return;
-//        this.station = (Station) station;
-//        reconnect();
-    }
-
-    public void deleteStation(Device device) {
-//        if(device instanceof Station) {
-//            disconnect();
-//            station = null;
-//        }
-    }
+//    public void updateStation(Device station) {
+////        if(!(station instanceof Station))
+////            return;
+////        this.station = (Station) station;
+////        reconnect();
+//    }
+//
+//    public void deleteStation(Device device) {
+////        if(device instanceof Station) {
+////            disconnect();
+////            station = null;
+////        }
+//    }
 }

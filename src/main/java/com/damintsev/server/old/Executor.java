@@ -43,8 +43,8 @@ public class Executor {
 //    }
 //
 //    public ScheduledExecutorService getScheduler(String name) {
-//        if(schedulers.get(name) != null)
-//            return schedulers.get(name);
+//        if(schedulers.getInstance(name) != null)
+//            return schedulers.getInstance(name);
 //        ScheduledExecutorService sched = Executors.newSingleThreadScheduledExecutor();
 //        schedulers.put(name, sched);
 //        return sched;

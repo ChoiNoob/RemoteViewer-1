@@ -26,8 +26,9 @@ public class AddStationWindow implements Editor<Station> {
 
     private static AddStationWindow instance;
 
-    public static AddStationWindow get() {
-        if (instance == null) instance = new AddStationWindow();
+    public static AddStationWindow getInstance() {
+//        if (instance == null)
+            instance = new AddStationWindow();
         return instance;
     }
 
@@ -109,7 +110,7 @@ public class AddStationWindow implements Editor<Station> {
                             }
 
                             public void onSuccess(Void result) {
-//                                MonitoringFrame.get().reloadView();//todo realize deletion
+//                                MonitoringFrame.getInstance().reloadView();//todo realize deletion
                                 MonitoringFrame.get().delete(station);//todo realize deletion
                             }
                         });

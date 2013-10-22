@@ -1,14 +1,9 @@
 package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.pojo.Station;
 import com.damintsev.client.old.devices.UIItem;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
-import com.damintsev.client.v3.pages.windows.AddTaskWindow;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.core.client.util.IconHelper;
 
 /**
  * User: Damintsev Andrey
@@ -28,7 +23,7 @@ public class UIStation extends UIItem {
 
     @Override
     public void openEditor(Runnable runnable) {
-        AddStationWindow.get().show(item.getId(), runnable);
+        AddStationWindow.getInstance().show(item.getId(), runnable);
     }
 
     @Override

@@ -438,7 +438,7 @@
 //                    SQL += ")";
 //                    statement = connection.prepareStatement(SQL);
 //                    for(int i = 0; i < devices.size(); i++) {
-//                        statement.setLong(i + 1, devices.get(i));
+//                        statement.setLong(i + 1, devices.getInstance(i));
 //                    }
 //                    statement.executeUpdate();
 //
@@ -450,7 +450,7 @@
 //                    SQL += ")";
 //                    statement = connection.prepareStatement(SQL);
 //                    for(int i = 0; i < devices.size(); i++) {
-//                        statement.setLong(i + 1, devices.get(i));
+//                        statement.setLong(i + 1, devices.getInstance(i));
 //                    }
 //                    statement.executeUpdate();
 ////                    statement = connection.prepareStatement("DELETE FROM device_pos WHERE id in (?)");
@@ -718,7 +718,7 @@
 //    private HashMap<String, String> dictionary = new HashMap<String, String>();
 //    public String getDestinationName(String prefix) {
 //        if(dictionary.containsKey(prefix))
-//            return dictionary.get(prefix);
+//            return dictionary.getInstance(prefix);
 //        else {
 //            Connection connection = null;
 //            PreparedStatement statement = null;

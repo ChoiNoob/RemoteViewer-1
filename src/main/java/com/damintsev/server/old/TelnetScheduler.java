@@ -82,7 +82,7 @@
 //            }
 //        } catch (Exception e) {
 //            logger.info("Exception wile checking device =" + e.getMessage());
-//            TelnetWorker telnet = telnetStation.get(device.getId());
+//            TelnetWorker telnet = telnetStation.getInstance(device.getId());
 //            telnetStation.remove(device.getId());
 //            if(telnet!=null)telnet.disconnect();
 //            device.setStatus(Status.ERROR);
@@ -315,13 +315,13 @@
 //        } else {
 //            logger.info("Connection for Station id=" + station.getId() + " name=" + station.getHost() + " found");
 //        }
-//        return telnetStation.get(station.getId());
+//        return telnetStation.getInstance(station.getId());
 //    }
 //
 //    public void updateDevice(Device device) {
 //        stop();
 //        if(device instanceof Station) {
-//            TelnetWorker telnet = telnetStation.get(device.getId());
+//            TelnetWorker telnet = telnetStation.getInstance(device.getId());
 //            if(telnet!=null) {
 //                telnet.disconnect();
 //            }
@@ -336,7 +336,7 @@
 //    public void deleteDevice(Device device) {
 //        stop();
 //        if(device instanceof Station) {
-//            TelnetWorker telnet = telnetStation.get(device.getId());
+//            TelnetWorker telnet = telnetStation.getInstance(device.getId());
 //            if(telnet!=null){
 //                telnet.disconnect();
 //            }

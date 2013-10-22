@@ -1,4 +1,4 @@
-package com.damintsev.client.old.devices.uiframe;
+package com.damintsev.client;
 
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.v3.pages.frames.SettingsFrame;
@@ -9,10 +9,10 @@ import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.Viewport;
 
 /**
- * User: Damintsev Andrey
- * Date: 01.08.13
- * Time: 23:17
- */
+* User: Damintsev Andrey
+* Date: 01.08.13
+* Time: 23:17
+*/
 public class UIRootPanel {
 
     private static UIRootPanel instance;
@@ -41,7 +41,7 @@ public class UIRootPanel {
         body.setCenterWidget(frame);
         final ContentPanel settings = (ContentPanel) SettingsFrame.get().getContent();
         frame.add(settings);
-          frame.add(UIBillingPanel.getInstance().getContent());
+//          frame.add(UIBillingPanel.getInstance().getContent());
         return viewport;
     }
 }

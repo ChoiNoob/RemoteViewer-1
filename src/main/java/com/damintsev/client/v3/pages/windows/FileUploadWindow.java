@@ -37,7 +37,8 @@ public class FileUploadWindow extends Window {
     private static FileUploadWindow instance;
 
     public static FileUploadWindow getInstance() {
-        if(instance == null) instance = new FileUploadWindow();
+//        if(instance == null)
+            instance = new FileUploadWindow();
         return instance;
     }
 
@@ -75,7 +76,7 @@ public class FileUploadWindow extends Window {
 
         FileUploadField fileUploadField = new FileUploadField();
         fileUploadField.setName("upload");
-//        DivElement wrapper = Document.get().createDivElement();
+//        DivElement wrapper = Document.getInstance().createDivElement();
 //        wrapper.appendChild(fileUploadField.getElement());
 //        TextButton button = new TextButton("adasd");
 //        wrapper.appendChild(bu)
