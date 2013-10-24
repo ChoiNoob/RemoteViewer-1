@@ -156,7 +156,6 @@ public class FileUploadWindow extends Window {
 
     @Override
     public void show() {
-        form.clear();
         super.show();
     }
 

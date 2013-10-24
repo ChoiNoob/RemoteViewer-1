@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.damintsev.server.db.ImageHandler;
 import com.sun.corba.se.impl.orbutil.ORBUtility;
-import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
