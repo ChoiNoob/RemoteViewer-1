@@ -100,7 +100,7 @@ public class LabelWindow implements Editor<Label> {
             }
         }));
         window.setWidget(con);
-
+         new TestWindow().show();
     }
 
     public void show(Long id, Runnable run) {
