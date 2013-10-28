@@ -5,17 +5,14 @@ import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.utils.Position;
 import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.IsWidget;
-import com.google.gwt.user.client.ui.UIObject;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 
 /**
  * User: Damintsev Andrey
  * Date: 03.08.13
  * Time: 2:09
  */
-public abstract class UIItem extends Widget implements IsWidget {
+public abstract class UIItem extends Label implements IsWidget {
 
     private Widget widget;
     protected Item item;
@@ -40,7 +37,7 @@ public abstract class UIItem extends Widget implements IsWidget {
         super();
         this.item = item;
         taskState = new TaskState();
-        setElement(widget().getElement());
+        getElement().appendChild(widget().getElement());
     }
 
     public void savePosition() {

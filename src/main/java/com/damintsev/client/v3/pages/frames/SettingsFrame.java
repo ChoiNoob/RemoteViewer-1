@@ -164,7 +164,6 @@ public class SettingsFrame {
         });
 
         panel.addButton(cancel);
-
         panel.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
 
         return panel;

@@ -140,6 +140,7 @@ public class MonitoringFrame {
         editing = false;
         dragController.clearSelection();
         for(UIItem item : uiItems.values()) {
+            System.out.println("III=" + dragController);
             dragController.makeNotDraggable(item);
             item.savePosition();
         }
