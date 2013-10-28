@@ -20,6 +20,13 @@ public abstract class UIItem extends Widget implements IsWidget {
     protected TaskState taskState;
     protected Image image;
 
+    protected abstract Widget widget();
+    protected abstract int getLeft();
+    protected abstract int getTop();
+    protected abstract int getWidth();
+    protected abstract int getHeight();
+    public abstract void openEditor(Runnable runnable);
+
     @Override
     public Widget asWidget() {
         if (widget == null) widget = widget();
@@ -31,35 +38,10 @@ public abstract class UIItem extends Widget implements IsWidget {
         taskState = new TaskState();
     }
 
-        public void savePosition() {
+    public void savePosition() {
         item.getPosition().x = getLeft();
         item.getPosition().y = getTop();
     }
-
-    protected abstract Widget widget();
-    protected abstract int getLeft();
-    protected abstract int getTop();
-    protected abstract int getWidth();
-    protected abstract int getHeight();
-//
-//    private void init() {
-//        setHorizontalAlignment(ALIGN_CENTER);
-//       if(getImage() != null) {
-////            image = new Image(getImage());
-//            getElement().appendChild(getImage().getElement());
-//       }
-//       Label label = new Label(getName());
-//        if(getName() != null)
-//            getElement().appendChild(label.getElement());
-//        label.setStyleName("tooltip");
-////        super.addDoubleClickHandler(new DoubleClickHandler() {
-////            public void onDoubleClick(DoubleClickEvent event) {
-////                if (getDeviceType() == DeviceType.STATION) return;
-////                BusyChannelWindow panel = new BusyChannelWindow();
-////                panel.show(UIItem.this);
-////            }
-////        });
-//    }
 
     public Position getCenterPosition() {
         int x = getLeft() + getWidth() / 2;
@@ -75,18 +57,6 @@ public abstract class UIItem extends Widget implements IsWidget {
         return item.getName();
     }
 
-//    public String getName() {
-//        return item.getName();
-//    }
-
-//    public int getWidth() {
-//        return getImage() == null ? super.getTop() : getImage().getWidth();
-//    }
-//
-//    public int getHeight() {
-//        return getImage() == null ? super.getOffsetHeight() : getImage().getHeight();
-//    }
-
     public String getId() {
         return item.getStringId();
     }
@@ -95,26 +65,13 @@ public abstract class UIItem extends Widget implements IsWidget {
         return item.getStation();
     }
 
-//    public void setLabelColor() { //todo really need ?!
-////        label.getElement().getStyle().setBackgroundColor(data.getStatus().getColor());
+//    public boolean haveChildrens() {
+//        return getId().startsWith("s");
 //    }
-
-//    public void redraw() {
-//        System.out.println("redraw");
-////        label.getElement().setInnerText(getName());
-//////          label = new Label(getName());
-////        getElement().removeChild(label.getElement());
-////        label = new Label(getName());
-////        getElement().appendChild(label.getElement());
+//
+//    public boolean isChild(UIItem child) {
+//        return child.getId().startsWith("s");
 //    }
-
-    public boolean haveChildrens() {
-        return getId().startsWith("s");
-    }
-
-    public boolean isChild(UIItem child) {
-        return child.getId().startsWith("s");
-    }
 
     public String getParentId() {
         return item.getParentId();
@@ -135,6 +92,4 @@ public abstract class UIItem extends Widget implements IsWidget {
     public Item getItem() {
         return item;
     }
-
-    public abstract void openEditor(Runnable runnable);
 }

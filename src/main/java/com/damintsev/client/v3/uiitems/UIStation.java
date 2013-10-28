@@ -2,6 +2,7 @@ package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
+import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.utils.Position;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
@@ -16,6 +17,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class UIStation extends UIItem {
 
     private Label label;
+    private Label nameLabel;
 
     public UIStation(Item item) {
         super(item);
@@ -23,9 +25,10 @@ public class UIStation extends UIItem {
         label = new Label();
         label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         label.getElement().appendChild(image.getElement());
-        Label nameLabel = new Label(getName());
-        if(getName() != null)
+        nameLabel = new Label(getName());
+        if(getName() != null) {
             label.getElement().appendChild(nameLabel.getElement());
+        }
         nameLabel.setStyleName("tooltip");
     }
 
@@ -57,5 +60,12 @@ public class UIStation extends UIItem {
     @Override
     public void openEditor(Runnable runnable) {
         AddStationWindow.getInstance().show(item.getId(), runnable);
+    }
+
+    @Override
+    public void setTaskState(TaskState status) {
+        System.out.println("State station=" + status.getState());
+        nameLabel.getElement().getStyle().setBackgroundColor(status.getState().getColor());
+        super.setTaskState(status);
     }
 }

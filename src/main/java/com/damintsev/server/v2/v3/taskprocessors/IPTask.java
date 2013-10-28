@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * Date: 09.10.13
  * Time: 21:19
  */
-public class IPTask extends TaskProcessor {
+public class IPTask implements TaskProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(TaskProcessor.class);
 

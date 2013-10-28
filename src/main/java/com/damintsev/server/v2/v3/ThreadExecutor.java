@@ -63,7 +63,7 @@ public class ThreadExecutor extends Thread {
             checkForErrors(task);
         } catch (ConnectException conn) {
             logger.info("Caught connection error " + conn.getLocalizedMessage());
-            state = createConnectionError(task.getStringId(), conn, true);
+            state = createConnectionError(task.getParentId(), conn, true);
         }   catch (ExecutingTaskException exec) {
             logger.info("Caught executing error " + exec.getLocalizedMessage());
             state = createConnectionError(task.getStringId(), exec, false);
@@ -116,25 +116,25 @@ public class ThreadExecutor extends Thread {
     public String getThreadId() {
         return station.getStringId();
     }
-
-    private TaskState createConnectionError(String taskId, Exception conn, boolean connectionError) {
+                                    //todo надо переписать!!!!!
+    private TaskState createConnectionError(String stringID, Exception conn, boolean connectionError) {
         logger.info("Created connection error!");
         TaskState task = new TaskState(ExecuteState.ERROR, conn.getMessage());
-        task.setId(taskId);
-        if (errors.get(taskId) == null) errors.put(taskId, 1);
-        if (errors.get(taskId) <= 2) {
+        task.setId(stringID);
+        if (errors.get(stringID) == null) errors.put(stringID, 1);
+        if (errors.get(stringID) <= 2) {
             task.setState(ExecuteState.WARNING);
-        } else if (errors.get(taskId) > 2) {
-            logger.info("Setting ERROR to taskId=" + taskId);
+        } else if (errors.get(stringID) > 2) {
+            logger.info("Setting ERROR to taskId=" + stringID);
             task.setState(ExecuteState.ERROR);
             if (connectionError) {
                 for (TaskState state : taskStates.values()) {
-                   if (state.getId().equals(taskId)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
+                   if (state.getId().equals(stringID)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
                         state.setState(ExecuteState.UNKNOWN);
                 }
             }
         }
-        errors.put(taskId, errors.get(taskId) + 1);
+        errors.put(stringID, errors.get(stringID) + 1);
         return task;
     }
 

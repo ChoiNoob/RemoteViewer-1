@@ -25,11 +25,6 @@ public class UILabel extends UIItem {
     }
 
     @Override
-    public void savePosition() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
     protected int getLeft() {
         return label.getAbsoluteLeft();
     }
@@ -46,7 +41,7 @@ public class UILabel extends UIItem {
 
     @Override
     protected int getWidth() {
-        return 0;  //To change body of implemented methods use File | Settings | File Templates.
+        return 0;
     }
 
     @Override

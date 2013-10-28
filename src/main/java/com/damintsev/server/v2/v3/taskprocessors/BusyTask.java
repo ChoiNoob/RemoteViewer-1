@@ -7,7 +7,7 @@ import com.damintsev.common.beans.TaskState;
  * Date: 09.10.13
  * Time: 0:18
  */
-public class BusyTask extends TaskProcessor {
+public class BusyTask implements TaskProcessor {
 
     @Override
     public TaskState process(String stri) {

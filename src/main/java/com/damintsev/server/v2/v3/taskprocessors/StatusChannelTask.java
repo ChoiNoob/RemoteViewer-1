@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  * Date: 06.10.13
  * Time: 16:55
  */
-public class StatusChannelTask extends TaskProcessor {
+public class StatusChannelTask implements TaskProcessor {
 
     private static final Logger logger = LoggerFactory.getLogger(StatusChannelTask.class);
 
