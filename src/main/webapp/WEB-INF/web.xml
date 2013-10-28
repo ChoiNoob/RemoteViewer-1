@@ -5,23 +5,17 @@
 
 <web-app>
 
+    <welcome-file-list>
+        <welcome-file>mainGWT.html</welcome-file>
+    </welcome-file-list>
   <!-- Servlets -->
-  <servlet>
-    <servlet-name>greetServlet</servlet-name>
-    <servlet-class>com.damintsev.server.services.ServerService</servlet-class>
-  </servlet>
-
-  <servlet-mapping>
-    <servlet-name>greetServlet</servlet-name>
-    <url-pattern>/mainGWT/service</url-pattern>
-  </servlet-mapping>
 
     <servlet>
-        <servlet-name>com.damintsev.mainGWT DatabaseService</servlet-name>
+        <servlet-name>DatabaseService</servlet-name>
         <servlet-class>com.damintsev.server.services.DatabaseServerService</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>com.damintsev.mainGWT DatabaseService</servlet-name>
+        <servlet-name>DatabaseService</servlet-name>
         <url-pattern>/mainGWT/DatabaseServerService</url-pattern>
     </servlet-mapping>
 
@@ -46,47 +40,6 @@
     <listener>
         <listener-class>com.damintsev.servlet.ShutdownServlet</listener-class>
     </listener>
-    <!--<servlet>-->
-        <!--<servlet-name>imageUpload</servlet-name>-->
-        <!--<servlet-class>com.damintsev.servlet.ImageUpload</servlet-class>-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>imageUpload</servlet-name>-->
-        <!--<url-pattern>/download</url-pattern>-->
-    <!--</servlet-mapping>-->
-    <!--<context-param>-->
-        <!--<param-name>log4jConfigLocation</param-name>-->
-        <!--<param-value>/WEB-INF/log4j.properties</param-value>-->
-    <!--</context-param>-->
-    <!--<listener>-->
-        <!--<listener-class>org.apache.logging.log4j.core.web.Log4jServletContextListener</listener-class>-->
-    <!--</listener>-->
-
-    <!--<filter>-->
-        <!--<filter-name>log4jServletFilter</filter-name>-->
-        <!--<filter-class>org.apache.logging.log4j.core.web.Log4jServletFilter</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>log4jServletFilter</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-        <!--&lt;!&ndash;<dispatcher>REQUEST</dispatcher>&ndash;&gt;-->
-        <!--&lt;!&ndash;<dispatcher>FORWARD</dispatcher>&ndash;&gt;-->
-        <!--&lt;!&ndash;<dispatcher>INCLUDE</dispatcher>&ndash;&gt;-->
-        <!--&lt;!&ndash;<dispatcher>ERROR</dispatcher>&ndash;&gt;-->
-    <!--</filter-mapping>-->
-
-    <!--<servlet>-->
-        <!--<servlet-name>remoteLogging</servlet-name>-->
-        <!--<servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>remoteLogging</servlet-name>-->
-        <!--<url-pattern>/mainGWT/remote_logging</url-pattern>-->
-    <!--</servlet-mapping>-->
 
 
-    <!-- Default page to serve -->
-  <welcome-file-list>
-    <welcome-file>mainGWT.html</welcome-file>
-  </welcome-file-list>
 </web-app>
