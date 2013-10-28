@@ -110,15 +110,14 @@ public class SettingsFrame {
                 Async.runAsync(new AsyncTask() {
                     @Override
                     public void onSuccess() {
-                        final Widget selected =  MonitoringFrame.get().getSelected();
+                        final UIItem selected =  MonitoringFrame.get().getSelected();
                         if (selected == null) Dialogs.alert("Выберите устройство");
                         else {
-//                            ((UIItem)selected).openEditor(new Runnable() {
-//                                public void run() {
-//                                    //todo ?!?!?!
-//                                }
-//                            });
-                            //todo!!!!!!!!!!!!!!!!!
+                            selected.openEditor(new Runnable() {
+                                public void run() {
+                                    //todo ?!?!?!
+                                }
+                            });
                         }
                     }
                 });

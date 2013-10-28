@@ -4,8 +4,10 @@ import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.utils.Position;
+import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.UIObject;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -29,13 +31,16 @@ public abstract class UIItem extends Widget implements IsWidget {
 
     @Override
     public Widget asWidget() {
+        System.out.println("asdWWWW");
         if (widget == null) widget = widget();
         return widget;
     }
 
     public UIItem(Item item) {
+        super();
         this.item = item;
         taskState = new TaskState();
+        setElement(widget().getElement());
     }
 
     public void savePosition() {
@@ -65,7 +70,7 @@ public abstract class UIItem extends Widget implements IsWidget {
         return item.getStation();
     }
 
-//    public boolean haveChildrens() {
+    //    public boolean haveChildrens() {
 //        return getId().startsWith("s");
 //    }
 //

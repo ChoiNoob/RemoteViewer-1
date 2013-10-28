@@ -122,9 +122,9 @@ public class MonitoringFrame {
 //        UIItem uiItem = new UIItem(item);
         UIItem uiItem = item.accept(visitor);
         uiItems.put(uiItem.getId(), uiItem);
-        panel.add(uiItem.asWidget(), 0, 0);
-        panel.setWidgetPosition(uiItem.asWidget(), uiItem.getPosition().x, uiItem.getPosition().y);
-        if (editing) dragController.makeDraggable(uiItem.asWidget());
+        panel.add(uiItem, 0, 0);
+        panel.setWidgetPosition(uiItem, uiItem.getPosition().x, uiItem.getPosition().y);
+        if (editing) dragController.makeDraggable(uiItem);
         drawConnections();
     }
 
@@ -132,7 +132,7 @@ public class MonitoringFrame {
         stop();
         editing = true;
         for(UIItem item : uiItems.values()) {
-            dragController.makeDraggable(item.asWidget());
+            dragController.makeDraggable(item);
         }
     }
 
@@ -140,7 +140,7 @@ public class MonitoringFrame {
         editing = false;
         dragController.clearSelection();
         for(UIItem item : uiItems.values()) {
-            dragController.makeNotDraggable(item.asWidget());
+            dragController.makeNotDraggable(item);
             item.savePosition();
         }
         saveItemPositions();
@@ -151,9 +151,9 @@ public class MonitoringFrame {
         DataLoader.getInstance().saveUIItems(uiItems.values());
     }
 
-    public Widget getSelected() {
+    public UIItem getSelected() {
         Iterator<Widget> it = dragController.getSelectedWidgets().iterator();
-        return it.hasNext() ? it.next() : null;
+        return it.hasNext() ? (UIItem)it.next() : null;
     }
 
     public void delete(UIItem item) {
@@ -175,7 +175,6 @@ public class MonitoringFrame {
 
     private void drawConnections() {
         clearCanvas();
-        System.out.println("CCCCCCCCCCCC=" + uiItems.get(null));
         for(UIItem uiItem : uiItems.values()) {
             UIItem parent = uiItems.get(uiItem.getParentId());
             System.out.println("id=" + uiItem.getId() + " parent=" + uiItem.getParentId());

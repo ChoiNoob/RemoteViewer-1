@@ -19,6 +19,10 @@ public class UITask extends UIItem {
 
     public UITask(Item item) {
         super(item);
+    }
+
+    @Override
+    public Widget widget() {
         image = new Image("image?type=task");
         label = new Label();
         label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
@@ -27,10 +31,6 @@ public class UITask extends UIItem {
         if(getName() != null)
             label.getElement().appendChild(nameLabel.getElement());
         nameLabel.setStyleName("tooltip");
-    }
-
-    @Override
-    public Widget widget() {
         return label;
     }
 

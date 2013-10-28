@@ -21,15 +21,6 @@ public class UIStation extends UIItem {
 
     public UIStation(Item item) {
         super(item);
-        image = new Image("image?type=station");
-        label = new Label();
-        label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
-        label.getElement().appendChild(image.getElement());
-        nameLabel = new Label(getName());
-        if(getName() != null) {
-            label.getElement().appendChild(nameLabel.getElement());
-        }
-        nameLabel.setStyleName("tooltip");
     }
 
     @Override
@@ -54,6 +45,15 @@ public class UIStation extends UIItem {
 
     @Override
     public Widget widget() {
+        image = new Image("image?type=station");
+        label = new Label();
+        label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+        label.getElement().appendChild(image.getElement());
+        nameLabel = new Label(getName());
+        if(getName() != null) {
+            label.getElement().appendChild(nameLabel.getElement());
+        }
+        nameLabel.setStyleName("tooltip");
         return label;
     }
 

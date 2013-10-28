@@ -18,10 +18,6 @@ public class UILabel extends UIItem {
 
     public UILabel(Item item) {
         super(item);
-        label = new Label(getName(), true);
-        label.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
-        label.getElement().getStyle().setProperty("width", "auto");
-        label.setStyleName("tooltip");
     }
 
     @Override
@@ -51,6 +47,10 @@ public class UILabel extends UIItem {
 
     @Override
     public Widget widget() {
+        label = new Label(getName(), true);
+        label.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
+        label.getElement().getStyle().setProperty("width", "auto");
+        label.setStyleName("tooltip");
         return label;
     }
 
