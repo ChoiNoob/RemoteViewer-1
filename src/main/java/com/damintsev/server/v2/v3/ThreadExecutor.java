@@ -40,7 +40,7 @@ public class ThreadExecutor extends Thread {
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
         logger.info("initializing Tread executor with station=" + station.getId() + " name=" + station.getName());
         this.station = station;
-        delay = station.getDelay() == null ? 5 : station.getDelay();
+        delay = station.getDelay() == -1 ? 5 : station.getDelay();
         this.tasks = tasks;
         this.taskStates = map;
         errors = new HashMap<String, Integer>(tasks.size() + 1);

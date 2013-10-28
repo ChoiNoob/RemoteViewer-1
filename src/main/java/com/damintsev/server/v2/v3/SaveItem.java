@@ -94,7 +94,7 @@ public class SaveItem implements Visitor<Item> {
                 statement.setString(5, station.getPassword());
                 statement.setString(6, station.getPort());
                 statement.setBoolean(7, station.getAllowStatistics());
-                statement.setInt(8, station.getDelay());
+                statement.setInt(8, station.getDelay() == null ? -1 : station.getDelay());
                 statement.setLong(9, station.getId());
                 statement.executeUpdate();
             }
