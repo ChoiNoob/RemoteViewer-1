@@ -1,13 +1,13 @@
 package com.damintsev.server.v2.v3;
 
-import com.damintsev.common.pojo.Station;
-import com.damintsev.common.pojo.Task;
+import com.damintsev.common.beans.Station;
+import com.damintsev.common.beans.Task;
 import com.damintsev.server.v2.v3.taskprocessors.TaskPool;
 import com.damintsev.server.v2.v3.taskprocessors.TaskProcessor;
 import com.damintsev.server.v2.v3.connections.Connection;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
-import com.damintsev.common.pojo.ExecuteState;
-import com.damintsev.common.pojo.TaskState;
+import com.damintsev.common.beans.ExecuteState;
+import com.damintsev.common.beans.TaskState;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 import org.slf4j.Logger;

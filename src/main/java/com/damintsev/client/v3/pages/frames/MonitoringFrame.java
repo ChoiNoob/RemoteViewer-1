@@ -6,7 +6,7 @@ import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.old.devices.UIItem;
 import com.damintsev.client.service.Service;
-import com.damintsev.common.pojo.TaskState;
+import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.visitor.UIVisitor;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;

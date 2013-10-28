@@ -1,13 +1,11 @@
 package com.damintsev.server.services;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.pojo.Label;
-import com.damintsev.common.pojo.Station;
+import com.damintsev.common.beans.Label;
+import com.damintsev.common.beans.Station;
 import com.damintsev.client.service.DatabaseService;
-import com.damintsev.common.pojo.Label;
-import com.damintsev.common.pojo.Station;
-import com.damintsev.common.pojo.TaskState;
-import com.damintsev.common.pojo.Task;
+import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.beans.Task;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.SoA;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;

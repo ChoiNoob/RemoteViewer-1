@@ -1,8 +1,8 @@
 package com.damintsev.common.visitor;
 
-import com.damintsev.common.pojo.Label;
-import com.damintsev.common.pojo.Station;
-import com.damintsev.common.pojo.Task;
+import com.damintsev.common.beans.Label;
+import com.damintsev.common.beans.Station;
+import com.damintsev.common.beans.Task;
 
 /**
  * User: adamintsev Date: 15.10.13 Time: 16:55

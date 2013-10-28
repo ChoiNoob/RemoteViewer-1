@@ -2,14 +2,13 @@ package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.Service;
-import com.damintsev.common.pojo.Station;
-import com.damintsev.common.pojo.Task;
-import com.damintsev.common.pojo.TaskType;
+import com.damintsev.common.beans.Station;
+import com.damintsev.common.beans.Task;
+import com.damintsev.common.beans.TaskType;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
-import com.google.gwt.editor.client.EditorError;
 import com.google.gwt.editor.client.SimpleBeanEditorDriver;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;

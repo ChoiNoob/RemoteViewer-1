@@ -1,11 +1,11 @@
 package com.damintsev.server.v2.v3;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.pojo.Station;
+import com.damintsev.common.beans.Station;
 import com.damintsev.server.db.DB;
-import com.damintsev.common.pojo.Task;
+import com.damintsev.common.beans.Task;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
-import com.damintsev.common.pojo.TaskState;
+import com.damintsev.common.beans.TaskState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,4 +1,4 @@
-package com.damintsev.common.pojo;
+package com.damintsev.common.beans;
 
 /**
  * User: Damintsev Andrey

@@ -19,14 +19,13 @@ public class TestWindow {
         window.show();
     }
 
-    interface MyBinder extends UiBinder<Widget, TestWindow>{
+    interface MyBinder extends UiBinder<Widget, TestWindow> {
     }
 
     private static MyBinder uiBinder = GWT.create(MyBinder.class);
 
     @UiField
     Window window;
-
     @UiField
     TextField name;
     @UiField

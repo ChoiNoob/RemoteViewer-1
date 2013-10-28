@@ -1,6 +1,6 @@
 package com.damintsev.server.v2.v3.taskprocessors;
 
-import com.damintsev.common.pojo.TaskState;
+import com.damintsev.common.beans.TaskState;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 
 /**

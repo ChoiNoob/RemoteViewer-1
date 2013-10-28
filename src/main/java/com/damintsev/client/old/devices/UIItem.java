@@ -1,7 +1,7 @@
 package com.damintsev.client.old.devices;
 
-import com.damintsev.common.pojo.Station;
-import com.damintsev.common.pojo.TaskState;
+import com.damintsev.common.beans.Station;
+import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.utils.Position;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;

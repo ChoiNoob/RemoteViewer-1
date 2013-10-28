@@ -1,6 +1,6 @@
 package com.damintsev.client.old.devices;
 
-import com.damintsev.common.pojo.Station;
+import com.damintsev.common.beans.Station;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlElement;

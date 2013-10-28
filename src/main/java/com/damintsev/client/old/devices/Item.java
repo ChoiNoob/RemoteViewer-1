@@ -1,7 +1,7 @@
 package com.damintsev.client.old.devices;
 
-import com.damintsev.common.pojo.Station;
-import com.damintsev.common.pojo.TaskType;
+import com.damintsev.common.beans.Station;
+import com.damintsev.common.beans.TaskType;
 import com.damintsev.common.visitor.CommonVisitor;
 import com.damintsev.common.visitor.Visitor;
 import com.damintsev.common.utils.Position;

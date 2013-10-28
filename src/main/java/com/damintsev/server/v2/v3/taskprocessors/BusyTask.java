@@ -1,7 +1,6 @@
 package com.damintsev.server.v2.v3.taskprocessors;
 
-import com.damintsev.common.pojo.TaskState;
-import com.damintsev.server.v2.v3.taskprocessors.TaskProcessor;
+import com.damintsev.common.beans.TaskState;
 
 /**
  * User: Damintsev Andrey

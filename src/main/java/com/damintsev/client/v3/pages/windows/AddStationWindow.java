@@ -2,7 +2,7 @@ package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.Service;
-import com.damintsev.common.pojo.Station;
+import com.damintsev.common.beans.Station;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.core.client.GWT;

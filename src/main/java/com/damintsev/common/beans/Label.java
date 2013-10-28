@@ -1,4 +1,4 @@
-package com.damintsev.common.pojo;
+package com.damintsev.common.beans;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.visitor.Visitor;

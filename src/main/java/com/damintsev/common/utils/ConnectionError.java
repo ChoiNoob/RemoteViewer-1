@@ -11,5 +11,6 @@ public class ConnectionError extends Window {
 
     public ConnectionError(Throwable throwable) {
         setPixelSize(250, 250);
+
     }
 }

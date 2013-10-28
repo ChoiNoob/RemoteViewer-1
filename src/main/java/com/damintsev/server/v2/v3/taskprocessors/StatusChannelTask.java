@@ -1,7 +1,7 @@
 package com.damintsev.server.v2.v3.taskprocessors;
 
-import com.damintsev.common.pojo.ExecuteState;
-import com.damintsev.common.pojo.TaskState;
+import com.damintsev.common.beans.ExecuteState;
+import com.damintsev.common.beans.TaskState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

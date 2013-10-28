@@ -18,7 +18,7 @@
     <gxt:Window ui:field="window" minHeight="300" minWidth="300" modal="true" blinkModal="true"
                 headingText="Hello Window">
         <gxt:ContentPanel headerVisible="false">
-            <container:VerticalLayoutContainer la>
+            <container:VerticalLayoutContainer>
                 <form:FieldLabel text="FUCK U">
                     <form:widget>
                         <form:TextField ui:field="name"/>

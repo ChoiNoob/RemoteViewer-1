@@ -1,8 +1,8 @@
 package com.damintsev.server.v2.v3.connections;
 
-import com.damintsev.common.pojo.Station;
+import com.damintsev.common.beans.Station;
 import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
-import com.damintsev.common.pojo.Task;
+import com.damintsev.common.beans.Task;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 

@@ -1,4 +1,4 @@
-package com.damintsev.common.pojo;
+package com.damintsev.common.beans;
 
 import com.damintsev.client.old.devices.Response;
 
