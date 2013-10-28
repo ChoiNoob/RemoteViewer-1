@@ -4,7 +4,7 @@ import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.client.old.devices.UIItem;
+import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.service.Service;
 import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.visitor.UIVisitor;
@@ -122,9 +122,9 @@ public class MonitoringFrame {
 //        UIItem uiItem = new UIItem(item);
         UIItem uiItem = item.accept(visitor);
         uiItems.put(uiItem.getId(), uiItem);
-        panel.add(uiItem, 0, 0);
-        panel.setWidgetPosition(uiItem, uiItem.getPosition().x, uiItem.getPosition().y);
-        if (editing) dragController.makeDraggable(uiItem);
+        panel.add(uiItem.asWidget(), 0, 0);
+        panel.setWidgetPosition(uiItem.asWidget(), uiItem.getPosition().x, uiItem.getPosition().y);
+        if (editing) dragController.makeDraggable(uiItem.asWidget());
         drawConnections();
     }
 
@@ -132,7 +132,7 @@ public class MonitoringFrame {
         stop();
         editing = true;
         for(UIItem item : uiItems.values()) {
-            dragController.makeDraggable(item);
+            dragController.makeDraggable(item.asWidget());
         }
     }
 
@@ -140,7 +140,7 @@ public class MonitoringFrame {
         editing = false;
         dragController.clearSelection();
         for(UIItem item : uiItems.values()) {
-            dragController.makeNotDraggable(item);
+            dragController.makeNotDraggable(item.asWidget());
             item.savePosition();
         }
         saveItemPositions();

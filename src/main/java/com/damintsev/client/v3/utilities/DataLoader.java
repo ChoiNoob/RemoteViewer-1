@@ -1,7 +1,7 @@
 package com.damintsev.client.v3.utilities;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.client.old.devices.UIItem;
+import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.google.gwt.user.client.rpc.AsyncCallback;

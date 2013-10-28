@@ -1,6 +1,6 @@
 package com.damintsev.client.v3.pages.frames;
 
-import com.damintsev.client.old.devices.UIItem;
+import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
@@ -10,8 +10,6 @@ import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Utils;
 import com.damintsev.common.utils.async.Async;
 import com.damintsev.common.utils.async.AsyncTask;
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.ButtonCell;
@@ -112,14 +110,15 @@ public class SettingsFrame {
                 Async.runAsync(new AsyncTask() {
                     @Override
                     public void onSuccess() {
-                        final UIItem selected = (UIItem) MonitoringFrame.get().getSelected();
+                        final Widget selected =  MonitoringFrame.get().getSelected();
                         if (selected == null) Dialogs.alert("Выберите устройство");
                         else {
-                            selected.openEditor(new Runnable() {
-                                public void run() {
-                                    //todo ?!?!?!
-                                }
-                            });
+//                            ((UIItem)selected).openEditor(new Runnable() {
+//                                public void run() {
+//                                    //todo ?!?!?!
+//                                }
+//                            });
+                            //todo!!!!!!!!!!!!!!!!!
                         }
                     }
                 });

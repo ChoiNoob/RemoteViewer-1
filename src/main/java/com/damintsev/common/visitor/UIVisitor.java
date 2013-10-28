@@ -1,6 +1,6 @@
 package com.damintsev.common.visitor;
 
-import com.damintsev.client.old.devices.UIItem;
+import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.common.beans.Label;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;

@@ -1,9 +1,9 @@
 package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.client.old.devices.UIItem;
-import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
+import com.damintsev.common.utils.Position;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -14,30 +14,49 @@ import com.google.gwt.user.client.ui.Widget;
  */
 public class UILabel extends UIItem {
 
+    private Label label;
+
     public UILabel(Item item) {
         super(item);
-        setWidth("auto");
+        label = new Label(getName(), true);
+        label.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
+        label.getElement().getStyle().setProperty("width", "auto");
+        label.setStyleName("tooltip");
     }
 
     @Override
-    protected String initImage() {
+    public void savePosition() {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected int getLeft() {
+        return label.getAbsoluteLeft();
+    }
+
+    @Override
+    protected int getTop() {
+        return label.getAbsoluteTop();
+    }
+
+    @Override
+    public Position getCenterPosition() {
         return null;
     }
 
     @Override
-    public Widget getParent() {
-        System.out.println("FUCKCCKCKCK");
-        return super.getParent();    //To change body of overridden methods use File | Settings | File Templates.
+    protected int getWidth() {
+        return 0;  //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    public Widget asWidget() {     //todo этот метод не вызвается! Надо придумать как его ызнвтаь!
-        Label label = new Label(getName(), true);
-//        label.setAutoHorizontalAlignment(ALIGN_JUSTIFY);
-//        label.setSize("200px");
-        label.getElement().getStyle().setProperty("width", "auto");
-//        super.setWidth("auto");
-        return this;
+    protected int getHeight() {
+        return 0;
+    }
+
+    @Override
+    public Widget widget() {
+        return label;
     }
 
     @Override

@@ -1,6 +1,6 @@
 //package com.damintsev.client.old.devices.windows;
 //
-//import com.damintsev.client.old.devices.UIItem;
+//import com.damintsev.client.v3.uiitems.UIItem;
 //import com.sencha.gxt.widget.core.client.Window;
 //import com.sencha.gxt.widget.core.client.event.HideEvent;
 //
