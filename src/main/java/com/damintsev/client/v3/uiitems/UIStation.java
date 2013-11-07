@@ -2,12 +2,17 @@ package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
+import com.damintsev.client.v3.utilities.StatusToolTip;
 import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Position;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.widget.core.client.event.BeforeShowEvent;
+import com.sencha.gxt.widget.core.client.tips.ToolTip;
+import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 
 /**
  * User: Damintsev Andrey
@@ -54,6 +59,8 @@ public class UIStation extends UIItem {
             label.getElement().appendChild(nameLabel.getElement());
         }
         nameLabel.setStyleName("tooltip");
+        ToolTipConfig tooltip = StatusToolTip.getInstance().createToolTip();
+        ToolTip tt = new ToolTip(this, tooltip);
         return label;
     }
 
