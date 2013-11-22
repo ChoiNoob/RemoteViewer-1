@@ -1,12 +1,9 @@
 package com.damintsev.common.visitor;
 
-import com.damintsev.client.v3.uiitems.UIItem;
+import com.damintsev.client.v3.uiitems.*;
 import com.damintsev.common.beans.Label;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
-import com.damintsev.client.v3.uiitems.UILabel;
-import com.damintsev.client.v3.uiitems.UIStation;
-import com.damintsev.client.v3.uiitems.UITask;
 
 /**
  * User: adamintsev Date: 15.10.13 Time: 16:55

@@ -25,8 +25,8 @@ public class MainGWT implements EntryPoint {
                 while (throwable != null) {
                     StackTraceElement[] stackTraceElements = throwable.getStackTrace();
                     text += throwable.toString() + "\n";
-                    for (int i = 0; i < stackTraceElements.length; i++) {
-                        text += "    at " + stackTraceElements[i] + "\n";
+                    for (StackTraceElement stackTraceElement : stackTraceElements) {
+                        text += "    at " + stackTraceElement + "\n";
                     }
                     throwable = throwable.getCause();
                     if (throwable != null) {

@@ -6,6 +6,7 @@ import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.v3.uiitems.UITest;
 import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.visitor.UIVisitor;
 import com.damintsev.client.v3.utilities.DataLoader;
@@ -134,6 +135,9 @@ public class MonitoringFrame {
         for(UIItem item : uiItems.values()) {
             dragController.makeDraggable(item);
         }
+        UITest test = new UITest();
+        panel.add(test, 0, 0);
+        panel.setWidgetPosition(test, 150, 150);
     }
 
     public void stopEditing() {

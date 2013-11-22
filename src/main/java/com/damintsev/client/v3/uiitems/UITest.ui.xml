@@ -1,0 +1,20 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+    <ui:style>
+        .inner {
+            /*background: #DDD;*/
+            /*display: table-cell;*/
+            vertical-align: middle;
+            text-align: center;
+        }
+    </ui:style>
+    <g:HTMLPanel>
+        <div class="{style.inner}">
+            <g:Image ui:field="image"/>
+        </div>
+        <div class="{style.inner}">
+            <g:Label styleName="tooltip" ui:field="label"/>
+        </div>
+    </g:HTMLPanel>
+</ui:UiBinder>
