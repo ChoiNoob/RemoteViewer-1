@@ -186,6 +186,7 @@ public class AddTaskWindow implements Editor<Task>{
         if (id == null) {
             task = new Task();
             delete.hide();
+            driver.edit(task);
         } else {
             delete.show();
             window.mask();
@@ -196,11 +197,11 @@ public class AddTaskWindow implements Editor<Task>{
 
                 public void onSuccess(Task result) {
                     task = result;
+                    driver.edit(task);
                     window.unmask();
                 }
             });
         }
-        driver.edit(task);
     }
 
     interface TaskEditor extends SimpleBeanEditorDriver<Task, AddTaskWindow> {

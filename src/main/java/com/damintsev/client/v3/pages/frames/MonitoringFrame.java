@@ -135,9 +135,9 @@ public class MonitoringFrame {
         for(UIItem item : uiItems.values()) {
             dragController.makeDraggable(item);
         }
-        UITest test = new UITest();
-        panel.add(test, 0, 0);
-        panel.setWidgetPosition(test, 150, 150);
+//        UITest test = new UITest();
+//        panel.add(test, 0, 0);
+//        panel.setWidgetPosition(test, 150, 150);
     }
 
     public void stopEditing() {

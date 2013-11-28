@@ -27,7 +27,6 @@ public class UITest extends Composite {
         this.task = task;
         image.setUrl("image?type=station");
         label.setText("FUCKCKCKCKCKCKC");
-        AppController
     }
 
     @UiField

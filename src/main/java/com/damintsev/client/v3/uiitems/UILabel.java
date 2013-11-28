@@ -3,6 +3,7 @@ package com.damintsev.client.v3.uiitems;
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
 import com.damintsev.common.utils.Position;
+import com.google.gwt.i18n.shared.DirectionEstimator;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
@@ -47,7 +48,10 @@ public class UILabel extends UIItem {
 
     @Override
     public Widget widget() {
-        label = new Label(getName(), true);
+
+//        label = new Label(getName().replace("\n", "<br>"));
+        label = new Label(getName());
+        label.getElement().setInnerHTML(getName().replace("\n", "<br>"));
         label.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
         label.getElement().getStyle().setProperty("width", "auto");
         label.setStyleName("tooltip");
