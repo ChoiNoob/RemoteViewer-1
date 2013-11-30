@@ -5,6 +5,8 @@ import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
 import com.damintsev.common.beans.Task;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * User: Damintsev Andrey
@@ -13,6 +15,7 @@ import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
  */
 public class TelnetConnection extends Connection {
 
+    private static final Logger logger = LoggerFactory.getLogger(TelnetConnection.class);
     private TelnetWorker worker;
     private Station station;
 
@@ -23,6 +26,7 @@ public class TelnetConnection extends Connection {
         worker.setPassword(station.getPassword());
         worker.setHost(station.getHost());
         worker.setPort(station.getPort());
+        logger.info("Trying to connect host=" + station.getHost() + " login=" + station.getLogin());
         worker.connect();
         return this;
     }

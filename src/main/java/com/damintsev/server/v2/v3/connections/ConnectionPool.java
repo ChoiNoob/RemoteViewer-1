@@ -4,6 +4,8 @@ import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
 import com.damintsev.common.beans.TaskType;
 import com.damintsev.server.v2.v3.exceptions.ConnectException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +16,7 @@ import java.util.Map;
  * Time: 20:01
  */
 public class ConnectionPool {
+    private static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
 
     private static ConnectionPool instance;
 
@@ -30,13 +33,15 @@ public class ConnectionPool {
 
     public Connection getConnection(Task task) throws ConnectException {
         Connection connection = connectionMap.get(task.getStringId() + task.getType());
-        if (connection == null) connection = create(task.getStation(), task.getType());
+        if (connection == null) {
+            logger.info("Connection not fount i pool. Initialiing new connection");
+            connection = create(task.getStation(), task.getType());
+        }
         return connection;
     }
 
     public Connection create(Station station, TaskType type) throws ConnectException {
         Connection conn;
-        System.err.println("TYPE=" + type);
         switch (type) {
 //            case TELNET:
             case ISDN:

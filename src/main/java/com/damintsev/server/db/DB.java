@@ -5,7 +5,6 @@ import com.damintsev.common.beans.Label;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
 import com.damintsev.common.beans.TaskType;
-import com.damintsev.server.v2.v3.SaveItem;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;

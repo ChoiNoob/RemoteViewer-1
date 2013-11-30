@@ -46,7 +46,7 @@ public class ThreadExecutor extends Thread {
         this.tasks = tasks;
         this.taskStates = map;
         errors = new HashMap<String, Integer>(tasks.size() + 1);
-        //todo надо ли инициализировать коннект сейчас ?
+        //todo надо ли инициализировать коннект сейчас ?  - найхуй
         for(Task task : tasks) {
             taskStates.put(task.getStringId(), new TaskState(ExecuteState.INIT));
         }

@@ -3,35 +3,35 @@ package com.damintsev.common.beans;
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.visitor.Visitor;
 
-import javax.persistence.*;
+//import javax.persistence.*;
 
 /**
  * User: Damintsev Andrey
  * Date: 04.08.13
  * Time: 14:15
  */
-@Entity
-@org.hibernate.annotations.Entity
+//@Entity
+//@org.hibernate.annotations.Entity
 public class Station extends Item {
-    @Id
+//    @Id
 //    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "station_id")
+//    @Column(name = "station_id")
     private Long id;
-    @Column
+//    @Column
     private String name;
-    @Column
+//    @Column
     private String host;
-    @Column
+//    @Column
     private String port;
-    @Column
+//    @Column
     private String login;
-    @Column
+//    @Column
     private String password;
-    @Column
+//    @Column
     private String comment;
-    @Transient
+//    @Transient
     private String imageName = "hipath";
-    @Column
+//    @Column
     private Boolean allowStatistics;
     private Integer delay;
 

@@ -59,8 +59,8 @@ public class UIStation extends UIItem {
             label.getElement().appendChild(nameLabel.getElement());
         }
         nameLabel.setStyleName("tooltip");
-        ToolTipConfig tooltip = StatusToolTip.getInstance().createToolTip();
-        ToolTip tt = new ToolTip(this, tooltip);
+//        ToolTipConfig tooltip = StatusToolTip.getInstance().createToolTip();
+//        ToolTip tt = new ToolTip(this, tooltip);
         return label;
     }
 
