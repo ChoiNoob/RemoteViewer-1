@@ -3,6 +3,7 @@ package com.damintsev.server.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 /**
  * User: Damintsev Andrey
@@ -11,13 +12,17 @@ import java.sql.DriverManager;
  */
 public class Mysql {
 
+    private static Properties prop;
+
     public static Connection getConnection() {
         Connection connect = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
-            connect = DriverManager.getConnection("jdbc:mysql://localhost:3306/viewer?"
-                    + "user=root&password=root@31994!&useUnicode=true&characterEncoding=utf-8");
-                                        //root@31994!
+            if (prop == null) {
+                prop = new Properties();
+                prop.load(Mysql.class.getClassLoader().getResourceAsStream("/database-prod.properties"));
+            }
+            Class.forName(prop.getProperty("driverClassName"));
+            connect = DriverManager.getConnection(prop.getProperty("url"), prop);
         } catch (Exception e) {
             e.printStackTrace();
         }
