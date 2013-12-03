@@ -42,4 +42,9 @@ public class TelnetConnection extends Connection {
     public void destroy() {
         worker.disconnect();
     }
+
+    @Override
+    public boolean isConnected() {
+        return worker != null && worker.isConnected();
+    }
 }

@@ -48,7 +48,7 @@ public class ThreadExecutor extends Thread {
         errors = new HashMap<String, Integer>(tasks.size() + 1);
         //todo надо ли инициализировать коннект сейчас ?  - найхуй
         for(Task task : tasks) {
-            taskStates.put(task.getStringId(), new TaskState(ExecuteState.INIT));
+            taskStates.put(task.getStringId(), new TaskState(task.getStringId(), ExecuteState.INIT));
         }
         start();
         logger.info("Starting current thread");
@@ -57,8 +57,11 @@ public class ThreadExecutor extends Thread {
     private void executeTask(Task task) {
         TaskState state;
         try {
-            logger.info("Executing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType());
+            logger.info("Executing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType() + " command=" + task.getCommand());
             Connection connection = ConnectionPool.getInstance().getConnection(task);
+
+            if (connection.isConnected()) taskStates.put(task.getParentId(), new TaskState(task.getParentId(), ExecuteState.WORK));
+
             TaskProcessor taskProcessor = TaskPool.getInstance().getTaskProcessor(task.getType());
             state = taskProcessor.process(connection.execute(task));
             state.setId(task.getStringId());
@@ -121,8 +124,7 @@ public class ThreadExecutor extends Thread {
                                     //todo надо переписать!!!!!
     private TaskState createConnectionError(String stringID, Exception conn, boolean connectionError) {
         logger.info("Created connection error!");
-        TaskState task = new TaskState(ExecuteState.ERROR, conn.getMessage());
-        task.setId(stringID);
+        TaskState task = new TaskState(stringID, ExecuteState.ERROR, conn.getMessage());
         if (errors.get(stringID) == null) errors.put(stringID, 1);
         if (errors.get(stringID) <= 2) {
             task.setState(ExecuteState.WARNING);

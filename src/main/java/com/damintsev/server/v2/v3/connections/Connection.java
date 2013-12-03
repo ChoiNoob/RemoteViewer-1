@@ -18,4 +18,5 @@ public abstract class Connection {
 
     public abstract void destroy();
 
+    public abstract boolean isConnected();
 }

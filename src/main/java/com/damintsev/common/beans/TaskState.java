@@ -16,17 +16,23 @@ public class TaskState implements Serializable {
     private Response response;
     private String message;
 
+    @Deprecated
     public TaskState() {
-        state = ExecuteState.INIT;
+       state = ExecuteState.INIT;
     }
 
-    public TaskState(ExecuteState state) {
-        this.state = state;
+    public TaskState(String id) {
+        this(id, ExecuteState.INIT);
     }
 
-    public TaskState(ExecuteState state, String message) {
+    public TaskState(String id, ExecuteState state) {
+        this(id, state, null);
+    }
+
+    public TaskState(String id, ExecuteState state, String message) {
         this.state = state;
         this.message = message;
+        this.id = id;
     }
 
     public String getId() {
@@ -60,4 +66,9 @@ public class TaskState implements Serializable {
     public void setState(ExecuteState state) {
         this.state = state;
     }
+
+//    @Override
+//    public String toString() {
+//        return "TaskState@" + getId();
+//    }
 }

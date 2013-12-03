@@ -34,7 +34,7 @@ public class ConnectionPool {
     public Connection getConnection(Task task) throws ConnectException {
         Connection connection = connectionMap.get(task.getStringId() + task.getType());
         if (connection == null) {
-            logger.info("Connection not fount i pool. Initialiing new connection");
+            logger.info("Connection not found in pool. Initialising new connection");
             connection = create(task.getStation(), task.getType());
         }
         return connection;

@@ -63,4 +63,9 @@ public class PingConnection extends Connection {
             }
         }
     }
+
+    @Override
+    public boolean isConnected() {
+        return true;
+    }
 }
