@@ -32,9 +32,9 @@ public class TelnetConnection extends Connection {
     }
 
     @Override
-    public String execute(Task task) throws ExecutingTaskException {
+    public String execute(Task task) throws ExecutingTaskException, ConnectException {
        if(worker == null || !worker.isConnected())
-           throw new RuntimeException("Telnet worker not initialized!");
+           throw new ConnectException("Telnet worker not initialized!");
         return worker.execute(task.getCommand()).getResultText(); //todo convert to string!
     }
 

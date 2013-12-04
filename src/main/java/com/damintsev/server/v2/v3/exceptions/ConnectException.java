@@ -14,4 +14,8 @@ public class ConnectException extends Exception {
     public ConnectException(Exception e) {
         super(e);
     }
+
+    public ConnectException(String e) {
+        super(e);
+    }
 }

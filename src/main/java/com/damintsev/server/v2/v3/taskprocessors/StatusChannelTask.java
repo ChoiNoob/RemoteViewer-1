@@ -35,6 +35,7 @@ public class StatusChannelTask implements TaskProcessor {
             logger.info("After parse result is ERROR");
             response.setState(ExecuteState.ERROR);
         }
+        response.setMessage(command);
         return response;
     }
 }

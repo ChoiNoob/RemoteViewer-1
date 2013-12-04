@@ -14,7 +14,7 @@ public abstract class Connection {
 
     public abstract Connection init(Station station) throws ConnectException;
 
-    public abstract String execute(Task task) throws ExecutingTaskException;
+    public abstract String execute(Task task) throws ExecutingTaskException, ConnectException;
 
     public abstract void destroy();
 

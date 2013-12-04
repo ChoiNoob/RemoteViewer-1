@@ -56,9 +56,10 @@ public class ThreadExecutor extends Thread {
 
     private void executeTask(Task task) {
         TaskState state;
+        Connection connection = null;
         try {
             logger.info("Executing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType() + " command=" + task.getCommand());
-            Connection connection = ConnectionPool.getInstance().getConnection(task);
+            connection = ConnectionPool.getInstance().getConnection(task);
 
             if (connection.isConnected()) taskStates.put(task.getParentId(), new TaskState(task.getParentId(), ExecuteState.WORK));
 
@@ -71,6 +72,7 @@ public class ThreadExecutor extends Thread {
         } catch (ConnectException conn) {
             logger.info("Caught connection error " + conn.getLocalizedMessage());
             state = createConnectionError(task.getParentId(), conn, true);
+            ConnectionPool.getInstance().dropConnection(task.getStation(), task.getType());
         }   catch (ExecutingTaskException exec) {
             logger.info("Caught executing error " + exec.getLocalizedMessage());
             state = createConnectionError(task.getStringId(), exec, false);
@@ -177,7 +179,8 @@ public class ThreadExecutor extends Thread {
 //    }
 
     public void destroyProcess() {
-        ConnectionPool.getInstance().dropConnection(station);
+// todo       ConnectionPool.getInstance().dropConnection(station);
+        ConnectionPool.getInstance().dropConnections();
         tasks.clear();
         taskStates.clear();
         errors.clear();

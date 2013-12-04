@@ -1,11 +1,14 @@
 package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.v3.utilities.StatusToolTip;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.utils.Position;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.*;
+import com.sencha.gxt.widget.core.client.tips.ToolTip;
+import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 
 /**
  * User: Damintsev Andrey
@@ -38,7 +41,12 @@ public abstract class UIItem extends Label implements IsWidget {
         this.item = item;
         taskState = new TaskState();
         getElement().appendChild(widget().getElement());
+
+    //todo    tooltip = StatusToolTip.getInstance();
+        //todo     ToolTip tt = new ToolTip(this, tooltip);
     }
+
+    StatusToolTip tooltip;
 
     public void savePosition() {
         item.getPosition().x = getLeft();
@@ -84,6 +92,7 @@ public abstract class UIItem extends Label implements IsWidget {
     }
 
     public void setTaskState(TaskState status) {
+        tooltip.setMessage(status);
         this.taskState = status;
     }
 

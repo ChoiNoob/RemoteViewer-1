@@ -37,6 +37,11 @@ public class ConnectionPool {
             logger.info("Connection not found in pool. Initialising new connection");
             connection = create(task.getStation(), task.getType());
         }
+//        System.out.println("isConnected=" + connection.isConnected());
+//        if(!connection.isConnected()) {
+//            connectionMap.remove(task.getParentId() + task.getType());
+//            throw new ConnectException("Connection not Alive");
+//        }
         return connection;
     }
 
@@ -59,11 +64,11 @@ public class ConnectionPool {
 //        return conn;
     }
 
-    public void dropConnection(Station station) {
-        if(connectionMap.get(station.getStringId()) != null) {
-            System.out.println("destroyng connection=" +station.getStringId());
-            connectionMap.get(station.getStringId()).destroy();
-            connectionMap.remove(station.getStringId());
+    public void dropConnection(Station station, TaskType type) {
+        if(connectionMap.get(station.getStringId() + type) != null) {
+            System.out.println("destroyng connection=" +station.getStringId() + type);
+            connectionMap.get(station.getStringId() + type).destroy();
+            connectionMap.remove(station.getStringId() + type);
         }
     }
 
