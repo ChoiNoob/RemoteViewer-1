@@ -71,6 +71,5 @@ public class StatusToolTip extends ToolTipConfig {
 
         setData(state);
 //        renderer.renderToolTip(state);
-        renderer.renderToolTip()
     }
 }

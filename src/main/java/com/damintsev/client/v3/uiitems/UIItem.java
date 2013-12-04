@@ -92,7 +92,7 @@ public abstract class UIItem extends Label implements IsWidget {
     }
 
     public void setTaskState(TaskState status) {
-        tooltip.setMessage(status);
+//todo        tooltip.setMessage(status);
         this.taskState = status;
     }
 
