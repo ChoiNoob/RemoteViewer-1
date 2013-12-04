@@ -32,7 +32,7 @@ public class ConnectionPool {
     }
 
     public Connection getConnection(Task task) throws ConnectException {
-        Connection connection = connectionMap.get(task.getStringId() + task.getType());
+        Connection connection = connectionMap.get(task.getParentId() + task.getType());
         if (connection == null) {
             logger.info("Connection not found in pool. Initialising new connection");
             connection = create(task.getStation(), task.getType());
@@ -41,6 +41,7 @@ public class ConnectionPool {
     }
 
     public Connection create(Station station, TaskType type) throws ConnectException {
+        logger.info("Createing connection with id=" + station.getStringId() + type);
         Connection conn;
         switch (type) {
 //            case TELNET:

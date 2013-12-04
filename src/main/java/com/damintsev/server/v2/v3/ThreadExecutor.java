@@ -63,7 +63,9 @@ public class ThreadExecutor extends Thread {
             if (connection.isConnected()) taskStates.put(task.getParentId(), new TaskState(task.getParentId(), ExecuteState.WORK));
 
             TaskProcessor taskProcessor = TaskPool.getInstance().getTaskProcessor(task.getType());
-            state = taskProcessor.process(connection.execute(task));
+            String res = connection.execute(task);
+
+            state = taskProcessor.process(res);
             state.setId(task.getStringId());
             checkForErrors(task);
         } catch (ConnectException conn) {
@@ -73,7 +75,7 @@ public class ThreadExecutor extends Thread {
             logger.info("Caught executing error " + exec.getLocalizedMessage());
             state = createConnectionError(task.getStringId(), exec, false);
         }
-        taskStates.put(task.getStringId(), state);
+        taskStates.put(state.getId(), state);    //todo убить этот метод нах он ублюдский
     }
 
     private void checkForErrors(Task task) {
@@ -112,7 +114,7 @@ public class ThreadExecutor extends Thread {
     public void interrupt() {
         start = false;
         for(Task task : tasks) {
-            taskStates.put(task.getStringId(), new TaskState());
+            taskStates.put(task.getStringId(), new TaskState(task.getStringId()));
         }
         needToPause = false;
         super.interrupt();

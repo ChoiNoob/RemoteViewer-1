@@ -112,7 +112,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
         return response;
     }
 
-    private Response write(String command) {
+    private Response write(String command) throws ConnectException {
         clearReaded();
         command += "\r\n";
         logger.info("***Sending command to remote server: " + command);
@@ -122,14 +122,14 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             Thread.sleep(5000);
         } catch (Exception e) {
            logger.debug("Exception when reading command" + e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new ConnectException(e);
         }
         String result = getReaded();
-        logger.debug("***Readed from server: " + result);
+        logger.info("***Readed from server: " + result);
         return new Response(result);
     }
 
-    public Response execute(String command) {
+    public Response execute(String command) throws ConnectException {
         return write(command);
     }
 
