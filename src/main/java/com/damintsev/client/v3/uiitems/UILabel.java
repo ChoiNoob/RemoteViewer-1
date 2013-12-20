@@ -48,8 +48,6 @@ public class UILabel extends UIItem {
 
     @Override
     public Widget widget() {
-
-//        label = new Label(getName().replace("\n", "<br>"));
         label = new Label(getName());
         label.getElement().setInnerHTML(getName().replace("\n", "<br>"));
         label.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);

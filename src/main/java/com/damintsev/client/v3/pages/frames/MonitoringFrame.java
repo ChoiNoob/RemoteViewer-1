@@ -3,11 +3,16 @@ package com.damintsev.client.v3.pages.frames;
 import com.allen_sauer.gwt.dnd.client.PickupDragController;
 import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
+import com.damintsev.client.EventBus;
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.uiitems.UITest;
 import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.event.StartEditEvent;
+import com.damintsev.common.event.StartEditEventHandler;
+import com.damintsev.common.event.StopEditEvent;
+import com.damintsev.common.event.StopEditEventHandler;
 import com.damintsev.common.visitor.UIVisitor;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;
@@ -65,12 +70,23 @@ public class MonitoringFrame {
         DropController dropController = new AbsolutePositionDropController(panel);
         dragController.registerDropController(dropController);
         dragController.setBehaviorMultipleSelection(true);
-
-        final TextButton editButton = new TextButton("Редактировать", new SelectEvent.SelectHandler() {
-            public void onSelect(SelectEvent event) {
+        EventBus.get().addHandler(StartEditEvent.TYPE, new StartEditEventHandler() {
+            @Override
+            public void onStartEdit(StartEditEvent event) {
                 startEditing();
                 SettingsFrame.get().expand();
                 stop();
+            }
+        });
+        EventBus.get().addHandler(StopEditEvent.TYPE, new StopEditEventHandler() {
+            @Override
+            public void onStopEdit(StopEditEvent event) {
+                stopEditing();
+            }
+        });
+        final TextButton editButton = new TextButton("Редактировать", new SelectEvent.SelectHandler() {
+            public void onSelect(SelectEvent event) {
+
             }
         });
         editButton.setAllowTextSelection(false);
@@ -78,7 +94,7 @@ public class MonitoringFrame {
         editButton.getElement().getStyle().setRight(5, Style.Unit.PX);
         editButton.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
 
-        panel.add(editButton);
+//todo        panel.add(editButton);
         drawCanvas(panel);
         DataLoader.getInstance().load();
         drawConnections();
@@ -139,6 +155,7 @@ public class MonitoringFrame {
 //        panel.add(test, 0, 0);
 //        panel.setWidgetPosition(test, 150, 150);
     }
+
 
     public void stopEditing() {
         editing = false;

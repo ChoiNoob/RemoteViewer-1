@@ -2,6 +2,7 @@ package com.damintsev.client;
 
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.v3.pages.frames.SettingsFrame;
+import com.damintsev.client.v3.pages.frames.StatusBar;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
@@ -30,6 +31,11 @@ public class UIRootPanel {
         body.getElement().getStyle().setBackgroundColor("white");
         viewport.add(body);
 
+        FlowLayoutContainer header = new FlowLayoutContainer();
+        header.setHeight(20);
+        header.add(new StatusBar().getToolBar());
+        body.setNorthWidget(header, new BorderLayoutContainer.BorderLayoutData(20));
+
         FlowLayoutContainer footer = new FlowLayoutContainer();
         footer.setHeight(20);
         footer.setStyleName("footer");
@@ -39,7 +45,6 @@ public class UIRootPanel {
         body.setCenterWidget(frame);
         final ContentPanel settings = (ContentPanel) SettingsFrame.get().getContent();
         frame.add(settings);
-//          frame.add(UIBillingPanel.getInstance().getContent());
         return viewport;
     }
 }

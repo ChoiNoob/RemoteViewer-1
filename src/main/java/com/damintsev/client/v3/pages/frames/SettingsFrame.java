@@ -1,11 +1,15 @@
 package com.damintsev.client.v3.pages.frames;
 
+import com.damintsev.client.EventBus;
 import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
 import com.damintsev.client.v3.pages.windows.FileUploadWindow;
 import com.damintsev.client.old.devices.windows.PrefixConfigWindow;
+import com.damintsev.common.event.StartEditEvent;
+import com.damintsev.common.event.StartEditEventHandler;
+import com.damintsev.common.event.StopEditEvent;
 import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Utils;
 import com.damintsev.common.utils.async.Async;
@@ -158,13 +162,21 @@ public class SettingsFrame {
         panel.addButton(save);
         TextButton cancel = new TextButton("Отмена", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                MonitoringFrame.get().stopEditing();
+//                MonitoringFrame.get().stopEditing();
+                EventBus.get().fireEvent(new StopEditEvent());
                 collapse();
             }
         });
 
         panel.addButton(cancel);
         panel.setButtonAlign(BoxLayoutContainer.BoxLayoutPack.CENTER);
+
+        EventBus.get().addHandler(StartEditEvent.TYPE, new StartEditEventHandler() {
+            @Override
+            public void onStartEdit(StartEditEvent event) {
+                expand();
+            }
+        });
 
         return panel;
     }

@@ -1,6 +1,7 @@
 package com.damintsev.client;
 
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
+import com.damintsev.common.event.StartEditEvent;
 import com.damintsev.common.utils.async.Async;
 import com.damintsev.common.utils.async.AsyncTask;
 import com.google.gwt.core.client.EntryPoint;
@@ -9,6 +10,7 @@ import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Window;
@@ -41,7 +43,6 @@ public class MainGWT implements EntryPoint {
                 dialogBox.center();
             }
         });
-
         Scheduler.get().scheduleDeferred(new Command() {
             public void execute() {
                 onModuleLoad2();
@@ -53,6 +54,7 @@ public class MainGWT implements EntryPoint {
         Async.runAsync(new AsyncTask() {
             @Override
             public void onSuccess() {
+                EventBus.get();
                 RootPanel.get().add(UIRootPanel.get().getContent());
             }
         });

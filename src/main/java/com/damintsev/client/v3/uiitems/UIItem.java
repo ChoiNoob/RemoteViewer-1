@@ -7,15 +7,13 @@ import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.utils.Position;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.*;
-import com.sencha.gxt.widget.core.client.tips.ToolTip;
-import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 
 /**
  * User: Damintsev Andrey
  * Date: 03.08.13
  * Time: 2:09
  */
-public abstract class UIItem extends Label implements IsWidget {
+public abstract class UIItem extends Label {
 
     private Widget widget;
     protected Item item;
@@ -29,12 +27,6 @@ public abstract class UIItem extends Label implements IsWidget {
     protected abstract int getHeight();
     public abstract void openEditor(Runnable runnable);
 
-    @Override
-    public Widget asWidget() {
-        System.out.println("asdWWWW");
-        if (widget == null) widget = widget();
-        return widget;
-    }
 
     public UIItem(Item item) {
         super();
@@ -74,14 +66,6 @@ public abstract class UIItem extends Label implements IsWidget {
     public Station getStation() {
         return item.getStation();
     }
-
-    //    public boolean haveChildrens() {
-//        return getId().startsWith("s");
-//    }
-//
-//    public boolean isChild(UIItem child) {
-//        return child.getId().startsWith("s");
-//    }
 
     public String getParentId() {
         return item.getParentId();
