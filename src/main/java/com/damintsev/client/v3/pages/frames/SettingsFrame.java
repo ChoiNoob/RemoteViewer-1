@@ -10,6 +10,7 @@ import com.damintsev.client.old.devices.windows.PrefixConfigWindow;
 import com.damintsev.common.event.StartEditEvent;
 import com.damintsev.common.event.StartEditEventHandler;
 import com.damintsev.common.event.StopEditEvent;
+import com.damintsev.common.event.StopEditEventHandler;
 import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Utils;
 import com.damintsev.common.utils.async.Async;
@@ -154,8 +155,8 @@ public class SettingsFrame {
 
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
-                MonitoringFrame.get().stopEditing();
-                collapse();
+//                MonitoringFrame.get().stopEditing();
+                EventBus.get().fireEvent(new StopEditEvent());
 //                reload();
             }
         });
@@ -164,7 +165,7 @@ public class SettingsFrame {
             public void onSelect(SelectEvent event) {
 //                MonitoringFrame.get().stopEditing();
                 EventBus.get().fireEvent(new StopEditEvent());
-                collapse();
+
             }
         });
 
@@ -175,6 +176,12 @@ public class SettingsFrame {
             @Override
             public void onStartEdit(StartEditEvent event) {
                 expand();
+            }
+        });
+        EventBus.get().addHandler(StopEditEvent.TYPE, new StopEditEventHandler() {
+            @Override
+            public void onStopEdit(StopEditEvent event) {
+                collapse();
             }
         });
 

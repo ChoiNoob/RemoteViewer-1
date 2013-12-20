@@ -84,17 +84,6 @@ public class MonitoringFrame {
                 stopEditing();
             }
         });
-        final TextButton editButton = new TextButton("Редактировать", new SelectEvent.SelectHandler() {
-            public void onSelect(SelectEvent event) {
-
-            }
-        });
-        editButton.setAllowTextSelection(false);
-        editButton.getElement().getStyle().setTop(5, Style.Unit.PX);
-        editButton.getElement().getStyle().setRight(5, Style.Unit.PX);
-        editButton.getElement().getStyle().setPosition(Style.Position.ABSOLUTE);
-
-//todo        panel.add(editButton);
         drawCanvas(panel);
         DataLoader.getInstance().load();
         drawConnections();
@@ -161,7 +150,6 @@ public class MonitoringFrame {
         editing = false;
         dragController.clearSelection();
         for(UIItem item : uiItems.values()) {
-            System.out.println("III=" + dragController);
             dragController.makeNotDraggable(item);
             item.savePosition();
         }
