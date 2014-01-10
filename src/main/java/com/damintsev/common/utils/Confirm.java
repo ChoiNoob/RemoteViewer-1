@@ -33,7 +33,7 @@ class Confirm extends Window {
             StringBuilder markup = new StringBuilder();
             markup.append("<table width=100% cellpadding=0 cellspacing=5>");
             for (int i = 0; i < messages.length; i++) {
-                markup.append("<tr><td style='vertical-align:top' class=confirm_box_" + i + "></td><td class=confirm_msg_" + i + "></td></tr>");
+                markup.append("<tr><td style='vertical-align:top' class=confirm_box_").append(i).append("></td><td class=confirm_msg_").append(i).append("></td></tr>");
             }
             markup.append("</table>");
             final HtmlLayoutContainer body = new HtmlLayoutContainer(markup.toString());

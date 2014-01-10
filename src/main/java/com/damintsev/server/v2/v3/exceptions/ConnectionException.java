@@ -5,17 +5,17 @@ package com.damintsev.server.v2.v3.exceptions;
  * Date: 08.10.13
  * Time: 22:33
  */
-public class ConnectException extends Exception {
+public class ConnectionException extends Exception {
 
-    public ConnectException() {
+    public ConnectionException() {
         super();
     }
 
-    public ConnectException(Exception e) {
+    public ConnectionException(Exception e) {
         super(e);
     }
 
-    public ConnectException(String e) {
+    public ConnectionException(String e) {
         super(e);
     }
 }

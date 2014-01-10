@@ -2,7 +2,7 @@ package com.damintsev.server.v2.v3.connections;
 
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
-import com.damintsev.server.v2.v3.exceptions.ConnectException;
+import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 
 import java.io.BufferedReader;
@@ -21,7 +21,7 @@ public class PingConnection extends Connection {
     private InputStream is = null;
 
     @Override
-    public Connection init(Station station) throws ConnectException {
+    public Connection init(Station station) throws ConnectionException {
         return this;
     }
 

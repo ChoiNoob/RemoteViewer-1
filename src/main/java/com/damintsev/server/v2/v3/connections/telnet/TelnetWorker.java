@@ -6,7 +6,7 @@ package com.damintsev.server.v2.v3.connections.telnet;
  */
 
 import com.damintsev.client.old.devices.Response;
-import com.damintsev.server.v2.v3.exceptions.ConnectException;
+import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import org.apache.commons.net.telnet.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +50,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
     private boolean allowTimeout = true;
     private boolean authentif = true;
 
-    public static void main(String[] args) throws ConnectException {
+    public static void main(String[] args) throws ConnectionException {
         TelnetWorker example = new TelnetWorker();
         example.setLogin("root");
         example.setPassword("hicom");
@@ -62,7 +62,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
     public TelnetWorker() {
     }
 
-    public Response connect() throws ConnectException {
+    public Response connect() throws ConnectionException {
         Response response = new Response();
         tc = new org.apache.commons.net.telnet.TelnetClient();
         TerminalTypeOptionHandler ttopt = new TerminalTypeOptionHandler("VT100", false, false, true, false);
@@ -107,12 +107,12 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             logger.error("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
             response.setResultText("Exception while connecting to server host=" + host + " port=" + port + " login=" + login + " pswd=" + password + e.getMessage());
             response.setResult(false);
-            throw new ConnectException(e);
+            throw new ConnectionException(e);
         }
         return response;
     }
 
-    private Response write(String command) throws ConnectException {
+    private Response write(String command) throws ConnectionException {
         clearReaded();
         command += "\r\n";
         logger.info("***Sending command to remote server: " + command);
@@ -122,14 +122,14 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             Thread.sleep(5000);
         } catch (Exception e) {
            logger.debug("Exception when reading command" + e.getMessage(), e);
-            throw new ConnectException(e);
+            throw new ConnectionException(e);
         }
         String result = getReaded();
         logger.info("***Readed from server: " + result);
         return new Response(result);
     }
 
-    public Response execute(String command) throws ConnectException {
+    public Response execute(String command) throws ConnectionException {
         return write(command);
     }
 

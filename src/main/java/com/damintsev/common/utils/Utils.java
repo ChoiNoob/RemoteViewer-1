@@ -9,6 +9,7 @@ import com.sencha.gxt.core.client.util.IconHelper;
  * Date: 05.08.13
  * Time: 22:23
  */
+@Deprecated
 public class Utils {
 
     public static ImageResource getImage(String name) {

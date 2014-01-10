@@ -1,9 +1,9 @@
 package com.damintsev.server.v2.v3.connections;
 
 import com.damintsev.common.beans.Station;
-import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
 import com.damintsev.common.beans.Task;
-import com.damintsev.server.v2.v3.exceptions.ConnectException;
+import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
+import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class TelnetConnection extends Connection {
     private Station station;
 
     @Override
-    public Connection init(Station station) throws ConnectException {
+    public Connection init(Station station) throws ConnectionException {
         worker = new TelnetWorker();
         worker.setLogin(station.getLogin());
         worker.setPassword(station.getPassword());
@@ -32,9 +32,9 @@ public class TelnetConnection extends Connection {
     }
 
     @Override
-    public String execute(Task task) throws ExecutingTaskException, ConnectException {
+    public String execute(Task task) throws ExecutingTaskException, ConnectionException {
        if(worker == null || !worker.isConnected())
-           throw new ConnectException("Telnet worker not initialized!");
+           throw new ConnectionException("Telnet worker not initialized!");
         return worker.execute(task.getCommand()).getResultText(); //todo convert to string!
     }
 

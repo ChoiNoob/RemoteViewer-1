@@ -2,10 +2,10 @@ package com.damintsev.server.v2.v3;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.beans.Station;
-import com.damintsev.server.db.DB;
 import com.damintsev.common.beans.Task;
-import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import com.damintsev.common.beans.TaskState;
+import com.damintsev.server.db.DB;
+import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,20 +19,22 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 07.10.13
  * Time: 23:53
  */
-public class SoA {
+public class Executor {
 
-    private static SoA instance;
+    private static final Logger logger = LoggerFactory.getLogger(Executor.class);
+
+    private static Executor instance;
+
     private static Map<String, ThreadExecutor> threads = new HashMap<String, ThreadExecutor>();
     private Map<String, TaskState> stateMap = new ConcurrentHashMap<String, TaskState>();
-    private static final Logger logger = LoggerFactory.getLogger(SoA.class);
     private String threadName = Thread.currentThread().getName() + " ";
 
-    public static SoA getInstance() {
-        if (instance == null) instance = new SoA();
+    public static Executor getInstance() {
+        if (instance == null) instance = new Executor();
         return instance;
     }
 
-    public SoA() {
+    public Executor() {
         List<Station> stations = DB.getInstance().getStationList();
         logger.info(threadName + "Loaded from instance " + stations.size() + " stations");
         for (Station station : stations) {

@@ -1,13 +1,13 @@
 package com.damintsev.server.services;
 
 import com.damintsev.client.old.devices.Item;
+import com.damintsev.client.service.DatabaseService;
 import com.damintsev.common.beans.Label;
 import com.damintsev.common.beans.Station;
-import com.damintsev.client.service.DatabaseService;
-import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.beans.Task;
+import com.damintsev.common.beans.TaskState;
 import com.damintsev.server.db.DB;
-import com.damintsev.server.v2.v3.SoA;
+import com.damintsev.server.v2.v3.Executor;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 import com.sencha.gxt.data.shared.loader.PagingLoadResultBean;
@@ -23,7 +23,7 @@ import java.util.List;
 public class DatabaseServerService extends RemoteServiceServlet implements DatabaseService {
 
     public DatabaseServerService() {
-        SoA.getInstance();
+        Executor.getInstance();
     }
 
     public Task loadTask(Long id) {
@@ -40,11 +40,11 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public void deleteStation(Station station) {
         DB.getInstance().deleteStation(station);
-        SoA.getInstance().updateEvent(station);
+        Executor.getInstance().updateEvent(station);
     }
 
     public List<TaskState> loadTaskStates() {
-        return new ArrayList<TaskState>(SoA.getInstance().getStates().values());
+        return new ArrayList<TaskState>(Executor.getInstance().getStates().values());
     }
 
     public void saveItemPosition(List<Item> items) {
@@ -53,7 +53,7 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public void deleteTask(Task task) {
         DB.getInstance().deleteTask(task);
-        SoA.getInstance().updateEvent(task);
+        Executor.getInstance().updateEvent(task);
     }
 
     public PagingLoadResult<Station> getStationList() {
@@ -71,7 +71,7 @@ public class DatabaseServerService extends RemoteServiceServlet implements Datab
 
     public Item saveItem(Item item) {
         item = DB.getInstance().saveItem(item);
-        SoA.getInstance().updateEvent(item);
+        Executor.getInstance().updateEvent(item);
         return item;
     }
 

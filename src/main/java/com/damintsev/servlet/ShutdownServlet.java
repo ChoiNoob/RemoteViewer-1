@@ -7,8 +7,7 @@ package com.damintsev.servlet;
  */
 
 import com.damintsev.server.db.Mysql;
-import com.damintsev.server.old.Executor;
-import com.damintsev.server.v2.v3.SoA;
+import com.damintsev.server.v2.v3.Executor;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
@@ -27,7 +26,7 @@ public class ShutdownServlet implements ServletContextListener{
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         System.out.println("CPT!!!!!");
-        SoA.getInstance().shutdown();
+        Executor.getInstance().shutdown();
         try {
             Mysql.shutdownConnections();
         } catch (SQLException e) {
@@ -38,6 +37,6 @@ public class ShutdownServlet implements ServletContextListener{
 //        scheduler.shutdownNow();
 //        BillingStatistics.getInstance().stopWorker();
 //        DatabaseConnector.getInstance().stopDatabaseConnector();
-        Executor.getInstance().shutdownAll();
+        com.damintsev.server.old.Executor.getInstance().shutdownAll();
     }
 }

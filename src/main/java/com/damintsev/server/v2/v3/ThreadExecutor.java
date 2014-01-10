@@ -1,20 +1,19 @@
 package com.damintsev.server.v2.v3;
 
+import com.damintsev.common.beans.ExecuteState;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
-import com.damintsev.server.v2.v3.taskprocessors.TaskPool;
-import com.damintsev.server.v2.v3.taskprocessors.TaskProcessor;
+import com.damintsev.common.beans.TaskState;
 import com.damintsev.server.v2.v3.connections.Connection;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
-import com.damintsev.common.beans.ExecuteState;
-import com.damintsev.common.beans.TaskState;
-import com.damintsev.server.v2.v3.exceptions.ConnectException;
+import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
+import com.damintsev.server.v2.v3.taskprocessors.TaskPool;
+import com.damintsev.server.v2.v3.taskprocessors.TaskProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -27,26 +26,25 @@ public class ThreadExecutor extends Thread {
 
     private static long threadId = 0;
     private static final Logger logger = LoggerFactory.getLogger(ThreadExecutor.class);
+
     private Station station;
     private int delay;
+    private int listPointer;
+    private boolean start = false;
+    private long thisThreadId = ++threadId;
+
+    private boolean needToPause;
     private List<Task> tasks;
     private Map<String, TaskState> taskStates;
     private Map<String, Integer> errors;
-    private boolean start = false;
-    private long thisThreadId = ++threadId;
-    private Iterator<Task> iterator;
-    private boolean needToPause;
 
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
         logger.info("initializing Tread executor with station=" + station.getId() + " name=" + station.getName());
         this.station = station;
-        if (station.getDelay() == null || station.getDelay() == -1) {
-            delay = 5;
-        } else delay = station.getDelay();
         this.tasks = tasks;
         this.taskStates = map;
         errors = new HashMap<String, Integer>(tasks.size() + 1);
-        //todo надо ли инициализировать коннект сейчас ?  - найхуй
+        //todo надо инициализировать коннект сейчас
         for(Task task : tasks) {
             taskStates.put(task.getStringId(), new TaskState(task.getStringId(), ExecuteState.INIT));
         }
@@ -56,43 +54,45 @@ public class ThreadExecutor extends Thread {
 
     private void executeTask(Task task) {
         TaskState state;
-        Connection connection = null;
+        Connection connection;
         try {
             logger.info("Executing task id=" + task.getStringId() + " name=" + task.getName() + " type=" + task.getType() + " command=" + task.getCommand());
             connection = ConnectionPool.getInstance().getConnection(task);
 
-            if (connection.isConnected()) taskStates.put(task.getParentId(), new TaskState(task.getParentId(), ExecuteState.WORK));
+            if (connection.isConnected())
+                taskStates.put(task.getParentId(), new TaskState(task.getParentId(), ExecuteState.WORK));
+
+            String result = connection.execute(task);
 
             TaskProcessor taskProcessor = TaskPool.getInstance().getTaskProcessor(task.getType());
-            String res = connection.execute(task);
-
-            state = taskProcessor.process(res);
+            state = taskProcessor.process(result);
             state.setId(task.getStringId());
             checkForErrors(task);
-        } catch (ConnectException conn) {
+        } catch (ConnectionException conn) {
             logger.info("Caught connection error " + conn.getLocalizedMessage());
-            state = createConnectionError(task.getParentId(), conn, true);
-            ConnectionPool.getInstance().dropConnection(task.getStation(), task.getType());
+            state = createConnectionError(task.getParentId(), conn);
+            ConnectionPool.getInstance().dropConnection(task);
         }   catch (ExecutingTaskException exec) {
             logger.info("Caught executing error " + exec.getLocalizedMessage());
-            state = createConnectionError(task.getStringId(), exec, false);
+            state = createExecutionError(task.getStringId(), exec);
         }
-        taskStates.put(state.getId(), state);    //todo убить этот метод нах он ублюдский
+        taskStates.put(state.getId(), state);
     }
 
     private void checkForErrors(Task task) {
-        if(errors.get(task.getStringId()) != null && errors.get(task.getStringId()) > 0)
+        if(errors.get(task.getStringId()) != null)
             errors.put(task.getStringId(), 0);
     }
 
+    private Task getNextTask() {
+        if(listPointer == tasks.size()) listPointer = 0;
+        return tasks.get(listPointer++);
+    }
+
     public void run() {
-        Thread.currentThread().setName("threadI=" + thisThreadId + " id=" + station.getId() + " name=" + station.getName());
+        Thread.currentThread().setName("threadId=" + thisThreadId + " id=" + station.getId() + " name=" + station.getName());
         while (start) {
-            if (iterator == null) iterator = tasks.iterator();
-            if (iterator.hasNext())
-                executeTask(iterator.next());
-            else
-                iterator = tasks.iterator();
+                executeTask(getNextTask());
             try {
                 Thread.sleep(delay * 1000);
                 synchronized (this) {
@@ -100,9 +100,7 @@ public class ThreadExecutor extends Thread {
                         wait();
                     }
                 }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            } catch (InterruptedException e) { }
         }
     }
 
@@ -125,21 +123,36 @@ public class ThreadExecutor extends Thread {
     public String getThreadId() {
         return station.getStringId();
     }
-                                    //todo надо переписать!!!!!
-    private TaskState createConnectionError(String stringID, Exception conn, boolean connectionError) {
+
+    private TaskState createExecutionError(String stringID, Exception conn) {
         logger.info("Created connection error!");
         TaskState task = new TaskState(stringID, ExecuteState.ERROR, conn.getMessage());
         if (errors.get(stringID) == null) errors.put(stringID, 1);
         if (errors.get(stringID) <= 2) {
+            logger.info("Setting WARNING to taskId=" + stringID);
             task.setState(ExecuteState.WARNING);
         } else if (errors.get(stringID) > 2) {
             logger.info("Setting ERROR to taskId=" + stringID);
             task.setState(ExecuteState.ERROR);
-            if (connectionError) {
-                for (TaskState state : taskStates.values()) {
-                   if (state.getId().equals(stringID)) continue;     //todo нйти все таски для станции и пометить их Андейфайнед
-                        state.setState(ExecuteState.UNKNOWN);
-                }
+        }
+        errors.put(stringID, errors.get(stringID) + 1);
+        return task;
+    }
+
+    private TaskState createConnectionError(String stringID, ConnectionException exception) {
+        logger.info("Created connection error!");
+        TaskState task = new TaskState(stringID, ExecuteState.ERROR, exception.getMessage());
+        if (errors.get(stringID) == null) errors.put(stringID, 1);
+        if (errors.get(stringID) <= 2) {
+            logger.info("Setting WARNING to taskId=" + stringID);
+            task.setState(ExecuteState.WARNING);
+        } else {
+            logger.info("Setting ERROR to taskId=" + stringID);
+            task.setState(ExecuteState.ERROR);
+            for (TaskState state : taskStates.values()) {
+                if (state.getId().equals(stringID)) continue;
+                System.out.println("For state id=" + state.getId());
+                state.setState(ExecuteState.WARNING);
             }
         }
         errors.put(stringID, errors.get(stringID) + 1);
