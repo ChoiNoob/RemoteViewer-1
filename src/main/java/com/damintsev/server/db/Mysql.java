@@ -6,7 +6,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -24,7 +23,7 @@ public class Mysql {
         try {
             if (prop == null) {
                 prop = new Properties();
-                prop.load(Mysql.class.getClassLoader().getResourceAsStream("/database-prod.properties"));
+                prop.load(Mysql.class.getClassLoader().getResourceAsStream("/database-local.properties"));
             }
             Class.forName(prop.getProperty("driverClassName"));
             connect = DriverManager.getConnection(prop.getProperty("url"), prop);

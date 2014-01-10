@@ -16,7 +16,6 @@ public class TaskState implements Serializable {
     private Response response;
     private String message;
 
-    @Deprecated
     public TaskState() {
        state = ExecuteState.INIT;
     }
@@ -47,9 +46,9 @@ public class TaskState implements Serializable {
         return response;
     }
 
-    public void setResponse(Response response) {
-        this.response = response;
-    }
+//    public void setResponse(Response response) {
+//        this.response = response;
+//    }
 
     public String getMessage() {
         return message;

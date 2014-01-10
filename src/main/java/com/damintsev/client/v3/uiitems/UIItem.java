@@ -1,12 +1,12 @@
 package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.client.v3.utilities.StatusToolTip;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.utils.Position;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * User: Damintsev Andrey
@@ -15,7 +15,6 @@ import com.google.gwt.user.client.ui.*;
  */
 public abstract class UIItem extends Label {
 
-    private Widget widget;
     protected Item item;
     protected TaskState taskState;
     protected Image image;
@@ -27,18 +26,15 @@ public abstract class UIItem extends Label {
     protected abstract int getHeight();
     public abstract void openEditor(Runnable runnable);
 
-
     public UIItem(Item item) {
-        super();
         this.item = item;
         taskState = new TaskState();
         getElement().appendChild(widget().getElement());
-
     //todo    tooltip = StatusToolTip.getInstance();
-        //todo     ToolTip tt = new ToolTip(this, tooltip);
+    //todo     ToolTip tt = new ToolTip(this, tooltip);
     }
 
-    StatusToolTip tooltip;
+    //todo StatusToolTip tooltip;
 
     public void savePosition() {
         item.getPosition().x = getLeft();

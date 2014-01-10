@@ -5,30 +5,29 @@ import com.allen_sauer.gwt.dnd.client.drop.AbsolutePositionDropController;
 import com.allen_sauer.gwt.dnd.client.drop.DropController;
 import com.damintsev.client.EventBus;
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.service.Service;
-import com.damintsev.client.v3.uiitems.UITest;
+import com.damintsev.client.v3.uiitems.UIItem;
+import com.damintsev.client.v3.utilities.DataLoader;
+import com.damintsev.client.v3.utilities.Scheduler;
 import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.event.StartEditEvent;
 import com.damintsev.common.event.StartEditEventHandler;
 import com.damintsev.common.event.StopEditEvent;
 import com.damintsev.common.event.StopEditEventHandler;
-import com.damintsev.common.visitor.UIVisitor;
-import com.damintsev.client.v3.utilities.DataLoader;
-import com.damintsev.client.v3.utilities.Scheduler;
 import com.damintsev.common.utils.Position;
+import com.damintsev.common.visitor.UIVisitor;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.event.SelectEvent;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * User: Damintsev Andrey
@@ -124,8 +123,6 @@ public class MonitoringFrame {
     private UIVisitor visitor = new UIVisitor();
 
     private void addItem(Item item) {
-        System.out.println("add item");
-//        UIItem uiItem = new UIItem(item);
         UIItem uiItem = item.accept(visitor);
         uiItems.put(uiItem.getId(), uiItem);
         panel.add(uiItem, 0, 0);
@@ -213,7 +210,6 @@ public class MonitoringFrame {
     public void start() {
         Scheduler.getInstance().start(this.getClass(), new Runnable() {
             public void run() {
-//                System.out.println("Call loadTaskStates date=" + new Date());
                 Service.instance.loadTaskStates(new AsyncCallback<List<TaskState>>() {
                     public void onFailure(Throwable caught) {
                         //todo грамотно обраотать ошибку!
