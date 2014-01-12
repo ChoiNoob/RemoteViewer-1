@@ -31,7 +31,7 @@ public class CleanManager {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             statement = connection.prepareStatement("SELECT id FROM busyinfo WHERE date < ? ");
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DAY_OF_MONTH, -1);

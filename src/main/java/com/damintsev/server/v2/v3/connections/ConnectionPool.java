@@ -62,8 +62,7 @@ public class ConnectionPool {
         dropConnection(task.getStation(), task.getType());
     }
 
-    public void dropConnection
-            (Station station, TaskType type) {
+    public void dropConnection (Station station, TaskType type) {
         if (connectionMap.get(station.getStringId() + type) != null) {
             System.out.println("destroying connection=" + station.getStringId() + type);
             connectionMap.get(station.getStringId() + type).destroy();
@@ -73,7 +72,8 @@ public class ConnectionPool {
 
     public void dropConnections() {
         for(Connection connection : connectionMap.values()) {
-            connection.destroy();
+            if(connection.isConnected())
+                connection.destroy();
         }
         connectionMap.clear();
     }

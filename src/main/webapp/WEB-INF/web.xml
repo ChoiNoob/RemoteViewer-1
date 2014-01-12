@@ -38,7 +38,7 @@
     </servlet-mapping>
 
     <listener>
-        <listener-class>com.damintsev.servlet.ShutdownServlet</listener-class>
+        <listener-class>com.damintsev.servlet.ApplicationListner</listener-class>
     </listener>
 
 

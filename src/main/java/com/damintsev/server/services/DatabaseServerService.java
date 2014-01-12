@@ -22,10 +22,6 @@ import java.util.List;
  */
 public class DatabaseServerService extends RemoteServiceServlet implements DatabaseService {
 
-    public DatabaseServerService() {
-        Executor.getInstance();
-    }
-
     public Task loadTask(Long id) {
         return DB.getInstance().getTask(id);
     }

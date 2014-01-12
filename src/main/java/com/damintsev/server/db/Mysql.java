@@ -1,11 +1,10 @@
 package com.damintsev.server.db;
 
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 /**
@@ -15,28 +14,41 @@ import java.util.Properties;
  */
 public class Mysql {
 
-    private static Properties prop;
-    private static List<Connection> connections = new ArrayList<Connection>();
+    private static Mysql instance;
+    private static ComboPooledDataSource cpds;
 
-    public static Connection getConnection() {
-        Connection connect = null;
-        try {
-            if (prop == null) {
-                prop = new Properties();
-                prop.load(Mysql.class.getClassLoader().getResourceAsStream("/database-local.properties"));
+    public static Mysql get() {
+        if(instance == null) {
+            try {
+                instance = new Mysql();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            Class.forName(prop.getProperty("driverClassName"));
-            connect = DriverManager.getConnection(prop.getProperty("url"), prop);
-            connections.add(connect);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return connect;
+        return instance;
     }
 
-    public static void shutdownConnections() throws SQLException {
-        for(Connection connection : connections) {
-            if(!connection.isClosed()) connection.close();//todo create intelligent array!
-        }
+    private Mysql() throws Exception {
+        Properties prop = new Properties();
+        prop.load(Mysql.class.getClassLoader().getResourceAsStream("/database-local.properties"));
+
+        cpds = new ComboPooledDataSource();
+        cpds.setDriverClass(prop.getProperty("driverClassName")); //loads the jdbc driver
+        cpds.setJdbcUrl(prop.getProperty("url"));
+        cpds.setUser(prop.getProperty("user"));
+        cpds.setPassword(prop.getProperty("password"));
+
+        cpds.setMinPoolSize(0);
+        cpds.setAcquireIncrement(5);
+        cpds.setMaxPoolSize(10);
+
+    }
+
+    public Connection getConnection() throws SQLException {
+        return cpds.getConnection();
+    }
+
+    public void shutdownConnections() {
+        cpds.close();
     }
 }

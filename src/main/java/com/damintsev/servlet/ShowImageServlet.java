@@ -4,16 +4,18 @@ import com.damintsev.server.db.DB;
 import com.damintsev.server.db.ImageHandler;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * User: adamintsev Date: 16.10.13 Time: 17:46
+ * * //todo переписать
  */
 public class ShowImageServlet extends HttpServlet {
 

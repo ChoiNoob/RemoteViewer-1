@@ -22,7 +22,7 @@ public class SaveItem implements Visitor<Item> {
           Connection connection = null;
           PreparedStatement statement = null;
           try {
-              connection = Mysql.getConnection();
+              connection = Mysql.get().getConnection();
               if (label.getId() == null) {
                   statement = connection.prepareStatement("INSERT INTO labels (name) values (?)", Statement.RETURN_GENERATED_KEYS);
                   statement.setString(1, label.getName());
@@ -63,7 +63,7 @@ public class SaveItem implements Visitor<Item> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             if (station.getId() == null) {
                 statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port,allowStatistics, delay) " +
                         "VALUES (?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -124,7 +124,7 @@ public class SaveItem implements Visitor<Item> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             if (task.getId() == null) {
                 statement = connection.prepareStatement("INSERT INTO task(name,command,type,station_id) " +
                         "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);

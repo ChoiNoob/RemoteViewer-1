@@ -100,7 +100,11 @@ public class ThreadExecutor extends Thread {
                         wait();
                     }
                 }
-            } catch (InterruptedException e) { }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                needToPause = false;
+                start = false;
+            }
         }
     }
 
@@ -112,11 +116,11 @@ public class ThreadExecutor extends Thread {
 
     @Override
     public void interrupt() {
+        needToPause = false;
         start = false;
         for(Task task : tasks) {
             taskStates.put(task.getStringId(), new TaskState(task.getStringId()));
         }
-        needToPause = false;
         super.interrupt();
     }
 

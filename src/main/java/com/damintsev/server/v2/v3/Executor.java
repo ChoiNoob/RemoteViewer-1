@@ -51,7 +51,8 @@ public class Executor {
 
     public void shutdown() {
         for (ThreadExecutor thread : threads.values()) {
-            thread.interrupt();
+            logger.info("Stopping thread with id=" + thread.getId());
+            thread.destroyProcess();
         }
         ConnectionPool.getInstance().dropConnections();
     }

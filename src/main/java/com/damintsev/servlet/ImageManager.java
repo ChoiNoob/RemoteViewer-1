@@ -1,14 +1,11 @@
 package com.damintsev.servlet;
 
-import org.slf4j.Logger;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.PixelGrabber;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -16,6 +13,8 @@ import java.io.IOException;
  * User: Damintsev Andrey
  * Date: 16.10.13
  * Time: 23:24
+ * /
+ /todo переписать
  */
 public class ImageManager {
 //    private static final Logger log = Logger.getLogger(ImageManager.class.getName());

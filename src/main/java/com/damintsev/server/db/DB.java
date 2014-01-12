@@ -9,8 +9,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
-import java.sql.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +41,7 @@ public class DB {
         ResultSet resultSet = null;
         Connection connection;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             statement = connection.prepareStatement("SELECT * FROM station");
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -73,7 +79,7 @@ public class DB {
         ResultSet resultSet = null;
         Station station = null;
         try {
-            statement = Mysql.getConnection().prepareStatement("SELECT * FROM station WHERE station_id = ?");
+            statement = Mysql.get().getConnection().prepareStatement("SELECT * FROM station WHERE station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -116,7 +122,7 @@ public class DB {
         ResultSet resultSet = null;
         Connection connection;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             statement = connection.prepareStatement("SELECT * FROM task t WHERE t.station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
@@ -153,7 +159,7 @@ public class DB {
         ResultSet resultSet = null;
         Connection connection;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             statement = connection.prepareStatement("SELECT * FROM task t WHERE t.id = ?");
             statement.setLong(1, taskId);
             resultSet = statement.executeQuery();
@@ -189,7 +195,7 @@ public class DB {
         ResultSet resultSet = null;
         Station station = null;
         try {
-            statement = Mysql.getConnection().prepareStatement("SELECT * FROM station WHERE station_id = ?");
+            statement = Mysql.get().getConnection().prepareStatement("SELECT * FROM station WHERE station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -223,15 +229,18 @@ public class DB {
         return null;
     }
 
+    //todo переписать метод. возможно переделать архитектуру
     public List<Item> getUIItemList() {
         List<Item> uiItems = new ArrayList<Item>();
-        PreparedStatement statement;
+        Connection connection = null;
+        PreparedStatement statement = null;
         try{
-            statement = Mysql.getConnection().prepareStatement("SELECT * FROM uipositions");
+            connection = Mysql.get().getConnection();
+            statement = connection.prepareStatement("SELECT * FROM uipositions");
             statement.execute();
             ResultSet resultSet = statement.getResultSet();
             while (resultSet.next()) {
-                Item item = null;
+                Item item;
                 DatabaseType type = DatabaseType.valueOf(resultSet.getString("ref_type"));
                 Long refId = resultSet.getLong("ref_id");
                 int x = resultSet.getInt("x");
@@ -253,6 +262,17 @@ public class DB {
             }
         }   catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return uiItems;
     }
@@ -261,7 +281,7 @@ public class DB {
         Connection connection = null;
         PreparedStatement statement = null;
         try  {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             List<Task> tasks = loadTasksForStation(station.getId());
             for (Task task : tasks) {
                 deleteTask(task);
@@ -272,11 +292,6 @@ public class DB {
             deleteFromUI(connection, station);
 
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
             logger.error(e.getMessage(), e);
             e.printStackTrace();
         } finally {
@@ -323,7 +338,7 @@ public class DB {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
 
             statement = connection.prepareStatement("DELETE FROM task WHERE id = ?");
             statement.setLong(1, task.getId());
@@ -332,11 +347,6 @@ public class DB {
             deleteFromUI(connection, task);
 
         } catch (SQLException e) {
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                e1.printStackTrace();
-            }
             logger.error(e.getMessage(), e);
             e.printStackTrace();
         } finally {
@@ -357,7 +367,7 @@ public class DB {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             statement = connection.prepareStatement("SELECT * FROM images WHERE type = ?");
             statement.setString(1, type);
             statement.execute();
@@ -412,7 +422,7 @@ public class DB {
             ImageIO.write(image, "png", os);
             InputStream is = new ByteArrayInputStream(os.toByteArray());
 
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             statement = connection.prepareStatement("INSERT INTO images (TYPE, DATA) VALUES (?,?) " +
                     "ON DUPLICATE KEY UPDATE data = VALUES(DATA)");
             statement.setString(1, type);
@@ -445,7 +455,7 @@ public class DB {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
             statement = connection.prepareStatement("INSERT INTO uipositions (x, y, ref_id, ref_type)" +
                     "VALUES (?,?,?,?) " +
                     "ON DUPLICATE KEY UPDATE x = VALUES(x), y = VALUES(y)");
@@ -482,7 +492,7 @@ public class DB {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
                 statement = connection.prepareStatement("DELETE FROM labels WHERE id = ?");
                 statement.setLong(1, label.getId());
                 statement.executeUpdate();
@@ -511,7 +521,7 @@ public class DB {
         PreparedStatement statement = null;
         try {
             Label label = null;
-            connection = Mysql.getConnection();
+            connection = Mysql.get().getConnection();
                 statement = connection.prepareStatement("SELECT * FROM labels WHERE id = ?");
                 statement.setLong(1, id);
                 resultSet = statement.executeQuery();
