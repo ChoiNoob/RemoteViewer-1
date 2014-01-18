@@ -41,6 +41,7 @@ public class ThreadExecutor extends Thread {
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
         logger.info("initializing Tread executor with station=" + station.getId() + " name=" + station.getName());
         this.station = station;
+        delay = station.getDelay();
         this.tasks = tasks;
         this.taskStates = map;
         errors = new HashMap<String, Integer>(tasks.size() + 1);
@@ -94,14 +95,14 @@ public class ThreadExecutor extends Thread {
         while (start) {
                 executeTask(getNextTask());
             try {
-                Thread.sleep(delay * 1000);
                 synchronized (this) {
+                    this.wait(delay * 1000);// Thread.sleep(delay * 1000);
                     while (needToPause) {
-                        wait();
+                        this.wait();
                     }
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+//                e.printStackTrace();
                 needToPause = false;
                 start = false;
             }
