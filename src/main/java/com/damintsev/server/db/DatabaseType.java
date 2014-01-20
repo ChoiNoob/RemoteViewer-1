@@ -13,8 +13,4 @@ public enum  DatabaseType {
     }
 
     private String label;
-
-
-
-
 }
