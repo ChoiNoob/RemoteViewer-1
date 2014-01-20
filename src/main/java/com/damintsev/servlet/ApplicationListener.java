@@ -16,15 +16,19 @@ import javax.servlet.ServletContextListener;
  * Created by adamintsev
  * Date: 28.08.13 12:11
  */
-public class ApplicationListner implements ServletContextListener {
+public class ApplicationListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
-        Mysql.get();
-        Executor.getInstance();
+        try {
+            Mysql.get();
+            Executor.getInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
         Executor.getInstance().shutdown();
-            Mysql.get().shutdownConnections();
+        Mysql.get().shutdownConnections();
     }
 }

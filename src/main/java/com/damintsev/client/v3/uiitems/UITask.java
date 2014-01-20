@@ -2,7 +2,6 @@ package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.v3.pages.windows.AddTaskWindow;
-import com.damintsev.common.utils.Position;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -13,7 +12,7 @@ import com.google.gwt.user.client.ui.Widget;
  * Date: 09.10.13
  * Time: 22:34
  */
-public class UITask extends UIItem {
+public class UITask extends UIItem implements HasConnections {
 
     private Label label;
 

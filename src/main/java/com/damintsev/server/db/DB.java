@@ -5,6 +5,7 @@ import com.damintsev.common.beans.Label;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
 import com.damintsev.common.beans.TaskType;
+import com.damintsev.server.entity.Image;
 import org.slf4j.LoggerFactory;
 
 import javax.imageio.ImageIO;
@@ -411,6 +412,57 @@ public class DB {
                 e.printStackTrace();
             }
         } return null;
+    }
+
+    public Image loadImages(Long id) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        Image image = null;
+        try {
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement("SELECT * FROM images WHERE id = ?");
+            statement.setLong(1, id);
+            statement.execute();
+            ResultSet resultSet = statement.getResultSet();
+            InputStream is;
+            if (resultSet.next()) {
+                is = resultSet.getBinaryStream("data");
+                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+                int nRead;
+                byte[] data = new byte[1024];
+                try {
+                    while ((nRead = is.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, nRead);
+                    }
+                    buffer.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }   finally {
+                    try {
+                        is.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return buffer.toByteArray();
+            }
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    return null;
     }
 
     public void saveImage(String type) {
