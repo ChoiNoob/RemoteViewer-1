@@ -445,7 +445,7 @@ public class DB {
                         e.printStackTrace();
                     }
                 }
-                return buffer.toByteArray();
+//                return buffer.toByteArray();
             }
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);

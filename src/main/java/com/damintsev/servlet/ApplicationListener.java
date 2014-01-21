@@ -6,11 +6,15 @@ package com.damintsev.servlet;
  * Time: 11:13
  */
 
+import com.damintsev.server.dao.DataBase;
+import com.damintsev.server.dao.DataBaseImpl;
 import com.damintsev.server.db.Mysql;
 import com.damintsev.server.v2.v3.Executor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import java.util.List;
 
 /**
  * Created by adamintsev
@@ -19,6 +23,8 @@ import javax.servlet.ServletContextListener;
 public class ApplicationListener implements ServletContextListener {
 
     public void contextInitialized(ServletContextEvent servletContextEvent) {
+        System.err.println("FUCK");
+
         try {
             Mysql.get();
             Executor.getInstance();

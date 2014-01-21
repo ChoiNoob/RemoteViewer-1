@@ -4,10 +4,12 @@ import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
 import com.damintsev.common.beans.TaskState;
+import com.damintsev.server.dao.DataBase;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 23:53
  */
 public class Executor {
+
+    @Autowired
+    private DataBase dataBase;
 
     private static final Logger logger = LoggerFactory.getLogger(Executor.class);
 

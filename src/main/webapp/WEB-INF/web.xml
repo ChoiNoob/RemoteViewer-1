@@ -37,9 +37,18 @@
         <url-pattern>/image</url-pattern>
     </servlet-mapping>
 
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
     <listener>
         <listener-class>com.damintsev.servlet.ApplicationListener</listener-class>
     </listener>
 
+    <context-param>
+        <!--<description>spring context configuration</description>-->
+        <param-name>contextConfigLocation</param-name>
+        <param-value>WEB-INF/application-context.xml</param-value>
+    </context-param>
 
 </web-app>
