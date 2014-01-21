@@ -78,7 +78,7 @@ public class FileUploadServlet extends HttpServlet {
 
     private static BufferedImage resizeImage(BufferedImage originalImage){
 
-        return ImageManager.resizeImageJpeg(originalImage, 300,300);
+        return ImageManager2.resizeImageJpeg(originalImage, 300, 300);
     }
 
 }

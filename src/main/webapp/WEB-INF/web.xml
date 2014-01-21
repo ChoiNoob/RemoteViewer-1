@@ -30,7 +30,7 @@
 
     <servlet>
         <servlet-name>imageShow</servlet-name>
-        <servlet-class>com.damintsev.servlet.ShowImageServlet</servlet-class>
+        <servlet-class>com.damintsev.servlet.ImageServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>imageShow</servlet-name>
