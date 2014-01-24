@@ -17,6 +17,7 @@ public class UIStation extends UIItem {
 
     private Label label;
     private Label nameLabel;
+    private Image image;
 
     public UIStation(Item item) {
         super(item);
@@ -44,7 +45,7 @@ public class UIStation extends UIItem {
 
     @Override
     public Widget widget() {
-        image = new Image("image?type=station");
+        image = new Image("image?imageId=" + item.getImage());
         label = new Label();
         label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         label.getElement().appendChild(image.getElement());

@@ -30,7 +30,7 @@ public class Station extends Item {
 //    @Column
     private String comment;
 //    @Transient
-    private String imageName = "hipath";
+    private Long image;
 //    @Column
     private Boolean allowStatistics;
     private Integer delay;
@@ -88,8 +88,9 @@ public class Station extends Item {
         this.id = id;
     }
 
-    public String getImage() {
-        return imageName;
+    public Long getImage() {
+        if(image == null) image = DefaultImages.STATION.getValue();
+        return image;
     }
 
     @Override
@@ -102,8 +103,8 @@ public class Station extends Item {
         return null;
     }
 
-    public void setImage(String imageName) {
-        this.imageName = imageName;
+    public void setImage(Long image) {
+        this.image = image;
     }
 
     public String getComment() {
@@ -114,13 +115,13 @@ public class Station extends Item {
         this.comment = comment;
     }
 
-    public String getImageName() {
-        return imageName;
-    }
+//    public String getImageName() {
+//        return imageName;
+//    }
 
-    public void setImageName(String imageName) {
-        this.imageName = imageName;
-    }
+//    public void setImageName(String imageName) {
+//        this.imageName = imageName;
+//    }
 
     public Boolean getAllowStatistics() {
         return allowStatistics;

@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.Widget;
 public class UITask extends UIItem implements HasConnections {
 
     private Label label;
+    private Image image;
 
     public UITask(Item item) {
         super(item);
@@ -22,7 +23,7 @@ public class UITask extends UIItem implements HasConnections {
 
     @Override
     public Widget widget() {
-        image = new Image("image?type=task");
+        image = new Image("image?imageId=" + item.getImage());
         label = new Label();
         label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         label.getElement().appendChild(image.getElement());

@@ -2,9 +2,9 @@ package com.damintsev.client.old.devices;
 
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.TaskType;
+import com.damintsev.common.utils.Position;
 import com.damintsev.common.visitor.CommonVisitor;
 import com.damintsev.common.visitor.Visitor;
-import com.damintsev.common.utils.Position;
 
 import java.io.Serializable;
 
@@ -43,5 +43,7 @@ public abstract class Item implements Serializable, CommonVisitor {
     public abstract String getParentId();
 
     public abstract <T> T accept(Visitor<T> visitor);
+
+    public abstract Long getImage();
 
 }

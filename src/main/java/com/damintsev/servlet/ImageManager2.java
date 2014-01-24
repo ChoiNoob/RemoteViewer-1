@@ -16,8 +16,8 @@ import java.io.IOException;
  * /
  /todo переписать
  */
-public class ImageManager {
-//    private static final Logger log = Logger.getLogger(ImageManager.class.getName());
+public class ImageManager2 {
+//    private static final Logger log = Logger.getLogger(ImageManager2.class.getName());
             /*
     public static byte[] resizeImage(byte[] fullImageContent, int width, int height) {
 //        String mimeType = getMiMeType(fullImageContent);

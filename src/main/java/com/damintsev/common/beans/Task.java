@@ -15,6 +15,8 @@ public class Task extends Item {
     private String command;
     private TaskType type;
     private Station station;
+    private Long imageId;
+    private long image;
 
     public String getCommand() {
         return command;
@@ -67,5 +69,15 @@ public class Task extends Item {
 
     public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);
+    }
+
+    @Override
+    public Long getImage() {
+        if(imageId == null) imageId = DefaultImages.TASK.getValue();
+        return imageId;
+    }
+
+    public void setImage(long image) {
+        this.image = image;
     }
 }

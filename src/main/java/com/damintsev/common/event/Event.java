@@ -1,6 +1,6 @@
 package com.damintsev.common.event;
 
-import com.damintsev.common.utils.ConnectionError;
+//import com.damintsev.common.utils.ConnectionError;
 
 /**
  * User: Damintsev Andrey

@@ -6,6 +6,7 @@
 
     <context:annotation-config/>
     <context:component-scan  base-package="com.damintsev.server"/>
+    <context:component-scan  base-package="com.damintsev.servlet"/>
     <context:property-placeholder location="classpath*:database-local.properties"/>
 
     <bean id="dataSource"
@@ -15,5 +16,7 @@
         <property name="username" value="${user}"/>
         <property name="password" value="${password}"/>
     </bean>
+
+    <!--<bean id="databaseServerService" class="com.damintsev.server.services.DatabaseServerServiceSS"/>-->
 
 </beans>

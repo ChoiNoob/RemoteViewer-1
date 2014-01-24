@@ -4,7 +4,6 @@ import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.TaskState;
 import com.damintsev.common.utils.Position;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -17,7 +16,7 @@ public abstract class UIItem extends Label {
 
     protected Item item;
     protected TaskState taskState;
-    protected Image image;
+//    protected Image image;
 
     protected abstract Widget widget();
     protected abstract int getLeft();

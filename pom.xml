@@ -31,7 +31,7 @@
         <gwtVersion>2.5.1</gwtVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <name>viewer</name>
-        <tomcat.url>http://46.29.153.166:8080/manager</tomcat.url>
+        <tomcat.url>http://46.29.154.8:8080/manager</tomcat.url>
         <tomcat.manager.login>das</tomcat.manager.login>
         <tomcat.manager.password>chiken</tomcat.manager.password>
     </properties>
@@ -133,6 +133,13 @@
             <version>3.1.1.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>3.1.1.RELEASE</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
@@ -185,6 +192,7 @@
                 </executions>
                 <configuration>
                     <warName>${name}</warName>
+                    <packagingIncludes>${basedir}/src/lib/gwtrpcspring-1.02.jar</packagingIncludes>
                     <webResources>
                         <resource>
                             <directory>${basedir}/src/main/webapp</directory>

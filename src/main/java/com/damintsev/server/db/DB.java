@@ -7,8 +7,11 @@ import com.damintsev.common.beans.Task;
 import com.damintsev.common.beans.TaskType;
 import com.damintsev.server.entity.Image;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.imageio.ImageIO;
+import javax.sql.DataSource;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -26,24 +29,25 @@ import java.util.List;
  * Date: 09.10.13
  * Time: 0:25
  */
+@Repository
 public class DB {
 
-    private static DB instance;
+//    private static DB instance;
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DB.class);
-    private Mysql dataSource = Mysql.get();
+//    private Mysql dataSource = Mysql.get();
+    @Autowired
+    private DataSource dataSource;
 
-    public static DB getInstance() {
-        if (instance == null) instance = new DB();
-        return instance;
-    }
+//    public static DB getInstance() {
+//        if (instance == null) instance = new DB();
+//        return instance;
+//    }
 
     public List<Station> getStationList() {
         List<Station> stations = new ArrayList<Station>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        Connection connection;
-        try {
-            connection = dataSource.getConnection();
+        try (Connection connection = dataSource.getConnection()){
             statement = connection.prepareStatement("SELECT * FROM station");
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -80,8 +84,8 @@ public class DB {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         Station station = null;
-        try {
-            statement = dataSource.getConnection().prepareStatement("SELECT * FROM station WHERE station_id = ?");
+        try (Connection connection = dataSource.getConnection()) {
+            statement = connection.prepareStatement("SELECT * FROM station WHERE station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -94,6 +98,7 @@ public class DB {
                 station.setPassword(resultSet.getString("password"));
                 station.setName(resultSet.getString("name"));
                 station.setAllowStatistics(resultSet.getBoolean("allowStatistics"));
+                station.setImage(resultSet.getLong("imageId"));
             }
             return station;
         } catch (Exception e) {
@@ -122,9 +127,7 @@ public class DB {
         List<Task> tasks = new ArrayList<Task>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        Connection connection;
-        try {
-            connection = dataSource.getConnection();
+        try(Connection connection = dataSource.getConnection()) {
             statement = connection.prepareStatement("SELECT * FROM task t WHERE t.station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
@@ -135,6 +138,7 @@ public class DB {
                 task.setCommand(resultSet.getString("command"));
                 task.setType(TaskType.valueOf(resultSet.getString("type")));
                 task.setStation(loadStationById(resultSet.getLong("station_id")));
+                task.setImage(resultSet.getLong("imageId"));
                 tasks.add(task);
             }
             return tasks;
@@ -159,9 +163,7 @@ public class DB {
     public Task getTask(Long taskId) {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        Connection connection;
-        try {
-            connection = dataSource.getConnection();
+        try(Connection connection = dataSource.getConnection()) {
             statement = connection.prepareStatement("SELECT * FROM task t WHERE t.id = ?");
             statement.setLong(1, taskId);
             resultSet = statement.executeQuery();
@@ -196,8 +198,8 @@ public class DB {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         Station station = null;
-        try {
-            statement = dataSource.getConnection().prepareStatement("SELECT * FROM station WHERE station_id = ?");
+        try(Connection connection = dataSource.getConnection()) {
+            statement = connection.prepareStatement("SELECT * FROM station WHERE station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {

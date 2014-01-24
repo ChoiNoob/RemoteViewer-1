@@ -3,6 +3,7 @@ CREATE TABLE task (
   name       VARCHAR(200),
   command    VARCHAR(200),
   type       VARCHAR(200),
+  imageId    INT,
   station_id INT
 )
   DEFAULT CHARSET = utf8;
@@ -17,7 +18,7 @@ CREATE TABLE uipositions (
   DEFAULT CHARSET = utf8;
 
 CREATE TABLE images (
-  id     INT AUTO_INCREMENT UNIQUE,
+  id     INT UNIQUE,
   TYPE   VARCHAR(20) UNIQUE,
   width  INT NOT NULL,
   height INT NOT NULL,
@@ -43,6 +44,7 @@ CREATE TABLE `station` (
   `port`            VARCHAR(255) DEFAULT NULL,
   `allowStatistics` BIT(1) DEFAULT NULL,
   `status`          INT(11) DEFAULT NULL,
+  imageId    INT,
   delay             INT DEFAULT NULL,
   PRIMARY KEY (`station_id`)
 )

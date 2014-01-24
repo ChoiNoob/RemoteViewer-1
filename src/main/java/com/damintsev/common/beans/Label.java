@@ -55,4 +55,9 @@ public class Label extends Item {
     public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);
     }
+
+    @Override
+    public Long getImage() {
+        return null;
+    }
 }

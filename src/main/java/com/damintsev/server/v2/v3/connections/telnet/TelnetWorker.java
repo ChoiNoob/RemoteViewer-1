@@ -125,7 +125,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             throw new ConnectionException(e);
         }
         String result = getReaded();
-        logger.info("***Readed from server: " + result);
+        logger.debug("***Readed from server: " + result);
         return new Response(result);
     }
 

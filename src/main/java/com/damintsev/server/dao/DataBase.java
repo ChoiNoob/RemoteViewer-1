@@ -1,8 +1,8 @@
 package com.damintsev.server.dao;
 
 import com.damintsev.common.beans.Station;
+import com.damintsev.server.entity.Image;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,4 +17,6 @@ import java.util.List;
 public interface DataBase {
 
     List<Station> getStationList();
+
+    Image getImage(Long id);
 }

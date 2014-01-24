@@ -22,7 +22,7 @@ public class StatusChannelTask implements TaskProcessor {
         int index = command.indexOf("PP NW");
         if (index > 0) {
             command = command.substring(index, command.length());
-            logger.debug("After substring: " + command);
+//            logger.debug("After substring: " + command);
         }
         if (command.contains("READY")) {
             logger.info("After parse result is WORK");
