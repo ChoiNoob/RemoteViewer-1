@@ -57,7 +57,7 @@ public class Label extends Item {
     }
 
     @Override
-    public Long getImage() {
+    public Long getImageId() {
         return null;
     }
 }

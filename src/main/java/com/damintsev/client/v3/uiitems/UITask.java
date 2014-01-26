@@ -23,7 +23,7 @@ public class UITask extends UIItem implements HasConnections {
 
     @Override
     public Widget widget() {
-        image = new Image("image?imageId=" + item.getImage());
+        image = new Image("image?imageId=" + item.getImageId());
         label = new Label();
         label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         label.getElement().appendChild(image.getElement());

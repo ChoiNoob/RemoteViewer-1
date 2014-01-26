@@ -88,7 +88,7 @@ public class Station extends Item {
         this.id = id;
     }
 
-    public Long getImage() {
+    public Long getImageId() {
         if(imageId == null || imageId == 0) imageId = DefaultImages.STATION.getValue();
         return imageId;
     }
@@ -114,14 +114,6 @@ public class Station extends Item {
     public void setComment(String comment) {
         this.comment = comment;
     }
-
-//    public String getImageName() {
-//        return imageName;
-//    }
-
-//    public void setImageName(String imageName) {
-//        this.imageName = imageName;
-//    }
 
     public Boolean getAllowStatistics() {
         return allowStatistics;

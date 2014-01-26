@@ -16,7 +16,6 @@ public abstract class UIItem extends Label {
 
     protected Item item;
     protected TaskState taskState;
-//    protected Image image;
 
     protected abstract Widget widget();
     protected abstract int getLeft();

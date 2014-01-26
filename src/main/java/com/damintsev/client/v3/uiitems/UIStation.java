@@ -45,7 +45,7 @@ public class UIStation extends UIItem {
 
     @Override
     public Widget widget() {
-        image = new Image("image?imageId=" + item.getImage());
+        image = new Image("image?imageId=" + item.getImageId());
         label = new Label();
         label.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
         label.getElement().appendChild(image.getElement());

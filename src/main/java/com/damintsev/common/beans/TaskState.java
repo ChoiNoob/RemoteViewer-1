@@ -46,10 +46,6 @@ public class TaskState implements Serializable {
         return response;
     }
 
-//    public void setResponse(Response response) {
-//        this.response = response;
-//    }
-
     public String getMessage() {
         return message;
     }
@@ -65,9 +61,4 @@ public class TaskState implements Serializable {
     public void setState(ExecuteState state) {
         this.state = state;
     }
-
-//    @Override
-//    public String toString() {
-//        return "TaskState@" + getId();
-//    }
 }

@@ -33,7 +33,7 @@
 //
 //    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 //        System.err.println("received request=" + request.getParameter("type"));
-////        if(ImageHandler.getInstance().getImage() == null) {
+////        if(ImageHandler.getInstance().getImageId() == null) {
 ////            //todo как-то красиво обыграть чтоли!
 ////            response.setContentType("text/html");
 ////            response.getOutputStream().println("<html><head><title>Person Photo</title></head>");
@@ -45,7 +45,7 @@
 //
 //        if("tmp".equals(request.getParameter("type"))){
 //            System.out.println("writing tmp");
-//            BufferedImage tmpImage = ImageHandler.getInstance().getImage();
+//            BufferedImage tmpImage = ImageHandler.getInstance().getImageId();
 //            ByteArrayOutputStream os = new ByteArrayOutputStream();
 //            ImageIO.write(tmpImage, "png", os);
 //            image1 = os.toByteArray();

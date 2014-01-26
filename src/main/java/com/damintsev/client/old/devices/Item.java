@@ -44,6 +44,6 @@ public abstract class Item implements Serializable, CommonVisitor {
 
     public abstract <T> T accept(Visitor<T> visitor);
 
-    public abstract Long getImage();
+    public abstract Long getImageId();
 
 }

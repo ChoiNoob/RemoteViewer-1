@@ -71,7 +71,7 @@ public class Task extends Item {
     }
 
     @Override
-    public Long getImage() {
+    public Long getImageId() {
         if(imageId == null || imageId == 0) imageId = DefaultImages.TASK.getValue();
         return imageId;
     }
