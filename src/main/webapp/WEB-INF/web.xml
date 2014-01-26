@@ -19,14 +19,14 @@
         <!--<url-pattern>/mainGWT/DatabaseServerService</url-pattern>-->
     <!--</servlet-mapping>-->
 
-    <servlet>
-        <servlet-name>fileUpload</servlet-name>
-        <servlet-class>com.damintsev.servlet.FileUploadServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>fileUpload</servlet-name>
-        <url-pattern>/fileUpload/*</url-pattern>
-    </servlet-mapping>
+    <!--<servlet>-->
+        <!--<servlet-name>fileUpload</servlet-name>-->
+        <!--<servlet-class>com.damintsev.servlet.FileUploadServlet</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>fileUpload</servlet-name>-->
+        <!--<url-pattern>/fileUpload/*</url-pattern>-->
+    <!--</servlet-mapping>-->
 
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -34,37 +34,23 @@
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
     </listener>
-    <!--<servlet>-->
-        <!--<servlet-name>imageShow</servlet-name>-->
-        <!--&lt;!&ndash;<servlet-class>com.damintsev.servlet.ShowImageServlet</servlet-class>&ndash;&gt;-->
-        <!--&lt;!&ndash;<servlet-class>com.damintsev.servlet.ImageServlet</servlet-class>&ndash;&gt;-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>imageShow</servlet-name>-->
-        <!--<url-pattern>/image</url-pattern>-->
-    <!--</servlet-mapping>-->
+
     <servlet>
-        <servlet-name>springmvc</servlet-name>
+        <servlet-name>servlet-context</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
         <init-param>
             <param-name>contextConfigLocation</param-name>
-            <param-value>WEB-INF/application-context.xml</param-value>
+            <param-value>WEB-INF/servlet-context.xml</param-value>
         </init-param>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>springmvc</servlet-name>
+        <servlet-name>servlet-context</servlet-name>
         <url-pattern>/image</url-pattern>
     </servlet-mapping>
 
-
-    <!--<listener>-->
-        <!--<listener-class>com.damintsev.servlet.ApplicationListener</listener-class>-->
-    <!--</listener>-->
-
     <context-param>
-        <!--<description>spring context configuration</description>-->
         <param-name>contextConfigLocation</param-name>
         <param-value>WEB-INF/application-context.xml</param-value>
     </context-param>

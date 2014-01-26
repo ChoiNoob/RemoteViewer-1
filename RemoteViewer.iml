@@ -29,6 +29,7 @@
       <configuration>
         <fileset id="fileset1" name="XML Application Context" removed="false">
           <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/application-context.xml</file>
+          <file>file://$MODULE_DIR$/src/main/webapp/WEB-INF/servlet-context.xml</file>
         </fileset>
       </configuration>
     </facet>
