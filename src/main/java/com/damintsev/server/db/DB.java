@@ -125,7 +125,7 @@ public class DB {
             statement = connection.prepareStatement("SELECT * FROM task t WHERE t.station_id = ?");
             statement.setLong(1, stationId);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 Task task = new Task();
                 task.setId(resultSet.getLong("id"));
                 task.setName(resultSet.getString("name"));
