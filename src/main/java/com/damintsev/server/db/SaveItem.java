@@ -5,16 +5,23 @@ import com.damintsev.common.beans.Label;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
 import com.damintsev.common.visitor.Visitor;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.sql.DataSource;
 import java.sql.*;
 
 /**
  * User: adamintsev Date: 15.10.13 Time: 16:51
  */
+@Component
 public class SaveItem implements Visitor<Item> {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(SaveItem.class);
+    private static final Logger logger = Logger.getLogger(SaveItem.class);
+
+    @Autowired
+    DataSource dataSource;
 
       public Label visit(Label label) {
           logger.info("save Label id=" + label.getId() + " name=" + label.getName());
@@ -22,7 +29,7 @@ public class SaveItem implements Visitor<Item> {
           Connection connection = null;
           PreparedStatement statement = null;
           try {
-              connection = Mysql.get().getConnection();
+              connection = dataSource.getConnection();
               if (label.getId() == null) {
                   statement = connection.prepareStatement("INSERT INTO labels (name) values (?)", Statement.RETURN_GENERATED_KEYS);
                   statement.setString(1, label.getName());
@@ -63,7 +70,7 @@ public class SaveItem implements Visitor<Item> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Mysql.get().getConnection();
+            connection = dataSource.getConnection();
             if (station.getId() == null) {
                 statement = connection.prepareStatement("INSERT INTO station(comment,deviceType,host,login,name,password,port,allowStatistics, delay) " +
                         "VALUES (?,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
@@ -124,7 +131,7 @@ public class SaveItem implements Visitor<Item> {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            connection = Mysql.get().getConnection();
+            connection = dataSource.getConnection();
             if (task.getId() == null) {
                 statement = connection.prepareStatement("INSERT INTO task(name,command,type,station_id) " +
                         "VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);

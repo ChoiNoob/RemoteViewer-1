@@ -4,8 +4,7 @@ import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
 import com.damintsev.common.beans.TaskType;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +16,7 @@ import java.util.Map;
  * //todo Remove switch statement
  */
 public class ConnectionPool {
-    private static final Logger logger = LoggerFactory.getLogger(ConnectionPool.class);
+    private static final Logger logger = Logger.getLogger(ConnectionPool.class);
 
     private static ConnectionPool instance;
 

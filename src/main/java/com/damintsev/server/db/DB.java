@@ -5,10 +5,9 @@ import com.damintsev.common.beans.Label;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
 import com.damintsev.common.beans.TaskType;
-import com.damintsev.server.entity.Image;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import javax.sql.DataSource;
@@ -29,19 +28,14 @@ import java.util.List;
  * Date: 09.10.13
  * Time: 0:25
  */
-@Repository
+@Component
 public class DB {
 
-//    private static DB instance;
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DB.class);
-//    private Mysql dataSource = Mysql.get();
+    private static final Logger logger = Logger.getLogger(DB.class);
     @Autowired
     private DataSource dataSource;
-
-//    public static DB getInstance() {
-//        if (instance == null) instance = new DB();
-//        return instance;
-//    }
+    @Autowired
+    private SaveItem saveItem;
 
     public List<Station> getStationList() {
         List<Station> stations = new ArrayList<Station>();
@@ -50,7 +44,7 @@ public class DB {
         try (Connection connection = dataSource.getConnection()){
             statement = connection.prepareStatement("SELECT * FROM station");
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 Station station = new Station();
                 station.setId(resultSet.getLong("station_id"));
                 station.setComment(resultSet.getString("comment"));
@@ -174,6 +168,7 @@ public class DB {
                 task.setCommand(resultSet.getString("command"));
                 task.setType(TaskType.valueOf(resultSet.getString("type")));
                 task.setStation(loadStationById(resultSet.getLong("station_id")));
+                task.setImage(resultSet.getLong("imageId"));
                 return task;
             }
         } catch (Exception e) {
@@ -367,106 +362,6 @@ public class DB {
         }
     }
 
-    public byte[] loadImages(String type) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM images WHERE type = ?");
-            statement.setString(1, type);
-            statement.execute();
-            ResultSet resultSet = statement.getResultSet();
-            InputStream is;
-            if (resultSet.next()) {
-                is = resultSet.getBinaryStream("data");
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-                int nRead;
-                byte[] data = new byte[1024];
-                try {
-                    while ((nRead = is.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, nRead);
-                    }
-                    buffer.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }   finally {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return buffer.toByteArray();
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } return null;
-    }
-
-    public Image loadImages(Long id) {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        Image image = null;
-        try {
-            connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM images WHERE id = ?");
-            statement.setLong(1, id);
-            statement.execute();
-            ResultSet resultSet = statement.getResultSet();
-            InputStream is;
-            if (resultSet.next()) {
-                is = resultSet.getBinaryStream("data");
-                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-                int nRead;
-                byte[] data = new byte[1024];
-                try {
-                    while ((nRead = is.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, nRead);
-                    }
-                    buffer.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }   finally {
-                    try {
-                        is.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-//                return buffer.toByteArray();
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    return null;
-    }
-
     public void saveImage(String type) {
         Connection connection = null;
         PreparedStatement statement = null;
@@ -607,7 +502,6 @@ public class DB {
     }
 
     public Item saveItem(Item item) {
-        SaveItem saveItem = new SaveItem();
         return item.accept(saveItem);
     }
 }

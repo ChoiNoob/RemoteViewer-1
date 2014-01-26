@@ -4,6 +4,8 @@ import com.damintsev.server.buisness.image.ImageManager;
 import com.damintsev.server.entity.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +33,9 @@ public class ImageServlet{
         System.err.println("received request=" + imageId);        //todo configure logger
         try {
             Image image = imageManager.getImage(imageId);
-            return new HttpEntity<>(image.getContent());
+            HttpHeaders header = new HttpHeaders();
+            header.setContentType(MediaType.IMAGE_JPEG);
+            return new HttpEntity<>(image.getContent(), header);
         }catch (Exception e) {
             e.printStackTrace();
             throw e;

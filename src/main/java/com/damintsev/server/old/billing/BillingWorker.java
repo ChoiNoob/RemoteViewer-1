@@ -2,11 +2,9 @@ package com.damintsev.server.old.billing;
 
 import com.damintsev.client.old.devices.BillingInfo;
 import com.damintsev.common.beans.Station;
-//import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.old.BillingStatistics;
 import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,13 +14,15 @@ import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+//import com.damintsev.server.db.DatabaseConnector;
+
 /**
  * Created by adamintsev
  * Date: 23.08.13 12:05
  */
 public class BillingWorker extends Thread {
 
-    private static final Logger logger = LoggerFactory.getLogger(BillingWorker.class);
+    private static final Logger logger = Logger.getLogger(BillingWorker.class);
     private static BillingWorker instance;
 
     public static BillingWorker getInstance() {

@@ -9,7 +9,7 @@ public enum  DefaultImages {
 
     private Long value;
     private DefaultImages(Long defaults) {
-            this.value =defaults;
+            this.value = defaults;
     }
 
     public Long getValue() {

@@ -10,8 +10,7 @@ import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 import com.damintsev.server.v2.v3.taskprocessors.TaskPool;
 import com.damintsev.server.v2.v3.taskprocessors.TaskProcessor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,7 +24,7 @@ import java.util.Map;
 public class ThreadExecutor extends Thread {
 
     private static long threadId = 0;
-    private static final Logger logger = LoggerFactory.getLogger(ThreadExecutor.class);
+    private static final Logger logger = Logger.getLogger(ThreadExecutor.class);
 
     private Station station;
     private int delay;
@@ -39,7 +38,7 @@ public class ThreadExecutor extends Thread {
     private Map<String, Integer> errors;
 
     public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
-        logger.info("initializing Tread executor with station=" + station.getId() + " name=" + station.getName());
+        logger.info("Initializing Tread executor #" + thisThreadId + " with station=" + station.getId() + " name=" + station.getName());
         this.station = station;
         delay = station.getDelay() == null ? 5 : station.getDelay();
         this.tasks = tasks;
@@ -50,7 +49,6 @@ public class ThreadExecutor extends Thread {
             taskStates.put(task.getStringId(), new TaskState(task.getStringId(), ExecuteState.INIT));
         }
         start();
-        logger.info("Starting current thread");
     }
 
     private void executeTask(Task task) {
@@ -92,6 +90,7 @@ public class ThreadExecutor extends Thread {
 
     public void run() {
         Thread.currentThread().setName("threadId=" + thisThreadId + " id=" + station.getId() + " name=" + station.getName());
+        logger.info("Starting current thread");
         while (start) {
                 executeTask(getNextTask());
             try {
@@ -219,12 +218,10 @@ public class ThreadExecutor extends Thread {
 //    }
 
     public void pause() {
-        System.out.println("CPT PAUSE");
         needToPause = true;
     }
 
     public synchronized void  unpause() {
-        System.out.println("CPT UNPAUSE");
         needToPause = false;
         this.notifyAll();
     }

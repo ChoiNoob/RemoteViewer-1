@@ -4,11 +4,9 @@ import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.beans.Station;
 import com.damintsev.common.beans.Task;
 import com.damintsev.common.beans.TaskState;
-import com.damintsev.server.dao.DataBase;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,23 +25,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class Executor {
 
-    @Autowired
-    private DataBase dataBase;
+//    @Autowired
+//    private DataBase dataBase;
     @Autowired
     private DB db;
 
-    private static final Logger logger = LoggerFactory.getLogger(Executor.class);
-
-    private static Executor instance;
+    private static final Logger logger = Logger.getLogger(Executor.class);
 
     private static Map<String, ThreadExecutor> threads = new HashMap<String, ThreadExecutor>();
     private Map<String, TaskState> stateMap = new ConcurrentHashMap<String, TaskState>();
     private String threadName = Thread.currentThread().getName() + " ";
-
-//    public static Executor getInstance() {
-//        if (instance == null) instance = new Executor();
-//        return instance;
-//    }
 
     public Executor() {
         logger.info("Constructor Executor()");
@@ -67,8 +58,9 @@ public class Executor {
 
     @PreDestroy
     public void shutdown() {
+        logger.info("Calling destroy!");
         for (ThreadExecutor thread : threads.values()) {
-            logger.info("Stopping thread with id=" + thread.getId());
+            logger.info("Stopping thread with id=" + thread.getThreadId());
             thread.destroyProcess();
         }
         ConnectionPool.getInstance().dropConnections();

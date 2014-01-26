@@ -10,8 +10,7 @@ import com.damintsev.server.db.ImageHandler;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -29,7 +28,7 @@ import java.io.InputStream;
  */
 public class FileUploadServlet extends HttpServlet {
 
-    private final Logger logger = LoggerFactory.getLogger(FileUploadServlet.class);
+    private final Logger logger = Logger.getLogger(FileUploadServlet.class);
 
     public FileUploadServlet(){
         super();

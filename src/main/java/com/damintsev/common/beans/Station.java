@@ -30,7 +30,7 @@ public class Station extends Item {
 //    @Column
     private String comment;
 //    @Transient
-    private Long image;
+    private Long imageId;
 //    @Column
     private Boolean allowStatistics;
     private Integer delay;
@@ -89,8 +89,8 @@ public class Station extends Item {
     }
 
     public Long getImage() {
-        if(image == null) image = DefaultImages.STATION.getValue();
-        return image;
+        if(imageId == null || imageId == 0) imageId = DefaultImages.STATION.getValue();
+        return imageId;
     }
 
     @Override
@@ -103,8 +103,8 @@ public class Station extends Item {
         return null;
     }
 
-    public void setImage(Long image) {
-        this.image = image;
+    public void setImage(Long imageId) {
+        this.imageId = imageId;
     }
 
     public String getComment() {

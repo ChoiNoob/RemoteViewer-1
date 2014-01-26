@@ -8,8 +8,7 @@ package com.damintsev.server.v2.v3.connections.telnet;
 import com.damintsev.client.old.devices.Response;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import org.apache.commons.net.telnet.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -36,7 +35,7 @@ import java.io.OutputStream;
  */
 public class TelnetWorker extends Thread implements TelnetNotificationHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(TelnetWorker.class);
+    private static final Logger logger = Logger.getLogger(TelnetWorker.class);
     private org.apache.commons.net.telnet.TelnetClient tc = null;
     private OutputStream outstr;
     private ByteArrayOutputStream stream;
@@ -115,7 +114,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
     private Response write(String command) throws ConnectionException {
         clearReaded();
         command += "\r\n";
-        logger.info("***Sending command to remote server: " + command);
+        logger.debug("***Sending command to remote server: " + command);
         try {
             outstr.write(command.getBytes());
             outstr.flush();
@@ -147,7 +146,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             do {
                 ret_read = instr.read(buff);
                 if (ret_read > 0) {
-                    System.out.print("\t\t\t" + new String(buff, 0, ret_read));
+                    logger.debug("\t\t\t" + new String(buff, 0, ret_read));
                     stream.write(buff, 0, ret_read);
                 }
             }

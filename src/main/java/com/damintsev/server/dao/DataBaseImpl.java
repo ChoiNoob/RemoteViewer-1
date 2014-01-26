@@ -75,7 +75,6 @@ public class DataBaseImpl implements DataBase {
                 image.setHeight(resultSet.getInt("height"));
                 image.setWidth(resultSet.getInt("width"));
                 Blob imageBlob = resultSet.getBlob("data");
-                System.err.println("lalalalala=" + imageBlob.length());
                 image.setContent(imageBlob.getBytes(1, (int) imageBlob.length()));
             }
         } catch (SQLException e) {

@@ -2,12 +2,12 @@ package com.damintsev.server.old;
 
 import com.damintsev.client.old.devices.BillingInfo;
 import com.damintsev.client.old.devices.BillingStats;
-//import com.damintsev.server.db.DatabaseConnector;
 import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.util.*;
+
+//import com.damintsev.server.db.DatabaseConnector;
 
 /**
  * Created by adamintsev
@@ -16,7 +16,7 @@ import java.util.*;
 public class BillingStatistics {
 
     private static BillingStatistics instance;
-    private static final Logger logger = LoggerFactory.getLogger(BillingStatistics.class);
+    private static final Logger logger = Logger.getLogger(BillingStatistics.class);
 
     public static  BillingStatistics getInstance() {
         if(instance == null) instance = new BillingStatistics();
@@ -88,7 +88,7 @@ public class BillingStatistics {
         for(String prefix : prefixMap.keySet()) {
             if (info.getNumberShort().startsWith(prefix)) {
                 String tmp = info.getNumberShort();
-                System.out.println("CPT=" + tmp + " short=" + tmp.substring(0, tmp.length() - 1));
+//                System.out.println("CPT=" + tmp + " short=" + tmp.substring(0, tmp.length() - 1));
                 info.setNumberShort(tmp.substring(0, prefix.length()));
                 info.setName(prefixMap.get(prefix));
             }

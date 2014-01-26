@@ -5,8 +5,7 @@ import com.damintsev.common.beans.Task;
 import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * User: Damintsev Andrey
@@ -15,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TelnetConnection extends Connection {
 
-    private static final Logger logger = LoggerFactory.getLogger(TelnetConnection.class);
+    private static final Logger logger = Logger.getLogger(TelnetConnection.class);
     private TelnetWorker worker;
     private Station station;
 

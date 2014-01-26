@@ -2,8 +2,7 @@ package com.damintsev.server.v2.v3.taskprocessors;
 
 import com.damintsev.common.beans.ExecuteState;
 import com.damintsev.common.beans.TaskState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 /**
  * User: Damintsev Andrey
@@ -12,13 +11,13 @@ import org.slf4j.LoggerFactory;
  */
 public class StatusChannelTask implements TaskProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(StatusChannelTask.class);
+    private static final Logger logger = Logger.getLogger(StatusChannelTask.class);
 
     @Override
     public TaskState process(String command)  {
         TaskState response = new TaskState();
 
-        logger.info("Executing command=" + command);
+        logger.debug("Executing command=" + command);
         int index = command.indexOf("PP NW");
         if (index > 0) {
             command = command.substring(index, command.length());

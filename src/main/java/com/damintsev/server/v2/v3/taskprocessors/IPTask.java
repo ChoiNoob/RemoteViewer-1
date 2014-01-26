@@ -2,8 +2,7 @@ package com.damintsev.server.v2.v3.taskprocessors;
 
 import com.damintsev.common.beans.ExecuteState;
 import com.damintsev.common.beans.TaskState;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class IPTask implements TaskProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(TaskProcessor.class);
+    private static final Logger logger = Logger.getLogger(TaskProcessor.class);
 
     @Override
     public TaskState process(String command) {

@@ -29,19 +29,12 @@ public class DatabaseServerService implements DatabaseService {
     @Autowired
     private Executor executor;
 
-    {
-        System.err.println("CPT!!!!");
-//        ApplicationContext context = WebApplicationContextUtils.getRequiredWebApplicationContext(getServletContext());
-//        db = (DB)context.getBean("db");
-//        executor= (Executor)context.getBean("executor");
-    }
-
     public Task loadTask(Long id) {
         return db.getTask(id);
     }
 
     public List<Item> loadUIItems() {
-        System.err.println("loadUIItems+loadUIItems+loadUIItems+loadUIItems");
+        System.out.println("loadUIItems+loadUIItems+loadUIItems+loadUIItems");
         try {
             return db.getUIItemList();
         }catch (Exception e) {
