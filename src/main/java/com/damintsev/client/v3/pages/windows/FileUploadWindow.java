@@ -1,23 +1,9 @@
 package com.damintsev.client.v3.pages.windows;
 
-import com.damintsev.client.service.Service;
-import com.damintsev.client.v3.pages.frames.MonitoringFrame;
-import com.damintsev.common.utils.Dialogs;
-import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.dom.client.DivElement;
-import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.form.ComboBoxCell;
 import com.sencha.gxt.core.client.util.Margins;
 import com.sencha.gxt.core.client.util.Padding;
@@ -25,14 +11,14 @@ import com.sencha.gxt.data.shared.LabelProvider;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
-import com.sencha.gxt.widget.core.client.container.*;
+import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
 import com.sencha.gxt.widget.core.client.event.SubmitCompleteEvent;
 import com.sencha.gxt.widget.core.client.event.SubmitEvent;
 import com.sencha.gxt.widget.core.client.form.*;
-import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
-
-import javax.swing.*;
 
 /**
 * User: Damintsev Andrey
@@ -127,15 +113,22 @@ public class FileUploadWindow extends Window {
 
 
         FileUploadField fileUploadField = new FileUploadField();
-        fileUploadField.setName("file");
+        fileUploadField.setName("text");
         fileUploadField.setWidth(250);
 
         label = new FieldLabel(fileUploadField, "Изображение");
         label.setWidth(250);
 
+        HTML html = new HTML(
+                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" action=\"/upload?imageId=1\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
+                "<div>\n" +
+                "Select images:  \n" +
+                "<input type=\"file\" id=\"file\" name=\"file\"/> \n" +
+                "</div>\n" +
+                "</form> ");
         HBoxLayoutContainer horizontalLayoutContainer = new HBoxLayoutContainer();
         horizontalLayoutContainer.setPadding(new Padding(5));
-        horizontalLayoutContainer.add(label);
+        horizontalLayoutContainer.add(html);
         BoxLayoutContainer.BoxLayoutData flex = new BoxLayoutContainer.BoxLayoutData(new Margins(0, 5, 0, 0));
         flex.setFlex(1);
         horizontalLayoutContainer.add(new Label(), flex);
@@ -143,9 +136,10 @@ public class FileUploadWindow extends Window {
         loadButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                if(!imageSelector.validate()) return;
-                form.setAction("/upload?imageId=" + imageSelector.getValue().id);
-                form.submit();
+                if (!imageSelector.validate()) return;
+//                form.setAction("upload?imageId=" + imageSelector.getValue().id);
+//                form.submit();
+                submitBtn();
             }
         });
         horizontalLayoutContainer.add(loadButton, new BoxLayoutContainer.BoxLayoutData(new Margins(0,0,0,0)));
@@ -178,4 +172,17 @@ public class FileUploadWindow extends Window {
             this.eng = eng;
         }
     }
+
+    public static native void submitBtn()/*-{
+        $wnd.document.getElementById('ImageUpload').submit();
+//
+//        $wnd.jQuery($wnd.document.getElementById('ImageUpload')).submit(function(){
+//            $wnd.alert('sucsess');
+//    });
+    }-*/;
+
+//
+//    $wnd.jQuery($wnd.document.getElementById('ImageUpload')).submit(function(){
+//        alert('sucsess');
+//    });
 }
