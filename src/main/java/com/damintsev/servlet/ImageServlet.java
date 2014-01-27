@@ -22,23 +22,18 @@ import java.io.IOException;
  */
 @Component
 @RequestMapping
-public class ImageServlet{
+public class ImageServlet {
 
     @Autowired
     private ImageManager imageManager;
 
-    @RequestMapping(value = "/image",method = RequestMethod.GET)
+    @RequestMapping(value = "/image", method = RequestMethod.GET)
     @ResponseBody
-    public HttpEntity<byte[]> doGet(@RequestParam Long imageId) throws ServletException, IOException {
+    public HttpEntity<byte[]> doGet(@RequestParam Long imageId) {
         System.err.println("received request=" + imageId);        //todo configure logger
-        try {
-            Image image = imageManager.getImage(imageId);
-            HttpHeaders header = new HttpHeaders();
-            header.setContentType(MediaType.IMAGE_JPEG);
-            return new HttpEntity<>(image.getContent(), header);
-        }catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+        Image image = imageManager.getImage(imageId);
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.IMAGE_JPEG);
+        return new HttpEntity<>(image.getContent(), header);
     }
 }

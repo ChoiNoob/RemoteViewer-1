@@ -114,7 +114,7 @@ public class FileUploadWindow extends Window {
         form.addSubmitHandler(new SubmitEvent.SubmitHandler() {
             @Override
             public void onSubmit(SubmitEvent event) {
-                imagePanel.mask();
+              //todo  imagePanel.mask();
             }
         });
         form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
@@ -125,8 +125,9 @@ public class FileUploadWindow extends Window {
             }
         });
 
+
         FileUploadField fileUploadField = new FileUploadField();
-        fileUploadField.setName("upload");
+        fileUploadField.setName("file");
         fileUploadField.setWidth(250);
 
         label = new FieldLabel(fileUploadField, "Изображение");
@@ -143,7 +144,7 @@ public class FileUploadWindow extends Window {
             @Override
             public void onSelect(SelectEvent event) {
                 if(!imageSelector.validate()) return;
-                form.setAction("upload?type=image?id=" + imageSelector.getValue().id);
+                form.setAction("/upload?imageId=" + imageSelector.getValue().id);
                 form.submit();
             }
         });
