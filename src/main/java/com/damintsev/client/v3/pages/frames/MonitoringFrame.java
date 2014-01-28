@@ -9,11 +9,9 @@ import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;
+import com.damintsev.common.beans.ExecuteState;
 import com.damintsev.common.beans.TaskState;
-import com.damintsev.common.event.StartEditEvent;
-import com.damintsev.common.event.StartEditEventHandler;
-import com.damintsev.common.event.StopEditEvent;
-import com.damintsev.common.event.StopEditEventHandler;
+import com.damintsev.common.event.*;
 import com.damintsev.common.utils.Position;
 import com.damintsev.common.visitor.UIVisitor;
 import com.google.gwt.canvas.client.Canvas;
@@ -220,7 +218,12 @@ public class MonitoringFrame {
                         for (TaskState state : result) {
                             System.out.println("state id=" + state.getId()  + " state="+ state.getState());
                             if (uiItems.get(state.getId()) != null) {
-                                uiItems.get(state.getId()).setTaskState(state);}
+                                uiItems.get(state.getId()).setTaskState(state);
+                                if(state.getState() == ExecuteState.WARNING
+                                        || state.getState() == ExecuteState.ERROR) {
+                                    EventBus.get().fireEvent(new AlarmEvent(state, uiItems.get(state.getId()).getItem()));
+                                }
+                            }
                             else {
                                 int i = 0; //todo!!!!
                             }

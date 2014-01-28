@@ -3,6 +3,7 @@ package com.damintsev.client;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.v3.pages.frames.SettingsFrame;
 import com.damintsev.client.v3.pages.frames.StatusBar;
+import com.damintsev.client.v3.utilities.Alarm;
 import com.google.gwt.user.client.ui.*;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
@@ -45,6 +46,8 @@ public class UIRootPanel {
         body.setCenterWidget(frame);
         final ContentPanel settings = (ContentPanel) SettingsFrame.get().getContent();
         frame.add(settings);
+
+        new Alarm(frame);
         return viewport;
     }
 }

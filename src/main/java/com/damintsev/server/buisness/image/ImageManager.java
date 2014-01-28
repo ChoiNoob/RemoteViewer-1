@@ -2,6 +2,7 @@ package com.damintsev.server.buisness.image;
 
 import com.damintsev.server.dao.DataBase;
 import com.damintsev.server.entity.Image;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,8 @@ import java.util.Map;
  */
 @Component
 public class ImageManager {
+
+    private static Logger logger = Logger.getLogger(ImageManager.class);
 
     @Autowired
     private DataBase dataBase;
@@ -42,6 +45,7 @@ public class ImageManager {
     }
 
     public void setTemporaryImage(Long imageId, byte[] content) {
+        logger.info("Saving temportary image");
         BufferedImage bufferedImage = null;
         try (InputStream is = new ByteArrayInputStream(content) ) {
             bufferedImage = ImageIO.read(is);

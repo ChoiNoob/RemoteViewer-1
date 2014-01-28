@@ -7,7 +7,7 @@ package com.damintsev.common.beans;
  */
 public enum ExecuteState {
 
-    INIT("gray"), WORK("green"), ERROR("red"), WARNING("yellow"), UNKNOWN("xyu");//todo
+    INIT("gray"), WORK("green"), ERROR("red"), WARNING("yellow");//todo
 
     private String color;
 
