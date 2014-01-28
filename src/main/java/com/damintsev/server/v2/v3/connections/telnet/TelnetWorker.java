@@ -153,7 +153,12 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             while (ret_read >= 0);
         } catch (IOException e) {
             logger.error("Exception while reading socket:" + e.getMessage(), e);
-            throw new RuntimeException(e);
+            try {
+                logger.info("Disconnecting from server");
+                tc.disconnect();
+            } catch (IOException e1) {
+                logger.error("Exception while disconnecting from socket:" + e.getMessage(), e);
+            }
         }
     }
 
@@ -172,7 +177,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             stream.close();
             super.interrupt();
             tc.disconnect();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

@@ -26,9 +26,11 @@ public class UploadServlet {
     @ResponseBody
     public HttpEntity<String> processFile(@RequestParam Long imageId,  @RequestParam MultipartFile file)  {
         System.out.println("imageId=" + imageId);
-//        file.getBytes();
-        System.out.println("size=" + file.toString());
-        System.err.println("FUCK!");
-        return new HttpEntity<>("FUCK") ;
+        try {
+            imageManager.setTemporaryImage(imageId, file.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return new HttpEntity<>("good") ;
     }
 }

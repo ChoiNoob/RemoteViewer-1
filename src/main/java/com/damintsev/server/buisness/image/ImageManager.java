@@ -6,6 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,5 +39,21 @@ public class ImageManager {
         Image image = dataBase.getImage(imageId);
         images.put(image.getId(), image);
         return image;
+    }
+
+    public void setTemporaryImage(Long imageId, byte[] content) {
+        BufferedImage bufferedImage = null;
+        try (InputStream is = new ByteArrayInputStream(content) ) {
+            bufferedImage = ImageIO.read(is);
+            int width          = bufferedImage.getWidth();
+            int height         = bufferedImage.getHeight();
+            Image image = new Image();
+            image.setWidth(width);
+            image.setHeight(height);
+            image.setContent(content);
+            images.put(0L, image);
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

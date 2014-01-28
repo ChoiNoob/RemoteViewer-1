@@ -120,7 +120,7 @@ public class FileUploadWindow extends Window {
         label.setWidth(250);
 
         HTML html = new HTML(
-                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" action=\"/upload?imageId=1\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
+                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" action=\"/upload?imageId=0\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
                 "<div>\n" +
                 "Select images:  \n" +
                 "<input type=\"file\" id=\"file\" name=\"file\"/> \n" +
@@ -146,7 +146,7 @@ public class FileUploadWindow extends Window {
         imageContainer.add(horizontalLayoutContainer);
 
 
-        image = new Image("/image?imageId=1");
+        image = new Image("/image?imageId=0");
         image.getElement().getStyle().setPosition(Style.Position.RELATIVE);
 
 
@@ -175,7 +175,7 @@ public class FileUploadWindow extends Window {
 
     public static native void submitBtn()/*-{
         $wnd.document.getElementById('ImageUpload').submit();
-//
+
 //        $wnd.jQuery($wnd.document.getElementById('ImageUpload')).submit(function(){
 //            $wnd.alert('sucsess');
 //    });

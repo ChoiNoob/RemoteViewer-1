@@ -43,8 +43,7 @@ public class ThreadExecutor extends Thread {
         delay = station.getDelay() == null ? 5 : station.getDelay();
         this.tasks = tasks;
         this.taskStates = map;
-        errors = new HashMap<String, Integer>(tasks.size() + 1);
-        //todo надо инициализировать коннект сейчас
+        errors = new HashMap<>(tasks.size() + 1);
         for(Task task : tasks) {
             taskStates.put(task.getStringId(), new TaskState(task.getStringId(), ExecuteState.INIT));
         }
