@@ -219,8 +219,7 @@ public class MonitoringFrame {
                             System.out.println("state id=" + state.getId()  + " state="+ state.getState());
                             if (uiItems.get(state.getId()) != null) {
                                 uiItems.get(state.getId()).setTaskState(state);
-                                if(state.getState() == ExecuteState.WARNING
-                                        || state.getState() == ExecuteState.ERROR) {
+                                if(state.getState() == ExecuteState.ERROR) {
                                     EventBus.get().fireEvent(new AlarmEvent(state, uiItems.get(state.getId()).getItem()));
                                 }
                             }
