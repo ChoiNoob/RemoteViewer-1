@@ -27,13 +27,13 @@ public class UploadServlet {
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
-    public HttpEntity<String> processFile(@RequestParam Long imageId,  @RequestParam MultipartFile file)  {
-        logger.debug("imageId=" + imageId);
+    public HttpEntity<String> processFile(@RequestParam MultipartFile file)  {
+        int imageId = -1;
         try {
-            imageManager.setTemporaryImage(imageId, file.getBytes());
+            imageId = imageManager.setTemporaryImage(file.getBytes());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new HttpEntity<>("good") ;
+        return new HttpEntity<>("<script>window.parent.document.getElementById('tmpImage').src = 'image/session?imageId=" + imageId + "';</script>") ;
     }
 }

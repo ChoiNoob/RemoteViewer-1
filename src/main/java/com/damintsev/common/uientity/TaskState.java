@@ -1,5 +1,7 @@
 package com.damintsev.common.uientity;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  * Date: 07.10.13
  * Time: 23:16
  */
-public class TaskState implements Serializable {
+public class TaskState implements IsSerializable, Serializable {
 
     private String id;
     private ExecuteState state;

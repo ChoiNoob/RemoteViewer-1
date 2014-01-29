@@ -5,9 +5,11 @@ import com.damintsev.server.entity.Image;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sun.management.ThreadInfoCompositeData;
 
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
+import javax.servlet.ServletContext;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,6 +30,9 @@ public class ImageManager {
     @Autowired
     private DataBase dataBase;
 
+    @Autowired
+    private ServletContext context;
+
     private Map<Long, Image> images;
 
     @PostConstruct
@@ -40,24 +45,33 @@ public class ImageManager {
             return images.get(imageId);
 
         Image image = dataBase.getImage(imageId);
-        images.put(image.getId(), image);
+        if(image != null) images.put(image.getId(), image);
         return image;
     }
 
-    public void setTemporaryImage(Long imageId, byte[] content) {
+    public int setTemporaryImage(byte[] content) {
         logger.info("Saving temportary image");
         BufferedImage bufferedImage = null;
-        try (InputStream is = new ByteArrayInputStream(content) ) {
+        try (InputStream is = new ByteArrayInputStream(content)) {
             bufferedImage = ImageIO.read(is);
-            int width          = bufferedImage.getWidth();
-            int height         = bufferedImage.getHeight();
+            int width = bufferedImage.getWidth();
+            int height = bufferedImage.getHeight();
             Image image = new Image();
             image.setWidth(width);
             image.setHeight(height);
             image.setContent(content);
-            images.put(0L, image);
+//            images.put(0L, image);
+            int imageId = image.hashCode();
+            context.setAttribute(Integer.toString(imageId), image);
+            return imageId;
         }catch (IOException e) {
             e.printStackTrace();
         }
+        return -1;
+    }
+
+    public Image getTemportaryImage(Long imageId) {
+
+        return (Image) context.getAttribute(Long.toString(imageId));
     }
 }

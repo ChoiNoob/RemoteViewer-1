@@ -22,7 +22,7 @@ import java.io.IOException;
  * Time: 17:46
  */
 @Component
-@RequestMapping
+@RequestMapping(value = "/image")
 public class ImageServlet {
 
     Logger logger = Logger.getLogger(UploadServlet.class);
@@ -30,13 +30,25 @@ public class ImageServlet {
     @Autowired
     private ImageManager imageManager;
 
-    @RequestMapping(value = "/image", method = RequestMethod.GET)
+    @RequestMapping(value = "fuck", method = RequestMethod.GET)
     @ResponseBody
     public HttpEntity<byte[]> doGet(@RequestParam Long imageId) {
         logger.debug("Received request=" + imageId);
         Image image = imageManager.getImage(imageId);
+        return makeHttp(image.getContent());
+    }
+
+    @RequestMapping(value = "session", method = RequestMethod.GET)
+    @ResponseBody
+    public HttpEntity<byte[]> getTmp(@RequestParam Long imageId) {
+        logger.info("Received request at tmp link" );
+        Image image = imageManager.getTemportaryImage(imageId);
+        return makeHttp(image.getContent());
+    }
+
+    private HttpEntity<byte[]> makeHttp(byte []content) {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.IMAGE_JPEG);
-        return new HttpEntity<>(image.getContent(), header);
+        return new HttpEntity<>(content, header);
     }
 }

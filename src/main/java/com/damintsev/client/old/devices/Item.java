@@ -5,6 +5,7 @@ import com.damintsev.common.uientity.TaskType;
 import com.damintsev.common.utils.Position;
 import com.damintsev.common.visitor.CommonVisitor;
 import com.damintsev.common.visitor.Visitor;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 import java.io.Serializable;
 
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * Date: 05.08.13
  * Time: 22:33
  */
-public abstract class Item implements Serializable, CommonVisitor {
+public abstract class Item implements IsSerializable, Serializable, CommonVisitor {
 
     private Position position;
 

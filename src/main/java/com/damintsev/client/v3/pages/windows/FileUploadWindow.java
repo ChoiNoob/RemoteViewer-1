@@ -94,33 +94,33 @@ public class FileUploadWindow extends Window {
         imageContainer = new VerticalLayoutContainer();
 
 
-        form = new FormPanel();
-        form.setEncoding(FormPanel.Encoding.MULTIPART);
-        form.setMethod(FormPanel.Method.POST);
-        form.addSubmitHandler(new SubmitEvent.SubmitHandler() {
-            @Override
-            public void onSubmit(SubmitEvent event) {
-              //todo  imagePanel.mask();
-            }
-        });
-        form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
-            @Override
-            public void onSubmitComplete(SubmitCompleteEvent event) {
-                imagePanel.unmask();
-                image.setUrl("image?id=0");
-            }
-        });
-
-
-        FileUploadField fileUploadField = new FileUploadField();
-        fileUploadField.setName("text");
-        fileUploadField.setWidth(250);
-
-        label = new FieldLabel(fileUploadField, "Изображение");
-        label.setWidth(250);
+//        form = new FormPanel();
+//        form.setEncoding(FormPanel.Encoding.MULTIPART);
+//        form.setMethod(FormPanel.Method.POST);
+//        form.addSubmitHandler(new SubmitEvent.SubmitHandler() {
+//            @Override
+//            public void onSubmit(SubmitEvent event) {
+//              //todo  imagePanel.mask();
+//            }
+//        });
+//        form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
+//            @Override
+//            public void onSubmitComplete(SubmitCompleteEvent event) {
+//                imagePanel.unmask();
+//                image.setUrl("image?id=0");
+//            }
+//        });
+//
+//
+//        FileUploadField fileUploadField = new FileUploadField();
+//        fileUploadField.setName("text");
+//        fileUploadField.setWidth(250);
+//
+//        label = new FieldLabel(fileUploadField, "Изображение");
+//        label.setWidth(250);
 
         HTML html = new HTML(
-                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" action=\"/upload?imageId=0\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
+                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" action=\"upload\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
                 "<div>\n" +
                 "Select images:  \n" +
                 "<input type=\"file\" id=\"file\" name=\"file\"/> \n" +
@@ -146,7 +146,8 @@ public class FileUploadWindow extends Window {
         imageContainer.add(horizontalLayoutContainer);
 
 
-        image = new Image("/image?imageId=0");
+        image = new Image();
+        image.getElement().setId("tmpImage");
         image.getElement().getStyle().setPosition(Style.Position.RELATIVE);
 
 
