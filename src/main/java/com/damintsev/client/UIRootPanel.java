@@ -4,7 +4,8 @@ import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.client.v3.pages.frames.SettingsFrame;
 import com.damintsev.client.v3.pages.frames.StatusBar;
 import com.damintsev.client.v3.utilities.Alarm;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.AbsolutePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.widget.core.client.ContentPanel;
 import com.sencha.gxt.widget.core.client.container.BorderLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
@@ -47,7 +48,7 @@ public class UIRootPanel {
         final ContentPanel settings = (ContentPanel) SettingsFrame.get().getContent();
         frame.add(settings);
 
-        new Alarm(frame);
+        Alarm.getInstance().setParentElement(frame);
         return viewport;
     }
 }

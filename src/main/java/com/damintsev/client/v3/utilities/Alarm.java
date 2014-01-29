@@ -16,16 +16,24 @@ import com.sencha.gxt.widget.core.client.form.TextArea;
  */
 public class Alarm {
 
+    private static Alarm instance;
+
+    public static Alarm getInstance() {
+        if(instance == null) instance = new Alarm();
+        return instance;
+    }
+
+    private AbsolutePanel panel;
     private Window window;
     private TextArea text;
     private boolean playng;
+    private AlarmEventHandler handler;
 
-    public Alarm(final AbsolutePanel panel) {
-
-        EventBus.get().addHandler(AlarmEvent.TYPE, new AlarmEventHandler() {
+    private Alarm() {
+        handler = new AlarmEventHandler() {
             @Override
             public void onAlarmEdit(AlarmEvent event) {
-                if(window == null ) initWindow(panel);
+                if(window == null) initWindow();
                 text.setText("Произошла ошибка на маршруте: " + event.getItem().getName());
                 if(!playng) {
                     startSound();
@@ -34,11 +42,25 @@ public class Alarm {
                 if(!window.isVisible())
                     window.show();
             }
-        });
+        };
+
     }
 
-    private void initWindow(AbsolutePanel panel) {
+    public void alarmOn() {
+        EventBus.get().addHandler(AlarmEvent.TYPE, handler);
+    }
+
+    public void alarmOff() {
+        EventBus.get().removeHandler(AlarmEvent.TYPE, handler);
+    }
+
+    public void setParentElement(final AbsolutePanel panel) {
+        this.panel = panel;
+    }
+
+    private void initWindow() {
         window = new Window();
+//todo change to center window top: 150px        window.setPosition(window.get, 200);
         //todo !! window.getElement().getStyle().setMarginTop(200, Style.Unit.PX);
         window.setDraggable(true);
         window.add(text = new TextArea());
@@ -66,9 +88,6 @@ public class Alarm {
     }-*/;
 
     public static native void startSound()/*-{
-//        var sound = new Howl({
-//            urls: ['/web/School_Fire_Alarm-Cullen_Card-202875844.mp3']
-//        }).play();
         $wnd.sound.play();
     }-*/;
 

@@ -1,13 +1,16 @@
 package com.damintsev.client.v3.pages.frames;
 
 import com.damintsev.client.EventBus;
+import com.damintsev.client.v3.utilities.Alarm;
+import com.damintsev.client.v3.utilities.UIButton;
 import com.damintsev.common.event.StartEditEvent;
-import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.sencha.gxt.core.client.util.Padding;
+import com.sencha.gxt.widget.core.client.button.ToggleButton;
 import com.sencha.gxt.widget.core.client.button.ToolButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 
 /**
@@ -25,10 +28,25 @@ public class StatusBar {
         toolBar.setPadding(new Padding(2, 10, 2, 10));
         toolBar.setPack(BoxLayoutContainer.BoxLayoutPack.END);
         toolBar.setHorizontalSpacing(20);
-        FieldLabel label = new FieldLabel(new Image("web/icons/run.png"), "Состояние");
-        label.setLabelWidth(70);
-        label.getElement().getStyle().setBackgroundColor("#e8e8e8");
-//        toolBar.getElement().appendChild(label.getElement());
+
+        final ToggleButton muteButton = UIButton.createToggleToolButton("/web/icons/music.png");
+        muteButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                if(muteButton.getValue()) {
+                    Alarm.getInstance().alarmOn();
+                } else {
+                    Alarm.getInstance().alarmOff();
+                }
+            }
+        });
+        muteButton.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+            @Override
+            public void onValueChange(ValueChangeEvent<Boolean> event) {
+                System.out.println("changed=" + event.getValue());
+            }
+        });
+        toolBar.add(muteButton);
 
         ToolButton editButton = new ToolButton(ToolButton.GEAR);
         editButton.addSelectHandler(new SelectEvent.SelectHandler() {
@@ -37,6 +55,7 @@ public class StatusBar {
                 EventBus.get().fireEvent(new StartEditEvent());
             }
         });
+
         toolBar.add(editButton);
     }
 
