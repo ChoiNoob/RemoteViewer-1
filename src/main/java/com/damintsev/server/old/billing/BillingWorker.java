@@ -3,7 +3,7 @@ package com.damintsev.server.old.billing;
 import com.damintsev.client.old.devices.BillingInfo;
 import com.damintsev.common.uientity.Station;
 import com.damintsev.server.old.BillingStatistics;
-import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
+import com.damintsev.server.v2.v3.connections.impl.telnet.TelnetWorker;
 import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;

@@ -1,7 +1,9 @@
-package com.damintsev.server.v2.v3.connections;
+package com.damintsev.server.v2.v3.connections.impl;
 
 import com.damintsev.common.uientity.Station;
 import com.damintsev.common.uientity.Task;
+import com.damintsev.server.v2.v3.connections.AbstractConnection;
+import com.damintsev.server.v2.v3.connections.Connection;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 
@@ -15,7 +17,7 @@ import java.io.InputStreamReader;
  * Date: 14.10.13
  * Time: 21:55
  */
-public class PingConnection extends Connection {
+public class PingConnection extends AbstractConnection {
 
     private Process process;
     private InputStream is = null;
@@ -44,7 +46,7 @@ public class PingConnection extends Connection {
                 try {
                     is.close();
                 } catch (IOException e) {
-                    e.printStackTrace();  //todo нужно что-то делать ?!
+                    e.printStackTrace();  //todo нужно что-то делать
                 }
             }
         }
@@ -58,7 +60,7 @@ public class PingConnection extends Connection {
             try {
                 is.close();
             } catch (IOException e) {
-                e.printStackTrace();  //todo нужно что-то делать ?!
+                e.printStackTrace();  //todo нужно что-то делать
             }
         }
     }

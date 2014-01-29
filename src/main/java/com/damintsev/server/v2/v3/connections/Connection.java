@@ -6,17 +6,16 @@ import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 
 /**
- * User: Damintsev Andrey
- * Date: 06.10.13
- * Time: 16:19
+ * @author Damintsev Andrey
+ *         29.01.14.
  */
-public abstract class Connection {
+public interface Connection {
 
-    public abstract Connection init(Station station) throws ConnectionException;
+    Connection init(Station station) throws ConnectionException;
 
-    public abstract String execute(Task task) throws ExecutingTaskException, ConnectionException;
+    String execute(Task task) throws ExecutingTaskException, ConnectionException;
 
-    public abstract void destroy();
+    void destroy();
 
-    public abstract boolean isConnected();
+    boolean isConnected();
 }

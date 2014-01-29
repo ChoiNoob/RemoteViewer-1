@@ -1,4 +1,4 @@
-//package com.damintsev.server.v2.v3.connections.telnet;
+//package com.damintsev.server.v2.v3.connections.connction.impl.telnet;
 //
 //import com.damintsev.client.old.devices.*;
 //import com.damintsev.client.old.devices.enums.DeviceType;
@@ -313,7 +313,7 @@
 //            logger.info("connection for Station id=" + station.getId() + " name=" + station.getHost() + " not found. Initializing new one");
 //            initConnection(station);
 //        } else {
-//            logger.info("Connection for Station id=" + station.getId() + " name=" + station.getHost() + " found");
+//            logger.info("AbstractConnection for Station id=" + station.getId() + " name=" + station.getHost() + " found");
 //        }
 //        return telnetStation.getInstance(station.getId());
 //    }

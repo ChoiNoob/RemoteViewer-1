@@ -1,6 +1,8 @@
-package com.damintsev.server.v2.v3.taskprocessors;
+package com.damintsev.server.v2.v3.processor;
 
 import com.damintsev.common.uientity.TaskType;
+import com.damintsev.server.v2.v3.processor.impl.IPTask;
+import com.damintsev.server.v2.v3.processor.impl.StatusChannelTask;
 
 import java.util.HashMap;
 import java.util.Map;

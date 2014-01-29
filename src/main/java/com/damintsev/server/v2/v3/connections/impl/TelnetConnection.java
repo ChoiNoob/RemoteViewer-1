@@ -1,8 +1,10 @@
-package com.damintsev.server.v2.v3.connections;
+package com.damintsev.server.v2.v3.connections.impl;
 
 import com.damintsev.common.uientity.Station;
 import com.damintsev.common.uientity.Task;
-import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
+import com.damintsev.server.v2.v3.connections.AbstractConnection;
+import com.damintsev.server.v2.v3.connections.Connection;
+import com.damintsev.server.v2.v3.connections.impl.telnet.TelnetWorker;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 import org.apache.log4j.Logger;
@@ -12,11 +14,10 @@ import org.apache.log4j.Logger;
  * Date: 06.10.13
  * Time: 16:28
  */
-public class TelnetConnection extends Connection {
+public class TelnetConnection extends AbstractConnection {
 
     private static final Logger logger = Logger.getLogger(TelnetConnection.class);
     private TelnetWorker worker;
-    private Station station;
 
     @Override
     public Connection init(Station station) throws ConnectionException {

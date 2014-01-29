@@ -363,12 +363,13 @@ public class DB {
         }
     }
 
+    @Deprecated
     public void saveImage(String type) {
         Connection connection = null;
         PreparedStatement statement = null;
 
         try {
-            BufferedImage image = ImageHandler.getInstance().getImage();
+            BufferedImage image = null;//todo  = ImageHandler.getInstance().getImage();
             ByteArrayOutputStream os = new ByteArrayOutputStream();
             ImageIO.write(image, "png", os);
             InputStream is = new ByteArrayInputStream(os.toByteArray());

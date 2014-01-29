@@ -26,16 +26,15 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class Executor {
 
+    private static final Logger logger = Logger.getLogger(Executor.class);
+
     @Autowired
     private DataBase dataBase;
     @Autowired
     private DB db;
 
-    private static final Logger logger = Logger.getLogger(Executor.class);
-
-    private static Map<String, ThreadExecutor> threads = new HashMap<String, ThreadExecutor>();
-    private Map<String, TaskState> stateMap = new ConcurrentHashMap<String, TaskState>();
-    private String threadName = Thread.currentThread().getName() + " ";
+    private Map<String, ThreadExecutor> threads = new HashMap<>();
+    private Map<String, TaskState> stateMap = new ConcurrentHashMap<>();
 
     public Executor() {
         logger.info("Constructor Executor()");
@@ -44,7 +43,7 @@ public class Executor {
     @PostConstruct
     public void init() {
         List<Station> stations = dataBase.getStationList();
-        logger.info(threadName + "Loaded from instance " + stations.size() + " stations");
+        logger.info("Loaded from instance " + stations.size() + " stations");
         for (Station station : stations) {
             createWorker(station);
         }
@@ -52,7 +51,7 @@ public class Executor {
 
     private void createWorker(Station station) {
         List<Task> tasks = db.loadTasksForStation(station);
-        logger.info(threadName + "For station id=" + station.getId() + " name=" + station.getName() + " loaded tasks=" + tasks.size());
+        logger.info("For station id=" + station.getId() + " name=" + station.getName() + " loaded tasks=" + tasks.size());
         ThreadExecutor thread = new ThreadExecutor(station, tasks, stateMap);
         threads.put(thread.getThreadId(), thread);
     }

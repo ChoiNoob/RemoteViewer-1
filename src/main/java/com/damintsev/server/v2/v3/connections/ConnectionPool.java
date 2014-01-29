@@ -3,6 +3,8 @@ package com.damintsev.server.v2.v3.connections;
 import com.damintsev.common.uientity.Station;
 import com.damintsev.common.uientity.Task;
 import com.damintsev.common.uientity.TaskType;
+import com.damintsev.server.v2.v3.connections.impl.PingConnection;
+import com.damintsev.server.v2.v3.connections.impl.TelnetConnection;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import org.apache.log4j.Logger;
 
@@ -14,6 +16,7 @@ import java.util.Map;
  * Date: 06.10.13
  * Time: 20:01
  * //todo Remove switch statement
+ * //todo syncronize this !!!!!
  */
 public class ConnectionPool {
     private static final Logger logger = Logger.getLogger(ConnectionPool.class);
@@ -28,7 +31,7 @@ public class ConnectionPool {
     private Map<String, Connection> connectionMap;
 
     private ConnectionPool() {
-        connectionMap = new HashMap<String, Connection>();
+        connectionMap = new HashMap<>();
     }
 
     public Connection getConnection(Task task) throws ConnectionException {

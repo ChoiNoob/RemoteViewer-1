@@ -8,8 +8,8 @@ import com.damintsev.server.v2.v3.connections.Connection;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
-import com.damintsev.server.v2.v3.taskprocessors.TaskPool;
-import com.damintsev.server.v2.v3.taskprocessors.TaskProcessor;
+import com.damintsev.server.v2.v3.processor.TaskPool;
+import com.damintsev.server.v2.v3.processor.TaskProcessor;
 import org.apache.log4j.Logger;
 
 import java.util.HashMap;
@@ -142,7 +142,7 @@ public class ThreadExecutor extends Thread {
         errors.put(stringID, errors.get(stringID) + 1);
         return task;
     }
-
+//todo убрать !!! методы вообще одинаковые
     private TaskState createConnectionError(String stringID, ConnectionException exception) {
         logger.info("Created connection error!");
         TaskState task = new TaskState(stringID, ExecuteState.ERROR, exception.getMessage());
@@ -153,11 +153,7 @@ public class ThreadExecutor extends Thread {
         } else {
             logger.info("Setting ERROR to taskId=" + stringID);
             task.setState(ExecuteState.ERROR);
-            for (TaskState state : taskStates.values()) {
-                if (state.getId().equals(stringID)) continue;
-                System.out.println("For state id=" + state.getId());
-                state.setState(ExecuteState.WARNING);
-            }
+
         }
         errors.put(stringID, errors.get(stringID) + 1);
         return task;
@@ -188,7 +184,7 @@ public class ThreadExecutor extends Thread {
 //        pause();
 //        ConnectionPool.getInstance().dropConnection(station);
 //        System.out.println("dropped");
-//        for(Task task : tasks) {  //todo не очень красиво как мне кажется
+//        for(Task task : tasks) {  //todo не очень красиво
 //            task.setStation(station);
 //        }
 //        iterator = null;

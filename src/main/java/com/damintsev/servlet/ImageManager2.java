@@ -14,7 +14,7 @@ import java.io.IOException;
  * Date: 16.10.12
  * Time: 23:24
  * /
- /todo переписать
+ //todo переписать
  */
 public class ImageManager2 {
 //    private static final Logger log = Logger.getLogger(ImageManager2.class.getName());

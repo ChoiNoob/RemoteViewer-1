@@ -1,6 +1,7 @@
-package com.damintsev.server.v2.v3.taskprocessors;
+package com.damintsev.server.v2.v3.processor.impl;
 
 import com.damintsev.common.uientity.TaskState;
+import com.damintsev.server.v2.v3.processor.TaskProcessor;
 
 /**
  * User: Damintsev Andrey

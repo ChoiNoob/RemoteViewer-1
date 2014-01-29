@@ -27,7 +27,7 @@
 //    }
 //
 //    public void cleanBusyInfo() {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        try {
 //            connection = Mysql.get().getConnection();

@@ -1,4 +1,4 @@
-package com.damintsev.server.v2.v3.connections.telnet;
+package com.damintsev.server.v2.v3.connections.impl.telnet;
 
 /**
  * Created by adamintsev

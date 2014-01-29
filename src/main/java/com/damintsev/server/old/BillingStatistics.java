@@ -2,7 +2,7 @@ package com.damintsev.server.old;
 
 import com.damintsev.client.old.devices.BillingInfo;
 import com.damintsev.client.old.devices.BillingStats;
-import com.damintsev.server.v2.v3.connections.telnet.TelnetWorker;
+import com.damintsev.server.v2.v3.connections.impl.telnet.TelnetWorker;
 import org.apache.log4j.Logger;
 
 import java.util.*;

@@ -36,7 +36,7 @@
 //    }
 //
 //    private Device saveCommonDevice(CommonDevice device) {
-//        Connection connection = Mysql.getConnection();
+//        AbstractConnection connection = Mysql.getConnection();
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        try {
@@ -92,7 +92,7 @@
 //
 //    private Device saveStation(Station station) {
 //        logger.info("saving Station");
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        try {
@@ -157,7 +157,7 @@
 //    }
 //
 //    private void savePosition(Item item) {
-////        Connection connection = null;
+////        AbstractConnection connection = null;
 ////        PreparedStatement statement = null;
 ////        try {
 ////            connection = Mysql.getConnection();
@@ -189,7 +189,7 @@
 //
 //    public List<Item> loadItems() {
 ////        List<Item> items = new ArrayList<Item>();
-////        Connection connection = null;
+////        AbstractConnection connection = null;
 ////        PreparedStatement statement = null;
 ////        try {
 ////            connection = Mysql.getConnection();
@@ -252,7 +252,7 @@
 //        return null;
 //    }
 //
-//    private Station findStation(Connection connection, Long stationId) {
+//    private Station findStation(AbstractConnection connection, Long stationId) {
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        Station station = null;
@@ -293,7 +293,7 @@
 //    }
 //
 //    public Device loadDevice(Long deviceId, DeviceType deviceType) {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        Device device = null;
@@ -339,7 +339,7 @@
 //    }
 //
 //    public void saveBusyInfo(Long id, BusyInfo info) {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        try {
 //            connection = Mysql.getConnection();
@@ -366,7 +366,7 @@
 //    }
 //
 //    public BusyInfo getBusyInfo(Device device) {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        try {
@@ -408,7 +408,7 @@
 //    }
 //
 //    public void deleteDevice(Device device){
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        try{
@@ -494,7 +494,7 @@
 //    }
 //
 //    public FTPSettings saveFTPSettings(FTPSettings settings) {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet;
 //        try{
@@ -548,7 +548,7 @@
 //    }
 //
 //    public FTPSettings loadFTPSettings(Station station) {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        FTPSettings settings = null;
@@ -589,7 +589,7 @@
 //    }
 //
 //    public List<FTPSettings> listFTPSettings() {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        List<FTPSettings> settingses = new ArrayList<FTPSettings>();
@@ -630,7 +630,7 @@
 //
 //    public List<BillingInfo> saveBillingInfo(List<BillingInfo> billingList) {
 //        logger.info("Saving billing info...");
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        try {
@@ -672,7 +672,7 @@
 //    }
 //
 //    public List<BillingInfo> loadBillingInfo() {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        List<BillingInfo> billingInfoList = new ArrayList<BillingInfo>();
@@ -720,7 +720,7 @@
 //        if(dictionary.containsKey(prefix))
 //            return dictionary.getInstance(prefix);
 //        else {
-//            Connection connection = null;
+//            AbstractConnection connection = null;
 //            PreparedStatement statement = null;
 //            ResultSet resultSet;
 //            try {
@@ -755,7 +755,7 @@
 //    }
 //
 //    public List<BusyInfo> getBusyInfoStatistics(Device device) {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        List<BusyInfo> busyInfoList = new ArrayList<BusyInfo>();
@@ -805,7 +805,7 @@
 //        List<Station> stations = new ArrayList<Station>();
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
-//        Connection connection;
+//        AbstractConnection connection;
 //        try {
 //            connection = Mysql.getConnection();
 //            statement = connection.prepareStatement("SELECT * FROM station");
@@ -845,7 +845,7 @@
 //        PreparedStatement statement = null;
 //        ResultSet resultSet = null;
 //        Station station = null;
-//        Connection connection;
+//        AbstractConnection connection;
 //        try {
 //            connection = Mysql.getConnection();
 //            statement = connection.prepareStatement("SELECT * FROM station WHERE allowStatistics = ?");
@@ -883,7 +883,7 @@
 //    }
 //
 //    public TreeMap<String, String> loadPrefixMap() {
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        ResultSet resultSet;
 //        TreeMap<String, String> map = new TreeMap<String, String>();
@@ -916,7 +916,7 @@
 //
 //    public void savePrefixMap(TreeMap<String, String> prefixMap) {
 //        logger.info("Saving prefix map");
-//        Connection connection = null;
+//        AbstractConnection connection = null;
 //        PreparedStatement statement = null;
 //        try {
 //            connection = Mysql.getConnection();
