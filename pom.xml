@@ -4,7 +4,6 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-    <!-- POM file generated with GWT webAppCreator -->
     <modelVersion>4.0.0</modelVersion>
     <groupId>RemoteViewer</groupId>
     <artifactId>RemoteViewer</artifactId>
@@ -138,7 +137,6 @@
         <sourceDirectory>src/main/java</sourceDirectory>
 
         <plugins>
-            <!-- GWT Maven Plugin -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>gwt-maven-plugin</artifactId>
@@ -153,22 +151,10 @@
                         </configuration>
                         <goals>
                             <goal>compile</goal>
-                            <!--<goal>test</goal>-->
-                            <!--<goal>i18n</goal>-->
-                            <!--<goal>generateAsync</goal>-->
                         </goals>
                     </execution>
                 </executions>
-                <!-- Plugin configuration. There are many available options, see
-                  gwt-maven-plugin documentation at codehaus.org -->
-                <!--<configuration>-->
-                    <!--<runTarget>mainGWT.html</runTarget>-->
-                    <!--<hostedWebapp>${webappDirectory}</hostedWebapp>-->
-                    <!--<i18nMessagesBundle>com.damintsev.client.Messages</i18nMessagesBundle>-->
-                <!--</configuration>-->
             </plugin>
-
-            <!-- Copy static web files before executing gwt:run -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -187,10 +173,8 @@
                         <resource>
                             <directory>${basedir}/src/lib</directory>
                             <targetPath>WEB-INF/lib</targetPath>
-                            <!--<exclude>${basedir}/target</exclude>-->
                         </resource>
                     </webResources>
-                    <!--<webappDirectory>${webappDirectory}</webappDirectory>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -202,7 +186,6 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>tomcat-maven-plugin</artifactId>

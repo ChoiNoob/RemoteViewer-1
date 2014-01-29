@@ -2,7 +2,7 @@ package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.Service;
-import com.damintsev.common.beans.Label;
+import com.damintsev.common.uientity.Label;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
@@ -48,7 +48,6 @@ public class LabelWindow implements Editor<Label> {
         con.add(panel);
 
         name = new TextArea();
-//        name.setHeight(800);
         FieldLabel fieldLabel = new FieldLabel(name, "Имя");
         fieldLabel.setHeight(80);
         panel.add(fieldLabel, new VerticalLayoutContainer.VerticalLayoutData(1,-1));
@@ -59,7 +58,7 @@ public class LabelWindow implements Editor<Label> {
                     public void run() {
                         Service.instance.deleteLabel(label, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
-                                //To change body of implemented methods use File | Settings | File Templates.
+                                //Todo change body of implemented methods use File | Settings | File Templates.
                             }
 
                             public void onSuccess(Void result) {

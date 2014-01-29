@@ -5,7 +5,7 @@ import com.google.gwt.event.shared.HandlerManager;
 /**
  * User: adamintsev
  * Date: 20.12.13
- * //todo написать комментарии
+ * Bus to work with events
  */
 public class EventBus {
 

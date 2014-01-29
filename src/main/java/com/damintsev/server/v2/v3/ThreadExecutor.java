@@ -1,9 +1,9 @@
 package com.damintsev.server.v2.v3;
 
-import com.damintsev.common.beans.ExecuteState;
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.Task;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.ExecuteState;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.Task;
+import com.damintsev.common.uientity.TaskState;
 import com.damintsev.server.v2.v3.connections.Connection;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
@@ -87,6 +87,7 @@ public class ThreadExecutor extends Thread {
         return tasks.get(listPointer++);
     }
 
+    //todo отдать в thread pool
     public void run() {
         Thread.currentThread().setName("threadId=" + thisThreadId + " id=" + station.getId() + " name=" + station.getName());
         logger.info("Starting current thread");

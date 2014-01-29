@@ -1,4 +1,4 @@
-package com.damintsev.client.old.devices;
+package com.damintsev.common.uientity;
 
 import java.io.Serializable;
 
@@ -7,11 +7,11 @@ import java.io.Serializable;
  * Date: 18.08.13
  * Time: 10:50
  */
+@Deprecated
 public class Response implements Serializable {
 
     private Long id;
     private String resultText;
-//    private String requestText;
     private boolean result;
 
     public Response() {
@@ -29,14 +29,6 @@ public class Response implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-//    public String getRequestText() {
-//        return requestText;
-//    }
-//
-//    public void setRequestText(String requestText) {
-//        this.requestText = requestText;
-//    }
 
     public String getResultText() {
         return resultText;

@@ -1,9 +1,9 @@
 package com.damintsev.server.db;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.beans.Label;
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.Task;
+import com.damintsev.common.uientity.Label;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.Task;
 import com.damintsev.common.visitor.Visitor;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

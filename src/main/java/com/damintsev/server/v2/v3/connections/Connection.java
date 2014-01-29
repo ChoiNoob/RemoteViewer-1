@@ -1,7 +1,7 @@
 package com.damintsev.server.v2.v3.connections;
 
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.Task;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.Task;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 

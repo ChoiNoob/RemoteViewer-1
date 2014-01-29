@@ -1,7 +1,7 @@
 //package com.damintsev.client.old.devices.windows;
 //
 //import com.damintsev.client.old.devices.FTPSettings;
-//import com.damintsev.common.beans.Station;
+//import com.damintsev.common.uientity.Station;
 //import com.google.gwt.core.client.GWT;
 //import com.google.gwt.editor.client.Editor;
 //import com.google.gwt.editor.client.SimpleBeanEditorDriver;

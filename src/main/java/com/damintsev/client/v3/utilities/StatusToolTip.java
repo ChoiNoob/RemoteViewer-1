@@ -1,12 +1,10 @@
 package com.damintsev.client.v3.utilities;
 
-import com.damintsev.common.beans.TaskState;
-import com.damintsev.common.utils.Dialogs;
+import com.damintsev.common.uientity.TaskState;
 import com.google.gwt.core.shared.GWT;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.sencha.gxt.core.client.Style;
 import com.sencha.gxt.core.client.XTemplates;
-import com.sencha.gxt.widget.core.client.tips.ToolTip;
 import com.sencha.gxt.widget.core.client.tips.ToolTipConfig;
 
 /**
@@ -66,7 +64,7 @@ public class StatusToolTip extends ToolTipConfig {
     public void setMessage(TaskState state) {
 //        TaskState state = new TaskState();
 //        Dialogs.alert("asd" + state.getMessage());
-        if (state.getMessage()==null) state.setMessage("");
+        if (state.getMessage() == null) state.setMessage("");
 //        state.setMessage("XYU PIZDA");
 
         setData(state);

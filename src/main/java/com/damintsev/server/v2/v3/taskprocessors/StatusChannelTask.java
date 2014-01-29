@@ -1,7 +1,7 @@
 package com.damintsev.server.v2.v3.taskprocessors;
 
-import com.damintsev.common.beans.ExecuteState;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.ExecuteState;
+import com.damintsev.common.uientity.TaskState;
 import org.apache.log4j.Logger;
 
 /**
@@ -21,7 +21,7 @@ public class StatusChannelTask implements TaskProcessor {
         int index = command.indexOf("PP NW");
         if (index > 0) {
             command = command.substring(index, command.length());
-//            logger.debug("After substring: " + command);
+            logger.debug("After substring: " + command);
         }
         if (command.contains("READY")) {
             logger.info("After parse result is WORK");

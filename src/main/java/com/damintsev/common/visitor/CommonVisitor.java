@@ -7,12 +7,5 @@ package com.damintsev.common.visitor;
  */
 public interface CommonVisitor {
 
-    /**
-     *
-     *
-     * @param visitor
-     * @return
-     */
     <T> T accept(Visitor<T> visitor);
-
 }

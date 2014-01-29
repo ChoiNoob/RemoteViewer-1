@@ -7,6 +7,8 @@ import java.util.Map;
  * User: Damintsev Andrey
  * Date: 11.10.13
  * Time: 0:25
+ * @Depricated
+ * //todo убить нахер!
  */
 public class Scheduler {
 

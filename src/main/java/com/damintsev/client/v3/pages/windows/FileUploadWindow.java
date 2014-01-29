@@ -30,7 +30,7 @@ public class FileUploadWindow extends Window {
     private static FileUploadWindow instance;
 
     public static FileUploadWindow getInstance() {
-//        if(instance == null)
+        if(instance == null)
             instance = new FileUploadWindow();
         return instance;
     }
@@ -175,14 +175,5 @@ public class FileUploadWindow extends Window {
 
     public static native void submitBtn()/*-{
         $wnd.document.getElementById('ImageUpload').submit();
-
-//        $wnd.jQuery($wnd.document.getElementById('ImageUpload')).submit(function(){
-//            $wnd.alert('sucsess');
-//    });
     }-*/;
-
-//
-//    $wnd.jQuery($wnd.document.getElementById('ImageUpload')).submit(function(){
-//        alert('sucsess');
-//    });
 }

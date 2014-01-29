@@ -1,10 +1,10 @@
 package com.damintsev.server.db;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.beans.Label;
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.Task;
-import com.damintsev.common.beans.TaskType;
+import com.damintsev.common.uientity.Label;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.Task;
+import com.damintsev.common.uientity.TaskType;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +29,7 @@ import java.util.List;
  * Time: 0:25
  */
 @Component
+@Deprecated
 public class DB {
 
     private static final Logger logger = Logger.getLogger(DB.class);

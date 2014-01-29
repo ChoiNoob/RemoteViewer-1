@@ -2,7 +2,7 @@ package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.v3.pages.windows.AddStationWindow;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.TaskState;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;

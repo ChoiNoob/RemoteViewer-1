@@ -1,6 +1,7 @@
 package com.damintsev.servlet;
 
 import com.damintsev.server.buisness.image.ImageManager;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.stereotype.Controller;
@@ -19,13 +20,15 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping
 public class UploadServlet {
 
+    Logger logger = Logger.getLogger(UploadServlet.class);
+
     @Autowired
     private ImageManager imageManager;
 
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public HttpEntity<String> processFile(@RequestParam Long imageId,  @RequestParam MultipartFile file)  {
-        System.out.println("imageId=" + imageId);
+        logger.debug("imageId=" + imageId);
         try {
             imageManager.setTemporaryImage(imageId, file.getBytes());
         } catch (Exception e) {

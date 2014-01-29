@@ -29,7 +29,7 @@ public class StatusBar {
         toolBar.setPack(BoxLayoutContainer.BoxLayoutPack.END);
         toolBar.setHorizontalSpacing(20);
 
-        final ToggleButton muteButton = UIButton.createToggleToolButton("/web/icons/music.png");
+        final ToggleButton muteButton = UIButton.createToggleToolButton("web/icons/music.png");
         muteButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {

@@ -1,10 +1,10 @@
 package com.damintsev.client.service;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.beans.Label;
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.Task;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.Label;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.Task;
+import com.damintsev.common.uientity.TaskState;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;

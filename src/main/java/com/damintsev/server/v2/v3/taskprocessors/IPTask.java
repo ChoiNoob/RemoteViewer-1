@@ -1,7 +1,7 @@
 package com.damintsev.server.v2.v3.taskprocessors;
 
-import com.damintsev.common.beans.ExecuteState;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.ExecuteState;
+import com.damintsev.common.uientity.TaskState;
 import org.apache.log4j.Logger;
 
 import java.util.regex.Matcher;
@@ -18,7 +18,6 @@ public class IPTask implements TaskProcessor {
 
     @Override
     public TaskState process(String command) {
-        logger.info("Command=" + command);
         TaskState state = new TaskState();
         Pattern pattern = Pattern.compile("[0-9]{1,3} bytes from ");
         Matcher matcher = pattern.matcher(command);

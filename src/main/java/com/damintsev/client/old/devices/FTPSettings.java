@@ -1,6 +1,6 @@
 //package com.damintsev.client.old.devices;
 //
-//import com.damintsev.common.beans.Station;
+//import com.damintsev.common.uientity.Station;
 //
 //import javax.persistence.*;
 //import javax.xml.bind.annotation.XmlElement;

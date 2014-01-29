@@ -1,4 +1,4 @@
-package com.damintsev.common.beans;
+package com.damintsev.common.uientity;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.visitor.Visitor;

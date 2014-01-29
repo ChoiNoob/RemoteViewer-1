@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * Date: 21.10.13
  * Time: 21:04
  */
-public abstract class ReloadAsyncCallback<T> implements AsyncCallback<T> {
+public abstract class Callback<T> implements AsyncCallback<T> {
 
     @Override
     public void onFailure(Throwable caught) {

@@ -1,7 +1,8 @@
 package com.damintsev.server.dao;
 
-import com.damintsev.common.beans.Station;
+import com.damintsev.common.uientity.Station;
 import com.damintsev.server.entity.Image;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -18,18 +19,17 @@ import java.util.List;
 @Repository
 public class DataBaseImpl implements DataBase {
 
+    private static Logger logger = Logger.getLogger(DataBaseImpl.class);
+
     @Autowired
     private DataSource dataSource;
 
     public List<Station> getStationList() {
         List<Station> stations = new ArrayList<Station>();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        Connection connection;
-        try {
-            connection = dataSource.getConnection();
-            statement = connection.prepareStatement("SELECT * FROM station");
-            resultSet = statement.executeQuery();
+        String query = "SELECT * FROM station";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 Station station = new Station();
                 station.setId(resultSet.getLong("station_id"));
@@ -43,19 +43,7 @@ public class DataBaseImpl implements DataBase {
             }
             return stations;
         } catch (Exception e) {
-//            logger.error(e.getMessage(), e);
-            e.printStackTrace();
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            logger.error(e.getMessage(), e);
         }
         return null;
     }
@@ -63,9 +51,9 @@ public class DataBaseImpl implements DataBase {
     @Override
     public Image getImage(Long id) {
         Image image = null;
-        String sql ="SELECT * FROM images WHERE id = ?";
+        String query ="SELECT * FROM images WHERE id = ?";
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             if(resultSet.next()) {

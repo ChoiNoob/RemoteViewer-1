@@ -2,10 +2,10 @@ package com.damintsev.server.services;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.DatabaseService;
-import com.damintsev.common.beans.Label;
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.Task;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.Label;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.Task;
+import com.damintsev.common.uientity.TaskState;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.Executor;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
@@ -34,13 +34,7 @@ public class DatabaseServerService implements DatabaseService {
     }
 
     public List<Item> loadUIItems() {
-        System.out.println("loadUIItems+loadUIItems+loadUIItems+loadUIItems");
-        try {
             return db.getUIItemList();
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
-return null;
     }
 
     public Station loadStation(Long id) {
@@ -53,7 +47,7 @@ return null;
     }
 
     public List<TaskState> loadTaskStates() {
-        return new ArrayList<TaskState>(executor.getStates().values());
+        return new ArrayList<>(executor.getStates().values());
     }
 
     public void saveItemPosition(List<Item> items) {

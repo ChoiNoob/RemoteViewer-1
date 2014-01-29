@@ -9,13 +9,16 @@ import com.damintsev.client.service.Service;
 import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.client.v3.utilities.DataLoader;
 import com.damintsev.client.v3.utilities.Scheduler;
-import com.damintsev.common.beans.ExecuteState;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.ExecuteState;
+import com.damintsev.common.uientity.TaskState;
 import com.damintsev.common.event.*;
+import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Position;
 import com.damintsev.common.visitor.UIVisitor;
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.event.logical.shared.ResizeEvent;
+import com.google.gwt.event.logical.shared.ResizeHandler;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -82,6 +85,12 @@ public class MonitoringFrame {
             }
         });
         drawCanvas(panel);
+        panel.addHandler(new ResizeHandler() {
+            @Override
+            public void onResize(ResizeEvent event) {
+                Dialogs.alert("fuck");
+            }
+        }, ResizeEvent.getType());
         DataLoader.getInstance().load();
         drawConnections();
     }

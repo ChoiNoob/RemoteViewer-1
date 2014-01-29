@@ -2,9 +2,9 @@ package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.Service;
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.Task;
-import com.damintsev.common.beans.TaskType;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.Task;
+import com.damintsev.common.uientity.TaskType;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
@@ -29,13 +29,13 @@ import com.sencha.gxt.widget.core.client.form.*;
  * Date: 06.08.13
  * Time: 1:40
  */
-public class AddTaskWindow implements Editor<Task>{
+public class AddTaskWindow implements Editor<Task> {
 
     private static AddTaskWindow instance;
 
     public static AddTaskWindow get() {
 //        if(instance == null)
-            instance = new AddTaskWindow();
+        instance = new AddTaskWindow();
         return instance;
     }
 
@@ -43,7 +43,7 @@ public class AddTaskWindow implements Editor<Task>{
     private Window window;
     private TextButton delete;
     private Task task;
-//    @Path("station")
+    //    @Path("station")
     ComboBox<Station> station;
     SimpleComboBox<TaskType> type;
     TextField name;
@@ -60,14 +60,14 @@ public class AddTaskWindow implements Editor<Task>{
         con.setBodyStyle("padding: 5px");
         final VerticalLayoutContainer panel = new VerticalLayoutContainer();
         con.add(panel);
-        
-           ListStore<Station> store = new ListStore<Station>(new ModelKeyProvider<Station>() {
+
+        ListStore<Station> store = new ListStore<Station>(new ModelKeyProvider<Station>() {
             public String getKey(Station item) {
                 return "" + item.getId();
             }
         });
 
-         station = new ComboBox<Station>(store, new LabelProvider<Station>() {
+        station = new ComboBox<Station>(store, new LabelProvider<Station>() {
             public String getLabel(Station item) {
                 return item.getName() == null ? "Адрес: " + item.getHost() : item.getName() + "(Адрес: " + item.getHost() + ")";
             }
@@ -103,7 +103,7 @@ public class AddTaskWindow implements Editor<Task>{
                 station.getLoader().load();
             }
         });
-        panel.add(new FieldLabel(station, "Станция"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(station, "Станция"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         type = new SimpleComboBox<TaskType>(new LabelProvider<TaskType>() {
             public String getLabel(TaskType item) {
@@ -116,14 +116,14 @@ public class AddTaskWindow implements Editor<Task>{
         type.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
         type.setEditable(false);
         type.setAllowBlank(false);
-        panel.add(new FieldLabel(type, "Тип"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(type, "Тип"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         name = new TextField();
-        panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(name, "Имя"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
         command = new TextField();
         command.setAllowBlank(false);
-        panel.add(new FieldLabel(command, "Запрос состояния канала"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        panel.add(new FieldLabel(command, "Запрос состояния канала"), new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
 //        queryBusy = new TextField();
 //        panel.add(new FieldLabel(queryBusy, "Проверака занятых каналов"), new VerticalLayoutContainer.VerticalLayoutData(1,-1));
@@ -134,7 +134,7 @@ public class AddTaskWindow implements Editor<Task>{
                     public void run() {
                         Service.instance.deleteTask(task, new AsyncCallback<Void>() {
                             public void onFailure(Throwable caught) {
-                                //To change body of implemented methods use File | Settings | File Templates.
+                                //Todo change body of implemented methods use File | Settings | File Templates.
                             }
 
                             public void onSuccess(Void result) {
@@ -178,7 +178,8 @@ public class AddTaskWindow implements Editor<Task>{
         }));
         window.setWidget(con);
     }
-                                          //todo сделать чтото с раннайблом
+
+    //todo сделать чтото с раннайблом
     public void show(Long id, Runnable run) {
         driver.initialize(this);
 
@@ -207,49 +208,4 @@ public class AddTaskWindow implements Editor<Task>{
     interface TaskEditor extends SimpleBeanEditorDriver<Task, AddTaskWindow> {
 
     }
-//
-////    @Path("station")
-//    public ComboBox<Station> getStationComboBox() {
-//        ListStore<Station> store = new ListStore<Station>(new ModelKeyProvider<Station>() {
-//            public String getKey(Station item) {
-//                return "" + item.getId();
-//            }
-//        });
-//
-//        final ComboBox<Station> station = new ComboBox<Station>(store, new LabelProvider<Station>() {
-//            public String getLabel(Station item) {
-//                return item.getName() == null ? "Адрес: " + item.getHost() : item.getName() + "(Адрес: " + item.getHost() + ")";
-//            }
-//        }){
-//            @Override
-//            public Station getValue() {
-//                System.out.println("getInstance VVV=" + super.getValue());
-//                return super.getValue();    //To change body of overridden methods use File | Settings | File Templates.
-//            }
-//        };
-//        station.setLoader(new PagingLoader<PagingLoadConfig, PagingLoadResult<Station>>(new DataProxy<PagingLoadConfig, PagingLoadResult<Station>>() {
-////            @Override
-//            public void load(PagingLoadConfig config, final com.google.gwt.core.client.Callback<PagingLoadResult<Station>, Throwable> callback) {
-//                Service.instance.getStationList(new AsyncCallback<PagingLoadResult<Station>>() {
-//                    public void onFailure(Throwable caught) {
-//                        //To change body of implemented methods use File | Settings | File Templates.
-//                    }
-//
-//                    public void onSuccess(PagingLoadResult<Station> result) {
-//                        station.getStore().clear();
-//                        station.getStore().addAll(result.getData());
-//                    }
-//                });
-//            }
-//        }));
-//        station.addSelectionHandler(new SelectionHandler<Station>() {
-//            public void onSelection(SelectionEvent<Station> event) {
-//                System.out.println("selecterd = "+ event.getSelectedItem().getId());
-//                station.setValue(event.getSelectedItem());
-//            }
-//        });
-//        station.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
-//
-//        return station;
-//    }
 }

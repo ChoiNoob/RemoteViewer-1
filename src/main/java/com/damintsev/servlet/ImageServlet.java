@@ -2,6 +2,7 @@ package com.damintsev.servlet;
 
 import com.damintsev.server.buisness.image.ImageManager;
 import com.damintsev.server.entity.Image;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,13 +25,15 @@ import java.io.IOException;
 @RequestMapping
 public class ImageServlet {
 
+    Logger logger = Logger.getLogger(UploadServlet.class);
+
     @Autowired
     private ImageManager imageManager;
 
     @RequestMapping(value = "/image", method = RequestMethod.GET)
     @ResponseBody
     public HttpEntity<byte[]> doGet(@RequestParam Long imageId) {
-        System.err.println("received request=" + imageId);        //todo configure logger
+        logger.debug("Received request=" + imageId);
         Image image = imageManager.getImage(imageId);
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.IMAGE_JPEG);

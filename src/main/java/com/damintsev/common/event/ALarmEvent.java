@@ -1,7 +1,7 @@
 package com.damintsev.common.event;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.TaskState;
 import com.google.gwt.event.shared.GwtEvent;
 
 /**

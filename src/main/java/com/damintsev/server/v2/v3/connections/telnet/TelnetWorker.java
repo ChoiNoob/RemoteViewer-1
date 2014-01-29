@@ -3,9 +3,10 @@ package com.damintsev.server.v2.v3.connections.telnet;
 /**
  * Created by adamintsev
  * Date: 12.08.13 15:29
+ * //todo интегрировать с другими классами!
  */
 
-import com.damintsev.client.old.devices.Response;
+import com.damintsev.common.uientity.Response;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import org.apache.commons.net.telnet.*;
 import org.apache.log4j.Logger;
@@ -132,12 +133,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
         return write(command);
     }
 
-    /**
-     * Reader thread.
-     * Reads lines from the TelnetWorker and echoes them
-     * on the screen.
-     * *
-     */
+//todo change
     public void run() {
 //        System.out.println("Start reader!!!!");
         try {

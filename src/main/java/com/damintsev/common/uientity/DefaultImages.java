@@ -1,4 +1,4 @@
-package com.damintsev.common.beans;
+package com.damintsev.common.uientity;
 
 /**
  * @author Damintsev Andrey

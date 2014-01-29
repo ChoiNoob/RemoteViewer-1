@@ -1,8 +1,8 @@
 package com.damintsev.client.v3.uiitems;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.TaskState;
 import com.damintsev.common.utils.Position;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;

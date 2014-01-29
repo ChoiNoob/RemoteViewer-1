@@ -8,6 +8,7 @@ package com.damintsev.server.v2.v3.exceptions;
 public class ExecutingTaskException extends Exception {
 
     public ExecutingTaskException() {
+        super();
     }
 
     public ExecutingTaskException(Throwable cause) {

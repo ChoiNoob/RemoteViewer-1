@@ -1,9 +1,10 @@
 package com.damintsev.server.v2.v3;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.beans.Station;
-import com.damintsev.common.beans.Task;
-import com.damintsev.common.beans.TaskState;
+import com.damintsev.common.uientity.Station;
+import com.damintsev.common.uientity.Task;
+import com.damintsev.common.uientity.TaskState;
+import com.damintsev.server.dao.DataBase;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import org.apache.log4j.Logger;
@@ -25,8 +26,8 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class Executor {
 
-//    @Autowired
-//    private DataBase dataBase;
+    @Autowired
+    private DataBase dataBase;
     @Autowired
     private DB db;
 
@@ -42,7 +43,7 @@ public class Executor {
 
     @PostConstruct
     public void init() {
-        List<Station> stations = db.getStationList();
+        List<Station> stations = dataBase.getStationList();
         logger.info(threadName + "Loaded from instance " + stations.size() + " stations");
         for (Station station : stations) {
             createWorker(station);

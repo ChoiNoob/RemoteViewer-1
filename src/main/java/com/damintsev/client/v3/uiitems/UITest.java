@@ -1,6 +1,6 @@
 package com.damintsev.client.v3.uiitems;
 
-import com.damintsev.common.beans.Task;
+import com.damintsev.common.uientity.Task;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;

@@ -1,6 +1,4 @@
-package com.damintsev.common.beans;
-
-import com.damintsev.client.old.devices.Response;
+package com.damintsev.common.uientity;
 
 import java.io.Serializable;
 

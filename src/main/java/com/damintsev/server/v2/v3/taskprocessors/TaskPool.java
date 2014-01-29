@@ -1,6 +1,6 @@
 package com.damintsev.server.v2.v3.taskprocessors;
 
-import com.damintsev.common.beans.TaskType;
+import com.damintsev.common.uientity.TaskType;
 
 import java.util.HashMap;
 import java.util.Map;
