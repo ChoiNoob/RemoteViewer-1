@@ -38,7 +38,7 @@
 
     <servlet-mapping>
         <servlet-name>servlet-context</servlet-name>
-        <url-pattern>/image</url-pattern>
+        <url-pattern>/image/*</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

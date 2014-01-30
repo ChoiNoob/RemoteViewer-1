@@ -1,6 +1,9 @@
 package com.damintsev.client.v3.pages.windows;
 
-import com.google.gwt.dom.client.Style;
+import com.damintsev.client.EventBus;
+import com.damintsev.common.event.FileUploadEvent;
+import com.damintsev.common.event.FileUploadHandler;
+import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -16,9 +19,10 @@ import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.event.SubmitCompleteEvent;
-import com.sencha.gxt.widget.core.client.event.SubmitEvent;
-import com.sencha.gxt.widget.core.client.form.*;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.NumberPropertyEditor;
+import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
+import com.sencha.gxt.widget.core.client.form.SpinnerField;
 
 /**
 * User: Damintsev Andrey
@@ -37,8 +41,8 @@ public class FileUploadWindow extends Window {
 
     private VerticalLayoutContainer imageContainer;
     private Image image;
-    private Image newImage;
-    private FormPanel form;
+    private SpinnerField<Integer> widthField;
+    private SpinnerField<Integer> heightField;
 
     protected FileUploadWindow() {
         setPixelSize(850,500);
@@ -70,7 +74,7 @@ public class FileUploadWindow extends Window {
         container.setWestWidget(editorContainer, new BorderLayoutContainer.BorderLayoutData(250));
         setWidget(container);
 
-        SpinnerField<Integer> widthField = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
+        widthField = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
         widthField.setAllowNegative(false);
         widthField.setMaxValue(500);
         widthField.setMinValue(50);
@@ -79,7 +83,7 @@ public class FileUploadWindow extends Window {
         label = new FieldLabel(widthField, "Ширина");
         editorPanel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
-        SpinnerField<Integer> heightField = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
+        heightField = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
         heightField.setAllowNegative(false);
         heightField.setMaxValue(500);
         heightField.setMinValue(50);
@@ -147,14 +151,31 @@ public class FileUploadWindow extends Window {
 
 
         image = new Image();
-        image.getElement().setId("tmpImage");
-        image.getElement().getStyle().setPosition(Style.Position.RELATIVE);
-
+//        image.getElement().getStyle().setPosition(Style.Position.RELATIVE);
 
         imageContainer.add(image, new VerticalLayoutContainer.VerticalLayoutData());
 
         imagePanel.setWidget(imageContainer);
         container.setCenterWidget(imagePanel);
+        addCallbackListner();
+
+        EventBus.get().addHandler(FileUploadEvent.TYPE, new FileUploadHandler() {
+            @Override
+            public void onFileUpload(FileUploadEvent event) {
+                Dialogs.alert("id=" + event.getFileId() + " width=" + event.getWidth() + " height=" + event.getHeight());
+                image.setUrl("image/session?imageId=" + event.getFileId());
+                image.setWidth("" +event.getWidth());
+                image.setHeight("" + event.getHeight());
+                widthField.setValue(event.getWidth());
+                heightField.setValue(event.getHeight());
+            }
+        });
+        addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                  //todo
+            }
+        }));
     }
 
     @Override
@@ -177,4 +198,36 @@ public class FileUploadWindow extends Window {
     public static native void submitBtn()/*-{
         $wnd.document.getElementById('ImageUpload').submit();
     }-*/;
+
+    public static native void addCallbackListner()/*-{
+        $wnd.jsniCallback = function (id, width, height) {
+            @com.damintsev.client.v3.pages.windows.FileUploadWindow::fileCallback(Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)(id, width, height)
+        };
+    }-*/;
+
+    public static native void postImage(Integer id, Integer fileId, Integer height, Integer width)/*-{
+        var method = "post";
+        var path = "";
+        var form = $wnd.document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    }-*/;
+
+    public static void fileCallback(Integer id, Integer width, Integer height) {
+        EventBus.get().fireEvent(new FileUploadEvent(id, width, height));
+    }
 }

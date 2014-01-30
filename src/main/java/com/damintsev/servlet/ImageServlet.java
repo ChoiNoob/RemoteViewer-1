@@ -13,16 +13,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
-
 /**
  * User: adamintsev
  * Date: 16.10.13
  * Time: 17:46
  */
 @Component
-@RequestMapping(value = "/image")
+@RequestMapping
 public class ImageServlet {
 
     Logger logger = Logger.getLogger(UploadServlet.class);
@@ -30,7 +27,7 @@ public class ImageServlet {
     @Autowired
     private ImageManager imageManager;
 
-    @RequestMapping(value = "fuck", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     public HttpEntity<byte[]> doGet(@RequestParam Long imageId) {
         logger.debug("Received request=" + imageId);
@@ -38,11 +35,11 @@ public class ImageServlet {
         return makeHttp(image.getContent());
     }
 
-    @RequestMapping(value = "session", method = RequestMethod.GET)
+    @RequestMapping(value = "/session", method = RequestMethod.GET)
     @ResponseBody
     public HttpEntity<byte[]> getTmp(@RequestParam Long imageId) {
         logger.info("Received request at tmp link" );
-        Image image = imageManager.getTemportaryImage(imageId);
+        Image image = imageManager.getTemporaryImage(imageId);
         return makeHttp(image.getContent());
     }
 

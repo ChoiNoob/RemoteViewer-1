@@ -1,6 +1,7 @@
 package com.damintsev.servlet;
 
 import com.damintsev.server.buisness.image.ImageManager;
+import com.damintsev.server.entity.Image;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -28,12 +29,17 @@ public class UploadServlet {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public HttpEntity<String> processFile(@RequestParam MultipartFile file)  {
-        int imageId = -1;
+        Image image = null;
         try {
-            imageId = imageManager.setTemporaryImage(file.getBytes());
+            image = imageManager.setTemporaryImage(file.getBytes());
+            return new HttpEntity<>(
+                    "<script> window.parent.jsniCallback(" + image.getId() + "," + image.getHeight() + "," + image.getWidth() + ")" +
+                            "</script>") ;
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new HttpEntity<>("<script>window.parent.document.getElementById('tmpImage').src = 'image/session?imageId=" + imageId + "';</script>") ;
+//        return new HttpEntity<>("<script>window.parent.document.getElementById('tmpImage').src = 'image/session?imageId=" + imageId + "';" +
+//                "</script>") ;
+         return null;//todo throw error!!!!
     }
 }
