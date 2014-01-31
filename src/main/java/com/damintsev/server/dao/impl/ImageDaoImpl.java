@@ -1,6 +1,6 @@
-package com.damintsev.server.dao;
+package com.damintsev.server.dao.impl;
 
-import com.damintsev.common.uientity.Station;
+import com.damintsev.server.dao.ImageDao;
 import com.damintsev.server.entity.Image;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * User: adamintsev
@@ -17,35 +15,16 @@ import java.util.List;
  * //todo написать комментарии
  */
 @Repository
-public class DataBaseImpl implements DataBase {
+public class ImageDaoImpl implements ImageDao {
 
-    private static Logger logger = Logger.getLogger(DataBaseImpl.class);
+    private static Logger logger = Logger.getLogger(ImageDaoImpl.class);
 
     @Autowired
     private DataSource dataSource;
 
-    public List<Station> getStationList() {
-        List<Station> stations = new ArrayList<Station>();
-        String query = "SELECT * FROM station";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            ResultSet resultSet = statement.executeQuery();
-            if (resultSet.next()) {
-                Station station = new Station();
-                station.setId(resultSet.getLong("station_id"));
-                station.setComment(resultSet.getString("comment"));
-                station.setHost(resultSet.getString("host"));
-                station.setPort(resultSet.getString("port"));
-                station.setLogin(resultSet.getString("login"));
-                station.setPassword(resultSet.getString("password"));
-                station.setName(resultSet.getString("name"));
-                stations.add(station);
-            }
-            return stations;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-        }
-        return null;
+    @Override
+    public void saveImage(Image image) {
+        //Todo change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override

@@ -27,6 +27,7 @@ import java.util.List;
  * User: Damintsev Andrey
  * Date: 09.10.13
  * Time: 0:25
+ * @deprecated
  */
 @Component
 @Deprecated
@@ -40,12 +41,11 @@ public class DB {
 
     public List<Station> getStationList() {
         List<Station> stations = new ArrayList<Station>();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try (Connection connection = dataSource.getConnection()){
-            statement = connection.prepareStatement("SELECT * FROM station");
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+        String query = "SELECT * FROM station";
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
                 Station station = new Station();
                 station.setId(resultSet.getLong("station_id"));
                 station.setComment(resultSet.getString("comment"));
@@ -59,18 +59,6 @@ public class DB {
             return stations;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            e.printStackTrace();
-        } finally {
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
         return null;
     }

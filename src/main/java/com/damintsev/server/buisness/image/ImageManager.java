@@ -1,6 +1,6 @@
 package com.damintsev.server.buisness.image;
 
-import com.damintsev.server.dao.DataBase;
+import com.damintsev.server.dao.ImageDao;
 import com.damintsev.server.entity.Image;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +21,10 @@ import java.util.Random;
 public class ImageManager {
 
     private static Logger logger = Logger.getLogger(ImageManager.class);
-    private static final int MAX_ALLOWED_SIZE = 500; //px
+    private static final int MAX_ALLOWED_SIZE = 500;//px
 
     @Autowired
-    private DataBase dataBase;
+    private ImageDao dataBase;
 
     @Autowired
     private ServletContext context;

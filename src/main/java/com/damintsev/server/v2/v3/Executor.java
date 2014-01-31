@@ -4,7 +4,6 @@ import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.uientity.Station;
 import com.damintsev.common.uientity.Task;
 import com.damintsev.common.uientity.TaskState;
-import com.damintsev.server.dao.DataBase;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import org.apache.log4j.Logger;
@@ -29,8 +28,6 @@ public class Executor {
     private static final Logger logger = Logger.getLogger(Executor.class);
 
     @Autowired
-    private DataBase dataBase;
-    @Autowired
     private DB db;
 
     private Map<String, ThreadExecutor> threads = new HashMap<>();
@@ -42,7 +39,7 @@ public class Executor {
 
     @PostConstruct
     public void init() {
-        List<Station> stations = dataBase.getStationList();
+        List<Station> stations = db.getStationList();
         logger.info("Loaded from instance " + stations.size() + " stations");
         for (Station station : stations) {
             createWorker(station);

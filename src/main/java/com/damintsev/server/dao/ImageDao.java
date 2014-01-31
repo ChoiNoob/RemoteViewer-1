@@ -1,11 +1,8 @@
 package com.damintsev.server.dao;
 
-import com.damintsev.common.uientity.Station;
 import com.damintsev.server.entity.Image;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * User: adamintsev
@@ -13,10 +10,10 @@ import java.util.List;
  * //todo написать комментарии
  */
 @Repository
-@Qualifier("DataBaseImpl")
-public interface DataBase {
+@Qualifier("ImageDaoImpl")
+public interface ImageDao {
 
-    List<Station> getStationList();
+    void saveImage(Image image);
 
     Image getImage(Long id);
 }
