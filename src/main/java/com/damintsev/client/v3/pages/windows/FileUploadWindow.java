@@ -124,11 +124,11 @@ public class FileUploadWindow extends Window {
 //        label.setWidth(250);
 
         HTML html = new HTML(
-                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" action=\"upload\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
-                "<div>\n" +
-                "Select images:  \n" +
-                "<input type=\"file\" id=\"file\" name=\"file\"/> \n" +
-                "</div>\n" +
+                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
+                    "<div>\n" +
+                        "Select images:  \n" +
+                        "<input type=\"file\" id=\"file\" name=\"file\"/> \n" +
+                    "</div>\n" +
                 "</form> ");
         HBoxLayoutContainer horizontalLayoutContainer = new HBoxLayoutContainer();
         horizontalLayoutContainer.setPadding(new Padding(5));
@@ -143,6 +143,7 @@ public class FileUploadWindow extends Window {
                 if (!imageSelector.validate()) return;
 //                form.setAction("upload?imageId=" + imageSelector.getValue().id);
 //                form.submit();
+//                bindSubmit();
                 submitBtn();
             }
         });
@@ -158,6 +159,7 @@ public class FileUploadWindow extends Window {
         imagePanel.setWidget(imageContainer);
         container.setCenterWidget(imagePanel);
         addCallbackListner();
+        bindSubmit();
 
         EventBus.get().addHandler(FileUploadEvent.TYPE, new FileUploadHandler() {
             @Override
@@ -197,6 +199,63 @@ public class FileUploadWindow extends Window {
 
     public static native void submitBtn()/*-{
         $wnd.document.getElementById('ImageUpload').submit();
+//        $wnd.jQuery("#ImageUpload").submit();
+    }-*/;
+
+    public static native void bindSubmit()/*-{
+        // variable to hold request
+        var request;
+// bind to the submit event of our form
+        $wnd.jQuery("#ImageUpload").submit(function (event) {
+            // abort any pending request
+            if (request) {
+                request.abort();
+            }
+            // setup some local variables
+            var $form = $(this);
+            // let's select and cache all the fields
+            var $inputs = $form.find("input, select, button, textarea");
+            // serialize the data in the form
+            var serializedData = $form.serialize();
+
+            // let's disable the inputs for the duration of the ajax request
+            $inputs.prop("disabled", true);
+
+            // fire off the request to /form.php
+            request = $.ajax({
+                url: "upload",
+                type: "post",
+                data: serializedData
+            });
+
+            // callback handler that will be called on success
+            request.done(function (response, textStatus, jqXHR) {
+                // log a message to the console
+                console.log("Hooray, it worked!");
+                $wnd.alert("resince =" + response)
+            });
+
+            // callback handler that will be called on failure
+            request.fail(function (jqXHR, textStatus, errorThrown) {
+                $wnd.alert("fail =" + textStatus)
+                // log the error to the console
+                console.error(
+                    "The following error occured: " +
+                        textStatus, errorThrown
+                );
+            });
+
+            // callback handler that will be called regardless
+            // if the request failed or succeeded
+            request.always(function () {
+                $wnd.alert("asdasdasd");
+                // reenable the inputs
+                $inputs.prop("disabled", false);
+            });
+
+            // prevent default posting of form
+            event.preventDefault();
+        });
     }-*/;
 
     public static native void addCallbackListner()/*-{

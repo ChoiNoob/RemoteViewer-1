@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping
 public class ImageServlet {
 
-    Logger logger = Logger.getLogger(UploadServlet.class);
+    private final static Logger logger = Logger.getLogger(ImageServlet.class);
 
     @Autowired
     private ImageManager imageManager;

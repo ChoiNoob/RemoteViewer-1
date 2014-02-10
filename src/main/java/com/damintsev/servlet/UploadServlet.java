@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping
 public class UploadServlet {
 
-    Logger logger = Logger.getLogger(UploadServlet.class);
+    private final static Logger logger = Logger.getLogger(UploadServlet.class);
 
     @Autowired
     private ImageManager imageManager;
@@ -29,6 +29,7 @@ public class UploadServlet {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public HttpEntity<String> processFile(@RequestParam MultipartFile file)  {
+        logger.debug("Received request at url \"upload\"");
         Image image = null;
         try {
             image = imageManager.setTemporaryImage(file.getBytes());
