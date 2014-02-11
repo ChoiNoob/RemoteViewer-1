@@ -145,6 +145,7 @@ public class FileUploadWindow extends Window {
 //                form.submit();
 //                bindSubmit();
                 submitBtn();
+//                bindSubmit2();
             }
         });
         horizontalLayoutContainer.add(loadButton, new BoxLayoutContainer.BoxLayoutData(new Margins(0,0,0,0)));
@@ -159,7 +160,7 @@ public class FileUploadWindow extends Window {
         imagePanel.setWidget(imageContainer);
         container.setCenterWidget(imagePanel);
         addCallbackListner();
-        bindSubmit();
+        bindSubmit2();
 
         EventBus.get().addHandler(FileUploadEvent.TYPE, new FileUploadHandler() {
             @Override
@@ -289,4 +290,8 @@ public class FileUploadWindow extends Window {
     public static void fileCallback(Integer id, Integer width, Integer height) {
         EventBus.get().fireEvent(new FileUploadEvent(id, width, height));
     }
+
+    public static native void bindSubmit2()/*-{
+        $wnd.parent.bindSubmit();
+    }-*/;
 }
