@@ -60,6 +60,16 @@ var sound = new Howl({
 //        // prevent default posting of form
 //        event.preventDefault();
 //    });
+//}
+function loadFile() {
+    $('#fileupload').fileupload({
+        dataType: 'json',
+        done: function (e, data) {
+            $.each(data.result.files, function (index, file) {
+                $('<p/>').text(file.name).appendTo(document.body);
+            });
+        },
+        url: "upload"
+    });
+};
 
-
-}

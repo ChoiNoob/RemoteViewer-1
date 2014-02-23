@@ -144,7 +144,7 @@ public class FileUploadWindow extends Window {
 //                form.setAction("upload?imageId=" + imageSelector.getValue().id);
 //                form.submit();
 //                bindSubmit();
-                submitBtn();
+//                submitBtn();
 //                bindSubmit2();
             }
         });
@@ -160,7 +160,6 @@ public class FileUploadWindow extends Window {
         imagePanel.setWidget(imageContainer);
         container.setCenterWidget(imagePanel);
         addCallbackListner();
-        bindSubmit2();
 
         EventBus.get().addHandler(FileUploadEvent.TYPE, new FileUploadHandler() {
             @Override
