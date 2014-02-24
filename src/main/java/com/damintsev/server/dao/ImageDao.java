@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
  * Date: 21.01.14
  * //todo написать комментарии
  */
-@Repository
-@Qualifier("ImageDaoImpl")
 public interface ImageDao {
 
     void saveImage(Image image);

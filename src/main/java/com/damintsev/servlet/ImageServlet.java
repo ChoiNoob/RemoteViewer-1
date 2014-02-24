@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Time: 17:46
  */
 @Component
-@RequestMapping
+@RequestMapping(value = "/image")
 public class ImageServlet {
 
     private final static Logger logger = Logger.getLogger(ImageServlet.class);

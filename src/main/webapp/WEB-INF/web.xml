@@ -38,12 +38,7 @@
 
     <servlet-mapping>
         <servlet-name>servlet-context</servlet-name>
-        <url-pattern>/image/*</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>servlet-context</servlet-name>
-        <url-pattern>/upload</url-pattern>
+        <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
 
     <context-param>

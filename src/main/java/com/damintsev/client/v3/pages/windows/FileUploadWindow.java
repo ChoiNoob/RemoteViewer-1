@@ -123,13 +123,16 @@ public class FileUploadWindow extends Window {
 //        label = new FieldLabel(fileUploadField, "Изображение");
 //        label.setWidth(250);
 
-        HTML html = new HTML(
-                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
-                    "<div>\n" +
-                        "Select images:  \n" +
-                        "<input type=\"file\" id=\"file\" name=\"file\"/> \n" +
-                    "</div>\n" +
-                "</form> ");
+//        HTML html = new HTML(
+//                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" url=\"upload\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
+//                    "<div>\n" +
+//                        "Select images:  \n" +
+////                        "<input type=\"file\" id=\"file\" name=\"file\"/> \n" +
+//                        "<input id=\"upload\" type=\"file\" name=\"file\" data-url=\"upload\" multiple>" +
+//                    "</div>\n" +
+//                "</form> ");
+        HTML html = new HTML(str2);
+
         HBoxLayoutContainer horizontalLayoutContainer = new HBoxLayoutContainer();
         horizontalLayoutContainer.setPadding(new Padding(5));
         horizontalLayoutContainer.add(html);
@@ -178,6 +181,7 @@ public class FileUploadWindow extends Window {
                   //todo
             }
         }));
+        binds();
     }
 
     @Override
@@ -197,65 +201,10 @@ public class FileUploadWindow extends Window {
         }
     }
 
-    public static native void submitBtn()/*-{
-        $wnd.document.getElementById('ImageUpload').submit();
-//        $wnd.jQuery("#ImageUpload").submit();
-    }-*/;
 
-    public static native void bindSubmit()/*-{
-        // variable to hold request
-        var request;
-// bind to the submit event of our form
-        $wnd.jQuery("#ImageUpload").submit(function (event) {
-            // abort any pending request
-            if (request) {
-                request.abort();
-            }
-            // setup some local variables
-            var $form = $(this);
-            // let's select and cache all the fields
-            var $inputs = $form.find("input, select, button, textarea");
-            // serialize the data in the form
-            var serializedData = $form.serialize();
 
-            // let's disable the inputs for the duration of the ajax request
-            $inputs.prop("disabled", true);
-
-            // fire off the request to /form.php
-            request = $.ajax({
-                url: "upload",
-                type: "post",
-                data: serializedData
-            });
-
-            // callback handler that will be called on success
-            request.done(function (response, textStatus, jqXHR) {
-                // log a message to the console
-                console.log("Hooray, it worked!");
-                $wnd.alert("resince =" + response)
-            });
-
-            // callback handler that will be called on failure
-            request.fail(function (jqXHR, textStatus, errorThrown) {
-                $wnd.alert("fail =" + textStatus)
-                // log the error to the console
-                console.error(
-                    "The following error occured: " +
-                        textStatus, errorThrown
-                );
-            });
-
-            // callback handler that will be called regardless
-            // if the request failed or succeeded
-            request.always(function () {
-                $wnd.alert("asdasdasd");
-                // reenable the inputs
-                $inputs.prop("disabled", false);
-            });
-
-            // prevent default posting of form
-            event.preventDefault();
-        });
+    public static native void binds()/*-{
+        $wnd.parent.bindd();
     }-*/;
 
     public static native void addCallbackListner()/*-{
@@ -290,7 +239,25 @@ public class FileUploadWindow extends Window {
         EventBus.get().fireEvent(new FileUploadEvent(id, width, height));
     }
 
-    public static native void bindSubmit2()/*-{
-        $wnd.parent.bindSubmit();
-    }-*/;
+    private String str = "\t<div>\n" +
+            "\t\t<form id='uploadForm'>\n" +
+            "  \t\t\t<fieldset>\n" +
+            "\t\t\t\t<legend>Files</legend>\n" +
+//            "\t\t\t\t<label for='owner'>Owner:</label><input type='text' id='owner'/><br/>\n" +
+//            "\t\t\t\t<textarea name=\"description\" id=\"description\">Description here</textarea><br/>\n" +
+            "\t\t\t\t<span id='filename'></span><br/>\n" +
+            "\t\t\t\t<a href='#' id='attach'>Add a file</a><br/>\n" +
+            "\t\t\t\t<input id=\"upload\" type=\"file\" name=\"file\" data-url=\"upload\" multiple style=\"opacity: 0; filter:alpha(opacity: 0);\"><br/>\n" +
+            "\t\t\t\t<input type='button' value='Reset' id='reset' />\n" +
+            "\t\t\t\t<input type='submit' value='Upload' id='submit'/>\n" +
+            "  \t\t\t</fieldset>\n" +
+            "\t\t</form>\n" +
+            "\t</div>";
+
+    String str2 = "<div>" +
+                "<form id=\"uploadForm\" enctype=\"multipart/form-data\">" +
+                  "<input id=\"upload\" type=\"file\" name=\"file\" data-url=\"api/upload/image\" multiple/>" +
+//                  "<input type=\"button\" value=\"Upload\" />" +
+                "</form>" +
+            "</div>";
 }

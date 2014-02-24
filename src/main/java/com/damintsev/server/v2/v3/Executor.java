@@ -37,7 +37,7 @@ public class Executor {
         logger.info("Constructor Executor()");
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         List<Station> stations = db.getStationList();
         logger.info("Loaded from instance " + stations.size() + " stations");

@@ -61,15 +61,46 @@ var sound = new Howl({
 //        event.preventDefault();
 //    });
 //}
+//function loadFile() {
+//    $('#fileupload').fileupload({
+//        dataType: 'json',
+//        done: function (e, data) {
+//            $.each(data.result.files, function (index, file) {
+//                $('<p/>').text(file.name).appendTo(document.body);
+//            });
+//        },
+//        url: "upload"
+//    });
+//};
 function loadFile() {
-    $('#fileupload').fileupload({
+    alert("try to load");
+    $('#ImageUpload').submit(function (event) {
+        event.preventDefault();
+
+        $.postJSON('/upload/image', {
+//                owner: $('#owner').val(),
+//                description: $('#description').val(),
+                filename: 'test!'
+            },
+            function (result) {
+                alert("sucesrrd")
+//                if (result.success == true) {
+//                    dialog('Success', 'Files have been uploaded!');
+//                } else {
+//                    dialog('Failure', 'Unable to upload files!');
+//                }
+            });
+    });
+
+    $('#upload').fileupload({
         dataType: 'json',
         done: function (e, data) {
-            $.each(data.result.files, function (index, file) {
-                $('<p/>').text(file.name).appendTo(document.body);
+            $.each(data.result, function (index, file) {
+                alert("suces");
+//                $('body').data('filelist').push(file);
+//                $('#filename').append(formatFileDisplay(file));
+//                $('#attach').empty().append('Add another file');
             });
-        },
-        url: "upload"
+        }
     });
-};
-
+}

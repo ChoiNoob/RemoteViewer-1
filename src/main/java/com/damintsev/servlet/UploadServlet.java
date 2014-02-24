@@ -2,6 +2,7 @@ package com.damintsev.servlet;
 
 import com.damintsev.server.buisness.image.ImageManager;
 import com.damintsev.server.entity.Image;
+import com.damintsev.server.entity.UploadedFile;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
@@ -18,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
  * //todo написать комментарии
  */
 @Controller
-@RequestMapping
+@RequestMapping(value = "/upload")
 public class UploadServlet {
 
     private final static Logger logger = Logger.getLogger(UploadServlet.class);
@@ -26,21 +27,21 @@ public class UploadServlet {
     @Autowired
     private ImageManager imageManager;
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    @ResponseBody
-    public HttpEntity<String> processFile(@RequestParam MultipartFile file)  {
-        logger.debug("Received request at url \"upload\"");
-        Image image = null;
+    @RequestMapping(value = "image", method = RequestMethod.POST)
+    public @ResponseBody UploadedFile processFile(@RequestParam MultipartFile file)  {
+        logger.debug("Received request at url \"upload/image\"");
+        UploadedFile tempImage = null;
         try {
-            image = imageManager.setTemporaryImage(file.getBytes());
-            return new HttpEntity<>(
-                    "<script> window.parent.jsniCallback(" + image.getId() + "," + image.getHeight() + "," + image.getWidth() + ")" +
-                            "</script>") ;
+            Image image = imageManager.setTemporaryImage(file.getBytes());
+            tempImage = new UploadedFile();
+            tempImage.setSize(image.getSize());
+            tempImage.setUrl("image/session?imageId=" + image.getId());
+            return tempImage;
         } catch (Exception e) {
             e.printStackTrace();
         }
 //        return new HttpEntity<>("<script>window.parent.document.getElementById('tmpImage').src = 'image/session?imageId=" + imageId + "';" +
 //                "</script>") ;
-         return null;//todo throw error!!!!
+         return tempImage;//todo throw error!!!!
     }
 }
