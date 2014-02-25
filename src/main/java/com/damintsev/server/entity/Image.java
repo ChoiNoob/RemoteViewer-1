@@ -54,6 +54,6 @@ public class Image {
     }
 
     public int getSize() {
-        return content.length;
+        return content == null ? 0 : content.length;
     }
 }

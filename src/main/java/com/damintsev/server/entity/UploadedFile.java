@@ -8,12 +8,13 @@ import java.io.Serializable;
  */
 public class UploadedFile implements Serializable {
 
+    private String id;
     private String name;
     private Integer size;
     private String url;
-    private String thumbnail_url;
-    private String delete_url;
-    private String delete_type;
+    private String thumbnailUrl;
+    private String deleteUrl;
+    private String deleteType;
 
     public String getName() {
         return name;
@@ -39,27 +40,35 @@ public class UploadedFile implements Serializable {
         this.url = url;
     }
 
-    public String getThumbnail_url() {
-        return thumbnail_url;
+    public String getId() {
+        return id;
     }
 
-    public void setThumbnail_url(String thumbnail_url) {
-        this.thumbnail_url = thumbnail_url;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getDelete_url() {
-        return delete_url;
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
     }
 
-    public void setDelete_url(String delete_url) {
-        this.delete_url = delete_url;
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
     }
 
-    public String getDelete_type() {
-        return delete_type;
+    public String getDeleteUrl() {
+        return deleteUrl;
     }
 
-    public void setDelete_type(String delete_type) {
-        this.delete_type = delete_type;
+    public void setDeleteUrl(String deleteUrl) {
+        this.deleteUrl = deleteUrl;
+    }
+
+    public String getDeleteType() {
+        return deleteType;
+    }
+
+    public void setDeleteType(String deleteType) {
+        this.deleteType = deleteType;
     }
 }

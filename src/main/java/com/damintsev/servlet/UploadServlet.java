@@ -1,6 +1,7 @@
 package com.damintsev.servlet;
 
 import com.damintsev.server.buisness.image.ImageManager;
+import com.damintsev.server.buisness.temporary.TemporaryFileManager;
 import com.damintsev.server.entity.Image;
 import com.damintsev.server.entity.UploadedFile;
 import org.apache.log4j.Logger;
@@ -13,35 +14,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+
 /**
  * User: adamintsev
  * Date: 27.01.14
- * //todo написать комментарии
  */
 @Controller
-@RequestMapping(value = "/upload")
+@RequestMapping(value = "upload")
 public class UploadServlet {
 
     private final static Logger logger = Logger.getLogger(UploadServlet.class);
 
     @Autowired
-    private ImageManager imageManager;
+    private TemporaryFileManager fileManager;
 
     @RequestMapping(value = "image", method = RequestMethod.POST)
     public @ResponseBody UploadedFile processFile(@RequestParam MultipartFile file)  {
         logger.debug("Received request at url \"upload/image\"");
-        UploadedFile tempImage = null;
         try {
-            Image image = imageManager.setTemporaryImage(file.getBytes());
-            tempImage = new UploadedFile();
-            tempImage.setSize(image.getSize());
-            tempImage.setUrl("image/session?imageId=" + image.getId());
-            return tempImage;
+            return fileManager.saveTempImage(file);
         } catch (Exception e) {
             e.printStackTrace();
         }
-//        return new HttpEntity<>("<script>window.parent.document.getElementById('tmpImage').src = 'image/session?imageId=" + imageId + "';" +
-//                "</script>") ;
-         return tempImage;//todo throw error!!!!
+         return null;//todo throw error!!!!
     }
 }

@@ -39,7 +39,6 @@ public class FileUploadWindow extends Window {
         return instance;
     }
 
-    private VerticalLayoutContainer imageContainer;
     private Image image;
     private SpinnerField<Integer> widthField;
     private SpinnerField<Integer> heightField;
@@ -95,43 +94,14 @@ public class FileUploadWindow extends Window {
         final ContentPanel imagePanel = new ContentPanel();
         imagePanel.setHeaderVisible(false);
 
-        imageContainer = new VerticalLayoutContainer();
+        VerticalLayoutContainer imageContainer = new VerticalLayoutContainer();
 
-
-//        form = new FormPanel();
-//        form.setEncoding(FormPanel.Encoding.MULTIPART);
-//        form.setMethod(FormPanel.Method.POST);
-//        form.addSubmitHandler(new SubmitEvent.SubmitHandler() {
-//            @Override
-//            public void onSubmit(SubmitEvent event) {
-//              //todo  imagePanel.mask();
-//            }
-//        });
-//        form.addSubmitCompleteHandler(new SubmitCompleteEvent.SubmitCompleteHandler() {
-//            @Override
-//            public void onSubmitComplete(SubmitCompleteEvent event) {
-//                imagePanel.unmask();
-//                image.setUrl("image?id=0");
-//            }
-//        });
-//
-//
-//        FileUploadField fileUploadField = new FileUploadField();
-//        fileUploadField.setName("text");
-//        fileUploadField.setWidth(250);
-//
-//        label = new FieldLabel(fileUploadField, "Изображение");
-//        label.setWidth(250);
-
-//        HTML html = new HTML(
-//                "<form id=\"ImageUpload\" name=\"ImageUpload\" target=\"iframe\" url=\"upload\" method=\"POST\" enctype=\"multipart/form-data\">\n" +
-//                    "<div>\n" +
-//                        "Select images:  \n" +
-////                        "<input type=\"file\" id=\"file\" name=\"file\"/> \n" +
-//                        "<input id=\"upload\" type=\"file\" name=\"file\" data-url=\"upload\" multiple>" +
-//                    "</div>\n" +
-//                "</form> ");
-        HTML html = new HTML(str2);
+        String formHtml = "<div>" +
+                "<form id=\"uploadForm\" enctype=\"multipart/form-data\">" +
+                "<input id=\"upload\" type=\"file\" name=\"file\" data-url=\"api/upload/image\" multiple/>" +
+                "</form>" +
+                "</div>";
+        HTML html = new HTML(formHtml);
 
         HBoxLayoutContainer horizontalLayoutContainer = new HBoxLayoutContainer();
         horizontalLayoutContainer.setPadding(new Padding(5));
@@ -139,36 +109,23 @@ public class FileUploadWindow extends Window {
         BoxLayoutContainer.BoxLayoutData flex = new BoxLayoutContainer.BoxLayoutData(new Margins(0, 5, 0, 0));
         flex.setFlex(1);
         horizontalLayoutContainer.add(new Label(), flex);
-        TextButton loadButton = new TextButton("Загрузить");
-        loadButton.addSelectHandler(new SelectEvent.SelectHandler() {
-            @Override
-            public void onSelect(SelectEvent event) {
-                if (!imageSelector.validate()) return;
-//                form.setAction("upload?imageId=" + imageSelector.getValue().id);
-//                form.submit();
-//                bindSubmit();
-//                submitBtn();
-//                bindSubmit2();
-            }
-        });
-        horizontalLayoutContainer.add(loadButton, new BoxLayoutContainer.BoxLayoutData(new Margins(0,0,0,0)));
+
         imageContainer.add(horizontalLayoutContainer);
 
 
         image = new Image();
-//        image.getElement().getStyle().setPosition(Style.Position.RELATIVE);
 
         imageContainer.add(image, new VerticalLayoutContainer.VerticalLayoutData());
 
         imagePanel.setWidget(imageContainer);
         container.setCenterWidget(imagePanel);
-        addCallbackListner();
+        addCallbackListener();
 
         EventBus.get().addHandler(FileUploadEvent.TYPE, new FileUploadHandler() {
             @Override
             public void onFileUpload(FileUploadEvent event) {
                 Dialogs.alert("id=" + event.getFileId() + " width=" + event.getWidth() + " height=" + event.getHeight());
-                image.setUrl("image/session?imageId=" + event.getFileId());
+                image.setUrl("api/image/temporary?imageId=" + event.getFileId());
                 image.setWidth("" +event.getWidth());
                 image.setHeight("" + event.getHeight());
                 widthField.setValue(event.getWidth());
@@ -181,12 +138,13 @@ public class FileUploadWindow extends Window {
                   //todo
             }
         }));
-        binds();
+
     }
 
     @Override
     public void show() {
         super.show();
+        binds();
     }
 
     private static class Types {
@@ -201,63 +159,18 @@ public class FileUploadWindow extends Window {
         }
     }
 
-
-
     public static native void binds()/*-{
         $wnd.parent.bindd();
     }-*/;
 
-    public static native void addCallbackListner()/*-{
+    public static native void addCallbackListener()/*-{
         $wnd.jsniCallback = function (id, width, height) {
             @com.damintsev.client.v3.pages.windows.FileUploadWindow::fileCallback(Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)(id, width, height)
         };
-    }-*/;
-
-    public static native void postImage(Integer id, Integer fileId, Integer height, Integer width)/*-{
-        var method = "post";
-        var path = "";
-        var form = $wnd.document.createElement("form");
-        form.setAttribute("method", method);
-        form.setAttribute("action", path);
-
-        for(var key in params) {
-            if(params.hasOwnProperty(key)) {
-                var hiddenField = document.createElement("input");
-                hiddenField.setAttribute("type", "hidden");
-                hiddenField.setAttribute("name", key);
-                hiddenField.setAttribute("value", params[key]);
-
-                form.appendChild(hiddenField);
-            }
-        }
-
-        document.body.appendChild(form);
-        form.submit();
     }-*/;
 
     public static void fileCallback(Integer id, Integer width, Integer height) {
         EventBus.get().fireEvent(new FileUploadEvent(id, width, height));
     }
 
-    private String str = "\t<div>\n" +
-            "\t\t<form id='uploadForm'>\n" +
-            "  \t\t\t<fieldset>\n" +
-            "\t\t\t\t<legend>Files</legend>\n" +
-//            "\t\t\t\t<label for='owner'>Owner:</label><input type='text' id='owner'/><br/>\n" +
-//            "\t\t\t\t<textarea name=\"description\" id=\"description\">Description here</textarea><br/>\n" +
-            "\t\t\t\t<span id='filename'></span><br/>\n" +
-            "\t\t\t\t<a href='#' id='attach'>Add a file</a><br/>\n" +
-            "\t\t\t\t<input id=\"upload\" type=\"file\" name=\"file\" data-url=\"upload\" multiple style=\"opacity: 0; filter:alpha(opacity: 0);\"><br/>\n" +
-            "\t\t\t\t<input type='button' value='Reset' id='reset' />\n" +
-            "\t\t\t\t<input type='submit' value='Upload' id='submit'/>\n" +
-            "  \t\t\t</fieldset>\n" +
-            "\t\t</form>\n" +
-            "\t</div>";
-
-    String str2 = "<div>" +
-                "<form id=\"uploadForm\" enctype=\"multipart/form-data\">" +
-                  "<input id=\"upload\" type=\"file\" name=\"file\" data-url=\"api/upload/image\" multiple/>" +
-//                  "<input type=\"button\" value=\"Upload\" />" +
-                "</form>" +
-            "</div>";
 }

@@ -1,15 +1,15 @@
 package com.damintsev.server.buisness.image;
 
+import com.damintsev.server.entity.*;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * User: Damintsev Andrey
@@ -91,6 +91,16 @@ public class ImageUtils {
             return null;
         }
         return image;
+    }
+
+    public com.damintsev.server.entity.Image createImage(File file, int width, int height) {
+        byte []content = null;
+        try {
+            content = FileUtils.readFileToByteArray(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return createImage(content, width, height);
     }
 }
 
