@@ -2,10 +2,8 @@ package com.damintsev.server.services;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.DatabaseService;
-import com.damintsev.common.uientity.Label;
-import com.damintsev.common.uientity.Station;
-import com.damintsev.common.uientity.Task;
-import com.damintsev.common.uientity.TaskState;
+import com.damintsev.common.uientity.*;
+import com.damintsev.server.buisness.image.ImageManager;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.Executor;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
@@ -28,6 +26,8 @@ public class DatabaseServerService implements DatabaseService {
     private DB db;
     @Autowired
     private Executor executor;
+    @Autowired
+    private ImageManager imageManager;
 
     public Task loadTask(Long id) {
         return db.getTask(id);
@@ -80,5 +80,15 @@ public class DatabaseServerService implements DatabaseService {
 
     public void saveImage(String type) {
         db.saveImage(type);
+    }
+
+    @Override
+    public Image loadTemporaryImage(String imageId) {
+        return imageManager.getTemporaryImage(imageId);
+    }
+
+    @Override
+    public Long saveTemporaryImage(String temporaryImageId, Long targetImageId, Image image) {
+        return imageManager.saveTemporaryImage(temporaryImageId, targetImageId, image);
     }
 }

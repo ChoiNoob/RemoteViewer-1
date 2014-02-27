@@ -1,10 +1,7 @@
 package com.damintsev.client.service;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.uientity.Label;
-import com.damintsev.common.uientity.Station;
-import com.damintsev.common.uientity.Task;
-import com.damintsev.common.uientity.TaskState;
+import com.damintsev.common.uientity.*;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
 
@@ -36,4 +33,8 @@ public interface DatabaseServiceAsync {
     void saveItem(Item item, AsyncCallback<Item> async);
 
     void saveImage(String type, AsyncCallback<Void> async);
+
+    void loadTemporaryImage(String imageId, AsyncCallback<Image> async);
+
+    void saveTemporaryImage(String temporaryImageId, Long targetImageId, Image image, AsyncCallback<Long> async);
 }

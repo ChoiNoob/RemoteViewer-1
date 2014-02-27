@@ -1,10 +1,7 @@
 package com.damintsev.client.service;
 
 import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.uientity.Label;
-import com.damintsev.common.uientity.Station;
-import com.damintsev.common.uientity.Task;
-import com.damintsev.common.uientity.TaskState;
+import com.damintsev.common.uientity.*;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
@@ -44,4 +41,8 @@ public interface DatabaseService extends RemoteService {
     Label loadLabel(Long id);
 
     void saveImage(String type);
+
+    Image loadTemporaryImage(String imageId);
+
+    Long saveTemporaryImage(String temporaryImageId, Long targetImageId, Image image);
 }

@@ -11,14 +11,10 @@ public class FileUploadEvent extends GwtEvent<FileUploadHandler> {
 
     public static GwtEvent.Type<FileUploadHandler> TYPE = new GwtEvent.Type<FileUploadHandler>();
 
-    private Integer fileId;
-    private Integer width;
-    private Integer height;
+    private final String fileId;
 
-    public FileUploadEvent(Integer fileId, Integer width, Integer height) {
+    public FileUploadEvent(String fileId) {
         this.fileId = fileId;
-        this.width = width;
-        this.height = height;
     }
 
     @Override
@@ -31,15 +27,8 @@ public class FileUploadEvent extends GwtEvent<FileUploadHandler> {
         handler.onFileUpload(this);
     }
 
-    public Integer getFileId() {
+    public String getFileId() {
         return fileId;
     }
 
-    public Integer getWidth() {
-        return width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
 }

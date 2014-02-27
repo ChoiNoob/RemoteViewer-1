@@ -1,14 +1,12 @@
 package com.damintsev.servlet;
 
+import com.damintsev.common.uientity.Image;
 import com.damintsev.server.buisness.image.ImageManager;
-import com.damintsev.server.buisness.temporary.TemporaryFileManager;
-import com.damintsev.server.entity.Image;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

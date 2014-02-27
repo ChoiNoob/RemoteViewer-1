@@ -3,15 +3,14 @@ package com.damintsev.server.buisness.temporary.impl;
 import com.damintsev.server.buisness.temporary.TemporaryFileManager;
 import com.damintsev.server.entity.UploadedFile;
 import org.apache.log4j.Logger;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author Damintsev Andrey
@@ -23,7 +22,35 @@ public class TemporaryFileManagerImpl implements TemporaryFileManager {
 
     private final static Logger logger = Logger.getLogger(TemporaryFileManagerImpl.class);
 
+    private final static long ONE_WEEK = 1000 * 60 * 60 * 24 * 7;
     private Map<String, File> fileMap = new HashMap<>();
+    private Timer timer;
+
+    @PostConstruct
+    public void init() {
+        logger.debug("Starting cleanup scheduler");
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                logger.info("Starting cleaning old resources");
+                for(Map.Entry<String, File> entry : fileMap.entrySet()) {
+                    File file = entry.getValue();
+                    logger.debug(String.format("Find file with lastModified='%1$s'" ,new Date(file.lastModified())));
+                    if((new Date().getTime() - ONE_WEEK) > file.lastModified()) {
+                        logger.info(String.format("Removing old file with name='$1%s'", file.getName()));
+                        fileMap.remove(entry.getKey());
+                    }
+                }
+            }
+        }, 1000, ONE_WEEK);
+    }
+
+    @PreDestroy
+    public void destroy() {
+        logger.info("Shutting down the timer");
+        timer.cancel();
+    }
 
     @Override
     public UploadedFile saveTempImage(MultipartFile multipartFile) {
@@ -44,7 +71,7 @@ public class TemporaryFileManagerImpl implements TemporaryFileManager {
     }
 
     @Override
-    public File getUploadedFile(String fileId) {
+    public File getTemporaryFile(String fileId) {
         return fileMap.get(fileId);
     }
 

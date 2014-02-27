@@ -13,5 +13,5 @@ public interface TemporaryFileManager {
 
     UploadedFile saveTempImage(MultipartFile multipartFile);
 
-    File getUploadedFile(String fileId);
+    File getTemporaryFile(String fileId);
 }

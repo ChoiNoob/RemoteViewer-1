@@ -1,9 +1,14 @@
 package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.EventBus;
+import com.damintsev.client.service.Service;
+import com.damintsev.common.Callback;
 import com.damintsev.common.event.FileUploadEvent;
 import com.damintsev.common.event.FileUploadHandler;
 import com.damintsev.common.utils.Dialogs;
+import com.google.gwt.dom.client.Style;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -19,6 +24,7 @@ import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.HBoxLayoutContainer;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
+import com.sencha.gxt.widget.core.client.event.TwinTriggerClickEvent;
 import com.sencha.gxt.widget.core.client.form.FieldLabel;
 import com.sencha.gxt.widget.core.client.form.NumberPropertyEditor;
 import com.sencha.gxt.widget.core.client.form.SimpleComboBox;
@@ -34,14 +40,16 @@ public class FileUploadWindow extends Window {
     private static FileUploadWindow instance;
 
     public static FileUploadWindow getInstance() {
-        if(instance == null)
+//        if(instance == null)
             instance = new FileUploadWindow();
         return instance;
     }
 
     private Image image;
+    private com.damintsev.common.uientity.Image loadedImage;
     private SpinnerField<Integer> widthField;
     private SpinnerField<Integer> heightField;
+    private String temporaryStringId;
 
     protected FileUploadWindow() {
         setPixelSize(850,500);
@@ -79,6 +87,19 @@ public class FileUploadWindow extends Window {
         widthField.setMinValue(50);
         widthField.setAllowBlank(false);
         widthField.setValue(200);
+        widthField.addTwinTriggerClickHandler(new TwinTriggerClickEvent.TwinTriggerClickHandler() {
+            @Override
+            public void onTwinTriggerClick(TwinTriggerClickEvent event) {
+                image.getElement().getStyle().setWidth(widthField.getCurrentValue(), Style.Unit.PX);
+            }
+        });
+        widthField.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                System.out.println("FUCK");
+                image.getElement().getStyle().setWidth(widthField.getCurrentValue(), Style.Unit.PX);
+            }
+        });
         label = new FieldLabel(widthField, "Ширина");
         editorPanel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
@@ -88,6 +109,19 @@ public class FileUploadWindow extends Window {
         heightField.setMinValue(50);
         heightField.setAllowBlank(false);
         heightField.setValue(200);
+        heightField.addTwinTriggerClickHandler(new TwinTriggerClickEvent.TwinTriggerClickHandler() {
+            @Override
+            public void onTwinTriggerClick(TwinTriggerClickEvent event) {
+                image.getElement().getStyle().setHeight(heightField.getCurrentValue(), Style.Unit.PX);
+            }
+        });
+        heightField.addChangeHandler(new ChangeHandler() {
+            @Override
+            public void onChange(ChangeEvent event) {
+                image.getElement().getStyle().setHeight(heightField.getCurrentValue(), Style.Unit.PX);
+            }
+        });
+
         label = new FieldLabel(heightField, "Высота");
         editorPanel.add(label, new VerticalLayoutContainer.VerticalLayoutData(1, -1));
 
@@ -112,9 +146,7 @@ public class FileUploadWindow extends Window {
 
         imageContainer.add(horizontalLayoutContainer);
 
-
         image = new Image();
-
         imageContainer.add(image, new VerticalLayoutContainer.VerticalLayoutData());
 
         imagePanel.setWidget(imageContainer);
@@ -124,18 +156,41 @@ public class FileUploadWindow extends Window {
         EventBus.get().addHandler(FileUploadEvent.TYPE, new FileUploadHandler() {
             @Override
             public void onFileUpload(FileUploadEvent event) {
-                Dialogs.alert("id=" + event.getFileId() + " width=" + event.getWidth() + " height=" + event.getHeight());
                 image.setUrl("api/image/temporary?imageId=" + event.getFileId());
-                image.setWidth("" +event.getWidth());
-                image.setHeight("" + event.getHeight());
-                widthField.setValue(event.getWidth());
-                heightField.setValue(event.getHeight());
+                temporaryStringId = event.getFileId();
+                Service.instance.loadTemporaryImage(event.getFileId(), new Callback<com.damintsev.common.uientity.Image>() {
+                    @Override
+                    protected void onFinish(com.damintsev.common.uientity.Image result) {
+                        widthField.setValue(result.getWidth());
+                        heightField.setValue(result.getHeight());
+                        FileUploadWindow.this.loadedImage = result;
+                    }
+                });
             }
         });
         addButton(new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                  //todo
+                if(!imageSelector.validate() ||
+                        !widthField.validate() ||
+                        !heightField.validate())
+                    return;
+                if(loadedImage == null) {
+                    Dialogs.alert("Загрузите изображжение");
+                }
+                loadedImage.setWidth(widthField.getValue());
+                loadedImage.setHeight(heightField.getValue());
+                Service.instance.saveTemporaryImage(
+                        temporaryStringId,
+                        imageSelector.getValue().id,
+                        loadedImage,
+                        new Callback<Long>() {
+                            @Override
+                            protected void onFinish(Long result) {
+                                hide();
+                                Dialogs.message("Изображение сохранено");
+                            }
+                        });
             }
         }));
 
@@ -164,13 +219,12 @@ public class FileUploadWindow extends Window {
     }-*/;
 
     public static native void addCallbackListener()/*-{
-        $wnd.jsniCallback = function (id, width, height) {
-            @com.damintsev.client.v3.pages.windows.FileUploadWindow::fileCallback(Ljava/lang/Integer;Ljava/lang/Integer;Ljava/lang/Integer;)(id, width, height)
+        $wnd.jsniCallback = function (id) {
+            @com.damintsev.client.v3.pages.windows.FileUploadWindow::fileCallback(Ljava/lang/String;)(id)
         };
     }-*/;
 
-    public static void fileCallback(Integer id, Integer width, Integer height) {
-        EventBus.get().fireEvent(new FileUploadEvent(id, width, height));
+    public static void fileCallback(String id) {
+        EventBus.get().fireEvent(new FileUploadEvent(id));
     }
-
 }

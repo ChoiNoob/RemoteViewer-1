@@ -1,5 +1,6 @@
 package com.damintsev.common;
 
+import com.damintsev.common.exceptions.CustomException;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -8,16 +9,29 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * Date: 21.10.13
  * Time: 21:04
  */
+/**
+ * Uses to reduce code. Class show alert box when caught exception
+ *
+ * @param <T>
+ */
 public abstract class Callback<T> implements AsyncCallback<T> {
 
     @Override
     public void onFailure(Throwable caught) {
-//        Dialogs.alert();
-
+        if (caught instanceof CustomException)
+            Dialogs.alert(caught.getMessage());
+        else
+            Dialogs.alert("Произошла ошибка при выполнении запроса: " + caught.getMessage());
     }
 
     @Override
     public void onSuccess(T result) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        onFinish(result);
     }
+
+    /**
+     * Called after success executing request
+     * @param result
+     */
+    protected abstract void onFinish(T result);
 }

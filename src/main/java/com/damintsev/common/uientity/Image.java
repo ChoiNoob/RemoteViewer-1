@@ -1,16 +1,33 @@
-package com.damintsev.server.entity;
+package com.damintsev.common.uientity;
+
+import com.google.gwt.user.client.rpc.IsSerializable;
+
+import javax.persistence.*;
 
 /**
  * User: adamintsev
  * Date: 20.01.14
- * //todo написать комментарии
+ * //todo Перенести в энтити на  север, когда откажемся от ГВТ
  */
-public class Image {
+@Entity
+@Table(name = "images")
+public class Image implements IsSerializable {
 
+    @Id
     private Long id;
+
+    @Lob
+    @Column(name = "DATA")
     private byte[] content;
-    private String type;
+
+//    @Column(name = "TYPE")
+//    @Enumerated(EnumType.STRING)
+//    private ObjectType type;
+
+    @Column(name = "height")
     private int height;
+
+    @Column(name = "width")
     private int width;
 
     public Long getId() {
@@ -29,13 +46,13 @@ public class Image {
         this.content = content;
     }
 
-    public String getType() {
-        return type;
-    }
+//    public ObjectType getType() {
+//        return type;
+//    }
 
-    public void setType(String type) {
-        this.type = type;
-    }
+//    public void setType(ObjectType type) {
+//        this.type = type;
+//    }
 
     public int getHeight() {
         return height;

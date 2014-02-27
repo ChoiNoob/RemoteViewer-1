@@ -1,13 +1,11 @@
 package com.damintsev.server.buisness.image;
 
-import com.damintsev.server.entity.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.*;
 
@@ -17,7 +15,7 @@ import java.io.*;
  * Time: 23:24
  * /
  */
-//todo @Scope("session")
+//@Scope(value = "")
 @Component
 public class ImageUtils {
 
@@ -78,8 +76,8 @@ public class ImageUtils {
         return null;
     }
 
-    public com.damintsev.server.entity.Image createImage(byte[] content, int width, int height) {
-        com.damintsev.server.entity.Image image = new com.damintsev.server.entity.Image();
+    public com.damintsev.common.uientity.Image createImage(byte[] content, int width, int height) {
+        com.damintsev.common.uientity.Image image = new com.damintsev.common.uientity.Image();
         BufferedImage bufferedImage = resizeImage(content, width, height);
         image.setWidth(bufferedImage.getWidth());
         image.setHeight(bufferedImage.getHeight());
@@ -93,7 +91,7 @@ public class ImageUtils {
         return image;
     }
 
-    public com.damintsev.server.entity.Image createImage(File file, int width, int height) {
+    public com.damintsev.common.uientity.Image createImage(File file, int width, int height) {
         byte []content = null;
         try {
             content = FileUtils.readFileToByteArray(file);

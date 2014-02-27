@@ -7,7 +7,7 @@ function bindd() {
 //            console.dir(data);
             var tmpImage = data.result;
             $('#upload').value = tmpImage.name;
-            jsniCallback(tmpImage.id, tmpImage.width, tmpImage.height);
+            jsniCallback(tmpImage.id);
 
         },
         fail: function (e, data) {
