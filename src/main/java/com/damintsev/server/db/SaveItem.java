@@ -5,6 +5,8 @@ import com.damintsev.common.uientity.Label;
 import com.damintsev.common.uientity.Station;
 import com.damintsev.common.uientity.Task;
 import com.damintsev.common.visitor.Visitor;
+import com.damintsev.server.buisness.uilogic.UiBusinessLogic;
+import com.damintsev.server.dao.UiItemDao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,44 +25,49 @@ public class SaveItem implements Visitor<Item> {
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    private UiItemDao dao;
+
       public Label visit(Label label) {
           logger.info("save Label id=" + label.getId() + " name=" + label.getName());
-          ResultSet resultSet = null;
-          Connection connection = null;
-          PreparedStatement statement = null;
-          try {
-              connection = dataSource.getConnection();
-              if (label.getId() == null) {
-                  statement = connection.prepareStatement("INSERT INTO labels (name) values (?)", Statement.RETURN_GENERATED_KEYS);
-                  statement.setString(1, label.getName());
-                  statement.executeUpdate();
-                  resultSet = statement.getGeneratedKeys();
-                  if (resultSet.next())
-                      label.setId(resultSet.getLong(1));
-              } else {
-                  statement = connection.prepareStatement("UPDATE labels SET name=? WHERE id=?");
-                  statement.setString(1, label.getName());
-                  statement.setLong(2, label.getId());
-
-                  statement.executeUpdate();
-              }
-          } catch (Exception e) {
-              logger.error(e.getMessage(), e);
-              e.printStackTrace();
-          } finally {
-              try {
-                  if (resultSet != null)
-                      resultSet.close();
-                  if (statement != null) {
-                      statement.close();
-                  }
-                  if (connection != null) {
-                      connection.close();
-                  }
-              } catch (SQLException e) {
-                  e.printStackTrace();
-              }
-          }
+//          ResultSet resultSet = null;
+//          Connection connection = null;
+//          PreparedStatement statement = null;
+//          try {
+//              connection = dataSource.getConnection();
+//              if (label.getId() == null) {
+//                  statement = connection.prepareStatement("INSERT INTO labels (name) values (?)", Statement.RETURN_GENERATED_KEYS);
+//                  statement.setString(1, label.getName());
+//                  statement.executeUpdate();
+//                  resultSet = statement.getGeneratedKeys();
+//                  if (resultSet.next())
+//                      label.setId(resultSet.getLong(1));
+//              } else {
+//                  statement = connection.prepareStatement("UPDATE labels SET name=? WHERE id=?");
+//                  statement.setString(1, label.getName());
+//                  statement.setLong(2, label.getId());
+//
+//                  statement.executeUpdate();
+//              }
+//          } catch (Exception e) {
+//              logger.error(e.getMessage(), e);
+//              e.printStackTrace();
+//          } finally {
+//              try {
+//                  if (resultSet != null)
+//                      resultSet.close();
+//                  if (statement != null) {
+//                      statement.close();
+//                  }
+//                  if (connection != null) {
+//                      connection.close();
+//                  }
+//              } catch (SQLException e) {
+//                  e.printStackTrace();
+//              }
+//          }
+          Long id = dao.saveLabel(label);
+          label.setId(id);
           return label;
     }
 

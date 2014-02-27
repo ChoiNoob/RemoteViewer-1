@@ -2,6 +2,7 @@ package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.Service;
+import com.damintsev.common.Callback;
 import com.damintsev.common.uientity.Label;
 import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.utils.Dialogs;
@@ -56,12 +57,9 @@ public class LabelWindow implements Editor<Label> {
             public void onSelect(SelectEvent event) {
                 Dialogs.confirm("Будет удалено утройство", new Runnable() {
                     public void run() {
-                        Service.instance.deleteLabel(label, new AsyncCallback<Void>() {
-                            public void onFailure(Throwable caught) {
-                                //Todo change body of implemented methods use File | Settings | File Templates.
-                            }
-
-                            public void onSuccess(Void result) {
+                        Service.instance.deleteLabel(label, new Callback<Void>() {
+                            @Override
+                            protected void onFinish(Void result) {
                                 MonitoringFrame.get().reloadView();
                             }
                         });

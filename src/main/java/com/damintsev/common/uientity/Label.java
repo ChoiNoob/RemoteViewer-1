@@ -3,15 +3,29 @@ package com.damintsev.common.uientity;
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.visitor.Visitor;
 
+import javax.persistence.*;
+
 /**
  * User: Damintsev Andrey
  * Date: 14.10.13
  * Time: 23:18
  */
+@Entity
+@Table(name = "labels")
 public class Label extends Item {
 
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "hasImage")
+    private Boolean hasImage;
+
+    @Column(name = "imageId")
+    private Long imageId;
 
     @Override
     public Long getId() {
@@ -56,8 +70,21 @@ public class Label extends Item {
         return visitor.visit(this);
     }
 
+    public void setImageId(Long imageId) {
+        this.imageId = imageId;
+    }
+
     @Override
     public Long getImageId() {
-        return null;
+        if(imageId == null || imageId == 0) imageId = DefaultImages.LABEL.getValue();
+        return imageId;
+    }
+
+    public Boolean getHasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(Boolean hasImage) {
+        this.hasImage = hasImage;
     }
 }

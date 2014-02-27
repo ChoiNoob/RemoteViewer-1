@@ -4,6 +4,7 @@ import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.DatabaseService;
 import com.damintsev.common.uientity.*;
 import com.damintsev.server.buisness.image.ImageManager;
+import com.damintsev.server.buisness.uilogic.UiBusinessLogic;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.Executor;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
@@ -28,6 +29,8 @@ public class DatabaseServerService implements DatabaseService {
     private Executor executor;
     @Autowired
     private ImageManager imageManager;
+    @Autowired
+    private UiBusinessLogic uiLogic;
 
     public Task loadTask(Long id) {
         return db.getTask(id);
@@ -66,10 +69,11 @@ public class DatabaseServerService implements DatabaseService {
 
     public void deleteLabel(Label label) {
         db.deleteLabel(label);
+//todo        uiLogic.deleteLabel(label.getId());
     }
 
     public Label loadLabel(Long id) {
-        return db.getLabel(id);
+        return uiLogic.loadLabel(id);
     }
 
     public Item saveItem(Item item) {

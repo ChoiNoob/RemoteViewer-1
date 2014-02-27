@@ -50,3 +50,7 @@ CREATE TABLE `station` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+
+alter table viewer.labels add column imageId int
+alter table viewer.labels add column hasImage tinyint

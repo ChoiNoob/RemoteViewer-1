@@ -5,6 +5,7 @@ import com.damintsev.common.uientity.Label;
 import com.damintsev.common.uientity.Station;
 import com.damintsev.common.uientity.Task;
 import com.damintsev.common.uientity.TaskType;
+import com.damintsev.server.dao.UiItemDao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -38,6 +39,8 @@ public class DB {
     private DataSource dataSource;
     @Autowired
     private SaveItem saveItem;
+    @Autowired
+    private UiItemDao newDao;
 
     public List<Station> getStationList() {
         List<Station> stations = new ArrayList<Station>();
@@ -456,39 +459,40 @@ public class DB {
 
     public Label getLabel(Long id) {
         logger.info("load Label id=" + id);
-        ResultSet resultSet = null;
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            Label label = null;
-            connection = dataSource.getConnection();
-                statement = connection.prepareStatement("SELECT * FROM labels WHERE id = ?");
-                statement.setLong(1, id);
-                resultSet = statement.executeQuery();
-                if (resultSet.next()){
-                    label = new Label();
-                    label.setId(resultSet.getLong("id"));
-                    label.setName(resultSet.getString("name"));
-                }
-                    return label;
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            e.printStackTrace();
-        } finally {
-            try {
-                if (resultSet != null)
-                    resultSet.close();
-                if (statement != null) {
-                    statement.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
+        return newDao.loadLabel(id);
+//        ResultSet resultSet = null;
+//        Connection connection = null;
+//        PreparedStatement statement = null;
+//        try {
+//            Label label = null;
+//            connection = dataSource.getConnection();
+//                statement = connection.prepareStatement("SELECT * FROM labels WHERE id = ?");
+//                statement.setLong(1, id);
+//                resultSet = statement.executeQuery();
+//                if (resultSet.next()){
+//                    label = new Label();
+//                    label.setId(resultSet.getLong("id"));
+//                    label.setName(resultSet.getString("name"));
+//                }
+//                    return label;
+//        } catch (Exception e) {
+//            logger.error(e.getMessage(), e);
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                if (resultSet != null)
+//                    resultSet.close();
+//                if (statement != null) {
+//                    statement.close();
+//                }
+//                if (connection != null) {
+//                    connection.close();
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return null;
     }
 
     public Item saveItem(Item item) {

@@ -2,13 +2,16 @@ package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.EventBus;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.Callback;
 import com.damintsev.common.event.FileUploadEvent;
 import com.damintsev.common.event.FileUploadHandler;
 import com.damintsev.common.utils.Dialogs;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -188,7 +191,17 @@ public class FileUploadWindow extends Window {
                             @Override
                             protected void onFinish(Long result) {
                                 hide();
-                                Dialogs.message("Изображение сохранено");
+                                Dialogs.message("Изображение сохранено", new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Scheduler.get().scheduleDeferred(new Command() {
+                                            @Override
+                                            public void execute() {
+                                                MonitoringFrame.reload();
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
             }
