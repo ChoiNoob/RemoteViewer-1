@@ -3,8 +3,9 @@ package com.damintsev.client.v3.uiitems;
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.v3.pages.windows.LabelWindow;
 import com.damintsev.common.utils.Position;
-import com.google.gwt.i18n.shared.DirectionEstimator;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -16,9 +17,12 @@ import com.google.gwt.user.client.ui.Widget;
 public class UILabel extends UIItem {
 
     private Label label;
+    private com.damintsev.common.uientity.Label itemLabel;
 
     public UILabel(Item item) {
         super(item);
+        this.itemLabel = (com.damintsev.common.uientity.Label) item;
+        initWidget(widget());
     }
 
     @Override
@@ -48,16 +52,30 @@ public class UILabel extends UIItem {
 
     @Override
     public Widget widget() {
-        label = new Label(getName());
-        label.getElement().setInnerHTML(getName().replace("\n", "<br>"));
-        label.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
-        label.getElement().getStyle().setProperty("width", "auto");
-        label.setStyleName("tooltip");
+        label = new Label();
+        System.out.println("id=" + getName() + " h=" + itemLabel.getHasImage());
+        if(itemLabel.getHasImage()) {
+            Image image = initImage();
+            label.getElement().appendChild(image.getElement());
+        }
+        Label nameLabel = new Label(getName());
+        nameLabel.getElement().setInnerHTML(getName().replace("\n", "<br>"));
+        nameLabel.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
+        nameLabel.getElement().getStyle().setProperty("width", "70%");
+        nameLabel.getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
+        nameLabel.setStyleName("tooltip");
+        label.getElement().appendChild(nameLabel.getElement());
         return label;
     }
 
     @Override
     public void openEditor(Runnable runnable) {
         LabelWindow.get().show(item.getId(), runnable);
+    }
+
+    private Image initImage() {
+        Image image = new Image();
+        image.setUrl("api/image?imageId=" + itemLabel.getImageId());
+        return image;
     }
 }

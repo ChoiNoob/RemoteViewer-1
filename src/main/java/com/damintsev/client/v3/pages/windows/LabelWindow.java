@@ -2,9 +2,9 @@ package com.damintsev.client.v3.pages.windows;
 
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.client.service.Service;
+import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.Callback;
 import com.damintsev.common.uientity.Label;
-import com.damintsev.client.v3.pages.frames.MonitoringFrame;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.editor.client.Editor;
@@ -15,7 +15,9 @@ import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.TextButton;
 import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
 import com.sencha.gxt.widget.core.client.event.SelectEvent;
-import com.sencha.gxt.widget.core.client.form.*;
+import com.sencha.gxt.widget.core.client.form.CheckBox;
+import com.sencha.gxt.widget.core.client.form.FieldLabel;
+import com.sencha.gxt.widget.core.client.form.TextArea;
 
 /**
  * User: Damintsev Andrey
@@ -57,8 +59,9 @@ public class LabelWindow implements Editor<Label> {
 
         hasImage = new CheckBox();
         hasImage.setBoxLabel("Изображение");
-//        fieldLabel = new FieldLabel(hasImage, "Изображение");
-        panel.add(hasImage, new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+        fieldLabel = new FieldLabel(hasImage, "");
+        fieldLabel.setLabelSeparator("");
+        panel.add(fieldLabel, new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
@@ -83,7 +86,6 @@ public class LabelWindow implements Editor<Label> {
                 label = driver.flush();
                 if (driver.hasErrors()) return;
                 window.mask();
-                Dialogs.alert("a=" + label.getHasImage());
                 Service.instance.saveItem(label, new AsyncCallback<Item>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Cannot save device =" + caught.getMessage());

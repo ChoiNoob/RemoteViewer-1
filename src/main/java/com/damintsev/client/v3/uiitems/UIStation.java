@@ -21,6 +21,7 @@ public class UIStation extends UIItem {
 
     public UIStation(Item item) {
         super(item);
+        initWidget(widget());
     }
 
     @Override

@@ -74,6 +74,7 @@ public class FileUploadWindow extends Window {
         });
         imageSelector.add(new Types(1L, "Станция", "station"));
         imageSelector.add(new Types(2L, "Маршрут", "task"));
+        imageSelector.add(new Types(3L, "Надпись", "label"));
         imageSelector.setTriggerAction(ComboBoxCell.TriggerAction.ALL);
         imageSelector.setAllowBlank(false);
         imageSelector.setEditable(false);
@@ -87,9 +88,8 @@ public class FileUploadWindow extends Window {
         widthField = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
         widthField.setAllowNegative(false);
         widthField.setMaxValue(500);
-        widthField.setMinValue(50);
+        widthField.setMinValue(10);
         widthField.setAllowBlank(false);
-        widthField.setValue(200);
         widthField.addTwinTriggerClickHandler(new TwinTriggerClickEvent.TwinTriggerClickHandler() {
             @Override
             public void onTwinTriggerClick(TwinTriggerClickEvent event) {
@@ -109,9 +109,8 @@ public class FileUploadWindow extends Window {
         heightField = new SpinnerField<Integer>(new NumberPropertyEditor.IntegerPropertyEditor());
         heightField.setAllowNegative(false);
         heightField.setMaxValue(500);
-        heightField.setMinValue(50);
+        heightField.setMinValue(10);
         heightField.setAllowBlank(false);
-        heightField.setValue(200);
         heightField.addTwinTriggerClickHandler(new TwinTriggerClickEvent.TwinTriggerClickHandler() {
             @Override
             public void onTwinTriggerClick(TwinTriggerClickEvent event) {
@@ -165,7 +164,9 @@ public class FileUploadWindow extends Window {
                     @Override
                     protected void onFinish(com.damintsev.common.uientity.Image result) {
                         widthField.setValue(result.getWidth());
+                        widthField.setMaxValue(result.getWidth());
                         heightField.setValue(result.getHeight());
+                        heightField.setMaxValue(result.getHeight());
                         FileUploadWindow.this.loadedImage = result;
                     }
                 });

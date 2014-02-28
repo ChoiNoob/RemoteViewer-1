@@ -19,6 +19,7 @@ public class UITask extends UIItem implements HasConnections {
 
     public UITask(Item item) {
         super(item);
+        initWidget(widget());
     }
 
     @Override

@@ -33,11 +33,7 @@ public class Executor {
     private Map<String, ThreadExecutor> threads = new HashMap<>();
     private Map<String, TaskState> stateMap = new ConcurrentHashMap<>();
 
-    public Executor() {
-        logger.info("Constructor Executor()");
-    }
-
-//    @PostConstruct
+    @PostConstruct
     public void init() {
         List<Station> stations = db.getStationList();
         logger.info("Loaded from instance " + stations.size() + " stations");
@@ -55,7 +51,7 @@ public class Executor {
 
     @PreDestroy
     public void shutdown() {
-        logger.info("Calling destroy!");
+        logger.info("Destroying all threads!");
         for (ThreadExecutor thread : threads.values()) {
             logger.info("Stopping thread with id=" + thread.getThreadId());
             thread.destroyProcess();

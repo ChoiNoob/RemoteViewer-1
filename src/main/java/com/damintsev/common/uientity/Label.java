@@ -81,7 +81,7 @@ public class Label extends Item {
     }
 
     public Boolean getHasImage() {
-        return hasImage;
+        return hasImage == null ? false : hasImage;
     }
 
     public void setHasImage(Boolean hasImage) {

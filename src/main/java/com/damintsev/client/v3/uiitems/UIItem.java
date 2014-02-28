@@ -27,12 +27,16 @@ public abstract class UIItem extends Label {
     public UIItem(Item item) {
         this.item = item;
         taskState = new TaskState();
-        getElement().appendChild(widget().getElement());
+
     //todo    tooltip = StatusToolTip.getInstance();
     //todo     ToolTip tt = new ToolTip(this, tooltip);
     }
 
     //todo StatusToolTip tooltip;
+
+    protected void initWidget(Widget widget) {
+        getElement().appendChild(widget.getElement());
+    }
 
     public void savePosition() {
         item.getPosition().x = getLeft();
