@@ -35,6 +35,8 @@ public class LabelWindow implements Editor<Label> {
     private Window window;
     private TextButton delete;
     private Label label;
+
+    CheckBox hasImage;
     TextArea name;
 
     private LabelWindow() {
@@ -52,6 +54,11 @@ public class LabelWindow implements Editor<Label> {
         FieldLabel fieldLabel = new FieldLabel(name, "Имя");
         fieldLabel.setHeight(80);
         panel.add(fieldLabel, new VerticalLayoutContainer.VerticalLayoutData(1,-1));
+
+        hasImage = new CheckBox();
+        hasImage.setBoxLabel("Изображение");
+//        fieldLabel = new FieldLabel(hasImage, "Изображение");
+        panel.add(hasImage, new VerticalLayoutContainer.VerticalLayoutData(1,-1));
 
         delete = new TextButton("Удалить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
@@ -76,6 +83,7 @@ public class LabelWindow implements Editor<Label> {
                 label = driver.flush();
                 if (driver.hasErrors()) return;
                 window.mask();
+                Dialogs.alert("a=" + label.getHasImage());
                 Service.instance.saveItem(label, new AsyncCallback<Item>() {
                     public void onFailure(Throwable caught) {
                         Dialogs.alert("Cannot save device =" + caught.getMessage());
@@ -83,7 +91,6 @@ public class LabelWindow implements Editor<Label> {
 
                     public void onSuccess(Item result) {
                         window.unmask();
-                        window.hide();
                         MonitoringFrame.get().add(result);
                         window.hide();
                     }
