@@ -53,7 +53,7 @@ public class UILabel extends UIItem {
     @Override
     public Widget widget() {
         label = new Label();
-        System.out.println("id=" + getName() + " h=" + itemLabel.getHasImage());
+//        System.out.println("id=" + getName() + " h=" + itemLabel.getHasImage());
         if(itemLabel.getHasImage()) {
             Image image = initImage();
             label.getElement().appendChild(image.getElement());
@@ -61,7 +61,6 @@ public class UILabel extends UIItem {
         Label nameLabel = new Label(getName());
         nameLabel.getElement().setInnerHTML(getName().replace("\n", "<br>"));
         nameLabel.setAutoHorizontalAlignment(HasHorizontalAlignment.ALIGN_JUSTIFY);
-        nameLabel.getElement().getStyle().setProperty("width", "70%");
         nameLabel.getElement().getStyle().setTextAlign(Style.TextAlign.CENTER);
         nameLabel.setStyleName("tooltip");
         label.getElement().appendChild(nameLabel.getElement());

@@ -2,7 +2,8 @@ package com.damintsev.servlet;
 
 import com.damintsev.common.uientity.Image;
 import com.damintsev.server.buisness.image.ImageManager;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(value = "image")
 public class ImageServlet {
 
-    private final static Logger logger = Logger.getLogger(ImageServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(ImageServlet.class);
 
     @Autowired
     private ImageManager imageManager;
@@ -30,7 +31,7 @@ public class ImageServlet {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
     public HttpEntity<byte[]> doGet(@RequestParam Long imageId) {
-        logger.debug("Received request=" + imageId);
+        logger.debug("Received request at tmp link '/image with imageId={}", imageId);
         Image image = imageManager.getImage(imageId);
         return makeHttp(image.getContent());
     }
@@ -38,7 +39,7 @@ public class ImageServlet {
     @RequestMapping(value = "temporary", method = RequestMethod.GET)
     @ResponseBody
     public HttpEntity<byte[]> getTmp(@RequestParam String imageId) {
-        logger.debug(String.format("Received request at tmp link '/image/temporary' with params imageId='$1%s'", imageId));
+        logger.debug("Received request at tmp link '/image/temporary' with params imageId={}", imageId);
         Image image = imageManager.getTemporaryImage(imageId);
         return makeHttp(image.getContent());
     }
