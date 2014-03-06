@@ -12,7 +12,8 @@ function bindd() {
         },
         fail: function (e, data) {
             console.log(data);
-            alert('fuck');
+            console.dir(data);
+            alert('При загрузке произошла ошибка:"' + data.errorThrown + '"');
         }
     });
 }

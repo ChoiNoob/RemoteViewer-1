@@ -1,6 +1,7 @@
 package com.damintsev.common;
 
-import com.damintsev.common.exceptions.CustomException;
+import com.damintsev.common.uiexceptions.CustomUiException;
+import com.damintsev.server.exceptions.CustomException;
 import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 
@@ -18,7 +19,7 @@ public abstract class Callback<T> implements AsyncCallback<T> {
 
     @Override
     public void onFailure(Throwable caught) {
-        if (caught instanceof CustomException)
+        if (caught instanceof CustomUiException)
             Dialogs.alert(caught.getMessage());
         else
             Dialogs.alert("Произошла ошибка при выполнении запроса: " + caught.getMessage());

@@ -1,7 +1,8 @@
 package com.damintsev.servlet;
 
+import com.damintsev.server.buisness.image.ImageManager;
+import com.damintsev.server.exceptions.CustomException;
 import com.damintsev.server.buisness.temporary.TemporaryFileManager;
-import com.damintsev.server.entity.UploadedFile;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,17 +25,26 @@ public class UploadServlet {
     private final static Logger logger = Logger.getLogger(UploadServlet.class);
 
     @Autowired
-    private TemporaryFileManager fileManager;
+    private ImageManager imageManager;
+
 
     @RequestMapping(value = "image", method = RequestMethod.POST)
     public @ResponseBody ResponseEntity processFile(@RequestParam MultipartFile file)  {
         logger.debug("Received request at url \"upload/image\"");
         try {
-            return new ResponseEntity<>(fileManager.saveTempImage(file), HttpStatus.OK);
+            return new ResponseEntity<>(imageManager.saveTempImage(file), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResponseEntity<>("fuck", HttpStatus.BAD_REQUEST);
+            return convertException(e);
         }
-//         return null;//todo throw error!!!!
+    }
+
+    private ResponseEntity convertException(Exception e) {
+        logger.error(e.getMessage(), e);
+        if(e instanceof CustomException) {
+            CustomException customException = (CustomException) e;
+            return new ResponseEntity<>(customException.getMessage(), customException.getHttpStatus());
+        } else {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

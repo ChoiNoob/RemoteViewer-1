@@ -1,9 +1,14 @@
 package com.damintsev.server.buisness.image;
 
+import com.damintsev.server.exceptions.CustomException;
+import net.sf.jmimemagic.Magic;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -15,11 +20,20 @@ import java.io.*;
  * Time: 23:24
  * /
  */
-//@Scope(value = "")
+@Scope(value = "prototype")
 @Component
 public class ImageUtils {
 
     private static final Logger log = Logger.getLogger(ImageUtils.class.getName());
+
+    @PostConstruct
+    public void init() {
+        try {
+            Magic.initialize();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 
     public BufferedImage resizeImage(byte[] fullImageContent, int width, int height) {
         BufferedImage bufferedImage = createBufferedImage(fullImageContent);
@@ -99,6 +113,21 @@ public class ImageUtils {
             e.printStackTrace();
         }
         return createImage(content, width, height);
+    }
+
+    public String getMimeType(MultipartFile file) {
+        String mimeType = null;
+        try {
+            mimeType = Magic.getMagicMatch(file.getBytes(), true).getMimeType();
+        } catch (Exception e) {
+            throw new CustomException(e.getMessage());
+        }
+        return mimeType;
+    }
+
+    public boolean isImage(MultipartFile file) {
+        String mimeType = getMimeType(file);
+        return mimeType.contains("image");
     }
 }
 
