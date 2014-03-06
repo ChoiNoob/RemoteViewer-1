@@ -4,6 +4,8 @@ import com.damintsev.server.buisness.temporary.TemporaryFileManager;
 import com.damintsev.server.entity.UploadedFile;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,13 +27,14 @@ public class UploadServlet {
     private TemporaryFileManager fileManager;
 
     @RequestMapping(value = "image", method = RequestMethod.POST)
-    public @ResponseBody UploadedFile processFile(@RequestParam MultipartFile file)  {
+    public @ResponseBody ResponseEntity processFile(@RequestParam MultipartFile file)  {
         logger.debug("Received request at url \"upload/image\"");
         try {
-            return fileManager.saveTempImage(file);
+            return new ResponseEntity<>(fileManager.saveTempImage(file), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
+            return new ResponseEntity<>("fuck", HttpStatus.BAD_REQUEST);
         }
-         return null;//todo throw error!!!!
+//         return null;//todo throw error!!!!
     }
 }

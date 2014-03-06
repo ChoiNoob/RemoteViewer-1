@@ -10,14 +10,11 @@
           <root url="file://$MODULE_DIR$/src/main/webapp" relative="/" />
           <root url="file://$MODULE_DIR$/src/lib" relative="WEB-INF/lib" />
         </webroots>
-        <sourceRoots>
-          <root url="file://$MODULE_DIR$/src/main/java" />
-          <root url="file://$MODULE_DIR$/src/main/resources" />
-        </sourceRoots>
       </configuration>
     </facet>
     <facet type="gwt" name="GWT">
       <configuration>
+        <setting name="compilerParameters" value="-draftCompile" />
         <setting name="compilerMaxHeapSize" value="1024" />
         <setting name="gwtScriptOutputStyle" value="DETAILED" />
         <setting name="gwtSdkUrl" value="file://$MAVEN_REPOSITORY$/com/google/gwt/gwt-dev/2.5.1/" />
@@ -26,26 +23,21 @@
       </configuration>
     </facet>
     <facet type="Spring" name="Spring">
-      <configuration />
-    </facet>
-    <facet type="jpa" name="JPA">
       <configuration>
-        <setting name="validation-enabled" value="true" />
-        <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping>
-          <factory-entry name="myEmf" value="4e5e865e-65b5-4736-aa37-ddbc5dc4bc3f" />
-        </datasource-mapping>
+        <fileset id="fileset1" name="XML Application Context" removed="false">
+          <file>file://$MODULE_DIR$/src/main/resources/properties/spring/servlet-context.xml</file>
+          <file>file://$MODULE_DIR$/src/main/resources/properties/spring/application-context.xml</file>
+        </fileset>
       </configuration>
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="false">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
-      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
-      <sourceFolder url="file://$MODULE_DIR$/src/test/resources" type="java-test-resource" />
+      <sourceFolder url="file://$MODULE_DIR$/src/main/resources" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

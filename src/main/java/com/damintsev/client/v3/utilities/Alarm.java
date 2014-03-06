@@ -23,30 +23,31 @@ public class Alarm {
         return instance;
     }
 
+    private boolean playing;
+
     private AbsolutePanel panel;
     private Window window;
     private TextArea text;
-    private boolean playng;
     private AlarmEventHandler handler;
 
     private Alarm() {
         handler = new AlarmEventHandler() {
             @Override
             public void onAlarmEdit(AlarmEvent event) {
-                if(window == null) initWindow();
+                if(window == null) window = initWindow(); //don`t move this because when its creating shadow shows at the screen
                 text.setText("Произошла ошибка на маршруте: " + event.getItem().getName());
-                if(!playng) {
+                if(!playing) {
                     startSound();
-                    playng = true;
+                    playing = true;
                 }
                 if(!window.isVisible())
                     window.show();
             }
         };
-
     }
 
     public void alarmOn() {
+        loadSounds();
         EventBus.get().addHandler(AlarmEvent.TYPE, handler);
     }
 
@@ -58,10 +59,8 @@ public class Alarm {
         this.panel = panel;
     }
 
-    private void initWindow() {
-        window = new Window();
-//todo change to center window top: 150px        window.setPosition(window.get, 200);
-        //todo !! window.getElement().getStyle().setMarginTop(200, Style.Unit.PX);
+    private Window initWindow() {
+        final Window window = new Window();
         window.setDraggable(true);
         window.add(text = new TextArea());
         window.setPixelSize(250, 150);
@@ -69,18 +68,19 @@ public class Alarm {
             @Override
             public void onSelect(SelectEvent event) {
                 stopSound();
-                playng = false;
+                playing = false;
                 window.hide();
             }
         }));
         window.addBeforeHideHandler(new BeforeHideEvent.BeforeHideHandler() {
             @Override
             public void onBeforeHide(BeforeHideEvent event) {
-                playng = false;
+                playing = false;
                 stopSound();
             }
         });
         panel.add(window);
+        return window;
     }
 
     public static native void stopSound()/*-{
@@ -91,7 +91,9 @@ public class Alarm {
         $wnd.sound.play();
     }-*/;
 
-    public static native void isRuning()/*-{
-
+    public static native void loadSounds()/*-{
+        if($wnd.sound == null) {
+            $wnd.initSound();
+        }
     }-*/;
 }

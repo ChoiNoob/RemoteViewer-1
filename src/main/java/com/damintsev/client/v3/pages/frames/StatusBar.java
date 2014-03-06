@@ -16,7 +16,7 @@ import com.sencha.gxt.widget.core.client.toolbar.ToolBar;
 /**
  * User: adamintsev
  * Date: 20.12.13
- * //todo написать комментарии
+ * Top bar with buttons
  */
 public class StatusBar {
 
@@ -29,6 +29,15 @@ public class StatusBar {
         toolBar.setPack(BoxLayoutContainer.BoxLayoutPack.END);
         toolBar.setHorizontalSpacing(20);
 
+        addTurnAlarmButton();
+        addEditButton();
+    }
+
+    public ToolBar getToolBar() {
+        return toolBar;
+    }
+
+    private void addTurnAlarmButton() {
         final ToggleButton muteButton = UIButton.createToggleToolButton("web/icons/music.png");
         muteButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
@@ -47,7 +56,9 @@ public class StatusBar {
             }
         });
         toolBar.add(muteButton);
+    }
 
+    private void addEditButton() {
         ToolButton editButton = new ToolButton(ToolButton.GEAR);
         editButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
@@ -57,9 +68,5 @@ public class StatusBar {
         });
 
         toolBar.add(editButton);
-    }
-
-    public ToolBar getToolBar() {
-        return toolBar;
     }
 }

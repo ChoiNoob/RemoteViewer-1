@@ -31,7 +31,7 @@ public class ImageServlet {
     @RequestMapping(value = "", method = RequestMethod.GET)
     @ResponseBody
     public HttpEntity<byte[]> doGet(@RequestParam Long imageId) {
-        logger.debug("Received request at tmp link '/image with imageId={}", imageId);
+        logger.debug("Received request at link '/image with imageId={}", imageId);
         Image image = imageManager.getImage(imageId);
         return makeHttp(image.getContent());
     }
@@ -39,7 +39,7 @@ public class ImageServlet {
     @RequestMapping(value = "temporary", method = RequestMethod.GET)
     @ResponseBody
     public HttpEntity<byte[]> getTmp(@RequestParam String imageId) {
-        logger.debug("Received request at tmp link '/image/temporary' with params imageId={}", imageId);
+        logger.debug("Received request at link '/image/temporary' with params imageId={}", imageId);
         Image image = imageManager.getTemporaryImage(imageId);
         return makeHttp(image.getContent());
     }
