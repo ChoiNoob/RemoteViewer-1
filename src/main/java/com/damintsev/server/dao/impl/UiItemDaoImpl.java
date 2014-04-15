@@ -32,4 +32,11 @@ public class UiItemDaoImpl implements UiItemDao {
         label = em.merge(label);
         return label.getId();
     }
+
+    @Override
+    @Transactional
+    public void deleteLabel(Long id) {
+        Label label = em.getReference(Label.class, id);
+        em.remove(label);
+    }
 }

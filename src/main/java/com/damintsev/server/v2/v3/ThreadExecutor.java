@@ -92,9 +92,12 @@ public class ThreadExecutor extends Thread {
         Thread.currentThread().setName("threadId=" + thisThreadId + " id=" + station.getId() + " name=" + station.getName());
         logger.info("Starting current thread");
         while (start) {
-                executeTask(getNextTask());
+
             try {
                 synchronized (this) {
+                    Task task = getNextTask();
+                    if(task == null) this.wait();
+                    executeTask(task);
                     this.wait(delay * 1000);// Thread.sleep(delay * 1000);
                     while (needToPause) {
                         this.wait();

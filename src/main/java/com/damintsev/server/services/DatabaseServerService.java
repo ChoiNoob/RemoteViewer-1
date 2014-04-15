@@ -5,6 +5,7 @@ import com.damintsev.client.service.DatabaseService;
 import com.damintsev.common.uientity.*;
 import com.damintsev.server.buisness.image.ImageManager;
 import com.damintsev.server.buisness.uilogic.UiBusinessLogic;
+import com.damintsev.server.dao.StationDao;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.Executor;
 import com.sencha.gxt.data.shared.loader.PagingLoadResult;
@@ -25,12 +26,18 @@ public class DatabaseServerService implements DatabaseService {
 
     @Autowired
     private DB db;
+
     @Autowired
     private Executor executor;
+
     @Autowired
     private ImageManager imageManager;
+
     @Autowired
     private UiBusinessLogic uiLogic;
+
+    @Autowired
+    private StationDao stationDao;
 
     public Task loadTask(Long id) {
         return db.getTask(id);
@@ -41,7 +48,7 @@ public class DatabaseServerService implements DatabaseService {
     }
 
     public Station loadStation(Long id) {
-        return db.getStation(id);
+        return stationDao.loadStation(id);
     }
 
     public void deleteStation(Station station) {
@@ -63,7 +70,7 @@ public class DatabaseServerService implements DatabaseService {
     }
 
     public PagingLoadResult<Station> getStationList() {
-        List<Station> stations = db.getStationList();   //todo мб можно обойтись одной строкой
+        List<Station> stations = stationDao.getStationList();
         return new PagingLoadResultBean<Station>(stations, 0, stations.size());
     }
 

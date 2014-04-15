@@ -25,10 +25,10 @@ public class Image implements IsSerializable {
 //    private ObjectType type;
 
     @Column(name = "height")
-    private int height;
+    private Integer height;
 
     @Column(name = "width")
-    private int width;
+    private Integer width;
 
     public Long getId() {
         return id;
@@ -54,19 +54,19 @@ public class Image implements IsSerializable {
 //        this.type = type;
 //    }
 
-    public int getHeight() {
+    public Integer getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(Integer height) {
         this.height = height;
     }
 
-    public int getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(Integer width) {
         this.width = width;
     }
 

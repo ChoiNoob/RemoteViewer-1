@@ -11,4 +11,6 @@ public interface UiItemDao {
     Label loadLabel(Long id);
 
     Long saveLabel(Label label);
+
+    void deleteLabel(Long id);
 }

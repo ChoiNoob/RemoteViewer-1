@@ -4,6 +4,7 @@ import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.uientity.Station;
 import com.damintsev.common.uientity.Task;
 import com.damintsev.common.uientity.TaskState;
+import com.damintsev.server.dao.StationDao;
 import com.damintsev.server.db.DB;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import org.apache.log4j.Logger;
@@ -30,12 +31,15 @@ public class Executor {
     @Autowired
     private DB db;
 
+    @Autowired
+    private StationDao stationDao;
+
     private Map<String, ThreadExecutor> threads = new HashMap<>();
     private Map<String, TaskState> stateMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void init() {
-        List<Station> stations = db.getStationList();
+        List<Station> stations = stationDao.getStationList();
         logger.info("Loaded from instance " + stations.size() + " stations");
         for (Station station : stations) {
             createWorker(station);
@@ -64,9 +68,11 @@ public class Executor {
     }
 
     public void updateEvent(Item item) {
-        if(item.getStation() == null) return;
-        ThreadExecutor threadExecutor = threads.get(item.getStation().getStringId());
-        threadExecutor.destroyProcess();
-        createWorker(item.getStation());
+//        if(item.getStation() == null) return;
+//        ThreadExecutor threadExecutor = threads.get(item.getStation().getStringId());
+//        threadExecutor.destroyProcess();
+//        createWorker(item.getStation());
+        shutdown();
+        init();
     }
 }

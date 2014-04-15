@@ -3,36 +3,47 @@ package com.damintsev.common.uientity;
 import com.damintsev.client.old.devices.Item;
 import com.damintsev.common.visitor.Visitor;
 
-//import javax.persistence.*;
+import javax.persistence.*;
 
 /**
  * User: Damintsev Andrey
  * Date: 04.08.13
  * Time: 14:15
  */
-//@Entity
-//@org.hibernate.annotations.Entity
+@Entity
+@Table(name = "station")
 public class Station extends Item {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "station_id")
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "station_id")
     private Long id;
-//    @Column
+
+    @Column
     private String name;
-//    @Column
+
+    @Column
     private String host;
-//    @Column
+
+    @Column
     private String port;
-//    @Column
+
+    @Column
     private String login;
-//    @Column
+
+    @Column
     private String password;
-//    @Column
+
+    @Column
     private String comment;
-//    @Transient
+
+    @Column
     private Long imageId;
-//    @Column
+
+    @Column
     private Boolean allowStatistics;
+
+    @Column
     private Integer delay;
 
     public String getHost() {
