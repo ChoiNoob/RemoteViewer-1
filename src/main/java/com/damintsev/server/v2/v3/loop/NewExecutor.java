@@ -41,7 +41,7 @@ public class NewExecutor {
         public void addTask(Process process) {
 
             executorService.scheduleAtFixedRate(process, 1, 100, TimeUnit.SECONDS);
-            executorService.g
+//            executorService.g
         }
         
     }

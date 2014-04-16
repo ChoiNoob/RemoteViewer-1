@@ -83,7 +83,7 @@ public class TelnetWorker extends Thread implements TelnetNotificationHandler {
             tc.registerNotifHandler(this);
             tc.setKeepAlive(keepAlive);
             if(allowTimeout)
-                if(timeout == null) tc.setSoTimeout(60000);//1 minute
+                if(timeout == null) tc.setSoTimeout(60000 * 10);//10 minute
                 else tc.setSoTimeout(timeout.intValue());
 
             instr = tc.getInputStream();

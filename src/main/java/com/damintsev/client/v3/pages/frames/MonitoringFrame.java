@@ -85,14 +85,14 @@ public class MonitoringFrame {
             }
         });
         drawCanvas(panel);
-        panel.addHandler(new ResizeHandler() {
-            @Override
-            public void onResize(ResizeEvent event) {
-                Dialogs.alert("fuck");
-            }
-        }, ResizeEvent.getType());
+//        panel.addHandler(new ResizeHandler() {
+//            @Override
+//            public void onResize(ResizeEvent event) {
+//                Dialogs.alert("fuck");
+//            }
+//        }, ResizeEvent.getType());
         DataLoader.getInstance().load();
-        drawConnections();
+//        drawConnections();
     }
 
     private void drawCanvas(AbsolutePanel panel) {
