@@ -1,4 +1,4 @@
-package com.damintsev.server.v2.v3;
+package com.damintsev.server.v2.v3.loop;
 
 import com.damintsev.common.uientity.ExecuteState;
 import com.damintsev.common.uientity.Station;
@@ -17,29 +17,25 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: Damintsev Andrey
- * Date: 07.10.13
- * Time: 22:35
+ * Author damintsev
+ * 4/16/2014
  */
-public class ThreadExecutor extends Thread {
+public class Process implements Runnable {
 
-    private static long threadId = 0;
-    private static final Logger logger = Logger.getLogger(ThreadExecutor.class);
+    private static long processId = 0;
+    private static final Logger logger = Logger.getLogger(Process.class);
 
-    private Station station;
-    private int delay;
+    private final Station station;
+    private final int delay;
+    private final long thisProcessId = ++processId;
     private int listPointer;
-    private boolean start = false;
-    private long thisThreadId = ++threadId;
-
-    private boolean needToPause;
 
     private List<Task> tasks;
     private Map<String, TaskState> taskStates;
     private Map<String, Integer> errors;
 
-    public ThreadExecutor(final Station station, List<Task> tasks, Map<String, TaskState> map) {
-        logger.info("Initializing Tread executor #" + thisThreadId + " with station=" + station.getId() + " name=" + station.getName());
+    public Process(final Station station, List<Task> tasks, Map<String, TaskState> map) {
+        logger.info("Initializing Process #" + thisProcessId + " with station=" + station.getId() + " name=" + station.getName());
         this.station = station;
         delay = station.getDelay() == null ? 5 : station.getDelay();
         this.tasks = tasks;
@@ -48,11 +44,11 @@ public class ThreadExecutor extends Thread {
         for(Task task : tasks) {
             taskStates.put(task.getStringId(), new TaskState(task.getStringId(), ExecuteState.INIT));
         }
-        if(tasks.size() > 0)
-            start();
     }
 
-    private void executeTask(Task task) {
+    @Override
+    public void run() {
+        Task task = getNextTask();
         TaskState state;
         Connection connection;
         try {
@@ -89,47 +85,6 @@ public class ThreadExecutor extends Thread {
         return tasks.get(listPointer++);
     }
 
-    //todo отдать в thread pool
-    public void run() {
-        Thread.currentThread().setName("threadId=" + thisThreadId + " id=" + station.getId() + " name=" + station.getName());
-        logger.info("Starting current thread");
-        while (start) {
-            executeTask(getNextTask());
-            try {
-                synchronized (this) {
-                    this.wait(delay * 1000);// Thread.sleep(delay * 1000);
-                    while (needToPause) {
-                        this.wait();
-                    }
-                }
-            } catch (InterruptedException e) {
-//                e.printStackTrace();
-                needToPause = false;
-                start = false;
-            }
-        }
-    }
-
-    @Override
-    public void start() {
-        start = true;
-        super.start();
-    }
-
-    @Override
-    public void interrupt() {
-        needToPause = false;
-        start = false;
-        for(Task task : tasks) {
-            taskStates.put(task.getStringId(), new TaskState(task.getStringId()));
-        }
-        super.interrupt();
-    }
-
-    public String getThreadId() {
-        return station.getStringId();
-    }
-
     private TaskState createExecutionError(String stringID, Exception conn) {
         logger.info("Created connection error!");
         TaskState task = new TaskState(stringID, ExecuteState.ERROR, conn.getMessage());
@@ -144,7 +99,7 @@ public class ThreadExecutor extends Thread {
         errors.put(stringID, errors.get(stringID) + 1);
         return task;
     }
-//todo убрать !!! методы вообще одинаковые
+    //todo убрать !!! методы вообще одинаковые
     private TaskState createConnectionError(String stringID, ConnectionException exception) {
         logger.info("Created connection error!");
         TaskState task = new TaskState(stringID, ExecuteState.ERROR, exception.getMessage());
@@ -159,68 +114,5 @@ public class ThreadExecutor extends Thread {
         }
         errors.put(stringID, errors.get(stringID) + 1);
         return task;
-    }
-
-//    public void updateTask(Task newTask) {
-//        pause();
-//        Task taskToRemove = null;
-//        for (Task oldTask : tasks) {
-//            if (oldTask.getStringId().equals(newTask.getStringId())) {
-//                taskToRemove = oldTask;
-//            }
-//        }
-//        if (taskToRemove != null) {
-//            logger.info("Deleting old task");
-//            tasks.remove(taskToRemove);
-//            //todo не нравится мне это!!!
-//            ConnectionPool.getInstance().dropConnection(taskToRemove.getStation());
-//        }
-//        tasks.add(newTask);
-//        taskStates.put(newTask.getStringId(), new TaskState());
-//
-//        iterator = null;
-//        unpause();
-//    }
-//
-//    public void updateStation(Station station) {
-//        pause();
-//        ConnectionPool.getInstance().dropConnection(station);
-//        System.out.println("dropped");
-//        for(Task task : tasks) {  //todo не очень красиво
-//            task.setStation(station);
-//        }
-//        iterator = null;
-//        unpause();
-//    }
-
-    public void destroyProcess() {
-// todo       ConnectionPool.getInstance().dropConnection(station);
-        ConnectionPool.getInstance().dropConnections();
-        tasks.clear();
-        taskStates.clear();
-        errors.clear();
-        interrupt();
-    }
-
-//    public void deleteTask(Task task) {
-//        pause();
-//        for(Task oldTask : tasks) {
-//            if(oldTask.getStringId().equals(task.getStringId())) {
-//                tasks.remove(oldTask);
-//            }
-//        }
-//        taskStates.remove(task.getStringId());
-//        errors.remove(task.getStringId());
-//        iterator = null;
-//        unpause();
-//    }
-
-    public void pause() {
-        needToPause = true;
-    }
-
-    public synchronized void  unpause() {
-        needToPause = false;
-        this.notifyAll();
     }
 }

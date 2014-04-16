@@ -401,7 +401,6 @@ public class DB {
         logger.info("saving items position");
         Connection connection = null;
         PreparedStatement statement = null;
-        ResultSet resultSet = null;
         try {
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("INSERT INTO uipositions (x, y, ref_id, ref_type)" +
@@ -420,9 +419,6 @@ public class DB {
             e.printStackTrace();
         } finally {
             try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
                 if (statement != null) {
                     statement.close();
                 }
