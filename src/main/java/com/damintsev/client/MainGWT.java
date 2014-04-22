@@ -1,20 +1,13 @@
 package com.damintsev.client;
 
-import com.damintsev.client.v3.pages.frames.MonitoringFrame;
-import com.damintsev.common.event.StartEditEvent;
+import com.damintsev.common.history.HistoryManager;
 import com.damintsev.common.utils.async.Async;
 import com.damintsev.common.utils.async.AsyncTask;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
-import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.RootPanel;
 
@@ -55,6 +48,7 @@ public class MainGWT implements EntryPoint {
             @Override
             public void onSuccess() {
                 EventBus.get();
+                new HistoryManager();
                 RootPanel.get().add(UIRootPanel.get().getContent());
             }
         });

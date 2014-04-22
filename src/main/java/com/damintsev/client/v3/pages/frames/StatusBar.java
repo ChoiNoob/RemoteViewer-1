@@ -1,11 +1,11 @@
 package com.damintsev.client.v3.pages.frames;
 
-import com.damintsev.client.EventBus;
 import com.damintsev.client.v3.utilities.Alarm;
 import com.damintsev.client.v3.utilities.UIButton;
-import com.damintsev.common.event.StartEditEvent;
+import com.damintsev.common.history.Link;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
+import com.google.gwt.user.client.History;
 import com.sencha.gxt.core.client.util.Padding;
 import com.sencha.gxt.widget.core.client.button.ToggleButton;
 import com.sencha.gxt.widget.core.client.button.ToolButton;
@@ -63,7 +63,7 @@ public class StatusBar {
         editButton.addSelectHandler(new SelectEvent.SelectHandler() {
             @Override
             public void onSelect(SelectEvent event) {
-                EventBus.get().fireEvent(new StartEditEvent());
+                History.newItem(Link.EDIT.toString());
             }
         });
 

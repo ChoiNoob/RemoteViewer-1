@@ -1,21 +1,23 @@
 package com.damintsev.client.v3.pages.frames;
 
 import com.damintsev.client.EventBus;
-import com.damintsev.client.v3.uiitems.UIItem;
-import com.damintsev.client.v3.pages.windows.AddTaskWindow;
-import com.damintsev.client.v3.pages.windows.AddStationWindow;
-import com.damintsev.client.v3.pages.windows.LabelWindow;
-import com.damintsev.client.v3.pages.windows.FileUploadWindow;
 import com.damintsev.client.old.devices.windows.PrefixConfigWindow;
+import com.damintsev.client.v3.pages.windows.AddStationWindow;
+import com.damintsev.client.v3.pages.windows.AddTaskWindow;
+import com.damintsev.client.v3.pages.windows.FileUploadWindow;
+import com.damintsev.client.v3.pages.windows.LabelWindow;
+import com.damintsev.client.v3.uiitems.UIItem;
 import com.damintsev.common.event.StartEditEvent;
 import com.damintsev.common.event.StartEditEventHandler;
 import com.damintsev.common.event.StopEditEvent;
 import com.damintsev.common.event.StopEditEventHandler;
+import com.damintsev.common.history.Link;
 import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Utils;
 import com.damintsev.common.utils.async.Async;
 import com.damintsev.common.utils.async.AsyncTask;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.ButtonCell;
 import com.sencha.gxt.core.client.util.Margins;
@@ -156,7 +158,8 @@ public class SettingsFrame {
         TextButton save = new TextButton("Сохранить", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
 //                MonitoringFrame.get().stopEditing();
-                EventBus.get().fireEvent(new StopEditEvent());
+//                EventBus.get().fireEvent(new StopEditEvent());
+                History.newItem(Link.MONITORING.toString());
 //                reload();
             }
         });
@@ -164,8 +167,8 @@ public class SettingsFrame {
         TextButton cancel = new TextButton("Отмена", new SelectEvent.SelectHandler() {
             public void onSelect(SelectEvent event) {
 //                MonitoringFrame.get().stopEditing();
-                EventBus.get().fireEvent(new StopEditEvent());
-
+//                EventBus.get().fireEvent(new StopEditEvent());
+                History.newItem(Link.MONITORING.toString());
             }
         });
 
