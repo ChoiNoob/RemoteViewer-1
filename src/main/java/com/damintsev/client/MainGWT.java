@@ -48,8 +48,8 @@ public class MainGWT implements EntryPoint {
             @Override
             public void onSuccess() {
                 EventBus.get();
-                new HistoryManager();
                 RootPanel.get().add(UIRootPanel.get().getContent());
+                new HistoryManager();
             }
         });
     }
