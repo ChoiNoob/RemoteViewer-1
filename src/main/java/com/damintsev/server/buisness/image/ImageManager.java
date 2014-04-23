@@ -3,10 +3,9 @@ package com.damintsev.server.buisness.image;
 import com.damintsev.server.entity.UploadedFile;
 import com.damintsev.server.exceptions.CustomException;
 import com.damintsev.server.exceptions.NotFoundException;
-import com.damintsev.common.uientity.Image;
+import com.damintsev.gwt.client.source.uientity.Image;
 import com.damintsev.server.buisness.temporary.TemporaryFileManager;
 import com.damintsev.server.dao.ImageDao;
-import net.sf.jmimemagic.Magic;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,9 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 

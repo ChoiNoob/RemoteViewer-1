@@ -90,8 +90,8 @@ public class ImageUtils {
         return null;
     }
 
-    public com.damintsev.common.uientity.Image createImage(byte[] content, int width, int height) {
-        com.damintsev.common.uientity.Image image = new com.damintsev.common.uientity.Image();
+    public com.damintsev.gwt.client.source.uientity.Image createImage(byte[] content, int width, int height) {
+        com.damintsev.gwt.client.source.uientity.Image image = new com.damintsev.gwt.client.source.uientity.Image();
         BufferedImage bufferedImage = resizeImage(content, width, height);
         image.setWidth(bufferedImage.getWidth());
         image.setHeight(bufferedImage.getHeight());
@@ -105,7 +105,7 @@ public class ImageUtils {
         return image;
     }
 
-    public com.damintsev.common.uientity.Image createImage(File file, int width, int height) {
+    public com.damintsev.gwt.client.source.uientity.Image createImage(File file, int width, int height) {
         byte []content = null;
         try {
             content = FileUtils.readFileToByteArray(file);

@@ -1,6 +1,6 @@
 package com.damintsev.server.dao.impl;
 
-import com.damintsev.common.uientity.Image;
+import com.damintsev.gwt.client.source.uientity.Image;
 import com.damintsev.server.dao.ImageDao;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

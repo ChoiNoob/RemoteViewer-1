@@ -1,6 +1,6 @@
 package com.damintsev.server.dao.impl;
 
-import com.damintsev.common.uientity.Label;
+import com.damintsev.gwt.client.source.uientity.Label;
 import com.damintsev.server.dao.UiItemDao;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

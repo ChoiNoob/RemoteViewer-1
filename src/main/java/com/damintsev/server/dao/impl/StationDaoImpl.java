@@ -1,6 +1,6 @@
 package com.damintsev.server.dao.impl;
 
-import com.damintsev.common.uientity.Station;
+import com.damintsev.gwt.client.source.uientity.Station;
 import com.damintsev.server.dao.StationDao;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,7 +1,7 @@
 package com.damintsev.server.buisness.uilogic.impl;
 
-import com.damintsev.common.uientity.Label;
-import com.damintsev.common.uientity.Station;
+import com.damintsev.gwt.client.source.uientity.Label;
+import com.damintsev.gwt.client.source.uientity.Station;
 import com.damintsev.server.buisness.uilogic.UiBusinessLogic;
 import com.damintsev.server.dao.StationDao;
 import com.damintsev.server.dao.UiItemDao;

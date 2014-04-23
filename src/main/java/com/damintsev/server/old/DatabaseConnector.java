@@ -1,10 +1,10 @@
 //package com.damintsev.server.db;
 //
-//import com.damintsev.client.old.devices.*;
-//import com.damintsev.client.old.devices.enums.DeviceType;
-//import com.damintsev.client.old.devices.enums.Status;
-//import com.damintsev.client.old.devices.graph.BusyInfo;
-//import com.damintsev.common.pojo.Station;
+//import com.damintsev.gwt.client.source.devices.*;
+//import com.damintsev.gwt.client.source.devices.enums.DeviceType;
+//import com.damintsev.gwt.client.source.devices.enums.Status;
+//import com.damintsev.gwt.client.source.devices.graph.BusyInfo;
+//import com.damintsev.gwt.common.pojo.Station;
 //import org.slf4j.LoggerFactory;
 //
 //import java.sql.*;

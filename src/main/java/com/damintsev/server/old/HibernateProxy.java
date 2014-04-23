@@ -1,6 +1,6 @@
 //package com.damintsev.server.old;
 //
-//import com.damintsev.client.old.devices.graph.BusyInfo;
+//import com.damintsev.gwt.client.source.devices.graph.BusyInfo;
 //import org.hibernate.Query;
 //import org.hibernate.Session;
 //

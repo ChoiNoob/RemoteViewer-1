@@ -1,9 +1,9 @@
 //package com.damintsev.server.v2.v3.connections.connction.impl.telnet;
 //
-//import com.damintsev.client.old.devices.*;
-//import com.damintsev.client.old.devices.enums.DeviceType;
-//import com.damintsev.client.old.devices.enums.Status;
-//import com.damintsev.client.old.devices.graph.BusyInfo;
+//import com.damintsev.gwt.client.source.devices.*;
+//import com.damintsev.gwt.client.source.devices.enums.DeviceType;
+//import com.damintsev.gwt.client.source.devices.enums.Status;
+//import com.damintsev.gwt.client.source.devices.graph.BusyInfo;
 //import com.damintsev.server.old.Executor;
 //import com.damintsev.server.old.SingleThread;
 //import com.damintsev.server.db.DatabaseConnector;

@@ -1,6 +1,6 @@
 package com.damintsev.server.v2.v3.processor;
 
-import com.damintsev.common.uientity.TaskType;
+import com.damintsev.gwt.client.source.uientity.TaskType;
 import com.damintsev.server.v2.v3.processor.impl.IPTask;
 import com.damintsev.server.v2.v3.processor.impl.StatusChannelTask;
 

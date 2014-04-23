@@ -1,9 +1,9 @@
 package com.damintsev.server.v2.v3.loop;
 
-import com.damintsev.common.uientity.ExecuteState;
-import com.damintsev.common.uientity.Station;
-import com.damintsev.common.uientity.Task;
-import com.damintsev.common.uientity.TaskState;
+import com.damintsev.gwt.client.source.uientity.ExecuteState;
+import com.damintsev.gwt.client.source.uientity.Station;
+import com.damintsev.gwt.client.source.uientity.Task;
+import com.damintsev.gwt.client.source.uientity.TaskState;
 import com.damintsev.server.v2.v3.connections.Connection;
 import com.damintsev.server.v2.v3.connections.ConnectionPool;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;

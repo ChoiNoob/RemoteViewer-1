@@ -1,7 +1,7 @@
 package com.damintsev.server.v2.v3.connections.impl;
 
-import com.damintsev.common.uientity.Station;
-import com.damintsev.common.uientity.Task;
+import com.damintsev.gwt.client.source.uientity.Station;
+import com.damintsev.gwt.client.source.uientity.Task;
 import com.damintsev.server.v2.v3.connections.AbstractConnection;
 import com.damintsev.server.v2.v3.connections.Connection;
 import com.damintsev.server.v2.v3.connections.impl.telnet.TelnetWorker;

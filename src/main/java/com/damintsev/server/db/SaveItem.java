@@ -1,10 +1,10 @@
 package com.damintsev.server.db;
 
-import com.damintsev.client.old.devices.Item;
-import com.damintsev.common.uientity.Label;
-import com.damintsev.common.uientity.Station;
-import com.damintsev.common.uientity.Task;
-import com.damintsev.common.visitor.Visitor;
+import com.damintsev.gwt.client.source.uientity.Item;
+import com.damintsev.gwt.client.source.uientity.Label;
+import com.damintsev.gwt.client.source.uientity.Station;
+import com.damintsev.gwt.client.source.uientity.Task;
+import com.damintsev.gwt.client.source.visitor.Visitor;
 import com.damintsev.server.dao.StationDao;
 import com.damintsev.server.dao.UiItemDao;
 import org.apache.log4j.Logger;

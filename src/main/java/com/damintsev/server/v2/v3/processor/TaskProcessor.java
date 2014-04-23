@@ -1,6 +1,6 @@
 package com.damintsev.server.v2.v3.processor;
 
-import com.damintsev.common.uientity.TaskState;
+import com.damintsev.gwt.client.source.uientity.TaskState;
 import com.damintsev.server.v2.v3.exceptions.ExecutingTaskException;
 
 /**

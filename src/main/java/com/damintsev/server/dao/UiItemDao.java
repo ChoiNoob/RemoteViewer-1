@@ -1,6 +1,6 @@
 package com.damintsev.server.dao;
 
-import com.damintsev.common.uientity.Label;
+import com.damintsev.gwt.client.source.uientity.Label;
 
 /**
  * @author Damintsev Andrey

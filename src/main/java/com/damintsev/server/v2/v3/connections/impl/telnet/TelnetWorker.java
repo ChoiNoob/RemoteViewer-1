@@ -6,7 +6,7 @@ package com.damintsev.server.v2.v3.connections.impl.telnet;
  * //todo интегрировать с другими классами!
  */
 
-import com.damintsev.common.uientity.Response;
+import com.damintsev.gwt.client.source.uientity.Response;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;
 import org.apache.commons.net.telnet.*;
 import org.apache.log4j.Logger;

@@ -1,6 +1,6 @@
 package com.damintsev.servlet;
 
-import com.damintsev.common.uientity.Image;
+import com.damintsev.gwt.client.source.uientity.Image;
 import com.damintsev.server.buisness.image.ImageManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package com.damintsev.server.dao;
 
-import com.damintsev.common.uientity.Station;
+import com.damintsev.gwt.client.source.uientity.Station;
 
 import java.util.List;
 

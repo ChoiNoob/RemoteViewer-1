@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='mainGWT'>
+    <inherits name='com.google.gwt.core.Core'/>
+    <inherits name='com.google.gwt.user.User'/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name='com.google.gwt.editor.Editor'/>
+
+    <inherits name="com.sencha.gxt.widget.core.Core"/>
+    <inherits name="com.sencha.gxt.ui.GXT"/>
+
+    <inherits name='com.allen_sauer.gwt.dnd.gwt-dnd'/>
+
+    <inherits name="com.damintsev.gwt.common.common"/>
+
+    <inherits name="com.sencha.gxt.chart.Chart"/>
+
+    <extend-property name="locale" values="ru_RU"/>
+
+    <entry-point class='com.damintsev.gwt.client.source.MainGWT'/>
+
+    <collapse-all-properties />
+    <source path='source'/>
+    <!--<source path='common'/>-->
+
+</module>

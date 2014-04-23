@@ -1,6 +1,6 @@
 package com.damintsev.server.dao;
 
-import com.damintsev.common.uientity.Image;
+import com.damintsev.gwt.client.source.uientity.Image;
 
 /**
  * User: adamintsev

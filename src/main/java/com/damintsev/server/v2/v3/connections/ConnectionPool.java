@@ -1,8 +1,8 @@
 package com.damintsev.server.v2.v3.connections;
 
-import com.damintsev.common.uientity.Station;
-import com.damintsev.common.uientity.Task;
-import com.damintsev.common.uientity.TaskType;
+import com.damintsev.gwt.client.source.uientity.Station;
+import com.damintsev.gwt.client.source.uientity.Task;
+import com.damintsev.gwt.client.source.uientity.TaskType;
 import com.damintsev.server.v2.v3.connections.impl.PingConnection;
 import com.damintsev.server.v2.v3.connections.impl.TelnetConnection;
 import com.damintsev.server.v2.v3.exceptions.ConnectionException;

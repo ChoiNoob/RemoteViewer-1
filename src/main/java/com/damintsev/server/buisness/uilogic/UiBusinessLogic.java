@@ -1,7 +1,7 @@
 package com.damintsev.server.buisness.uilogic;
 
-import com.damintsev.common.uientity.Label;
-import com.damintsev.common.uientity.Station;
+import com.damintsev.gwt.client.source.uientity.Label;
+import com.damintsev.gwt.client.source.uientity.Station;
 
 import java.util.List;
 

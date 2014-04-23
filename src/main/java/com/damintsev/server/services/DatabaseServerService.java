@@ -1,8 +1,8 @@
 package com.damintsev.server.services;
 
-import com.damintsev.client.old.devices.Item;
-import com.damintsev.client.service.DatabaseService;
-import com.damintsev.common.uientity.*;
+import com.damintsev.gwt.client.source.uientity.Item;
+import com.damintsev.gwt.client.source.service.DatabaseService;
+import com.damintsev.gwt.client.source.uientity.*;
 import com.damintsev.server.buisness.image.ImageManager;
 import com.damintsev.server.buisness.uilogic.UiBusinessLogic;
 import com.damintsev.server.dao.StationDao;
