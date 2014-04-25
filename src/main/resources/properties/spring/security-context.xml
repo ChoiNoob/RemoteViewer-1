@@ -18,20 +18,39 @@
         <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/mainGWT.html**" access="ROLE_USER"/>
         <!--<security:intercept-url pattern="/api/**" access="ROLE_USER"/>-->
+        <security:remember-me services-ref="rememberMeServices" />
     </security:http>
 
     <!--<bean id="authenticationProv" class="com.damintsev.servlet.Security"/>-->
     <bean id="userDetailsService" class="com.damintsev.servlet.UserDetailsServiceImpl"/>
 
-    <bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
-        <property name="userDetailsService" ref="userDetailsService"/>
+    <!--<bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">-->
+        <!--<property name="userDetailsService" ref="userDetailsService"/>-->
+    <!--</bean>-->
+
+
+
+    <bean id="authenticationRemeberProvider" class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+        <property name="key" value="springRocks"/>
     </bean>
-    <!--<security:authentication-manager alias="authenticationManager">-->
-        <!--<security:authentication-provider ref="authenticationProv"/>-->
-    <!--</security:authentication-manager>-->
+
+    <bean id="rememberMeServices" class=
+            "org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+        <property name="userDetailsService" ref="userDetailsService"/>
+        <property name="key" value="springRocks"/>
+        <property name="tokenValiditySeconds" value="500"/>
+        <property name="cookieName" value="damintsev"/>
+    </bean>
+
+    <bean id="rememberMeFilter" class=
+            "org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+        <property name="rememberMeServices" ref="rememberMeServices"/>
+        <property name="authenticationManager" ref="authenticationManager" />
+    </bean>
 
     <security:authentication-manager alias="authenticationManager">
-        <security:authentication-provider user-service-ref="userDetailsService"/>
+        <!--<security:authentication-provider user-service-ref="userDetailsService"/>-->
+        <security:authentication-provider ref="authenticationRemeberProvider"/>
     </security:authentication-manager>
 
 </beans>

@@ -19,7 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException, DataAccessException {
-        System.out.println("asdasddasfndaskljfjdkjasfjfjdsfjd;kasfjdsdsnfsfjLSJFDSFJSFJDSFDSF;SD");
+        System.err.println("asdasddasfndaskljfjdkjasfjfjdsfjd;kasfjdsdsnfsfjLSJFDSFJSFJDSFDSF;SD");
         GrantedAuthority authority = new GrantedAuthorityImpl("ROLE_USER");
         UserDetails userDetails = new UserDetailsImpl(username, "1234", Arrays.asList(authority));
         return userDetails;
