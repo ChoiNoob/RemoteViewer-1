@@ -20,10 +20,18 @@
         <!--<security:intercept-url pattern="/api/**" access="ROLE_USER"/>-->
     </security:http>
 
-    <bean id="authenticationProv" class="com.damintsev.servlet.Security"/>
+    <!--<bean id="authenticationProv" class="com.damintsev.servlet.Security"/>-->
+    <bean id="userDetailsService" class="com.damintsev.servlet.UserDetailsServiceImpl"/>
+
+    <bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="userDetailsService"/>
+    </bean>
+    <!--<security:authentication-manager alias="authenticationManager">-->
+        <!--<security:authentication-provider ref="authenticationProv"/>-->
+    <!--</security:authentication-manager>-->
 
     <security:authentication-manager alias="authenticationManager">
-        <security:authentication-provider ref="authenticationProv"/>
+        <security:authentication-provider user-service-ref="userDetailsService"/>
     </security:authentication-manager>
 
 </beans>

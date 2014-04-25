@@ -8,6 +8,7 @@ public class Login {
 
     private String login;
     private String password;
+    private Boolean rememberMe;
 
     public String getLogin() {
         return login;
@@ -23,5 +24,13 @@ public class Login {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Boolean getRememberMe() {
+        return rememberMe;
+    }
+
+    public void setRememberMe(Boolean rememberMe) {
+        this.rememberMe = rememberMe;
     }
 }

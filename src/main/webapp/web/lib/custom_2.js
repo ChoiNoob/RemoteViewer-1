@@ -19,30 +19,26 @@ function bindd() {
 }
 $(document).ready(function() {
     (function () {
-//    $('#submitForm').submit(function (e) {
-//        alert("asd");
-//        e.preventDefault();
-//        return false;
-//    });
-        $('form#submitForm').submit(function(e){
+
+       $('form#submitForm').submit(function(e){
             $(this).children('input[type=submit]').attr('disabled', 'disabled');
-            // this is just for demonstration
             e.preventDefault();
             loginAttempt();
             return false;
         });
 
         var loginAttempt = function () {
-            alert("asdasdasdas");
             var login = $('#login').val();
             var pswd = $('#password').val();
+            var rememberMe = $('input#rememberMe').prop('checked');
             if(checkValues(login, pswd)) return;
 //       todo var password = CryptoJS.MD5(pswd);
             var password = pswd;
             var request = $.post('api/login',
                 {
                     login: login,
-                    password: password
+                    password: password,
+                    rememberMe: rememberMe
                 });
 
             request.success(function() {

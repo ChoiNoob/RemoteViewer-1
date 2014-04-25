@@ -22,10 +22,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * User: Damintsev Andrey
@@ -136,6 +133,7 @@ public class MonitoringFrame {
         panel.setWidgetPosition(uiItem, uiItem.getPosition().x, uiItem.getPosition().y);
         if (editing) dragController.makeDraggable(uiItem);
         drawConnections();
+        saveItemPositions(uiItem);
     }
 
     private void startEditing() {
@@ -163,6 +161,10 @@ public class MonitoringFrame {
 
     public void saveItemPositions() {
         DataLoader.getInstance().saveUIItems(uiItems.values());
+    }
+
+    public void saveItemPositions(UIItem item) {
+        DataLoader.getInstance().saveUIItems(Arrays.asList(item));
     }
 
     public UIItem getSelected() {
