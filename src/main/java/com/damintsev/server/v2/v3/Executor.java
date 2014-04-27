@@ -37,7 +37,7 @@ public class Executor {
     private Map<String, ThreadExecutor> threads = new HashMap<>();
     private Map<String, TaskState> stateMap = new ConcurrentHashMap<>();
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         List<Station> stations = stationDao.getStationList();
         logger.info("Loaded from instance " + stations.size() + " stations");

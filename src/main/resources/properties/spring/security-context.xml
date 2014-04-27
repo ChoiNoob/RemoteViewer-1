@@ -2,55 +2,55 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:security="http://www.springframework.org/schema/security"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd     http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-<!--<security:http auto-config="true">-->
-        <!--<security:intercept-url pattern="/**" access="ROLE_USER"/>-->
-        <!--<security:intercept-url pattern="/edit" access="ROLE_ADMIN"/>-->
-        <!--&lt;!&ndash;<security:intercept-url pattern="/**/*.html" access="ROLE_USER"/>&ndash;&gt;-->
-        <!--<security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />-->
-        <!--&lt;!&ndash;<security:form-login login-page="login112231"/>&ndash;&gt;-->
-
-    <!--</security:http>-->
     <security:http auto-config="false">
         <security:form-login login-page="/login.html"/>
-        <!--<security:intercept-url pattern="/*" access="IS_AUTHENTICATED_ANONYMOUSLY"/>-->
-        <security:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
+        <!--<security:intercept-url pattern="/login" access=""/>-->
         <security:intercept-url pattern="/mainGWT.html**" access="ROLE_USER"/>
-        <!--<security:intercept-url pattern="/api/**" access="ROLE_USER"/>-->
-        <security:remember-me services-ref="rememberMeServices" />
+        <!--<security:remember-me services-ref="rememberMeServices" />-->
     </security:http>
 
-    <!--<bean id="authenticationProv" class="com.damintsev.servlet.Security"/>-->
     <bean id="userDetailsService" class="com.damintsev.servlet.UserDetailsServiceImpl"/>
 
-    <!--<bean id="authenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">-->
-        <!--<property name="userDetailsService" ref="userDetailsService"/>-->
-    <!--</bean>-->
-
-
-
-    <bean id="authenticationRemeberProvider" class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
-        <property name="key" value="springRocks"/>
+    <bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="userDetailsService"/>
+    </bean>
+    <!--org.springframework.security.authentication.RememberMeAuthenticationProvider#0-->
+    <bean id="rememberMeAuthenticationProvider" class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+        <constructor-arg name="key" value="rock"/>
     </bean>
 
+    <!--<bean id="authentificationManager" class="com.login.login.CustomAth"/>-->
+    <context:component-scan base-package="com.login"/>
+
     <bean id="rememberMeServices" class=
-            "org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices">
+            "org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
         <property name="userDetailsService" ref="userDetailsService"/>
-        <property name="key" value="springRocks"/>
-        <property name="tokenValiditySeconds" value="500"/>
-        <property name="cookieName" value="damintsev"/>
+        <property name="key" value="rock"/>
+        <property name="tokenValiditySeconds" value="5000"/>
+        <property name="alwaysRemember" value="true"/>
+        <!--<property name="cookieName" value="damintsev"/>-->
     </bean>
 
     <bean id="rememberMeFilter" class=
             "org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
         <property name="rememberMeServices" ref="rememberMeServices"/>
-        <property name="authenticationManager" ref="authenticationManager" />
+        <property name="authenticationManager" ref="authenticationManager"/>
+    </bean>
+
+    <bean id="providerManager" class="org.springframework.security.authentication.ProviderManager">
+        <property name="providers">
+            <list>
+                <ref bean="daoAuthenticationProvider"/>
+                <ref bean="rememberMeAuthenticationProvider"/>
+            </list>
+        </property>
     </bean>
 
     <security:authentication-manager alias="authenticationManager">
-        <!--<security:authentication-provider user-service-ref="userDetailsService"/>-->
-        <security:authentication-provider ref="authenticationRemeberProvider"/>
+        <!--<security:authentication-provider ref="daoAuthenticationProvider"/>-->
     </security:authentication-manager>
 
 </beans>
