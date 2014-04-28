@@ -1,4 +1,3 @@
-
 function bindd() {
     $('#upload').fileupload({
         replaceFileInput: false,
@@ -17,10 +16,10 @@ function bindd() {
         }
     });
 }
-$(document).ready(function() {
+$(document).ready(function () {
     (function () {
-
-       $('form#submitForm').submit(function(e){
+        $("input#rememberMe").prop("checked", true);
+        $('form#submitForm').submit(function (e) {
             $(this).children('input[type=submit]').attr('disabled', 'disabled');
             e.preventDefault();
             loginAttempt();
@@ -31,26 +30,27 @@ $(document).ready(function() {
             var login = $('#login').val();
             var pswd = $('#password').val();
             var rememberMe = $('input#rememberMe').prop('checked');
-            if(checkValues(login, pswd)) return;
+            if (checkValues(login, pswd)) return;
 //       todo var password = CryptoJS.MD5(pswd);
             var password = pswd;
-            var request = $.post('api/login',
+            var request = $.post('/api/login?username=' + login + '&password=' + pswd + "&remember_me=" + rememberMe,
                 {
                     login: login,
                     password: password,
                     rememberMe: rememberMe
                 });
 
-            request.success(function() {
+            request.success(function () {
                 window.location.replace("/");
             });
 
-            request.error(function(text) {
+            request.error(function (text) {
+                console.log(text);
                 alert(text);
             });
         };
 
-        var checkValues = function(login, pswd) {
+        var checkValues = function (login, pswd) {
             return login == null || pswd == null;
         };
         window['loginAttempt'] = loginAttempt;
