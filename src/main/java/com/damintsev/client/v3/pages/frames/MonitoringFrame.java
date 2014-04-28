@@ -12,6 +12,7 @@ import com.damintsev.client.v3.utilities.Scheduler;
 import com.damintsev.common.event.*;
 import com.damintsev.common.uientity.ExecuteState;
 import com.damintsev.common.uientity.TaskState;
+import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Position;
 import com.damintsev.common.visitor.UIVisitor;
 import com.google.gwt.canvas.client.Canvas;
@@ -19,6 +20,7 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.rpc.InvocationException;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Widget;
 
@@ -217,11 +219,20 @@ public class MonitoringFrame {
     }
 
     public void start() {
-        Scheduler.getInstance().start(this.getClass(), new Runnable() {
+        Scheduler.getInstance().start("monitoring", new Runnable() {
             public void run() {
                 Service.instance.loadTaskStates(new AsyncCallback<List<TaskState>>() {
                     public void onFailure(Throwable caught) {
                         //todo грамотно обраотать ошибку!
+                        Scheduler.getInstance().stop("monitoring");
+                        if(caught instanceof InvocationException) {
+                            Dialogs.alert("Вы не авторизованы. Пожалуйста введите свой логин и пароль.", new Runnable() {
+                                @Override
+                                public void run() {
+                                    Window.Location.reload();
+                                }
+                            });
+                        }
                     }
 
                     public void onSuccess(List<TaskState> result) {
@@ -246,7 +257,7 @@ public class MonitoringFrame {
     }
 
     public void stop() {
-        Scheduler.getInstance().stop(this.getClass());
+        Scheduler.getInstance().stop("monitoring");
     }
 
     public void reloadView() {

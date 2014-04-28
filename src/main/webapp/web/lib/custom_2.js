@@ -18,6 +18,11 @@ function bindd() {
 }
 $(document).ready(function () {
     (function () {
+//        $.get('api/authenticated').success(function(result) {
+//            if(result == true)
+//                window.location.replace("/");
+//        });
+
         $("input#rememberMe").prop("checked", true);
         $('form#submitForm').submit(function (e) {
             $(this).children('input[type=submit]').attr('disabled', 'disabled');
@@ -33,7 +38,7 @@ $(document).ready(function () {
             if (checkValues(login, pswd)) return;
 //       todo var password = CryptoJS.MD5(pswd);
             var password = pswd;
-            var request = $.post('/api/login?username=' + login + '&password=' + pswd + "&remember_me=" + rememberMe,
+            var request = $.post('api/login?username=' + login + '&password=' + pswd + "&remember_me=" + rememberMe,
                 {
                     login: login,
                     password: password,
@@ -41,7 +46,8 @@ $(document).ready(function () {
                 });
 
             request.success(function () {
-                window.location.replace("/");
+//                window.location.replace("../");
+                document.location.href = '../';
             });
 
             request.error(function (text) {

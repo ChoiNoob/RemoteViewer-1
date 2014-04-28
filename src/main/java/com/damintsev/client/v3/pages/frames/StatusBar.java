@@ -3,10 +3,12 @@ package com.damintsev.client.v3.pages.frames;
 import com.damintsev.client.v3.utilities.Alarm;
 import com.damintsev.client.v3.utilities.UIButton;
 import com.damintsev.common.history.Link;
+import com.damintsev.common.utils.Dialogs;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.user.client.History;
 import com.sencha.gxt.core.client.util.Padding;
+import com.sencha.gxt.widget.core.client.Window;
 import com.sencha.gxt.widget.core.client.button.ToggleButton;
 import com.sencha.gxt.widget.core.client.button.ToolButton;
 import com.sencha.gxt.widget.core.client.container.BoxLayoutContainer;
@@ -31,6 +33,7 @@ public class StatusBar {
 
         addTurnAlarmButton();
         addEditButton();
+        logOutButton();
     }
 
     public ToolBar getToolBar() {
@@ -64,6 +67,25 @@ public class StatusBar {
             @Override
             public void onSelect(SelectEvent event) {
                 History.newItem(Link.EDIT.toString());
+            }
+        });
+
+        toolBar.add(editButton);
+    }
+
+    private void logOutButton() {
+        ToolButton editButton = new ToolButton(ToolButton.CLOSE);
+        editButton.setToolTip("Выйти");
+        editButton.addSelectHandler(new SelectEvent.SelectHandler() {
+            @Override
+            public void onSelect(SelectEvent event) {
+                Dialogs.confirm("Вы уверены, что хотите выйти?", new Runnable() {
+                    @Override
+                    public void run() {
+//                        com.google.gwt.user.client.Window.open("api/logout", "", "");
+                        com.google.gwt.user.client.Window.Location.assign("api/logout");
+                    }
+                });
             }
         });
 
