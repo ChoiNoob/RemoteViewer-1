@@ -43,7 +43,7 @@ public class UserDetailsImpl implements UserDetails {
 //        Arrays.asList(authorities.split(" ")).stream().forEach((authority) -> {
 //            authoritiesList.add(new SimpleGrantedAuthority(authority));
 //        });
-        for(String authority : authorities.split(" ")) {
+        for(String authority : authorities.split(",")) {
             authoritiesList.add(new SimpleGrantedAuthority(authority.trim()));
         }
         return authoritiesList;

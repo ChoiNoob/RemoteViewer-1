@@ -21,8 +21,8 @@ $(document).ready(function () {
         $.get('api/authenticated').success(function(result) {
             console.log(result);
             if(result == true)
-                window.location.replace("/");
-        });
+                window.location.replace("/");//todo!!!!!
+        }).error(function() {/*do nothing*/});
 
         $("input#rememberMe").prop("checked", true);
         $('form#submitForm').submit(function (e) {
@@ -47,7 +47,7 @@ $(document).ready(function () {
                 });
 
             request.success(function () {
-                window.location.replace("../");
+                window.location.replace("../");//todo!!!!!
 //                document.location.href = '../';
             });
 

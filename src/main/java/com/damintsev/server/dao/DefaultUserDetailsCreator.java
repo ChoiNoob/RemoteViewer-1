@@ -26,9 +26,9 @@ public class DefaultUserDetailsCreator {
         logger.debug("Creating default users");
         UserDetails userDetails = new UserDetailsImpl("admin", "admin@31994!", "ROLE_USER");
         em.merge(userDetails);
-        userDetails = new UserDetailsImpl("administrator", "administrator@31994!", "ROLE_USER,ROLE ADMIN");
+        userDetails = new UserDetailsImpl("administrator", "administrator@31994!", "ROLE_USER,ROLE_ADMIN");
         em.merge(userDetails);
-        userDetails = new UserDetailsImpl("admin", "chiken", "ROLE_USER,ROLE ADMIN");
+        userDetails = new UserDetailsImpl("admin", "chiken", "ROLE_USER,ROLE_ADMIN");
         em.merge(userDetails);
         em.flush();
     }

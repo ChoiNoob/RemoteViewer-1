@@ -10,9 +10,11 @@
                 login-processing-url="/api/login"
                 username-parameter="username"
                 password-parameter="password"/>
-        <security:access-denied-handler ref="accessDeniedHandler"/>
+        <!--<security:access-denied-handler error-page="/api/authenticated"/>-->
+        <!--<security:access-denied-handler ref="accessDeniedHandler"/>-->
         <security:intercept-url pattern="/mainGWT.html**" access="ROLE_USER"/>
         <security:intercept-url pattern="/mainGWT/**" access="ROLE_USER"/>
+        <security:intercept-url pattern="/api/authenticated" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
         <security:intercept-url pattern="/api/**" access="ROLE_USER"/>
         <security:remember-me user-service-ref="userDetailsService"
                               remember-me-parameter="remember_me"
@@ -28,7 +30,7 @@
         <property name="userDetailsService" ref="userDetailsService"/>
     </bean>
     <!--<bean id="authenticationFailureHandler" class="com.damintsev.servlet.AuthenticationFailureHandler" />-->
-    <bean id="accessDeniedHandler" class="com.damintsev.servlet.AccessDeniedHandler"/>
+    <!--<bean id="accessDeniedHandler" class="com.damintsev.servlet.AccessDeniedHandler"/>-->
 
 
     <security:authentication-manager alias="authenticationManager">

@@ -23,13 +23,10 @@ public class AuthenticationHandler {
     @ResponseBody
     public ResponseEntity<Boolean> isAuthenticated() {
         Authentication authenticationInfo = SecurityContextHolder.getContext().getAuthentication();
-        boolean authenticated = true;
         if(authenticationInfo != null && authenticationInfo instanceof AnonymousAuthenticationToken) {
-            authenticated = false;
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 //        boolean authenticated = authenticationInfo != null && !authenticationInfo.getPrincipal().equals("anonymousUser");
-        if(authenticated)
-            return new ResponseEntity<>(authenticated, HttpStatus.OK);
-        else return new ResponseEntity<>(authenticated, HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.OK);
     }
 }
