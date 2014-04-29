@@ -2,7 +2,6 @@ package com.damintsev.servlet;
 
 import com.damintsev.server.buisness.image.ImageManager;
 import com.damintsev.server.exceptions.CustomException;
-import com.damintsev.server.buisness.temporary.TemporaryFileManager;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +25,6 @@ public class UploadServlet {
 
     @Autowired
     private ImageManager imageManager;
-
 
     @RequestMapping(value = "image", method = RequestMethod.POST)
     public @ResponseBody ResponseEntity processFile(@RequestParam MultipartFile file)  {
