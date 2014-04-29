@@ -35,13 +35,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("User with name " + username + "not found");
         }
     }
-
-    @Transactional
-    public void createDefaultUsers() {
-        UserDetails userDetails = new UserDetailsImpl("admin", "admin@31994!", "ROLE_USER");
-        em.merge(userDetails);
-        userDetails = new UserDetailsImpl("administrator", "administrator@31994!", "ROLE_USER,ROLE ADMIN");
-        em.merge(userDetails);
-        em.flush();
-    }
 }

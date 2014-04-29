@@ -18,10 +18,11 @@ function bindd() {
 }
 $(document).ready(function () {
     (function () {
-//        $.get('api/authenticated').success(function(result) {
-//            if(result == true)
-//                window.location.replace("/");
-//        });
+        $.get('api/authenticated').success(function(result) {
+            console.log(result);
+            if(result == true)
+                window.location.replace("/");
+        });
 
         $("input#rememberMe").prop("checked", true);
         $('form#submitForm').submit(function (e) {
@@ -46,8 +47,8 @@ $(document).ready(function () {
                 });
 
             request.success(function () {
-//                window.location.replace("../");
-                document.location.href = '../';
+                window.location.replace("../");
+//                document.location.href = '../';
             });
 
             request.error(function (text) {

@@ -10,6 +10,7 @@
                 login-processing-url="/api/login"
                 username-parameter="username"
                 password-parameter="password"/>
+        <security:access-denied-handler ref="accessDeniedHandler"/>
         <security:intercept-url pattern="/mainGWT.html**" access="ROLE_USER"/>
         <security:intercept-url pattern="/mainGWT/**" access="ROLE_USER"/>
         <security:intercept-url pattern="/api/**" access="ROLE_USER"/>
@@ -26,6 +27,9 @@
     <bean id="daoAuthenticationProvider" class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
         <property name="userDetailsService" ref="userDetailsService"/>
     </bean>
+    <!--<bean id="authenticationFailureHandler" class="com.damintsev.servlet.AuthenticationFailureHandler" />-->
+    <bean id="accessDeniedHandler" class="com.damintsev.servlet.AccessDeniedHandler"/>
+
 
     <security:authentication-manager alias="authenticationManager">
         <security:authentication-provider ref="daoAuthenticationProvider"/>
