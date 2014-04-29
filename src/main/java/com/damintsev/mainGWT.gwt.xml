@@ -15,7 +15,7 @@
 
     <entry-point class='com.damintsev.client.MainGWT'/>
 
-    <collapse-all-properties />
+    <!--<collapse-all-properties />-->
     <source path='client'/>
     <source path='common'/>
 
