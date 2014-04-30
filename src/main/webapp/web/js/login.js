@@ -7,14 +7,15 @@ $(document).ready(function () {
     (function () {
         var timeoutFunction;
         var checkAuthentication = function() {
-            $.get('api/authenticated').success(function(contextPath) {
-                APPLICATION_ROOT = contextPath.responseText;
+            $.get('api/authenticated').success(function(response) {
+                APPLICATION_ROOT = response == '' ? '/' : response;
                 goToRootContext();
-            }).error(function(contextPath) {
-                APPLICATION_ROOT = contextPath.responseText;
+            }).error(function(response) {
+                APPLICATION_ROOT = response.responseText == '' ? '/' : response.responseText;
                 timeoutFunction = setTimeout(checkAuthentication, 30000);
             });
         };
+
         checkAuthentication();
 
         $("input#rememberMe").prop("checked", true);

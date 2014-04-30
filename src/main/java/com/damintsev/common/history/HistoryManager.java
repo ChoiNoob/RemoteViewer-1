@@ -21,10 +21,7 @@ public class HistoryManager implements ValueChangeHandler<String> {
     @Override
     public void onValueChange(ValueChangeEvent<String> event) {
         String path = event.getValue();
-        System.out.println("link=" + path);
-        if (Link.LOGIN.toString().equals(path)) {
-            //todo !!!!
-        } else if (Link.EDIT.toString().equals(path)) {
+        if (Link.EDIT.toString().equals(path)) {
             EventBus.get().fireEvent(new StartEditEvent());
         } else if (Link.MONITORING.toString().equals(path)) {
             EventBus.get().fireEvent(new StopEditEvent());

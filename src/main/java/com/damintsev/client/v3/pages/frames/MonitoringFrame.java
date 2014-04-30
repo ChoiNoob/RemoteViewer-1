@@ -71,7 +71,7 @@ public class MonitoringFrame {
             public void onStartEdit(StartEditEvent event) {
                 if(!editing) {
                     startEditing();
-                    SettingsFrame.get().expand();
+//                    SettingsFrame.get().expand();
                     stop();
                 }
             }
@@ -144,9 +144,6 @@ public class MonitoringFrame {
         for(UIItem item : uiItems.values()) {
             dragController.makeDraggable(item);
         }
-//        UITest test = new UITest();
-//        panel.add(test, 0, 0);
-//        panel.setWidgetPosition(test, 150, 150);
     }
 
 

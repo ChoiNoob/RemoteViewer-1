@@ -16,7 +16,9 @@ import com.damintsev.common.utils.Dialogs;
 import com.damintsev.common.utils.Utils;
 import com.damintsev.common.utils.async.Async;
 import com.damintsev.common.utils.async.AsyncTask;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.History;
 import com.google.gwt.user.client.ui.Widget;
 import com.sencha.gxt.cell.core.client.ButtonCell;
@@ -178,7 +180,12 @@ public class SettingsFrame {
         EventBus.get().addHandler(StartEditEvent.TYPE, new StartEditEventHandler() {
             @Override
             public void onStartEdit(StartEditEvent event) {
-                expand();
+                Scheduler.get().scheduleDeferred(new Command() {
+                    @Override
+                    public void execute() {
+                        expand();
+                    }
+                });
             }
         });
         EventBus.get().addHandler(StopEditEvent.TYPE, new StopEditEventHandler() {
