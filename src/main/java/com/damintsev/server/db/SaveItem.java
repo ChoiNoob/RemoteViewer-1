@@ -17,6 +17,7 @@ import java.sql.*;
 /**
  * User: adamintsev Date: 15.10.13 Time: 16:51
  */
+@Deprecated
 @Component
 public class SaveItem implements Visitor<Item> {
 

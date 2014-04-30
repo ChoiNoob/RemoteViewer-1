@@ -11,6 +11,7 @@ import java.util.Random;
  * Date: 24.08.13
  * Time: 20:41
  */
+@Deprecated
 public class TestStatistics extends  Thread {
 
     public void run() {

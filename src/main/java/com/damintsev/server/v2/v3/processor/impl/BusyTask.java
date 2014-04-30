@@ -12,6 +12,6 @@ public class BusyTask implements TaskProcessor {
 
     @Override
     public TaskState process(String stri) {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return null;  //Noy yet implemented. Really need this ?
     }
 }

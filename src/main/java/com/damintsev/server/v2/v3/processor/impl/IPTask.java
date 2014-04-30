@@ -28,6 +28,7 @@ public class IPTask implements TaskProcessor {
         } else {
             logger.info("Pattern not found. ERROR");
             state.setState(ExecuteState.ERROR);
+            state.setMessage(command);
         }
         return state;
     }

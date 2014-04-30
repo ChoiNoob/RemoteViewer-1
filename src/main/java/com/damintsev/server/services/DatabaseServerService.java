@@ -20,8 +20,10 @@ import java.util.List;
  * User: Damintsev Andrey
  * Date: 06.10.13
  * Time: 11:24
+ * Should be deep refactored
  */
 @Service
+@Deprecated
 public class DatabaseServerService implements DatabaseService {
 
     @Autowired

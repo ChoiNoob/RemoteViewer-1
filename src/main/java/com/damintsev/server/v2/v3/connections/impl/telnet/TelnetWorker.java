@@ -34,6 +34,7 @@ import java.io.OutputStream;
  * @author Bruno D'Avanzo
  *         *
  */
+@Deprecated
 public class TelnetWorker extends Thread implements TelnetNotificationHandler {
 
     private static final Logger logger = Logger.getLogger(TelnetWorker.class);
