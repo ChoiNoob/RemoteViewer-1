@@ -16,7 +16,6 @@ import java.util.*;
  * @author Damintsev Andrey
  *         25.02.14.
  */
-//@Scope(value = "bundle")
 @Component
 public class TemporaryFileManagerImpl implements TemporaryFileManager {
 

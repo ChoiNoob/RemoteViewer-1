@@ -52,7 +52,8 @@ public class ImageManager {
             return images.get(imageId);
 
         Image image = imageDao.getImage(imageId);
-        if(image == null) throw new NotFoundException("Image with id=" + imageId + " not found");
+        if(image == null)
+            throw new NotFoundException("Image with id=" + imageId + " not found");
 
         images.put(image.getId(), image);
         return image;
@@ -61,7 +62,8 @@ public class ImageManager {
     public Image getTemporaryImage(String imageId) {
         File file = temporaryFileManager.getTemporaryFile(imageId);
 
-        if(file == null) throw new NotFoundException("Image with id=" + imageId + " not found");
+        if(file == null)
+            throw new NotFoundException("Image with id=" + imageId + " not found");
 
         Image image = imageUtils.createImage(file, MAX_ALLOWED_SIZE, MAX_ALLOWED_SIZE);
         logger.debug(

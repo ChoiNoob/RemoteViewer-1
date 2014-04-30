@@ -99,7 +99,7 @@ public class ImageUtils {
             ImageIO.write(bufferedImage, "png", out);//todo parametrize
             image.setContent(out.toByteArray());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e, e);
             return null;
         }
         return image;
@@ -110,7 +110,7 @@ public class ImageUtils {
         try {
             content = FileUtils.readFileToByteArray(file);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Exception while converting image: " + e.getMessage(), e);
         }
         return createImage(content, width, height);
     }
